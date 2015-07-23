@@ -12,7 +12,7 @@ module Dry
       #     validator.rules,
       #     validator
       #   )
-      #     => [{}, {:name=>[{:code=>"presence", :options=>true}]}]
+      #     => [{}, {:name=>[{:code=>"presence", :value=>"", :options=>true}]}]
       #
       # @api public
       module Each

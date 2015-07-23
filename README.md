@@ -27,7 +27,7 @@ embedded_user_validator = Dry::Validator.new(
   }
 )
 embedded_user_validator.call(user: user)
-# => {:user=>[{:name=>[{:code=>"presence", :options=>true}]}]}
+# => {:user=>[{:name=>[{:code=>"presence", :value=>"", :options=>true}]}]}
 
 # Validate an embedded object using a nested validator
 embedded_user_validator = Dry::Validator.new(
@@ -36,7 +36,7 @@ embedded_user_validator = Dry::Validator.new(
   }
 )
 embedded_user_validator.call(user: user)
-# => {:user=>[{:name=>[{:code=>"presence", :options=>true}]}]}
+# => {:user=>[{:name=>[{:code=>"presence", :value=>"", :options=>true}]}]}
 
 # Validate an array of objects using a nested rules hash
 users_validator = Dry::Validator.new(
@@ -47,7 +47,7 @@ users_validator = Dry::Validator.new(
   }
 )
 users_validator.call(users: [valid_user, user])
-# => {:users=>[{}, {:name=>[{:code=>"presence", :options=>true}]}]}
+# => {:users=>[{}, {:name=>[{:code=>"presence", :value=>"", :options=>true}]}]}
 
 # Validate an array of objects using a nested validator
 users_validator = Dry::Validator.new(
@@ -56,7 +56,7 @@ users_validator = Dry::Validator.new(
   }
 )
 users_validator.call(users: [valid_user, user])
-# => {:users=>[{}, {:name=>[{:code=>"presence", :options=>true}]}]}
+# => {:users=>[{}, {:name=>[{:code=>"presence", :value=>"", :options=>true}]}]}
 ```
 
 ## License

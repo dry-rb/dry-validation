@@ -26,7 +26,7 @@ RSpec.describe 'Dry::Validator' do
             {},
             {
               name: [
-                { code: 'presence', options: true }
+                { code: 'presence', value: '', options: true }
               ]
             }
           ])
@@ -59,7 +59,7 @@ RSpec.describe 'Dry::Validator' do
             {},
             {
               name: [
-                { code: 'presence', options: true }
+                { code: 'presence', value: '', options: true }
               ]
             }
           ])
@@ -103,7 +103,7 @@ RSpec.describe 'Dry::Validator' do
           is_expected.to include(user: [
             {
               name: [
-                { code: 'presence', options: true }
+                { code: 'presence', value: '', options: true }
               ]
             }
           ])
@@ -135,7 +135,7 @@ RSpec.describe 'Dry::Validator' do
             {},
             {
               name: [
-                { code: 'presence', options: true }
+                { code: 'presence', value: '', options: true }
               ]
             }
           ])
@@ -171,7 +171,7 @@ RSpec.describe 'Dry::Validator' do
 
         it 'returns a hash with errors' do
           is_expected.to include(name: [
-            { code: 'presence', options: true }
+            { code: 'presence', value: '', options: true }
           ])
         end
       end
@@ -205,7 +205,7 @@ RSpec.describe 'Dry::Validator' do
 
         it 'returns a hash with errors' do
           is_expected.to include(name: [
-            { code: 'length', options: { min: 2, max: 5 } }
+            { code: 'length', value: '', options: { min: 2, max: 5 } }
           ])
         end
       end
@@ -235,7 +235,7 @@ RSpec.describe 'Dry::Validator' do
 
         it 'returns a hash with errors' do
           is_expected.to include(name: [
-            { code: 'length', options: { max: 5 } }
+            { code: 'length', value: 'Jack Smith', options: { max: 5 } }
           ])
         end
       end
@@ -265,7 +265,7 @@ RSpec.describe 'Dry::Validator' do
 
         it 'returns a hash with errors' do
           is_expected.to include(name: [
-            { code: 'length', options: { min: 5 } }
+            { code: 'length', value: 'Jack', options: { min: 5 } }
           ])
         end
       end

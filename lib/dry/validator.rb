@@ -21,7 +21,7 @@ module Dry
   #
   #   user = User.new('')
   #   user_validator.call(user)
-  #     => {:name=>[{:code=>"presence", :options=>true}]}
+  #     => {:name=>[{:code=>"presence", :value=>"", :options=>true}]}
   #
   # @api public
   class Validator

@@ -15,7 +15,7 @@ module Dry
       #     '',
       #     3..10
       #   )
-      #     => {:code=>"length", :options=>{:min=>3, :max=>10}}
+      #     => {:code=>"length", :value=>"", :options=>{:min=>3, :max=>10}}
       #
       # @api public
       module Length
@@ -41,7 +41,7 @@ module Dry
           min = options.fetch(:min, -Float::INFINITY)
           max = options.fetch(:max, Float::INFINITY)
 
-          { code: 'length', options: options } unless (min..max).include?(value.length)
+          { code: 'length', value: value, options: options } unless (min..max).include?(value.length)
         end
       end
     end

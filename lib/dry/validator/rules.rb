@@ -19,7 +19,7 @@ module Dry
     #   end
     #
     #   Dry::Validator::Rules[:presence].call('', true)
-    #     => {:code=>"presence", :options=>true}
+    #     => {:code=>"presence", :value=>"", :options=>true}
     #
     # @api public
     module Rules

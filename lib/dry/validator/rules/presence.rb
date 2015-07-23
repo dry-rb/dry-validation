@@ -9,7 +9,7 @@ module Dry
       #     => {:code=>"presence", :options=>true}
       #
       #   Dry::Validator::Rules::Presence.call('Jack', false)
-      #     => {:code=>"presence", :options=>false}
+      #     => {:code=>"presence", :value=>"Jack", :options=>false}
       #
       # @api public
       module Presence
@@ -23,11 +23,11 @@ module Dry
         #
         # @api public
         def call(value, switch = true, _validator = nil)
-          result = {
+          {
             code: 'presence',
+            value: value,
             options: switch
-          }
-          result if (switch && value.to_s.length == 0) || (!switch && value.to_s.length > 0)
+          } if (switch && value.to_s.length == 0) || (!switch && value.to_s.length > 0)
         end
       end
     end

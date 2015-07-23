@@ -9,7 +9,7 @@ module Dry
     #
     #   validator = Dry::Validator.new(name: { presence: true })
     #   Dry::Validator::Processor.call(validator, name: '')
-    #     # => {:name=>[{:code=>"presence", :options=>true}]}
+    #     # => {:name=>[{:code=>"presence", :value=>"", :options=>true}]}
     #
     # @api public
     module Processor
