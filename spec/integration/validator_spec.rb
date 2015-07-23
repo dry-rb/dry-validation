@@ -154,12 +154,44 @@ RSpec.describe 'Dry::Validator' do
     end
   end
 
+  describe 'validate exclusion' do
+    subject! { validator.call(attributes) }
+
+    let(:validator) do
+      Dry::Validator.new(
+        name: { exclusion: %w(Jack Jill) }
+      )
+    end
+
+    context 'when attribute included' do
+      let(:attributes) do
+        { name: 'Jack' }
+      end
+
+      it 'returns a hash with errors' do
+        is_expected.to include(name: [
+          { code: 'exclusion', value: 'Jack', options: %w(Jack Jill) }
+        ])
+      end
+    end
+
+    context 'when attribute not included' do
+      let(:attributes) do
+        { name: 'Jo' }
+      end
+
+      it 'returns an empty hash' do
+        is_expected.to be_empty
+      end
+    end
+  end
+
   describe 'validate inclusion' do
     subject! { validator.call(attributes) }
 
     let(:validator) do
       Dry::Validator.new(
-        name: { in: %w(Jack Jill) }
+        name: { inclusion: %w(Jack Jill) }
       )
     end
 
