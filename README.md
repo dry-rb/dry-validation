@@ -8,32 +8,55 @@ A simple validator implemented in Ruby
 ## Synopsis
 
 ```ruby
+# Define a user model and some users
 User = Struct.new(:name)
+user = User.new('')
+valid_user = User.new('Jack')
 
-user_validator = Dry::Validator.new(
-  name: {
-    presence: true,
-    length: 2..5
+# A simple validator
+user_validator = Dry::Validator.new(name: { presence: true })
+user_validator.call(user)
+# => {:name=>[{:code=>"presence", :options=>true}]}
+
+# Validate an embedded object using a nested rules hash
+embedded_user_validator = Dry::Validator.new(
+  user: {
+    embedded: {
+      name: { presence: true }
+    }
   }
 )
+embedded_user_validator.call(user: user)
+# => {:user=>[{:name=>[{:code=>"presence", :options=>true}]}]}
 
-user = User.new('')
-user_validator.call(user)
-# => {
-#      :name => [
-#        {
-#          :code => "presence",
-#          :options=>true
-#        },
-#        {
-#          :code => "length",
-#          :options => {
-#            :min=>2,
-#            :max=>5
-#           }
-#         }
-#       ]
-#     }
+# Validate an embedded object using a nested validator
+embedded_user_validator = Dry::Validator.new(
+  user: {
+    embedded: user_validator
+  }
+)
+embedded_user_validator.call(user: user)
+# => {:user=>[{:name=>[{:code=>"presence", :options=>true}]}]}
+
+# Validate an array of objects using a nested rules hash
+users_validator = Dry::Validator.new(
+  users: {
+    each: {
+      name: { presence: true }
+    }
+  }
+)
+users_validator.call(users: [valid_user, user])
+# => {:users=>[{}, {:name=>[{:code=>"presence", :options=>true}]}]}
+
+# Validate an array of objects using a nested validator
+users_validator = Dry::Validator.new(
+  users: {
+    each: user_validator
+  }
+)
+users_validator.call(users: [valid_user, user])
+# => {:users=>[{}, {:name=>[{:code=>"presence", :options=>true}]}]}
 ```
 
 ## License

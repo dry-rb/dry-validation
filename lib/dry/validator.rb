@@ -27,10 +27,22 @@ module Dry
   class Validator
     extend ::Dry::Configurable
 
-    attr_reader :rules, :processor
+    # @return [Hash] Rules hash
+    attr_reader :rules
+    # @return [Mixed] Validation processor
+    attr_reader :processor
 
     setting :default_processor, ::Dry::Validator::Processor
 
+    # Create a new validator
+    #
+    # @param [Hash] rules or options
+    # @option options [Hash] :rules Validation rules
+    # @option options [Mixed] :processor Validation processor
+    #
+    # @return Dry::Validator self
+    #
+    # @api public
     def initialize(options = {})
       if options.fetch(:rules, false)
         @rules = options.fetch(:rules, {})
@@ -41,6 +53,13 @@ module Dry
       end
     end
 
+    # Create a new validator
+    #
+    # @param [Dry::Validator] other
+    #
+    # @return Dry::Validator
+    #
+    # @api public
     def merge(other)
       self.class.new(
         rules: rules.merge(other.rules),
@@ -49,13 +68,21 @@ module Dry
     end
     alias_method :<<, :merge
 
-    def call(attributes)
-      processor.call(self, attributes)
+    # Create a new validator
+    #
+    # @param [Object] subject The subject to validate
+    #
+    # @return Dry::Validator
+    #
+    # @api public
+    def call(subject)
+      processor.call(self, subject)
     end
     alias_method :validate, :call
 
     private
 
+    # @api private
     def default_processor
       self.class.config.default_processor
     end
