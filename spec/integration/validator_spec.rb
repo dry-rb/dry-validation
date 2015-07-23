@@ -100,13 +100,15 @@ RSpec.describe 'Dry::Validator' do
         end
 
         it 'returns a hash with errors' do
-          is_expected.to include(user: [
-            {
-              name: [
-                { code: 'presence', value: '', options: true }
-              ]
-            }
-          ])
+          is_expected.to include(
+            user: [
+              {
+                name: [
+                  { code: 'presence', value: '', options: true }
+                ]
+              }
+            ]
+          )
         end
       end
 
@@ -114,6 +116,7 @@ RSpec.describe 'Dry::Validator' do
         let(:attributes) do
           { user: { name: 'Jack' } }
         end
+
         it 'returns an empty hash' do
           is_expected.to be_empty
         end
@@ -122,29 +125,29 @@ RSpec.describe 'Dry::Validator' do
 
     context 'with validator' do
       let(:user_validator) { Dry::Validator.new(name: { presence: true }) }
-      let(:validator) { Dry::Validator.new(users: { each: user_validator }) }
+      let(:validator) { Dry::Validator.new(user: { embedded: user_validator }) }
 
       context 'when invalid' do
         let(:attributes) do
-          { users: [{ name: 'Jack' }, { name: 'Jill' }, { name: '' }] }
+          { user: { name: '' } }
         end
 
         it 'returns a hash with errors' do
-          is_expected.to include(users: [
-            {},
-            {},
-            {
-              name: [
-                { code: 'presence', value: '', options: true }
-              ]
-            }
-          ])
+          is_expected.to include(
+            user: [
+              {
+                name: [
+                  { code: 'presence', value: '', options: true }
+                ]
+              }
+            ]
+          )
         end
       end
 
       context 'when valid' do
         let(:attributes) do
-          { users: [{ name: 'Jack' }, { name: 'Jill' }, { name: 'Jo' }] }
+          { user: { name: 'Jack' } }
         end
 
         it 'returns an empty hash' do
