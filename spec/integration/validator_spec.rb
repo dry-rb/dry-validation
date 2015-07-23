@@ -154,36 +154,34 @@ RSpec.describe 'Dry::Validator' do
     end
   end
 
-  describe 'validate presence' do
+  describe 'validate inclusion' do
     subject! { validator.call(attributes) }
 
-    context 'with option true' do
-      let(:validator) do
-        Dry::Validator.new(
-          name: { presence: true }
-        )
+    let(:validator) do
+      Dry::Validator.new(
+        name: { in: %w(Jack Jill) }
+      )
+    end
+
+    context 'when attribute not included' do
+      let(:attributes) do
+        { name: 'Jo' }
       end
 
-      context 'when attribute not present' do
-        let(:attributes) do
-          { name: '' }
-        end
+      it 'returns a hash with errors' do
+        is_expected.to include(name: [
+          { code: 'inclusion', value: 'Jo', options: %w(Jack Jill) }
+        ])
+      end
+    end
 
-        it 'returns a hash with errors' do
-          is_expected.to include(name: [
-            { code: 'presence', value: '', options: true }
-          ])
-        end
+    context 'when attribute included' do
+      let(:attributes) do
+        { name: 'Jack' }
       end
 
-      context 'when attribute present' do
-        let(:attributes) do
-          { name: 'Jack' }
-        end
-
-        it 'returns an empty hash' do
-          is_expected.to be_empty
-        end
+      it 'returns an empty hash' do
+        is_expected.to be_empty
       end
     end
   end
@@ -273,6 +271,40 @@ RSpec.describe 'Dry::Validator' do
       context 'when attribute length in range' do
         let(:attributes) do
           { name: 'Jillian' }
+        end
+
+        it 'returns an empty hash' do
+          is_expected.to be_empty
+        end
+      end
+    end
+  end
+
+  describe 'validate presence' do
+    subject! { validator.call(attributes) }
+
+    context 'with option true' do
+      let(:validator) do
+        Dry::Validator.new(
+          name: { presence: true }
+        )
+      end
+
+      context 'when attribute not present' do
+        let(:attributes) do
+          { name: '' }
+        end
+
+        it 'returns a hash with errors' do
+          is_expected.to include(name: [
+            { code: 'presence', value: '', options: true }
+          ])
+        end
+      end
+
+      context 'when attribute present' do
+        let(:attributes) do
+          { name: 'Jack' }
         end
 
         it 'returns an empty hash' do

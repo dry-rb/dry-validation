@@ -1,6 +1,7 @@
 require 'dry/validator/rules/registry'
 require 'dry/validator/rules/each'
 require 'dry/validator/rules/embedded'
+require 'dry/validator/rules/inclusion'
 require 'dry/validator/rules/length'
 require 'dry/validator/rules/presence'
 
@@ -31,6 +32,7 @@ module Dry
 
       register(:each, Each)
       register(:embedded, Embedded)
+      register(:in, Inclusion)
       register(:length, Length)
       register(:presence, Presence)
     end
