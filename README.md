@@ -27,7 +27,16 @@ embedded_user_validator = Dry::Validator.new(
   }
 )
 embedded_user_validator.call(user: user)
-# => {:user=>[{:name=>[{:code=>"presence", :value=>"", :options=>true}]}]}
+# => {
+#      :user=>[
+#        {
+#          :code=>"embedded",
+#          :errors=>{:name=>[{:code=>"presence", :value=>"", :options=>true}]},
+#          :value=>#<struct User name="">,
+#          :options=>{:name=>{:presence=>true}}
+#        }
+#      ]
+#    }
 
 # Validate an embedded object using a nested validator
 embedded_user_validator = Dry::Validator.new(
@@ -36,7 +45,16 @@ embedded_user_validator = Dry::Validator.new(
   }
 )
 embedded_user_validator.call(user: user)
-# => {:user=>[{:name=>[{:code=>"presence", :value=>"", :options=>true}]}]}
+# => {
+#      :user=>[
+#        {
+#          :code=>"embedded",
+#          :errors=>{:name=>[{:code=>"presence", :value=>"", :options=>true}]},
+#          :value=>#<struct User name="">,
+#          :options=>{:name=>{:presence=>true}}
+#        }
+#      ]
+#    }
 
 # Validate an array of objects using a nested rules hash
 users_validator = Dry::Validator.new(
@@ -47,7 +65,16 @@ users_validator = Dry::Validator.new(
   }
 )
 users_validator.call(users: [valid_user, user])
-# => {:users=>[{}, {:name=>[{:code=>"presence", :value=>"", :options=>true}]}]}
+# => {
+#      :users=>[
+#         {
+#           :code=>"each",
+#           :errors=>[{}, {:name=>[{:code=>"presence", :value=>"", :options=>true}]}],
+#           :value=>[#<struct User name="Jack">, #<struct User name="">],
+#           :options=>{:name=>{:presence=>true}}
+#         }
+#      ]
+#    }
 
 # Validate an array of objects using a nested validator
 users_validator = Dry::Validator.new(
@@ -56,7 +83,16 @@ users_validator = Dry::Validator.new(
   }
 )
 users_validator.call(users: [valid_user, user])
-# => {:users=>[{}, {:name=>[{:code=>"presence", :value=>"", :options=>true}]}]}
+# => {
+#      :users=>[
+#         {
+#           :code=>"each",
+#           :errors=>[{}, {:name=>[{:code=>"presence", :value=>"", :options=>true}]}],
+#           :value=>[#<struct User name="Jack">, #<struct User name="">],
+#           :options=>{:name=>{:presence=>true}}
+#         }
+#      ]
+#    }
 ```
 
 ## Configuration
@@ -111,7 +147,7 @@ Dry::Validator.configure do |config|
         )
       end.compact
 
-      result[attribute] = errors unless errors.all?(&:empty?)
+      result[attribute] = errors unless errors.empty?
     end
   end
 end
