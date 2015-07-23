@@ -59,6 +59,64 @@ users_validator.call(users: [valid_user, user])
 # => {:users=>[{}, {:name=>[{:code=>"presence", :value=>"", :options=>true}]}]}
 ```
 
+## Configuration
+
+#### Adding custom rules
+
+```ruby
+Dry::Validator::Rules.register(:blank) do |value, switch = true, *|
+  {
+    code: 'blank',
+    value: value,
+    options: switch
+  } if (!switch && value.to_s.length == 0) || (switch && value.to_s.length > 0)
+end
+```
+
+#### Using a custom rule set
+
+```ruby
+Dry::Validator::Processor.configure do |config|
+  config.rules = {
+    presence: ->(value, switch = true, *) do
+      {
+        code: 'presence',
+        value: value,
+        options: switch
+      } if (switch && value.to_s.length == 0) || (!switch && value.to_s.length > 0)
+    end
+  }
+end
+```
+
+#### Changing the attribute extractor
+
+```ruby
+Dry::Validator::Processor.configure do |config|
+  config.attribute_extractor = ->(subject, attribute) { subject[attribute] }
+end
+```
+
+#### Changing the default processor (invalidates all other configuration)
+
+```ruby
+Dry::Validator.configure do |config|
+  config.default_processor = ->(validator, subject) do
+    validator.rules.each_with_object({}) do |(attribute, rule_set), result|
+      errors = rule_set.flat_map do |rule_name, options|
+        Dry::Validator::Rules[rule_name].call(
+          subject[attribute],
+          options,
+          validator
+        )
+      end.compact
+
+      result[attribute] = errors unless errors.all?(&:empty?)
+    end
+  end
+end
+```
+
 ## License
 
 See `LICENSE` file.
