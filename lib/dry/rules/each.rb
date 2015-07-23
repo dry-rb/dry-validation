@@ -4,10 +4,14 @@ module Dry
       module_function
 
       def call(value, rules = {}, validator)
-        validator = validator.class.new(
-          rules: rules,
-          processor: validator.processor
-        )
+        if rules.is_a?(validator.class)
+          validator = rules
+        else
+          validator = validator.class.new(
+            rules: rules,
+            processor: validator.processor
+          )
+        end
 
         value.map { |object| validator.call(object) }
       end

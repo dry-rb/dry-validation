@@ -1,4 +1,159 @@
 RSpec.describe 'Dry::Validator' do
+  describe 'validate each' do
+    subject! { validator.call(attributes) }
+
+    context 'with rules hash' do
+      let(:validator) do
+        Dry::Validator.new(
+          users: {
+            each: {
+              name: {
+                presence: true
+              }
+            }
+          }
+        )
+      end
+
+      context 'when invalid' do
+        let(:attributes) do
+          { users: [{ name: 'Jack' }, { name: 'Jill' }, { name: '' }] }
+        end
+
+        it 'returns a hash with errors' do
+          is_expected.to include(users: [
+            {},
+            {},
+            {
+              name: [
+                { code: 'presence', options: true }
+              ]
+            }
+          ])
+        end
+      end
+
+      context 'when valid' do
+        let(:attributes) do
+          { users: [{ name: 'Jack' }, { name: 'Jill' }, { name: 'Jo' }] }
+        end
+
+        it 'returns an empty hash' do
+          is_expected.to be_empty
+        end
+      end
+    end
+
+    context 'with validator' do
+      let(:user_validator) { Dry::Validator.new(name: { presence: true }) }
+      let(:validator) { Dry::Validator.new(users: { each: user_validator }) }
+
+      context 'when invalid' do
+        let(:attributes) do
+          { users: [{ name: 'Jack' }, { name: 'Jill' }, { name: '' }] }
+        end
+
+        it 'returns a hash with errors' do
+          is_expected.to include(users: [
+            {},
+            {},
+            {
+              name: [
+                { code: 'presence', options: true }
+              ]
+            }
+          ])
+        end
+      end
+
+      context 'when valid' do
+        let(:attributes) do
+          { users: [{ name: 'Jack' }, { name: 'Jill' }, { name: 'Jo' }] }
+        end
+
+        it 'returns an empty hash' do
+          is_expected.to be_empty
+        end
+      end
+    end
+  end
+
+  describe 'validate embedded' do
+    subject! { validator.call(attributes) }
+
+    context 'with rules hash' do
+      let(:validator) do
+        Dry::Validator.new(
+          user: {
+            embedded: {
+              name: {
+                presence: true
+              }
+            }
+          }
+        )
+      end
+
+      context 'when invalid' do
+        let(:attributes) do
+          { user: { name: '' } }
+        end
+
+        it 'returns a hash with errors' do
+          is_expected.to include(user: [
+            {
+              name: [
+                { code: 'presence', options: true }
+              ]
+            }
+          ])
+        end
+      end
+
+      context 'when valid' do
+        let(:attributes) do
+          { user: { name: 'Jack' } }
+        end
+        it 'returns an empty hash' do
+          is_expected.to be_empty
+        end
+      end
+    end
+
+    context 'with validator' do
+      let(:user_validator) { Dry::Validator.new(name: { presence: true }) }
+      let(:validator) { Dry::Validator.new(users: { each: user_validator }) }
+
+      context 'when invalid' do
+        let(:attributes) do
+          { users: [{ name: 'Jack' }, { name: 'Jill' }, { name: '' }] }
+        end
+
+        it 'returns a hash with errors' do
+          is_expected.to include(users: [
+            {},
+            {},
+            {
+              name: [
+                { code: 'presence', options: true }
+              ]
+            }
+          ])
+        end
+      end
+
+      context 'when valid' do
+        let(:attributes) do
+          { users: [{ name: 'Jack' }, { name: 'Jill' }, { name: 'Jo' }] }
+        end
+
+        it 'returns an empty hash' do
+          is_expected.to be_empty
+        end
+      end
+    end
+  end
+
   describe 'validate presence' do
     subject! { validator.call(attributes) }
 
