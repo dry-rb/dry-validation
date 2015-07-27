@@ -1,6 +1,7 @@
 require 'thread_safe'
 require 'dry-configurable'
 require 'dry-container'
+require 'dry/validator/support/merge_rules'
 require 'dry/validator/processor'
 require 'dry/validator/version'
 
@@ -62,8 +63,8 @@ module Dry
     # @api public
     def merge(other)
       self.class.new(
-        rules: rules.merge(other.rules),
-        processor: processor
+        rules: ::Dry::Validator::Support.merge_rules(rules, other.rules),
+        processor: other.processor
       )
     end
     alias_method :<<, :merge
