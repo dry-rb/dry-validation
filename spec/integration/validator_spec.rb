@@ -1,4 +1,81 @@
 RSpec.describe 'Dry::Validator' do
+  describe 'merging validators' do
+    let(:first) do
+      Dry::Validator.new(
+        first_name: {
+          presence: true,
+          inclusion: %w(Jack Jill),
+          length: 5..10
+        },
+        last_name: {
+          presence: true,
+          length: 5..15
+        },
+        permissions: {
+          each: {
+            type: {
+              presence: true
+            },
+            granted: {
+              inclusion: [true, false]
+            }
+          }
+        }
+      )
+    end
+    let(:second) do
+      Dry::Validator.new(
+        rules: {
+          first_name: {
+            inclusion: %w(Janet John),
+            length: 5..15
+          },
+          permissions: {
+            each: {
+              type: {
+                presence: true
+              },
+              granted: {
+                inclusion: [true]
+              }
+            }
+          }
+        },
+        processor: ::Dry::Validator::Processor.dup
+      )
+    end
+    let!(:merged) { first.merge(second) }
+
+    it 'deep merges rules' do
+      expect(merged.rules).to eq(
+        first_name: {
+          presence: true,
+          inclusion: %w(Janet John),
+          length: 5..15
+        },
+        last_name: {
+          presence: true,
+          length: 5..15
+        },
+        permissions: {
+          each: {
+            type: {
+              presence: true
+            },
+            granted: {
+              inclusion: [true]
+            }
+          }
+        }
+      )
+    end
+
+    it 'overwrites the processor' do
+      expect(merged.processor).to_not be(first.processor)
+      expect(merged.processor).to be(second.processor)
+    end
+  end
+
   describe 'validate each' do
     subject! { validator.call(attributes) }
 
