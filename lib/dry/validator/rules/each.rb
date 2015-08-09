@@ -12,7 +12,12 @@ module Dry
       #     validator.rules,
       #     validator
       #   )
-      #     => [{}, {:name=>[{:code=>"presence", :value=>"", :options=>true}]}]
+      #     => {
+      #          :code=>"each",
+      #          :errors=>[{}, {:name=>[{:code=>"presence", :value=>"", :options=>true}]}],
+      #          :value=>[{:name=>"Jack"}, {:name=>""}],
+      #          :options=>{:name=>{:presence=>true}}
+      #        }
       #
       # @api public
       module Each
@@ -36,7 +41,14 @@ module Dry
             )
           end
 
-          value.map { |object| validator.call(object) }
+          errors = value.map { |object| validator.call(object) }
+
+          {
+            code: 'each',
+            errors: errors,
+            value: value,
+            options: validator.rules
+          } unless errors.all?(&:empty?)
         end
       end
     end

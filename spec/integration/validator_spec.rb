@@ -98,15 +98,28 @@ RSpec.describe 'Dry::Validator' do
         end
 
         it 'returns a hash with errors' do
-          is_expected.to include(users: [
-            {},
-            {},
-            {
-              name: [
-                { code: 'presence', value: '', options: true }
-              ]
-            }
-          ])
+          is_expected.to include(
+            users: [
+              {
+                code: 'each',
+                errors: [
+                  {},
+                  {},
+                  {
+                    name: [{ code: 'presence', value: '', options: true }]
+                  }
+                ],
+                value: [
+                  { name: 'Jack' },
+                  { name: 'Jill' },
+                  { name: '' }
+                ],
+                options: {
+                  name: { presence: true }
+                }
+              }
+            ]
+          )
         end
       end
 
@@ -131,15 +144,28 @@ RSpec.describe 'Dry::Validator' do
         end
 
         it 'returns a hash with errors' do
-          is_expected.to include(users: [
-            {},
-            {},
-            {
-              name: [
-                { code: 'presence', value: '', options: true }
-              ]
-            }
-          ])
+          is_expected.to include(
+            users: [
+              {
+                code: 'each',
+                errors: [
+                  {},
+                  {},
+                  {
+                    name: [{ code: 'presence', value: '', options: true }]
+                  }
+                ],
+                value: [
+                  { name: 'Jack' },
+                  { name: 'Jill' },
+                  { name: '' }
+                ],
+                options: {
+                  name: { presence: true }
+                }
+              }
+            ]
+          )
         end
       end
 
@@ -180,9 +206,12 @@ RSpec.describe 'Dry::Validator' do
           is_expected.to include(
             user: [
               {
-                name: [
-                  { code: 'presence', value: '', options: true }
-                ]
+                code: 'embedded',
+                errors: {
+                  name: [{ code: 'presence', value: '', options: true }]
+                },
+                value: { name: '' },
+                options: { name: { presence: true } }
               }
             ]
           )
@@ -213,9 +242,12 @@ RSpec.describe 'Dry::Validator' do
           is_expected.to include(
             user: [
               {
-                name: [
-                  { code: 'presence', value: '', options: true }
-                ]
+                code: 'embedded',
+                errors: {
+                  name: [{ code: 'presence', value: '', options: true }]
+                },
+                value: { name: '' },
+                options: { name: { presence: true } }
               }
             ]
           )

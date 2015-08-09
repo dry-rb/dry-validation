@@ -37,7 +37,7 @@ module Dry
             )
           end.compact
 
-          result[attribute] = errors unless errors.all?(&:empty?)
+          result[attribute] = errors unless errors.empty?
         end
       end
 

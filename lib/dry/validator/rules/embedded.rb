@@ -12,7 +12,14 @@ module Dry
       #     validator.rules,
       #     validator
       #   )
-      #     => {:name=>[{:code=>"presence", :value=>"", :options=>true}]}
+      #     => {
+      #          :code=>"embedded",
+      #          :errors=>{
+      #            :name=>[{:code=>"presence", :value=>"", :options=>true}]
+      #          },
+      #          :value=>{:name=>""},
+      #          :options=>{:name=>{:presence=>true}}
+      #        }
       #
       # @api public
       module Embedded
@@ -36,7 +43,14 @@ module Dry
             )
           end
 
-          validator.call(value)
+          errors = validator.call(value)
+
+          {
+            code: 'embedded',
+            errors: errors,
+            value: value,
+            options: validator.rules
+          } if errors.any?
         end
       end
     end
