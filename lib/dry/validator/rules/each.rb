@@ -31,7 +31,7 @@ module Dry
         # @return [Hash|NilClass]
         #
         # @api public
-        def call(value, rules = {}, validator)
+        def call(value, rules = {}, validator = nil)
           if rules.respond_to?(:call)
             validator = rules
           else
