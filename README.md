@@ -1,7 +1,10 @@
 # dry-validator <a href="https://gitter.im/dryrb/chat" target="_blank">![Join the chat at https://gitter.im/dryrb/chat](https://badges.gitter.im/Join%20Chat.svg)</a>
 
+<a href="https://rubygems.org/gems/dry-validator" target="_blank">![Gem Version](https://badge.fury.io/rb/dry-validator.svg)</a>
 <a href="https://travis-ci.org/dryrb/dry-validator" target="_blank">![Build Status](https://travis-ci.org/dryrb/dry-validator.svg?branch=master)</a>
-<a href="http://inch-ci.org/github/dryrb/dry-validator" target="_blank">![Inline docs](http://inch-ci.org/github/dryrb/dry-validator.svg?branch=master&style=flat)</a>
+<a href="https://gemnasium.com/dryrb/dry-validator" target="_blank">![Dependency Status](https://gemnasium.com/dryrb/dry-validator.svg)</a>
+<a href="https://codeclimate.com/github/dryrb/dry-validator" target="_blank">![Code Climate](https://codeclimate.com/github/dryrb/dry-validator/badges/gpa.svg)</a>
+<a href="http://inch-ci.org/github/dryrb/dry-validator" target="_blank">![Documentation Status](http://inch-ci.org/github/dryrb/dry-validator.svg?branch=master&style=flat)</a>
 
 A simple validator implemented in Ruby
 
