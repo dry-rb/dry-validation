@@ -27,7 +27,7 @@ module Dry
             code: 'presence',
             value: value,
             options: switch
-          } if (switch && value.to_s.length == 0) || (!switch && value.to_s.length > 0)
+          } if (switch == (value.respond_to?(:length) && value.length == 0))
         end
       end
     end
