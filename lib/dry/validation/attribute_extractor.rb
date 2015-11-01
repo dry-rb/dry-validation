@@ -1,21 +1,22 @@
 module Dry
-  class Validator
+  module Validation
     # (Default) attribute extractor
     #
     # @example
     #
-    #   Dry::Validator::Processor::AttributeExtractor.call({ name: 'Jack' }, :name)
+    #   Dry::Validation::AttributeExtractor.call({ name: 'Jack' }, :name)
     #     # => "Jack"
     #
     # @api public
     module AttributeExtractor
       module_function
+
       # Validate subject using validator
       #
       # @param [Mixed] subject The subject to extract the attribute from
       # @param [Mixed] attribute The attribute to extract
       #
-      # @return Dry::Validator
+      # @return [Mixed] value The attribute value
       #
       # @api public
       def call(subject, attribute)

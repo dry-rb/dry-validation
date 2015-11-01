@@ -1,5 +1,5 @@
 module Dry
-  class Validator
+  module Validation
     module Rules
       # @api private
       class Registry < ::Dry::Container::Registry
