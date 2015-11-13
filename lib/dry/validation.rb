@@ -7,3 +7,6 @@ module Dry
   module Validation
   end
 end
+
+require 'dry/validation/predicate'
+require 'dry/validation/schema'
