@@ -4,8 +4,8 @@ require File.expand_path('../lib/dry/validation/version', __FILE__)
 Gem::Specification.new do |spec|
   spec.name          = 'dry-validation'
   spec.version       = Dry::Validation::VERSION
-  spec.authors       = ['Andy Holland']
-  spec.email         = ['andyholland1991@aol.com']
+  spec.authors       = ['Andy Holland', 'Piotr Solnica']
+  spec.email         = ['andyholland1991@aol.com', 'piotr.solnica@gmail.com']
   spec.summary       = 'A simple validation library'
   spec.homepage      = 'https://github.com/dryrb/dry-validation'
   spec.license       = 'MIT'
