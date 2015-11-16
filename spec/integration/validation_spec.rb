@@ -16,7 +16,9 @@ RSpec.describe Dry::Validation do
       validation = Test::Validation.new
 
       expect(validation.(name: 'Jane', age: 18)).to be_empty
+
       expect(validation.(name: '', age: 18)).to eql(name: [validation.rules[:name]])
+      expect(validation.(name: 'Jane', age: '18')).to eql(age: [validation.rules[:age]])
     end
   end
 end
