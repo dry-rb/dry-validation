@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'dry-configurable'
   spec.add_runtime_dependency 'dry-container'
+  spec.add_runtime_dependency 'dry-equalizer'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'

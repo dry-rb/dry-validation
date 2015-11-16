@@ -1,3 +1,4 @@
+require 'dry-equalizer'
 require 'dry-configurable'
 require 'dry-container'
 

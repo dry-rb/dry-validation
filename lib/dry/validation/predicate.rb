@@ -2,30 +2,53 @@ require 'dry/validation/result'
 
 module Dry
   module Validation
-    class Predicate
-      attr_reader :fn
+    def self.Predicate(block)
+      case block
+      when Method then Predicate.new(block.name, &block)
+      else raise ArgumentError, 'predicate needs an :id'
+      end
+    end
 
-      class Composite < Predicate
+    class Predicate
+      include Dry::Equalizer(:id, :fn)
+
+      attr_reader :id, :fn
+
+      class Conjuction < Predicate
+        include Dry::Equalizer(:left, :right)
+
+        attr_reader :left, :right
+
+        def initialize(left, right)
+          @left = left
+          @right = right
+        end
+
+        def call(*args)
+          left.(*args) && right.(*args)
+        end
       end
 
-      def initialize(&block)
+      def initialize(id = nil, &block)
+        @id = id
         @fn = block
       end
 
       def call(*args)
-        Validation.Result(fn.call(*args))
+        fn.(*args)
       end
 
-      def &(other)
-        Predicate::Composite.new { |*args| Validation.Result(fn.call(*args) && fn.call(*args)) }
+      def and(other)
+        Predicate::Conjuction.new(self, other)
       end
+      alias_method :&, :and
 
-      def inversed
-        self.class.new { |*args| Validation.Result(!fn.(*args)) }
+      def negation
+        self.class.new(:"not_#{id}") { |*args| !fn.(*args) }
       end
 
       def curry(*args)
-        self.class.new(&fn.curry.(*args))
+        self.class.new(id, &fn.curry.(*args))
       end
     end
   end

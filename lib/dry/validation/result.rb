@@ -1,16 +1,14 @@
 module Dry
   module Validation
-    def self.Result(input)
-      case input
-      when Result then input
-      else Result.new(input)
-      end
+    def self.Result(input, value)
+      Result.new(input, value)
     end
 
     class Result
-      attr_reader :value
+      attr_reader :input, :value
 
-      def initialize(value)
+      def initialize(input, value)
+        @input = input
         @value = value
       end
 
