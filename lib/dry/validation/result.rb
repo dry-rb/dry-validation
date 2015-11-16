@@ -19,14 +19,6 @@ module Dry
       def failure?
         ! success?
       end
-
-      def &(other)
-        if failure?
-          self
-        else
-          other
-        end
-      end
     end
   end
 end
