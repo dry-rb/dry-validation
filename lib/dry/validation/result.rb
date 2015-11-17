@@ -18,6 +18,15 @@ module Dry
       end
       alias_method :to_a, :to_ary
 
+      def and(other)
+        if success?
+          other.(input)
+        else
+          self
+        end
+      end
+      alias_method :&, :and
+
       def success?
         @value
       end

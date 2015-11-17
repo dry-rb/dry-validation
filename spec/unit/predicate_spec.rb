@@ -11,21 +11,6 @@ RSpec.describe Dry::Validation::Predicate do
     end
   end
 
-  describe '#and' do
-    it 'returns a conjunction' do
-      is_num = Dry::Validation::Predicate.new(:is_num) { |input| input.is_a?(Fixnum) }
-
-      gt_18 = Dry::Validation::Predicate.new(:gt_18) { |num| num > 18 }
-
-      num_gt_18 = is_num.and(gt_18)
-
-      expect(num_gt_18.(19)).to be(true)
-
-      expect(num_gt_18.('18')).to be(false)
-      expect(num_gt_18.(17)).to be(false)
-    end
-  end
-
   describe '#negation' do
     it 'returns a negated version of a predicate' do
       is_empty = Dry::Validation::Predicate.new(:is_empty) { |str| str.empty? }

@@ -46,7 +46,7 @@ module Dry
           rule = Rule::Key.new(name, predicate)
 
           if block
-            rules[name] = rule.compose(*yield(ValueDSL.new(name, predicates)))
+            rules[name] = rule.and(*yield(ValueDSL.new(name, predicates)))
           else
             rules[name] = rule
           end
