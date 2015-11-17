@@ -59,13 +59,13 @@ RSpec.describe Dry::Validation::Rule do
     let(:string_rule) { Dry::Validation::Rule::Value.new(:name, is_string) }
 
     let(:key_exist) do
-      Dry::Validation::Predicate.new do |key, input|
+      Dry::Validation::Predicate.new(:key_exist?) do |key, input|
         input.key?(key)
       end
     end
 
     let(:is_string) do
-      Dry::Validation::Predicate.new do |input|
+      Dry::Validation::Predicate.new(:str?) do |input|
         input.is_a?(String)
       end
     end

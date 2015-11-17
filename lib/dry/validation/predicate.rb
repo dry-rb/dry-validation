@@ -10,11 +10,12 @@ module Dry
     class Predicate
       include Dry::Equalizer(:id, :fn)
 
-      attr_reader :id, :fn
+      attr_reader :id, :args, :fn
 
-      def initialize(id = nil, &block)
+      def initialize(id, *args, &block)
         @id = id
         @fn = block
+        @args = args
       end
 
       def call(*args)
@@ -26,7 +27,7 @@ module Dry
       end
 
       def curry(*args)
-        self.class.new(id, &fn.curry.(*args))
+        self.class.new(id, *args, &fn.curry.(*args))
       end
     end
   end

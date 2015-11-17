@@ -20,4 +20,18 @@ RSpec.describe Dry::Validation::Predicate do
       expect(is_filled.('filled')).to be(true)
     end
   end
+
+  describe '#curry' do
+    it 'returns curried predicate' do
+      min_age = Dry::Validation::Predicate.new(:min_age) { |age, input| input >= age }
+
+      min_age_18 = min_age.curry(18)
+
+      expect(min_age_18.args).to eql([18])
+
+      expect(min_age_18.(18)).to be(true)
+      expect(min_age_18.(19)).to be(true)
+      expect(min_age_18.(17)).to be(false)
+    end
+  end
 end
