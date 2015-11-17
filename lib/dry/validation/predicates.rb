@@ -2,15 +2,21 @@ require 'dry/validation/predicate'
 
 module Dry
   module Validation
-    class Predicates
-      extend Dry::Container::Mixin
+    module Predicates
+      module Methods
+        def predicate(name, &block)
+          register(name, Predicate.new(name, &block))
+        end
+      end
 
-      def self.value?(name, input)
+      extend Dry::Container::Mixin
+      extend Methods
+
+      predicate(:value?) do |name, input|
         input.key?(name)
       end
-      register(:value?, Validation.Predicate(method(:value?)))
 
-      def self.empty?(input)
+      predicate(:empty?) do |input|
         case input
         when String, Array, Hash then input.empty?
         when nil then true
@@ -18,23 +24,20 @@ module Dry
           false
         end
       end
-      register(:empty?, Validation.Predicate(method(:empty?)))
+
       register(:filled?, self[:empty?].negation)
 
-      def self.present?(name, input)
+      predicate(:present?) do |name, input|
         self[:value?].(name, input) && self[:filled?].(input[name])
       end
-      register(:present?, Validation.Predicate(method(:present?)))
 
-      def self.int?(input)
+      predicate(:int?) do |input|
         input.is_a?(Fixnum)
       end
-      register(:int?, Validation.Predicate(method(:int?)))
 
-      def self.gt?(num, input)
+      predicate(:gt?) do |num, input|
         input > num
       end
-      register(:gt?, Validation.Predicate(method(:gt?)))
     end
   end
 end
