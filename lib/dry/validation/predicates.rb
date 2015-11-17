@@ -12,7 +12,7 @@ module Dry
       extend Dry::Container::Mixin
       extend Methods
 
-      predicate(:value?) do |name, input|
+      predicate(:key?) do |name, input|
         input.key?(name)
       end
 
@@ -25,10 +25,8 @@ module Dry
         end
       end
 
-      register(:filled?, self[:empty?].negation)
-
-      predicate(:present?) do |name, input|
-        self[:value?].(name, input) && self[:filled?].(input[name])
+      predicate(:filled?) do |input|
+        ! self[:empty?].(input)
       end
 
       predicate(:int?) do |input|

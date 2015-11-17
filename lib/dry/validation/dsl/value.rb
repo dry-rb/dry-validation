@@ -15,6 +15,10 @@ module Dry
           DSL::Key.new(name, predicates)
         end
 
+        def key?(name, &block)
+          key(name).key?(&block)
+        end
+
         def to_ary
           rules
         end

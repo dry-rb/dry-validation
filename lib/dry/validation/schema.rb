@@ -17,6 +17,10 @@ module Dry
         DSL::Key.new(name, config.predicates, config.rules)
       end
 
+      def self.key?(name, &block)
+        key(name).key?(&block)
+      end
+
       def initialize
         @rules = self.class.config.rules
       end
