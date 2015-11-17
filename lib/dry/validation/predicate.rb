@@ -29,6 +29,11 @@ module Dry
       def curry(*args)
         self.class.new(id, *args, &fn.curry.(*args))
       end
+
+      def to_ary
+        [id, args]
+      end
+      alias_method :to_a, :to_ary
     end
   end
 end

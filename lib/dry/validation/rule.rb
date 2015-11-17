@@ -11,13 +11,13 @@ module Dry
         end
 
         def call(input)
-          Validation.Result(input[name], predicate.(input), predicate.id)
+          Validation.Result(input[name], predicate.(input), predicate)
         end
       end
 
       class Value < Rule
         def call(input)
-          Validation.Result(input, predicate.(input), predicate.id)
+          Validation.Result(input, predicate.(input), predicate)
         end
       end
 
@@ -66,11 +66,6 @@ module Dry
         Disjunction.new(self, other)
       end
       alias_method :|, :or
-
-      def to_ary
-        [:predicate, predicate.id]
-      end
-      alias_method :to_a, :to_ary
 
       def curry(*args)
         self.class.new(name, predicate.curry(*args))

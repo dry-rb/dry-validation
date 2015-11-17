@@ -14,7 +14,7 @@ module Dry
       end
 
       def to_ary
-        [:input, input, [:predicate, predicate]]
+        [:input, input, [:predicate, *predicate.to_ary]]
       end
       alias_method :to_a, :to_ary
 

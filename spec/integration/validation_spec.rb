@@ -18,13 +18,13 @@ RSpec.describe Dry::Validation do
       expect(validation.(email: 'jane@doe.org', age: 19)).to be_empty
 
       expect(validation.(email: '', age: 18)).to match_array([
-        [:error, [:rule, :email, [:result, [:input, "", [:predicate, :present?]]]]],
-        [:error, [:rule, :age, [:result, [:input, 18, [:predicate, :gt?]]]]]
+        [:error, [:rule, :email, [:result, [:input, "", [:predicate, :present?, [:email]]]]]],
+        [:error, [:rule, :age, [:result, [:input, 18, [:predicate, :gt?, [18]]]]]]
       ])
 
       expect(validation.(name: 'Jane', age: '18')).to match_array([
-        [:error, [:rule, :age, [:result, [:input, "18", [:predicate, :int?]]]]],
-        [:error, [:rule, :email, [:result, [:input, nil, [:predicate, :present?]]]]]
+        [:error, [:rule, :age, [:result, [:input, "18", [:predicate, :int?, []]]]]],
+        [:error, [:rule, :email, [:result, [:input, nil, [:predicate, :present?, [:email]]]]]]
       ])
     end
   end
