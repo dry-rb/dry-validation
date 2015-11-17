@@ -7,10 +7,13 @@ module Dry
     class ValueDSL
       attr_reader :name, :predicates, :rules
 
-      def initialize(name, predicates, &block)
+      def initialize(name, predicates)
         @name = name
         @predicates = predicates
-        @rules = []
+      end
+
+      def key(name, &block)
+        KeyDSL.new(name, predicates)
       end
 
       def to_ary
@@ -19,12 +22,9 @@ module Dry
       alias_method :to_a, :to_ary
 
       def method_missing(meth, *args, &block)
-        predicate = predicates[meth]
-
-        if predicate
-          rule = Rule::Value.new(name, predicate.curry(*args))
-          rules << rule
-          rule
+        if predicates.key?(meth)
+          predicate = predicates[meth]
+          Rule::Value.new(name, predicate.curry(*args))
         else
           super
         end
@@ -34,25 +34,27 @@ module Dry
     class KeyDSL
       attr_reader :name, :predicates, :rules
 
-      def initialize(name, predicates, rules, &block)
+      def initialize(name, predicates, rules = nil, &block)
         @name = name
         @predicates = predicates
         @rules = rules
       end
 
       def method_missing(meth, *args, &block)
-        predicate = predicates[meth]
+        if predicates.key?(meth)
+          predicate = predicates[meth]
+          key_rule = Rule::Key.new(name, predicate)
 
-        if predicate
-          rule = Rule::Key.new(name, predicate)
+          rule =
+            if block
+              val_rule = yield(ValueDSL.new(name, predicates))
+              key_rule.and(val_rule)
+            else
+              key_rule
+            end
 
-          if block
-            rules[name] = rule.and(yield(ValueDSL.new(name, predicates)))
-          else
-            rules[name] = rule
-          end
-
-          self
+          rules << rule if rules
+          rule
         else
           super
         end
@@ -63,7 +65,7 @@ module Dry
       extend Dry::Configurable
 
       setting :predicates, Predicates
-      setting :rules, Hash.new { |k, v| k[v] = [] }
+      setting :rules, []
 
       attr_reader :rules
 
@@ -76,7 +78,7 @@ module Dry
       end
 
       def call(input)
-        rules.values.each_with_object(Error::Set.new) do |rule, errors|
+        rules.each_with_object(Error::Set.new) do |rule, errors|
           result = rule.(input)
           errors << Error.new(result, rule) if result.failure?
         end

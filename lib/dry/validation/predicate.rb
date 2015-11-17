@@ -23,7 +23,7 @@ module Dry
       end
 
       def negation
-        self.class.new(:"not_#{id}") { |*args| !fn.(*args) }
+        self.class.new(:"not_#{id}") { |input| !fn.(input) }
       end
 
       def curry(*args)

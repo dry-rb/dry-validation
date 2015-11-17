@@ -38,6 +38,10 @@ module Dry
       predicate(:gt?) do |num, input|
         input > num
       end
+
+      predicate(:min_size?) do |num, input|
+        input.size >= num
+      end
     end
   end
 end
