@@ -8,9 +8,10 @@ module Dry
       class Composite
         include Dry::Equalizer(:left, :right)
 
-        attr_reader :left, :right
+        attr_reader :name, :left, :right
 
         def initialize(left, right)
+          @name = left.name
           @left = left
           @right = right
         end
@@ -24,6 +25,11 @@ module Dry
             result
           end
         end
+
+        def to_ary
+          [left.to_ary, [right.to_ary]]
+        end
+        alias_method :to_a, :to_ary
       end
 
       class Key < Rule
@@ -32,7 +38,13 @@ module Dry
         end
 
         def call(input)
-          Validation.Result(input[name], predicate.(input))
+          Validation.Result(input[name], predicate.(input), predicate.id)
+        end
+      end
+
+      class Value < Rule
+        def call(input)
+          Validation.Result(input, predicate.(input), predicate.id)
         end
       end
 
@@ -41,10 +53,6 @@ module Dry
       def initialize(name, predicate)
         @name = name
         @predicate = predicate
-      end
-
-      def call(input)
-        Validation.Result(input, predicate.(input))
       end
 
       def curry(*args)

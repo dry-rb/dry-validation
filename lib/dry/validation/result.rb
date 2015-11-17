@@ -1,16 +1,22 @@
 module Dry
   module Validation
-    def self.Result(input, value)
-      Result.new(input, value)
+    def self.Result(input, value, predicate)
+      Result.new(input, value, predicate)
     end
 
     class Result
-      attr_reader :input, :value
+      attr_reader :input, :value, :predicate
 
-      def initialize(input, value)
+      def initialize(input, value, predicate)
         @input = input
         @value = value
+        @predicate = predicate
       end
+
+      def to_ary
+        [:input, input, [:predicate, predicate]]
+      end
+      alias_method :to_a, :to_ary
 
       def success?
         @value

@@ -1,12 +1,12 @@
 require 'dry/validation/predicate'
 require 'dry/validation/rule'
 
-RSpec.describe Dry::Validation::Rule do
+RSpec.describe Dry::Validation::Rule::Value do
   describe '#call' do
     it 'returns result of a predicate' do
-      is_string = -> input { input.is_a?(String) }
+      is_string = Dry::Validation::Predicate.new { |input| input.is_a?(String) }
 
-      rule = Dry::Validation::Rule.new(:name, is_string)
+      rule = Dry::Validation::Rule::Value.new(:name, is_string)
 
       expect(rule.(1)).to be_failure
       expect(rule.('1')).to be_success
@@ -15,11 +15,11 @@ RSpec.describe Dry::Validation::Rule do
 
   describe '#compose' do
     it 'returns pipelined rule' do
-      is_string = Dry::Validation::Rule.new(
+      is_string = Dry::Validation::Rule::Value.new(
         :name, Dry::Validation::Predicate.new { |input| input.is_a?(String) }
       )
 
-      min_size = Dry::Validation::Rule.new(
+      min_size = Dry::Validation::Rule::Value.new(
         :name, Dry::Validation::Predicate.new { |size, input| input.size >= size }
       )
 
@@ -36,7 +36,7 @@ RSpec.describe Dry::Validation::Rule do
   describe Dry::Validation::Rule::Key do
     subject(:presence_rule) { Dry::Validation::Rule::Key.new(:name, key_exist) }
 
-    let(:string_rule) { Dry::Validation::Rule.new(:name, is_string) }
+    let(:string_rule) { Dry::Validation::Rule::Value.new(:name, is_string) }
 
     let(:key_exist) do
       Dry::Validation::Predicate.new do |key, input|

@@ -2,7 +2,7 @@ RSpec.describe Dry::Validation do
   before do
     module Test
       class Validation < Dry::Validation::Schema
-        key(:name).present?
+        key(:email).present?
 
         key(:age).present? do |value|
           value.int?
@@ -15,10 +15,16 @@ RSpec.describe Dry::Validation do
     it 'works' do
       validation = Test::Validation.new
 
-      expect(validation.(name: 'Jane', age: 18)).to be_empty
+      expect(validation.(email: 'jane@doe.org', age: 18)).to be_empty
 
-      expect(validation.(name: '', age: 18)).to eql(name: [validation.rules[:name]])
-      expect(validation.(name: 'Jane', age: '18')).to eql(age: [validation.rules[:age]])
+      expect(validation.(email: '', age: 18)).to match_array([
+        [:error, [:rule, :email, [:result, [:input, "", [:predicate, :present?]]]]]
+      ])
+
+      expect(validation.(name: 'Jane', age: '18')).to match_array([
+        [:error, [:rule, :age, [:result, [:input, "18", [:predicate, :int?]]]]],
+        [:error, [:rule, :email, [:result, [:input, nil, [:predicate, :present?]]]]]
+      ])
     end
   end
 end
