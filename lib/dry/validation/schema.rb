@@ -22,8 +22,9 @@ module Dry
         predicate = predicates[meth]
 
         if predicate
-          rules << Rule::Value.new(name, predicate.curry(*args))
-          self
+          rule = Rule::Value.new(name, predicate.curry(*args))
+          rules << rule
+          rule
         else
           super
         end
@@ -46,7 +47,7 @@ module Dry
           rule = Rule::Key.new(name, predicate)
 
           if block
-            rules[name] = rule.and(*yield(ValueDSL.new(name, predicates)))
+            rules[name] = rule.and(yield(ValueDSL.new(name, predicates)))
           else
             rules[name] = rule
           end

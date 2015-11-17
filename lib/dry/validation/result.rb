@@ -25,7 +25,14 @@ module Dry
           self
         end
       end
-      alias_method :&, :and
+
+      def or(other)
+        if success?
+          self
+        else
+          other.(input)
+        end
+      end
 
       def success?
         @value

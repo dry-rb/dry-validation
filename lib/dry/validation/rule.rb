@@ -40,7 +40,13 @@ module Dry
 
       class Conjunction < Composite
         def call(input)
-          left.(input) & right
+          left.(input).and(right)
+        end
+      end
+
+      class Disjunction < Composite
+        def call(input)
+          left.(input).or(right)
         end
       end
 
@@ -54,6 +60,17 @@ module Dry
       def and(other)
         Conjunction.new(self, other)
       end
+      alias_method :&, :and
+
+      def or(other)
+        Disjunction.new(self, other)
+      end
+      alias_method :|, :or
+
+      def to_ary
+        [:predicate, predicate.id]
+      end
+      alias_method :to_a, :to_ary
 
       def curry(*args)
         self.class.new(name, predicate.curry(*args))

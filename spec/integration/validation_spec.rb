@@ -5,7 +5,7 @@ RSpec.describe Dry::Validation do
         key(:email).present?
 
         key(:age).present? do |value|
-          value.int?
+          value.int? & value.gt?(18)
         end
       end
     end
@@ -15,10 +15,11 @@ RSpec.describe Dry::Validation do
     it 'works' do
       validation = Test::Validation.new
 
-      expect(validation.(email: 'jane@doe.org', age: 18)).to be_empty
+      expect(validation.(email: 'jane@doe.org', age: 19)).to be_empty
 
       expect(validation.(email: '', age: 18)).to match_array([
-        [:error, [:rule, :email, [:result, [:input, "", [:predicate, :present?]]]]]
+        [:error, [:rule, :email, [:result, [:input, "", [:predicate, :present?]]]]],
+        [:error, [:rule, :age, [:result, [:input, 18, [:predicate, :gt?]]]]]
       ])
 
       expect(validation.(name: 'Jane', age: '18')).to match_array([
