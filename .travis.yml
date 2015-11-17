@@ -3,8 +3,7 @@ sudo: false
 cache: bundler
 bundler_args: --without console
 script:
-  - bundle exec rspec
-  - bundle exec rubocop
+  - bundle exec rake spec
 rvm:
   - 2.0
   - 2.1
