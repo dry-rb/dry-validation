@@ -12,11 +12,7 @@ module Dry
         end
 
         def key(name, &block)
-          DSL::Key.new(name, predicates)
-        end
-
-        def key?(name, &block)
-          key(name).key?(&block)
+          DSL::Key.new(name, predicates).key?(&block)
         end
 
         def to_ary

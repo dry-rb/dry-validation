@@ -2,14 +2,14 @@ RSpec.describe Dry::Validation do
   before do
     module Test
       class Validation < Dry::Validation::Schema
-        key?(:email) { |value| value.filled? }
+        key(:email) { |value| value.filled? }
 
-        key?(:age) do |value|
+        key(:age) do |value|
           value.int? & value.gt?(18)
         end
 
-        key?(:address) do |address|
-          address.key?(:city) do |city|
+        key(:address) do |address|
+          address.key(:city) do |city|
             city.min_size?(3)
           end
         end

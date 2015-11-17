@@ -13,12 +13,8 @@ module Dry
 
       attr_reader :rules
 
-      def self.key(name)
-        DSL::Key.new(name, config.predicates, config.rules)
-      end
-
-      def self.key?(name, &block)
-        key(name).key?(&block)
+      def self.key(name, &block)
+        DSL::Key.new(name, config.predicates, config.rules).key?(&block)
       end
 
       def initialize
