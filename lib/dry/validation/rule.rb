@@ -50,6 +50,18 @@ module Dry
         end
       end
 
+      class Set
+        attr_reader :rules
+
+        def initialize(rules)
+          @rules = rules
+        end
+
+        def call(input)
+          Validation.Result(input, rules.map { |rule| rule.(input) })
+        end
+      end
+
       attr_reader :name, :predicate
 
       def initialize(name, predicate)

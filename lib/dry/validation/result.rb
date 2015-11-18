@@ -1,22 +1,39 @@
 module Dry
   module Validation
-    def self.Result(input, value, predicate)
-      Result.new(input, value, predicate)
+    def self.Result(input, value, predicate = nil)
+      case value
+      when Array then Result::Set.new(input, value)
+      else Result::Value.new(input, value, predicate)
+      end
     end
 
     class Result
       attr_reader :input, :value, :predicate
 
-      def initialize(input, value, predicate)
-        @input = input
-        @value = value
-        @predicate = predicate
+      class Set < Result
+        def success?
+          value.all?(&:success?)
+        end
       end
 
-      def to_ary
-        [:input, input, [:predicate, *predicate.to_ary]]
+      class Value < Result
+        attr_reader :predicate
+
+        def initialize(input, value, predicate)
+          super(input, value)
+          @predicate = predicate
+        end
+
+        def to_ary
+          [:input, input, [:predicate, *predicate.to_ary]]
+        end
+        alias_method :to_a, :to_ary
       end
-      alias_method :to_a, :to_ary
+
+      def initialize(input, value)
+        @input = input
+        @value = value
+      end
 
       def and(other)
         if success?

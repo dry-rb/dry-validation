@@ -2,25 +2,25 @@ require 'dry/validation/predicate'
 require 'dry/validation/rule'
 
 RSpec.describe Dry::Validation::Rule do
+  let(:is_nil) do
+    Dry::Validation::Rule::Value.new(
+      :name, Dry::Validation::Predicate.new(:nil?) { |input| input.nil? }
+    )
+  end
+
+  let(:is_string) do
+    Dry::Validation::Rule::Value.new(
+      :name, Dry::Validation::Predicate.new(:str?) { |input| input.is_a?(String) }
+    )
+  end
+
+  let(:min_size) do
+    Dry::Validation::Rule::Value.new(
+      :name, Dry::Validation::Predicate.new(:min_size?) { |size, input| input.size >= size }
+    )
+  end
+
   describe Dry::Validation::Rule::Value do
-    let(:is_nil) do
-      Dry::Validation::Rule::Value.new(
-        :name, Dry::Validation::Predicate.new(:nil?) { |input| input.nil? }
-      )
-    end
-
-    let(:is_string) do
-      Dry::Validation::Rule::Value.new(
-        :name, Dry::Validation::Predicate.new(:str?) { |input| input.is_a?(String) }
-      )
-    end
-
-    let(:min_size) do
-      Dry::Validation::Rule::Value.new(
-        :name, Dry::Validation::Predicate.new(:min_size?) { |size, input| input.size >= size }
-      )
-    end
-
     describe '#call' do
       it 'returns result of a predicate' do
         expect(is_string.(1)).to be_failure
@@ -85,6 +85,20 @@ RSpec.describe Dry::Validation::Rule do
 
         expect(present_and_string.({})).to be_failure
         expect(present_and_string.(name: 1)).to be_failure
+      end
+    end
+  end
+
+  describe Dry::Validation::Rule::Set do
+    subject(:address_rule) do
+      Dry::Validation::Rule::Set.new([is_string, min_size.curry(6)])
+    end
+
+    describe '#call' do
+      it 'applies its rules to the input' do
+        expect(address_rule.('Address')).to be_success
+
+        expect(address_rule.('Addr')).to be_failure
       end
     end
   end
