@@ -1,20 +1,24 @@
+require 'dry/validation/schema/definition'
 require 'dry/validation/predicates'
-require 'dry/validation/rule'
 require 'dry/validation/error'
-require 'dry/validation/dsl/key'
 
 module Dry
   module Validation
     class Schema
       extend Dry::Configurable
+      extend Definition
 
       setting :predicates, Predicates
       setting :rules, []
 
       attr_reader :rules
 
-      def self.key(name, &block)
-        DSL::Key.new(name, config.predicates, config.rules).key?(&block)
+      def self.predicates
+        config.predicates
+      end
+
+      def self.rules
+        config.rules
       end
 
       def initialize

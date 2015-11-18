@@ -2,17 +2,16 @@ require 'dry/validation/rule'
 
 module Dry
   module Validation
-    module DSL
+    class Schema
       class Value
+        include Schema::Definition
+
         attr_reader :name, :predicates, :rules
 
         def initialize(name, predicates)
           @name = name
           @predicates = predicates
-        end
-
-        def key(name, &block)
-          DSL::Key.new(name, predicates).key?(&block)
+          @rules = []
         end
 
         def to_ary
@@ -29,7 +28,6 @@ module Dry
           end
         end
       end
-
     end
   end
 end

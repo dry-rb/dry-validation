@@ -1,13 +1,12 @@
 require 'dry/validation/rule'
-require 'dry/validation/dsl/value'
 
 module Dry
   module Validation
-    module DSL
+    class Schema
       class Key
         attr_reader :name, :predicates, :rules
 
-        def initialize(name, predicates, rules = nil, &block)
+        def initialize(name, predicates, rules, &block)
           @name = name
           @predicates = predicates
           @rules = rules
@@ -20,13 +19,13 @@ module Dry
 
             rule =
               if block
-                val_rule = yield(DSL::Value.new(name, predicates))
+                val_rule = yield(Value.new(name, predicates))
                 key_rule.and(val_rule)
               else
                 key_rule
               end
 
-            rules << rule if rules
+            rules << rule
             rule
           else
             super
