@@ -16,6 +16,11 @@ RSpec.describe Dry::Validation do
           address.key(:street) do |street|
             street.filled?
           end
+
+          address.key(:country) do |country|
+            country.key(:name, &:filled?)
+            country.key(:code, &:filled?)
+          end
         end
 
         key(:phone_numbers) do |phone_numbers|
@@ -31,7 +36,7 @@ RSpec.describe Dry::Validation do
       attrs = {
         email: 'jane@doe.org',
         age: 19,
-        address: { city: 'NYC', street: 'Street 1/2' },
+        address: { city: 'NYC', street: 'Street 1/2', country: { code: 'US', name: 'USA' } },
         phone_numbers: [
           '123456', '234567'
         ]
@@ -58,9 +63,14 @@ RSpec.describe Dry::Validation do
         [:error, [
           :set, [
             [:input, "NY", [:rule, [:city, [:min_size?, [3]]]]],
-            [:input, nil, [:rule, [:street, [:key?, [:street]]]]]
+            [:input, nil, [:rule, [:street, [:key?, [:street]]]]],
+            [:input, nil, [:rule, [:country, [:key?, [:country]]]]]
           ]
         ]]
+      ])
+
+      expect(validation.(attrs.merge(address: attrs[:address].merge(country: { code: 'US', name: '' })))).to match_array([
+        [:error, [:set, [[:set, [[:input, "", [:rule, [:name, [:filled?, []]]]]]]]]]
       ])
     end
   end

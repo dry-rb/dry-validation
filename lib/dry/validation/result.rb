@@ -16,7 +16,7 @@ module Dry
         end
 
         def to_ary
-          [:set, value.map(&:to_ary)]
+          [:set, value.select(&:failure?).map(&:to_ary)]
         end
         alias_method :to_a, :to_ary
       end
