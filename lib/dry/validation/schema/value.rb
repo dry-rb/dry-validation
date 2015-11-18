@@ -21,8 +21,7 @@ module Dry
 
         def method_missing(meth, *args, &block)
           if predicates.key?(meth)
-            predicate = predicates[meth]
-            Rule::Value.new(name, predicate.curry(*args))
+            Rule::Value.new(name, predicates[meth].curry(*args))
           else
             super
           end

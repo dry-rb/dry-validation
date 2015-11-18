@@ -14,19 +14,20 @@ module Dry
 
         def method_missing(meth, *args, &block)
           if predicates.key?(meth)
-            predicate = predicates[meth]
-            key_rule = Rule::Key.new(name, predicate)
+            key_rule = Rule::Key.new(name, predicates[meth])
 
-            rule =
+            rules <<
               if block
                 val_rule = yield(Value.new(name, predicates))
-                key_rule.and(val_rule)
+
+                if val_rule.is_a?(Array)
+                  key_rule.and(Rule::Set.new(val_rule))
+                else
+                  key_rule.and(val_rule)
+                end
               else
                 key_rule
               end
-
-            rules << rule
-            rule
           else
             super
           end

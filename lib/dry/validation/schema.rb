@@ -28,7 +28,7 @@ module Dry
       def call(input)
         rules.each_with_object(Error::Set.new) do |rule, errors|
           result = rule.(input)
-          errors << Error.new(result, rule) if result.failure?
+          errors << Error.new(result) if result.failure?
         end
       end
     end

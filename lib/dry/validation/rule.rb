@@ -11,13 +11,13 @@ module Dry
         end
 
         def call(input)
-          Validation.Result(input[name], predicate.(input), predicate)
+          Validation.Result(input[name], predicate.(input), self)
         end
       end
 
       class Value < Rule
         def call(input)
-          Validation.Result(input, predicate.(input), predicate)
+          Validation.Result(input, predicate.(input), self)
         end
       end
 
@@ -58,8 +58,13 @@ module Dry
         end
 
         def call(input)
-          Validation.Result(input, rules.map { |rule| rule.(input) })
+          Validation.Result(input, rules.map { |rule| rule.(input) }, self)
         end
+
+        def to_ary
+          rules.map(&:to_ary)
+        end
+        alias_method :to_a, :to_ary
       end
 
       attr_reader :name, :predicate
@@ -68,6 +73,11 @@ module Dry
         @name = name
         @predicate = predicate
       end
+
+      def to_ary
+        [name, predicate.to_ary]
+      end
+      alias_method :to_a, :to_ary
 
       def and(other)
         Conjunction.new(self, other)

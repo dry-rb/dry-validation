@@ -28,15 +28,14 @@ module Dry
         alias_method :to_a, :to_ary
       end
 
-      attr_reader :result, :rule
+      attr_reader :result
 
-      def initialize(result, rule)
+      def initialize(result)
         @result = result
-        @rule = rule
       end
 
       def to_ary
-        [:error, [:rule, rule.name, [:result, result.to_ary]]]
+        [:error, result.to_ary]
       end
       alias_method :to_a, :to_ary
     end
