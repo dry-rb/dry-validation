@@ -16,18 +16,17 @@ module Dry
           if predicates.key?(meth)
             key_rule = Rule::Key.new(name, predicates[meth])
 
-            rules <<
-              if block
-                val_rule = yield(Value.new(name, predicates))
+            if block
+              val_rule = yield(Value.new(name, predicates))
 
-                if val_rule.is_a?(Array)
-                  key_rule.and(Rule::Set.new(val_rule))
-                else
-                  key_rule.and(val_rule)
-                end
+              rules << if val_rule.is_a?(Array)
+                key_rule.and(Rule::Set.new(val_rule))
               else
-                key_rule
+                key_rule.and(val_rule)
               end
+            else
+              key_rule
+            end
           else
             super
           end

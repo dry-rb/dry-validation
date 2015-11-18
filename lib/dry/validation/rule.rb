@@ -50,6 +50,12 @@ module Dry
         end
       end
 
+      class Each < Rule
+        def call(input)
+          Validation.Result(input, input.map { |element| predicate.(element) }, self)
+        end
+      end
+
       class Set
         attr_reader :rules
 

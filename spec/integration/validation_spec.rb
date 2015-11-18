@@ -17,6 +17,10 @@ RSpec.describe Dry::Validation do
             street.filled?
           end
         end
+
+        key(:phone_numbers) do |phone_numbers|
+          phone_numbers.each(&:str?)
+        end
       end
     end
   end
@@ -24,7 +28,14 @@ RSpec.describe Dry::Validation do
   describe 'defining schema' do
     it 'works' do
       validation = Test::Validation.new
-      attrs = { email: 'jane@doe.org', age: 19, address: { city: 'NYC', street: 'Street 1/2' } }
+      attrs = {
+        email: 'jane@doe.org',
+        age: 19,
+        address: { city: 'NYC', street: 'Street 1/2' },
+        phone_numbers: [
+          '123456', '234567'
+        ]
+      }
 
       expect(validation.(attrs)).to be_empty
 
@@ -33,13 +44,14 @@ RSpec.describe Dry::Validation do
         [:error, [:input, 18, [:rule, [:age, [:gt?, [18]]]]]]
       ])
 
-      expect(validation.(name: 'Jane', age: '18', address: attrs[:address])).to match_array([
+      expect(validation.(name: 'Jane', age: '18', address: attrs[:address], phone_numbers: attrs[:phone_numbers])).to match_array([
         [:error, [:input, nil, [:rule, [:email, [:key?, [:email]]]]]],
         [:error, [:input, "18", [:rule, [:age, [:int?, []]]]]]
       ])
 
       expect(validation.(email: 'jane@doe.org', age: 19)).to match_array([
-        [:error, [:input, nil, [:rule, [:address, [:key?, [:address]]]]]]
+        [:error, [:input, nil, [:rule, [:address, [:key?, [:address]]]]]],
+        [:error, [:input, nil, [:rule, [:phone_numbers, [:key?, [:phone_numbers]]]]]]
       ])
 
       expect(validation.(attrs.merge(address: { city: 'NY' }))).to match_array([

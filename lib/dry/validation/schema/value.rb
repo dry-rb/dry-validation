@@ -14,10 +14,9 @@ module Dry
           @rules = []
         end
 
-        def to_ary
-          rules
+        def each(&block)
+          Rule::Each.new(name, yield(self))
         end
-        alias_method :to_a, :to_ary
 
         def method_missing(meth, *args, &block)
           if predicates.key?(meth)

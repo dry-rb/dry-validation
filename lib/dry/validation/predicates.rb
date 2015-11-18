@@ -33,6 +33,10 @@ module Dry
         input.is_a?(Fixnum)
       end
 
+      predicate(:str?) do |input|
+        input.is_a?(String)
+      end
+
       predicate(:gt?) do |num, input|
         input > num
       end
