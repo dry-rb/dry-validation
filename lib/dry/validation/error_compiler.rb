@@ -16,21 +16,30 @@ module Dry
       end
 
       def visit_error(error)
-        input, rules = visit(error[0]), error[1..error.size-1]
-        rules.flat_map { |rule| visit(rule, input) }
+        visit(error)
       end
 
       def visit_input(input)
-        input
+        name, value, rule = input
+        visit(rule, name, value)
       end
 
-      def visit_rule(rule, *args)
+      def visit_rule(rule, name, value)
         name, predicate = rule
-        [name, [visit(predicate, *args)]]
+        [name, Array(visit(predicate, value, name))]
       end
 
-      def visit_predicate(predicate, input)
-        config[:errors][predicate[0]] % { value: input }
+      def visit_predicate(predicate, input, name)
+        identifier, args = predicate
+        config[:errors][identifier] % visit(predicate, *args).merge(name: name)
+      end
+
+      def visit_gt?(*args)
+        { value: args[0], num: args[1] }
+      end
+
+      def visit_filled?(*args)
+        {}
       end
     end
   end
