@@ -10,7 +10,7 @@ end
 
 schema = Schema.new
 
-errors = schema.(email: 'goo', age: 19)
+errors = schema.(email: 'jane@doe.org', age: 19)
 
 puts errors.inspect
 # #<Dry::Validation::Error::Set:0x007ff3e29626d8 @errors=[]>
