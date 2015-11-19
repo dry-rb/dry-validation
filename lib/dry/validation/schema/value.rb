@@ -25,6 +25,10 @@ module Dry
             super
           end
         end
+
+        def respond_to_missing?(meth, _include_private = false)
+          predicates.key?(meth) || super
+        end
       end
     end
   end
