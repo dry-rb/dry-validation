@@ -57,6 +57,10 @@ module Dry
         !self[:lt?].(num, input)
       end
 
+      predicate(:size?) do |num, input|
+        input.size == num
+      end
+
       predicate(:min_size?) do |num, input|
         input.size >= num
       end
