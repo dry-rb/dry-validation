@@ -8,5 +8,5 @@ group :tools do
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-rubocop'
-  gem 'byebug'
+  gem 'byebug', platform: :mri
 end
