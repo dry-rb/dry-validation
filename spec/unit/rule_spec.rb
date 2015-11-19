@@ -53,42 +53,6 @@ RSpec.describe Dry::Validation::Rule do
     end
   end
 
-  describe Dry::Validation::Rule::Key do
-    subject(:presence_rule) { Dry::Validation::Rule::Key.new(:name, key_exist) }
-
-    let(:string_rule) { Dry::Validation::Rule::Value.new(:name, is_string) }
-
-    let(:key_exist) do
-      Dry::Validation::Predicate.new(:key_exist?) do |key, input|
-        input.key?(key)
-      end
-    end
-
-    let(:is_string) do
-      Dry::Validation::Predicate.new(:str?) do |input|
-        input.is_a?(String)
-      end
-    end
-
-    describe '#call' do
-      it 'applies predicate to the value' do
-        expect(presence_rule.(name: 'Jane')).to be_success
-        expect(presence_rule.({})).to be_failure
-      end
-    end
-
-    describe '#and' do
-      it 'returns conjunction rule where value is passed to the right' do
-        present_and_string = presence_rule.and(string_rule)
-
-        expect(present_and_string.(name: 'Jane')).to be_success
-
-        expect(present_and_string.({})).to be_failure
-        expect(present_and_string.(name: 1)).to be_failure
-      end
-    end
-  end
-
   describe Dry::Validation::Rule::Set do
     subject(:address_rule) do
       Dry::Validation::Rule::Set.new([is_string, min_size.curry(6)])

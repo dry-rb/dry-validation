@@ -12,6 +12,10 @@ module Dry
       extend Dry::Container::Mixin
       extend Methods
 
+      predicate(:nil?) do |input|
+        input.nil?
+      end
+
       predicate(:key?) do |name, input|
         input.key?(name)
       end
