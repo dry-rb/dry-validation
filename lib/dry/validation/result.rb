@@ -17,13 +17,13 @@ module Dry
 
         def to_ary
           indices = value.map { |v| v.failure? ? value.index(v) : nil }.compact
-          [[:input, input], rule.at(*indices).to_ary]
+          [:input, [rule.name, input, value.values_at(*indices).map(&:to_ary)]]
         end
       end
 
       class Value < Result
         def to_ary
-          [[:input, input], rule.to_ary]
+          [:input, [rule.name, input, rule.to_ary]]
         end
         alias_method :to_a, :to_ary
       end

@@ -48,71 +48,34 @@ RSpec.describe Dry::Validation do
 
     it 'validates presence of an email and min age value' do
       expect(validation.(attrs.merge(email: '', age: 18))).to match_array([
-        [:error, [[:input, ""], [:rule, [:email, [:predicate, [:filled?, []]]]]]],
-        [:error, [[:input, 18], [:rule, [:age, [:predicate, [:gt?, [18]]]]]]]
+        [:error, [:input, [:age, 18, [:rule, [:age, [:predicate, [:gt?, [18]]]]]]]],
+        [:error, [:input, [:email, "", [:rule, [:email, [:predicate, [:filled?, []]]]]]]]
       ])
     end
 
     it 'validates presence of the email key and type of age value' do
       expect(validation.(name: 'Jane', age: '18', address: attrs[:address], phone_numbers: attrs[:phone_numbers])).to match_array([
-        [:error, [[:input, nil], [:rule, [:email, [:predicate, [:key?, [:email]]]]]]],
-        [:error, [[:input, "18"], [:rule, [:age, [:predicate, [:int?, []]]]]]]
+        [:error, [:input, [:age, "18", [:rule, [:age, [:predicate, [:int?, []]]]]]]],
+        [:error, [:input, [:email, nil, [:rule, [:email, [:predicate, [:key?, [:email]]]]]]]]
       ])
     end
 
     it 'validates presence of the address and phone_number keys' do
       expect(validation.(email: 'jane@doe.org', age: 19)).to match_array([
-        [:error, [[:input, nil], [:rule, [:address, [:predicate, [:key?, [:address]]]]]]],
-        [:error, [[:input, nil], [:rule, [:phone_numbers, [:predicate, [:key?, [:phone_numbers]]]]]]]
+        [:error, [:input, [:address, nil, [:rule, [:address, [:predicate, [:key?, [:address]]]]]]]],
+        [:error, [:input, [:phone_numbers, nil, [:rule, [:phone_numbers, [:predicate, [:key?, [:phone_numbers]]]]]]]]
       ])
     end
 
     it 'validates presence of keys under address and min size of the city value' do
       expect(validation.(attrs.merge(address: { city: 'NY' }))).to match_array([
         [:error, [
-          [:input, { city: "NY" }],
-          [
-            :rule, [
-              :address, [
-                :set, [
-                  [
-                    [:rule, [:city, [:predicate, [:key?, [:city]]]]],
-                    [
-                      [:rule, [:city, [:predicate, [:min_size?, [3]]]]]
-                    ]
-                  ],
-                  [
-                    [:rule, [:street, [:predicate, [:key?, [:street]]]]],
-                    [
-                      [:rule, [:street, [:predicate, [:filled?, []]]]]
-                    ]
-                  ],
-                  [
-                    [:rule, [:country, [:predicate, [:key?, [:country]]]]],
-                    [
-                      [
-                        :rule, [
-                          :country, [
-                            :set, [
-                              [
-                                [:rule, [:name, [:predicate, [:key?, [:name]]]]],
-                                [
-                                  [:rule, [:name, [:predicate, [:filled?, []]]]]]
-                              ],
-                              [
-                                [:rule, [:code, [:predicate, [:key?, [:code]]]]],
-                                [
-                                  [:rule, [:code, [:predicate, [:filled?, []]]]]
-                                ]
-                              ]
-                            ]
-                          ]
-                        ]
-                      ]
-                    ]
-                  ]
-                ]
-              ]
+          :input, [
+            :address, {city: "NY"},
+            [
+              [:input, [:city, "NY", [:rule, [:city, [:predicate, [:min_size?, [3]]]]]]],
+              [:input, [:street, nil, [:rule, [:street, [:predicate, [:key?, [:street]]]]]]],
+              [:input, [:country, nil, [:rule, [:country, [:predicate, [:key?, [:country]]]]]]]
             ]
           ]
         ]]
@@ -122,33 +85,15 @@ RSpec.describe Dry::Validation do
     it 'validates address code and name values' do
       expect(validation.(attrs.merge(address: attrs[:address].merge(country: { code: 'US', name: '' })))).to match_array([
         [:error, [
-          [:input, { city: "NYC", street: "Street 1/2", country: { code: "US", name: "" }}],
-          [
-            :rule, [
-              :address, [
-                :set, [
-                  [
-                    [:rule, [:country, [:predicate, [:key?, [:country]]]]],
+          :input, [
+            :address, {city: "NYC", street: "Street 1/2", country: {code: "US", name: ""}},
+            [
+              [
+                :input, [
+                  :country, {code: "US", name: ""}, [
                     [
-                      [
-                        :rule, [
-                          :country, [
-                            :set, [
-                              [
-                                [:rule, [:name, [:predicate, [:key?, [:name]]]]],
-                                [
-                                  [:rule, [:name, [:predicate, [:filled?, []]]]]
-                                ]
-                              ],
-                              [
-                                [:rule, [:code, [:predicate, [:key?, [:code]]]]],
-                                [
-                                  [:rule, [:code, [:predicate, [:filled?, []]]]]
-                                ]
-                              ]
-                            ]
-                          ]
-                        ]
+                      :input, [
+                        :name, "", [:rule, [:name, [:predicate, [:filled?, []]]]]
                       ]
                     ]
                   ]
