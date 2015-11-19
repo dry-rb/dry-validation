@@ -81,7 +81,7 @@ puts errors.inspect
 errors = schema.(email: nil, age: 19)
 
 puts errors.inspect
-#<Dry::Validation::Error::Set:0x007f80ac198a00 @errors=[#<Dry::Validation::Error:0x007f80ac193aa0 @result=#<Dry::Validation::Result::Value success?=false input=nil rule=#<Dry::Validation::Rule::Value name=:email predicate=#<Dry::Validation::Predicate id=:filled?>>>>]>
+# #<Dry::Validation::Error::Set:0x007f80ac198a00 @errors=[#<Dry::Validation::Error:0x007f80ac193aa0 @result=#<Dry::Validation::Result::Value success?=false input=nil rule=#<Dry::Validation::Rule::Value name=:email predicate=#<Dry::Validation::Predicate id=:filled?>>>>]>
 ```
 
 A couple of remarks:
@@ -122,12 +122,12 @@ schema = Schema.new
 errors = schema.({})
 
 puts errors.inspect
-#<Dry::Validation::Error::Set:0x007fc4f89c4360 @errors=[#<Dry::Validation::Error:0x007fc4f89c4108 @result=#<Dry::Validation::Result::Value success?=false input=nil rule=#<Dry::Validation::Rule::Key name=:address predicate=#<Dry::Validation::Predicate id=:key?>>>>]>
+# #<Dry::Validation::Error::Set:0x007fc4f89c4360 @errors=[#<Dry::Validation::Error:0x007fc4f89c4108 @result=#<Dry::Validation::Result::Value success?=false input=nil rule=#<Dry::Validation::Rule::Key name=:address predicate=#<Dry::Validation::Predicate id=:key?>>>>]>
 
 errors = schema.(address: { city: 'NYC' })
 
 puts errors.inspect
-#<Dry::Validation::Error::Set:0x007fd151189b18 @errors=[#<Dry::Validation::Error:0x007fd151188e20 @result=#<Dry::Validation::Result::Set success?=false input={:city=>"NYC"} rule=#<Dry::Validation::Rule::Set name=:address predicate=[#<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:city predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:city predicate=#<Dry::Validation::Predicate id=:min_size?>>>, #<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:street predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:street predicate=#<Dry::Validation::Predicate id=:filled?>>>, #<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:country predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Set name=:country predicate=[#<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:name predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:name predicate=#<Dry::Validation::Predicate id=:filled?>>>, #<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:code predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:code predicate=#<Dry::Validation::Predicate id=:filled?>>>]>>]>>>]>
+# #<Dry::Validation::Error::Set:0x007fd151189b18 @errors=[#<Dry::Validation::Error:0x007fd151188e20 @result=#<Dry::Validation::Result::Set success?=false input={:city=>"NYC"} rule=#<Dry::Validation::Rule::Set name=:address predicate=[#<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:city predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:city predicate=#<Dry::Validation::Predicate id=:min_size?>>>, #<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:street predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:street predicate=#<Dry::Validation::Predicate id=:filled?>>>, #<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:country predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Set name=:country predicate=[#<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:name predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:name predicate=#<Dry::Validation::Predicate id=:filled?>>>, #<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:code predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:code predicate=#<Dry::Validation::Predicate id=:filled?>>>]>>]>>>]>
 ```
 
 ## Status and Roadmap
