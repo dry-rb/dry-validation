@@ -4,7 +4,7 @@ module Dry
       attr_reader :config
 
       def initialize(config)
-        @config = config
+        @config = config[:errors]
       end
 
       def call(ast)
@@ -30,7 +30,7 @@ module Dry
       end
 
       def visit_predicate(predicate, value, name)
-        config[:errors][predicate[0]] % visit(predicate, value).merge(name: name)
+        lookup_message(predicate[0], name) % visit(predicate, value).merge(name: name)
       end
 
       def visit_gt?(*args, value)
@@ -39,6 +39,12 @@ module Dry
 
       def visit_filled?(*args)
         {}
+      end
+
+      def lookup_message(identifier, key)
+        config.fetch(:attributes, {}).fetch(key, {}).fetch(identifier) {
+          config.fetch(identifier)
+        }
       end
     end
   end
