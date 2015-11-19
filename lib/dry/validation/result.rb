@@ -8,6 +8,8 @@ module Dry
     end
 
     class Result
+      include Dry::Equalizer(:success?, :input, :rule)
+
       attr_reader :input, :value, :rule
 
       class Set < Result

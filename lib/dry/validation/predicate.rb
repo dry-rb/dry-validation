@@ -8,7 +8,7 @@ module Dry
     end
 
     class Predicate
-      include Dry::Equalizer(:id, :fn)
+      include Dry::Equalizer(:id)
 
       attr_reader :id, :args, :fn
 
