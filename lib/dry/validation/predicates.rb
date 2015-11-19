@@ -68,6 +68,14 @@ module Dry
       predicate(:max_size?) do |num, input|
         input.size <= num
       end
+
+      predicate(:inclusion?) do |list, input|
+        list.include?(input)
+      end
+
+      predicate(:exclusion?) do |list, input|
+        !self[:inclusion?].(list, input)
+      end
     end
   end
 end
