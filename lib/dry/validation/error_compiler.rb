@@ -29,13 +29,12 @@ module Dry
         [name, Array(visit(predicate, value, name))]
       end
 
-      def visit_predicate(predicate, input, name)
-        identifier, args = predicate
-        config[:errors][identifier] % visit(predicate, *args).merge(name: name)
+      def visit_predicate(predicate, value, name)
+        config[:errors][predicate[0]] % visit(predicate, value).merge(name: name)
       end
 
-      def visit_gt?(*args)
-        { value: args[0], num: args[1] }
+      def visit_gt?(*args, value)
+        { num: args[0][0], value: value }
       end
 
       def visit_filled?(*args)

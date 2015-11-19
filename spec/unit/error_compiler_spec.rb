@@ -6,7 +6,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
   let(:config) do
     {
       errors: {
-        gt?: "%{name} must be greater than %{num}",
+        gt?: "%{name} must be greater than %{num} (%{value} was given)",
         filled?: "%{name} must be filled"
       }
     }
@@ -22,7 +22,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     it 'converts error ast into another format' do
       expect(error_compiler.(ast)).to eql([
-        [:age, ["age must be greater than 18"]],
+        [:age, ["age must be greater than 18 (18 was given)"]],
         [:email, ["email must be filled"]]
       ])
     end
