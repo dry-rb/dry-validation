@@ -9,20 +9,19 @@ module Dry
       extend Definition
 
       setting :predicates, Predicates
-      setting :rules, []
-
-      attr_reader :rules
 
       def self.predicates
         config.predicates
       end
 
       def self.rules
-        config.rules
+        @__rules__ ||= []
       end
 
+      attr_reader :rules
+
       def initialize
-        @rules = self.class.config.rules
+        @rules = self.class.rules
       end
 
       def call(input)

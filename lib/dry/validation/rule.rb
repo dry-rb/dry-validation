@@ -56,19 +56,17 @@ module Dry
         end
       end
 
-      class Set
-        attr_reader :rules
-
-        def initialize(rules)
-          @rules = rules
+      class Set < Rule
+        def call(input)
+          Validation.Result(input, predicate.map { |rule| rule.(input) }, self)
         end
 
-        def call(input)
-          Validation.Result(input, rules.map { |rule| rule.(input) }, self)
+        def at(*args)
+          self.class.new(name, predicate.values_at(*args))
         end
 
         def to_ary
-          rules.map(&:to_ary)
+          [:rule, [name, [:set, predicate.map(&:to_ary)]]]
         end
         alias_method :to_a, :to_ary
       end
@@ -81,7 +79,7 @@ module Dry
       end
 
       def to_ary
-        [name, predicate.to_ary]
+        [:rule, [name, predicate.to_ary]]
       end
       alias_method :to_a, :to_ary
 

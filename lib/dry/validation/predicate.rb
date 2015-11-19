@@ -31,7 +31,7 @@ module Dry
       end
 
       def to_ary
-        [id, args]
+        [:predicate, [id, args]]
       end
       alias_method :to_a, :to_ary
     end

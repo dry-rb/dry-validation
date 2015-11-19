@@ -20,7 +20,7 @@ module Dry
               val_rule = yield(Value.new(name, predicates))
 
               rules << if val_rule.is_a?(Array)
-                key_rule.and(Rule::Set.new(val_rule))
+                key_rule.and(Rule::Set.new(name, val_rule))
               else
                 key_rule.and(val_rule)
               end
