@@ -1,5 +1,4 @@
 require 'dry/validation/predicate'
-require 'dry/validation/predicates'
 
 module Dry
   module Validation
@@ -17,7 +16,6 @@ module Dry
       def self.extended(other)
         super
         other.extend(Methods, Dry::Container::Mixin)
-        other.import(PredicateSet::BuiltIn)
       end
     end
   end

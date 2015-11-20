@@ -9,6 +9,4 @@ module Dry
   end
 end
 
-require 'dry/validation/predicate'
 require 'dry/validation/schema'
-require 'dry/validation/predicate_set/built_in'
