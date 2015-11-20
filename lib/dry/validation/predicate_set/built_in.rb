@@ -72,7 +72,5 @@ module Dry
         end
       end
     end
-
-    Predicates.import(PredicateSet::BuiltIn)
   end
 end

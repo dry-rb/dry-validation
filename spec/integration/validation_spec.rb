@@ -1,35 +1,35 @@
 RSpec.describe Dry::Validation do
-  let(:schema) do
-    Class.new(Dry::Validation::Schema) do
-      key(:email) { |email| email.filled? }
-
-      key(:age) do |age|
-        age.int? & age.gt?(18)
-      end
-
-      key(:address) do |address|
-        address.key(:city) do |city|
-          city.min_size?(3)
-        end
-
-        address.key(:street) do |street|
-          street.filled?
-        end
-
-        address.key(:country) do |country|
-          country.key(:name, &:filled?)
-          country.key(:code, &:filled?)
-        end
-      end
-
-      key(:phone_numbers) do |phone_numbers|
-        phone_numbers.each(&:str?)
-      end
-    end
-  end
+  subject(:validation) { schema.new }
 
   describe 'defining schema' do
-    let(:validation) { schema.new }
+    let(:schema) do
+      Class.new(Dry::Validation::Schema) do
+        key(:email) { |email| email.filled? }
+
+        key(:age) do |age|
+          age.int? & age.gt?(18)
+        end
+
+        key(:address) do |address|
+          address.key(:city) do |city|
+            city.min_size?(3)
+          end
+
+          address.key(:street) do |street|
+            street.filled?
+          end
+
+          address.key(:country) do |country|
+            country.key(:name, &:filled?)
+            country.key(:code, &:filled?)
+          end
+        end
+
+        key(:phone_numbers) do |phone_numbers|
+          phone_numbers.each(&:str?)
+        end
+      end
+    end
 
     let(:attrs) do
       {
