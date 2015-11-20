@@ -15,9 +15,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'dry-configurable'
-  spec.add_runtime_dependency 'dry-container'
-  spec.add_runtime_dependency 'dry-equalizer'
+  spec.add_runtime_dependency 'dry-configurable', '~> 0.1'
+  spec.add_runtime_dependency 'dry-container', '~> 0.2', '>= 0.2.6'
+  spec.add_runtime_dependency 'dry-equalizer', '~> 0.2'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
