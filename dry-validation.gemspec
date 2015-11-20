@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'dry-configurable'
-  spec.add_runtime_dependency 'dry-container'
+  # spec.add_runtime_dependency 'dry-container'
   spec.add_runtime_dependency 'dry-equalizer'
 
   spec.add_development_dependency 'bundler'
