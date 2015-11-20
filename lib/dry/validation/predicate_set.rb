@@ -6,7 +6,7 @@ module Dry
     module PredicateSet
       module Methods
         def predicate(name, &block)
-          register(name, singleton: true) { Predicate.new(name, &block) }
+          register(name) { Predicate.new(name, &block) }
         end
       end
 
