@@ -4,7 +4,7 @@ module Dry
   module Validation
     module PredicateSet
       module BuiltIn
-        extend Dry::Validation::PredicateSet
+        extend PredicateSet
 
         predicate(:nil?) do |input|
           input.nil?
