@@ -11,8 +11,7 @@ module Dry
       end
 
       def self.extended(base)
-        base.__send__(:extend, Dry::Container::Mixin)
-        base.__send__(:extend, Methods)
+        base.extend(Dry::Container::Mixin, Methods)
       end
     end
   end
