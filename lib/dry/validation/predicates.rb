@@ -5,8 +5,6 @@ module Dry
   module Validation
     module Predicates
       extend PredicateSet
-
-      import PredicateSet::BuiltIn
     end
   end
 end

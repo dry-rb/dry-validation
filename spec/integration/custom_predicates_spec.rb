@@ -5,7 +5,7 @@ RSpec.describe Dry::Validation do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
         configure do |config|
-          config.predicates = Test::Predicates.import(Dry::Validation::Predicates)
+          config.predicates = Test::Predicates
         end
 
         key(:email) { |value| value.filled? & value.email? }
