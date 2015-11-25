@@ -9,6 +9,7 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
   let(:val_rule) { Rule::Value.new(:email, predicate) }
   let(:and_rule) { key_rule & val_rule }
   let(:or_rule) { key_rule | val_rule }
+  let(:set_rule) { Rule::Set.new(:email, [val_rule]) }
 
   it 'compiles key rules' do
     ast = [[:key_rule, [:email, [:predicate, [:key?, predicate]]]]]
@@ -46,5 +47,21 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
     rules = compiler.(ast)
 
     expect(rules).to eql([or_rule])
+  end
+
+  it 'compiles set rules' do
+    ast = [
+      [
+        :set_rule, [
+          :email, [
+            [:val_rule, [:email, [:predicate, [:filled?, predicate]]]]
+          ]
+        ]
+      ]
+    ]
+
+    rules = compiler.(ast)
+
+    expect(rules).to eql([set_rule])
   end
 end

@@ -22,6 +22,11 @@ module Dry
         Rule::Value.new(name, visit(predicate))
       end
 
+      def visit_set_rule(node)
+        name, rules = node
+        Rule::Set.new(name, rules.map { |rule| visit(rule) })
+      end
+
       def visit_predicate(node)
         _, fn = node
         fn
