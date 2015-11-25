@@ -24,6 +24,11 @@ module Dry
         visit(rule, name, value)
       end
 
+      def visit_key(rule, name, value)
+        name, predicate = rule
+        [name, Array(visit(predicate, value, name))]
+      end
+
       def visit_val(rule, name, value)
         name, predicate = rule
         [name, Array(visit(predicate, value, name))]
@@ -31,6 +36,10 @@ module Dry
 
       def visit_predicate(predicate, value, name)
         lookup_message(predicate[0], name) % visit(predicate, value).merge(name: name)
+      end
+
+      def visit_key?(*args, value)
+        { name: args[0][0] }
       end
 
       def visit_gt?(*args, value)

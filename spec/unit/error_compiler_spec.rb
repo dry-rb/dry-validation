@@ -8,6 +8,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       errors: {
         gt?: "%{name} must be greater than %{num} (%{value} was given)",
         filled?: "%{name} must be filled",
+        key?: "%{name} is missing",
         attributes: {
           address: {
             filled?: 'Please provide your address'
@@ -20,6 +21,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
   describe '#call' do
     let(:ast) do
       [
+        [:error, [:input, [:name, nil, [:key, [:name, [:predicate, [:key?, []]]]]]]],
         [:error, [:input, [:age, 18, [:val, [:age, [:predicate, [:gt?, [18]]]]]]]],
         [:error, [:input, [:email, "", [:val, [:email, [:predicate, [:filled?, []]]]]]]],
         [:error, [:input, [:address, "", [:val, [:address, [:predicate, [:filled?, []]]]]]]]
@@ -28,6 +30,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     it 'converts error ast into another format' do
       expect(error_compiler.(ast)).to eql([
+        [:name, ["name is missing"]],
         [:age, ["age must be greater than 18 (18 was given)"]],
         [:email, ["email must be filled"]],
         [:address, ["Please provide your address"]]
