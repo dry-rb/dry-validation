@@ -1,10 +1,18 @@
-# dry-validation <a href="https://gitter.im/dryrb/chat" target="_blank">![Join the chat at https://gitter.im/dryrb/chat](https://badges.gitter.im/Join%20Chat.svg)</a>
+[gem]: https://rubygems.org/gems/dry-validation
+[travis]: https://travis-ci.org/dryrb/dry-validation
+[gemnasium]: https://gemnasium.com/dryrb/dry-validation
+[codeclimate]: https://codeclimate.com/github/dryrb/dry-validation
+[coveralls]: https://coveralls.io/r/dryrb/dry-validation
+[inchpages]: http://inch-ci.org/github/dryrb/dry-validation
 
-<a href="https://rubygems.org/gems/dry-validation" target="_blank">![Gem Version](https://badge.fury.io/rb/dry-validation.svg)</a>
-<a href="https://travis-ci.org/dryrb/dry-validation" target="_blank">![Build Status](https://travis-ci.org/dryrb/dry-validation.svg?branch=master)</a>
-<a href="https://gemnasium.com/dryrb/dry-validation" target="_blank">![Dependency Status](https://gemnasium.com/dryrb/dry-validation.svg)</a>
-<a href="https://codeclimate.com/github/dryrb/dry-validation" target="_blank">![Code Climate](https://codeclimate.com/github/dryrb/dry-validation/badges/gpa.svg)</a>
-<a href="http://inch-ci.org/github/dryrb/dry-validation" target="_blank">![Documentation Status](http://inch-ci.org/github/dryrb/dry-validation.svg?branch=master&style=flat)</a>
+# dry-validation [![Join the chat at https://gitter.im/dryrb/dry-validation](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dryrb/dry-validation)
+
+[![Gem Version](https://badge.fury.io/rb/transproc.svg)][gem]
+[![Build Status](https://travis-ci.org/dryrb/dry-validation.svg?branch=master)][travis]
+[![Dependency Status](https://gemnasium.com/dryrb/dry-validation.svg)][gemnasium]
+[![Code Climate](https://codeclimate.com/github/dryrb/dry-validation/badges/gpa.svg)][codeclimate]
+[![Test Coverage](https://codeclimate.com/github/dryrb/dry-validation/badges/coverage.svg)][codeclimate]
+[![Inline docs](http://inch-ci.org/github/dryrb/dry-validation.svg?branch=master)][inchpages]
 
 Data validation library based on predicate logic and rule composition.
 
