@@ -145,5 +145,13 @@ RSpec.describe Dry::Validation::ErrorCompiler do
         expect(msg).to eql('num must be a string')
       end
     end
+
+    describe ':format?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:format?, [/^F/]], 'Bar', :str)
+
+        expect(msg).to eql('str is in invalid format')
+      end
+    end
   end
 end

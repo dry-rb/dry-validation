@@ -96,6 +96,10 @@ module Dry
         { value: value }
       end
 
+      def visit_format?(*args, value)
+        {}
+      end
+
       def visit_nil?(*args, value)
         {}
       end

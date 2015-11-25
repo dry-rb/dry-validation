@@ -75,6 +75,10 @@ module Dry
       predicate(:exclusion?) do |list, input|
         !self[:inclusion?].(list, input)
       end
+
+      predicate(:format?) do |regex, input|
+        !regex.match(input).nil?
+      end
     end
   end
 end
