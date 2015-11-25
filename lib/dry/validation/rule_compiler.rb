@@ -27,6 +27,11 @@ module Dry
         Rule::Set.new(name, rules.map { |rule| visit(rule) })
       end
 
+      def visit_each_rule(node)
+        name, rule = node
+        Rule::Each.new(name, visit(rule))
+      end
+
       def visit_predicate(node)
         _, fn = node
         fn
