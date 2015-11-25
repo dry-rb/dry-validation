@@ -73,21 +73,21 @@ end
 
 schema = Schema.new
 
-errors = schema.(email: 'jane@doe.org', age: 19)
+errors = schema.messages(email: 'jane@doe.org', age: 19)
 
 puts errors.inspect
-# #<Dry::Validation::Error::Set:0x007ff3e29626d8 @errors=[]>
+# []
 
-errors = schema.(email: nil, age: 19)
+errors = schema.messages(email: nil, age: 19)
 
 puts errors.inspect
-# #<Dry::Validation::Error::Set:0x007f80ac198a00 @errors=[#<Dry::Validation::Error:0x007f80ac193aa0 @result=#<Dry::Validation::Result::Value success?=false input=nil rule=#<Dry::Validation::Rule::Value name=:email predicate=#<Dry::Validation::Predicate id=:filled?>>>>]>
+# [[:email, ["email must be filled"]]]
 ```
 
 A couple of remarks:
 
 * `key` assumes that we want to use the `:key?` predicate to check the existance of that key
-* `age.gt?(18)` translates to `Dry::Validation::Predicates.gt?(18, age)`
+* `age.gt?(18)` translates to calling a predicate like this: `schema[:gt?].(18, age)`
 * `age.int? & age.gt?(18)` is a conjunction, so we don't bother about `gt?` unless `int?` returns `true`
 * You can also use `|` for disjunction
 * Schema object does not carry the input as its state, nor does it know how to access the input values, we
@@ -119,16 +119,78 @@ end
 
 schema = Schema.new
 
-errors = schema.({})
+errors = schema.messages({})
 
 puts errors.inspect
-# #<Dry::Validation::Error::Set:0x007fc4f89c4360 @errors=[#<Dry::Validation::Error:0x007fc4f89c4108 @result=#<Dry::Validation::Result::Value success?=false input=nil rule=#<Dry::Validation::Rule::Key name=:address predicate=#<Dry::Validation::Predicate id=:key?>>>>]>
+# [[:address, ["address is missing"]]]
 
-errors = schema.(address: { city: 'NYC' })
+errors = schema.messages(address: { city: 'NYC' })
 
 puts errors.inspect
-# #<Dry::Validation::Error::Set:0x007fd151189b18 @errors=[#<Dry::Validation::Error:0x007fd151188e20 @result=#<Dry::Validation::Result::Set success?=false input={:city=>"NYC"} rule=#<Dry::Validation::Rule::Set name=:address predicate=[#<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:city predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:city predicate=#<Dry::Validation::Predicate id=:min_size?>>>, #<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:street predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:street predicate=#<Dry::Validation::Predicate id=:filled?>>>, #<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:country predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Set name=:country predicate=[#<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:name predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:name predicate=#<Dry::Validation::Predicate id=:filled?>>>, #<Dry::Validation::Rule::Conjunction left=#<Dry::Validation::Rule::Key name=:code predicate=#<Dry::Validation::Predicate id=:key?>> right=#<Dry::Validation::Rule::Value name=:code predicate=#<Dry::Validation::Predicate id=:filled?>>>]>>]>>>]>
+# [[:address, [[:street, ["street is missing"]], [:country, ["country is missing"]]]]]
 ```
+
+### Error Messages
+
+By default `dry-validation` comes with a set of pre-defined error messages for
+every built-in predicate. They are defined in [a yaml file](https://github.com/dryrb/dry-validation/blob/master/config/errors.yml)
+which is shipped with the gem.
+
+You can provide your own messages and configure your schemas to use it like that:
+
+``` ruby
+class Schema < Dry::Validation::Schema
+  configure { |config| config.messages_file = '/path/to/my/errors.yml' }
+end
+```
+
+You can also provide a namespace per-schema that will be used by default:
+
+``` ruby
+class Schema < Dry::Validation::Schema
+  configure { |config| config.namespace = :user }
+end
+```
+
+Lookup rules:
+
+``` yaml
+filled?: "%{name} must be filled"
+
+attributes:
+  email:
+    filled?: "the email is missing"
+
+user:
+  filled?: "%{name} name cannot be blank"
+
+  attributes:
+    address:
+      filled?: "You gotta tell us where you live"
+```
+
+Given the yaml file above, messages lookup works as follows:
+
+``` ruby
+messages = Dry::Validation::Messages.load('/path/to/our/errors.yml')
+
+messages.lookup(:filled?, :age) # => "age must be filled"
+messages.lookup(:filled?, :address) # => "address must be filled"
+messages.lookup(:filled?, :email) # => "the email is missing"
+
+# with namespaced messages
+user_messages = messages.namespaced(:user)
+
+user_messages.lookup(:filled?, :age) # "age cannot be blank"
+user_messages.lookup(:filled?, :address) # "You gotta tell us where you live"
+```
+
+By configuring `messages_file` and/or `namespace` in a schema, default messages
+are going to be automatically merged with defaults and/or namespaced for you.
+
+### I18n Integration
+
+Coming (very) soon...
 
 ## Status and Roadmap
 
