@@ -4,36 +4,34 @@ module Dry
   module Validation
     class Schema
       class Key
-        attr_reader :name, :predicates, :rules
+        attr_reader :name, :rules
 
-        def initialize(name, predicates, rules, &block)
+        def initialize(name, rules, &block)
           @name = name
-          @predicates = predicates
           @rules = rules
         end
 
+        private
+
         def method_missing(meth, *args, &block)
-          if predicates.key?(meth)
-            key_rule = Rule::Key.new(name, predicates[meth])
+          key_rule = [:key, [name, [:predicate, [meth, args]]]]
 
-            if block
-              val_rule = yield(Value.new(name, predicates))
+          if block
+            val_rule = yield(Value.new(name))
 
-              rules << if val_rule.is_a?(Array)
-                key_rule.and(Rule::Set.new(name, val_rule))
+            rules <<
+              if val_rule.is_a?(Array)
+                Definition::Rule.new([:and, [key_rule, [:set, [name, val_rule.map(&:to_ary)]]]])
               else
-                key_rule.and(val_rule)
+                Definition::Rule.new([:and, [key_rule, val_rule.to_ary]])
               end
-            else
-              key_rule
-            end
           else
-            super
+            Definition::Rule.new(key_rule)
           end
         end
 
         def respond_to_missing?(meth, _include_private = false)
-          predicates.key?(meth) || super
+          true
         end
       end
     end

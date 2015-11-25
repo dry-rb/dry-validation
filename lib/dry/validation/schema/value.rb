@@ -1,33 +1,29 @@
-require 'dry/validation/rule'
-
 module Dry
   module Validation
     class Schema
       class Value
         include Schema::Definition
 
-        attr_reader :name, :predicates, :rules
+        attr_reader :name, :rules
 
-        def initialize(name, predicates)
+        def initialize(name)
           @name = name
-          @predicates = predicates
           @rules = []
         end
 
         def each(&block)
-          Rule::Each.new(name, yield(self))
+          rule = yield(self).to_ary
+          Definition::Rule.new([:each, [name, rule]])
         end
 
+        private
+
         def method_missing(meth, *args, &block)
-          if predicates.key?(meth)
-            Rule::Value.new(name, predicates[meth].curry(*args))
-          else
-            super
-          end
+          Definition::Rule.new([:val, [name, [:predicate, [meth, args]]]])
         end
 
         def respond_to_missing?(meth, _include_private = false)
-          predicates.key?(meth) || super
+          true
         end
       end
     end

@@ -1,6 +1,7 @@
 require 'dry/validation/schema/definition'
 require 'dry/validation/predicates'
 require 'dry/validation/error'
+require 'dry/validation/rule_compiler'
 
 module Dry
   module Validation
@@ -21,7 +22,7 @@ module Dry
       attr_reader :rules
 
       def initialize
-        @rules = self.class.rules
+        @rules = RuleCompiler.new(self).(self.class.rules.map(&:to_ary))
       end
 
       def call(input)
@@ -29,6 +30,10 @@ module Dry
           result = rule.(input)
           errors << Error.new(result) if result.failure?
         end
+      end
+
+      def [](name)
+        methods.include?(name) ? method(name) : self.class.predicates[name]
       end
     end
   end
