@@ -34,4 +34,116 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       ])
     end
   end
+
+  describe '#visit_predicate' do
+    describe ':empty?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:empty?, []], [], :tags)
+
+        expect(msg).to eql('tags cannot be empty')
+      end
+    end
+
+    describe ':exclusion?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:exclusion?, [[1, 2, 3]]], 2, :num)
+
+        expect(msg).to eql('num must not be one of: 1, 2, 3')
+      end
+    end
+
+    describe ':inclusion?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:inclusion?, [[1, 2, 3]]], 2, :num)
+
+        expect(msg).to eql('num must be one of: 1, 2, 3')
+      end
+    end
+
+    describe ':gt?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:gt?, [3]], 2, :num)
+
+        expect(msg).to eql('num must be greater than 3 (2 was given)')
+      end
+    end
+
+    describe ':gteq?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:gteq?, [3]], 2, :num)
+
+        expect(msg).to eql('num must be greater than or equal to 3')
+      end
+    end
+
+    describe ':lt?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:lt?, [3]], 2, :num)
+
+        expect(msg).to eql('num must be less than 3 (2 was given)')
+      end
+    end
+
+    describe ':lteq?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:lteq?, [3]], 2, :num)
+
+        expect(msg).to eql('num must be less than or equal to 3')
+      end
+    end
+
+    describe ':int?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:int?, []], '2', :num)
+
+        expect(msg).to eql('num must be an integer')
+      end
+    end
+
+    describe ':max_size?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:max_size?, [3]], 'abcd', :num)
+
+        expect(msg).to eql('num size cannot be greater than 3')
+      end
+    end
+
+    describe ':min_size?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:min_size?, [3]], 'ab', :num)
+
+        expect(msg).to eql('num size cannot be less than 3')
+      end
+    end
+
+    describe ':nil?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:nil?, []], nil, :num)
+
+        expect(msg).to eql('num cannot be nil')
+      end
+    end
+
+    describe ':size?' do
+      it 'returns valid message when arg is int' do
+        msg = error_compiler.visit_predicate([:size?, [3]], 'ab', :num)
+
+        expect(msg).to eql('num size must be 3')
+      end
+
+      it 'returns valid message when arg is range' do
+        msg = error_compiler.visit_predicate([:size?, [3..4]], 'ab', :num)
+
+        expect(msg).to eql('num size must be within 3 - 4')
+      end
+    end
+
+    describe ':str?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:str?, []], 3, :num)
+
+        expect(msg).to eql('num must be a string')
+      end
+    end
+  end
 end

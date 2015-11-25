@@ -54,9 +54,15 @@ module Dry
         Namespaced.new(Messages.new(data[namespace]), self)
       end
 
-      def lookup(identifier, key, &block)
-        data.fetch(:attributes, {}).fetch(key, {}).fetch(identifier) do
+      def lookup(identifier, key, arg, &block)
+        message = data.fetch(:attributes, {}).fetch(key, {}).fetch(identifier) do
           data.fetch(identifier, &block)
+        end
+
+        if message.is_a?(Hash)
+          message.fetch(arg.class.name.downcase.to_sym, message.fetch(:default))
+        else
+          message
         end
       end
     end
