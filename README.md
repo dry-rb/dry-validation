@@ -5,7 +5,7 @@
 [coveralls]: https://coveralls.io/r/dryrb/dry-validation
 [inchpages]: http://inch-ci.org/github/dryrb/dry-validation
 
-# dry-validation [![Join the chat at https://gitter.im/dryrb/dry-validation](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dryrb/dry-validation)
+# dry-validation [![Join the chat at https://gitter.im/dryrb/chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dryrb/chat)
 
 [![Gem Version](https://badge.fury.io/rb/dry-validation.svg)][gem]
 [![Build Status](https://travis-ci.org/dryrb/dry-validation.svg?branch=master)][travis]
