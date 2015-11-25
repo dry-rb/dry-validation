@@ -20,12 +20,10 @@ RSpec.describe Dry::Validation::Rule::Set do
   describe '#to_ary' do
     it 'returns an array representation' do
       expect(rule).to match_array([
-        :rule, [
+        :set, [
           :address, [
-            :set, [
-              [:rule, [:name, [:predicate, [:str?, []]]]],
-              [:rule, [:name, [:predicate, [:min_size?, [6]]]]]
-            ]
+            [:val, [:name, [:predicate, [:str?, []]]]],
+            [:val, [:name, [:predicate, [:min_size?, [6]]]]]
           ]
         ]
       ])

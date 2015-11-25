@@ -28,11 +28,11 @@ RSpec.describe Dry::Validation do
       expect(validation.(email: 'jane@doe')).to be_empty
 
       expect(validation.(email: nil)).to match_array([
-        [:error, [:input, [:email, nil, [:rule, [:email, [:predicate, [:filled?, []]]]]]]]
+        [:error, [:input, [:email, nil, [:val, [:email, [:predicate, [:filled?, []]]]]]]]
       ])
 
       expect(validation.(email: 'jane')).to match_array([
-        [:error, [:input, [:email, 'jane', [:rule, [:email, [:predicate, [:email?, []]]]]]]]
+        [:error, [:input, [:email, 'jane', [:val, [:email, [:predicate, [:email?, []]]]]]]]
       ])
     end
   end

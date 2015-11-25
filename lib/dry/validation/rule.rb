@@ -10,6 +10,10 @@ module Dry
           super(name, predicate.curry(name))
         end
 
+        def type
+          :key
+        end
+
         def call(input)
           Validation.Result(input[name], predicate.(input), self)
         end
@@ -18,6 +22,10 @@ module Dry
       class Value < Rule
         def call(input)
           Validation.Result(input, predicate.(input), self)
+        end
+
+        def type
+          :val
         end
       end
 
@@ -33,7 +41,7 @@ module Dry
         end
 
         def to_ary
-          [left.to_ary, [right.to_ary]]
+          [type, left.to_ary, [right.to_ary]]
         end
         alias_method :to_a, :to_ary
       end
@@ -42,17 +50,29 @@ module Dry
         def call(input)
           left.(input).and(right)
         end
+
+        def type
+          :and
+        end
       end
 
       class Disjunction < Composite
         def call(input)
           left.(input).or(right)
         end
+
+        def type
+          :or
+        end
       end
 
       class Each < Rule
         def call(input)
           Validation.Result(input, input.map { |element| predicate.(element) }, self)
+        end
+
+        def type
+          :each
         end
       end
 
@@ -61,12 +81,16 @@ module Dry
           Validation.Result(input, predicate.map { |rule| rule.(input) }, self)
         end
 
+        def type
+          :set
+        end
+
         def at(*args)
           self.class.new(name, predicate.values_at(*args))
         end
 
         def to_ary
-          [:rule, [name, [:set, predicate.map(&:to_ary)]]]
+          [type, [name, predicate.map(&:to_ary)]]
         end
         alias_method :to_a, :to_ary
       end
@@ -79,7 +103,7 @@ module Dry
       end
 
       def to_ary
-        [:rule, [name, predicate.to_ary]]
+        [type, [name, predicate.to_ary]]
       end
       alias_method :to_a, :to_ary
 

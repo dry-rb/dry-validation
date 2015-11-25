@@ -48,22 +48,22 @@ RSpec.describe Dry::Validation do
 
     it 'validates presence of an email and min age value' do
       expect(validation.(attrs.merge(email: '', age: 18))).to match_array([
-        [:error, [:input, [:age, 18, [:rule, [:age, [:predicate, [:gt?, [18]]]]]]]],
-        [:error, [:input, [:email, "", [:rule, [:email, [:predicate, [:filled?, []]]]]]]]
+        [:error, [:input, [:age, 18, [:val, [:age, [:predicate, [:gt?, [18]]]]]]]],
+        [:error, [:input, [:email, "", [:val, [:email, [:predicate, [:filled?, []]]]]]]]
       ])
     end
 
     it 'validates presence of the email key and type of age value' do
       expect(validation.(name: 'Jane', age: '18', address: attrs[:address], phone_numbers: attrs[:phone_numbers])).to match_array([
-        [:error, [:input, [:age, "18", [:rule, [:age, [:predicate, [:int?, []]]]]]]],
-        [:error, [:input, [:email, nil, [:rule, [:email, [:predicate, [:key?, [:email]]]]]]]]
+        [:error, [:input, [:age, "18", [:val, [:age, [:predicate, [:int?, []]]]]]]],
+        [:error, [:input, [:email, nil, [:key, [:email, [:predicate, [:key?, [:email]]]]]]]]
       ])
     end
 
     it 'validates presence of the address and phone_number keys' do
       expect(validation.(email: 'jane@doe.org', age: 19)).to match_array([
-        [:error, [:input, [:address, nil, [:rule, [:address, [:predicate, [:key?, [:address]]]]]]]],
-        [:error, [:input, [:phone_numbers, nil, [:rule, [:phone_numbers, [:predicate, [:key?, [:phone_numbers]]]]]]]]
+        [:error, [:input, [:address, nil, [:key, [:address, [:predicate, [:key?, [:address]]]]]]]],
+        [:error, [:input, [:phone_numbers, nil, [:key, [:phone_numbers, [:predicate, [:key?, [:phone_numbers]]]]]]]]
       ])
     end
 
@@ -73,9 +73,9 @@ RSpec.describe Dry::Validation do
           :input, [
             :address, {city: "NY"},
             [
-              [:input, [:city, "NY", [:rule, [:city, [:predicate, [:min_size?, [3]]]]]]],
-              [:input, [:street, nil, [:rule, [:street, [:predicate, [:key?, [:street]]]]]]],
-              [:input, [:country, nil, [:rule, [:country, [:predicate, [:key?, [:country]]]]]]]
+              [:input, [:city, "NY", [:val, [:city, [:predicate, [:min_size?, [3]]]]]]],
+              [:input, [:street, nil, [:key, [:street, [:predicate, [:key?, [:street]]]]]]],
+              [:input, [:country, nil, [:key, [:country, [:predicate, [:key?, [:country]]]]]]]
             ]
           ]
         ]]
@@ -93,7 +93,7 @@ RSpec.describe Dry::Validation do
                   :country, {code: "US", name: ""}, [
                     [
                       :input, [
-                        :name, "", [:rule, [:name, [:predicate, [:filled?, []]]]]
+                        :name, "", [:val, [:name, [:predicate, [:filled?, []]]]]
                       ]
                     ]
                   ]
