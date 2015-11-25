@@ -25,7 +25,7 @@ module Dry
 
       class Value < Result
         def to_ary
-          [:input, [rule.name, input, rule.to_ary]]
+          [:input, [rule.name, input, [rule.to_ary]]]
         end
         alias_method :to_a, :to_ary
       end

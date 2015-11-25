@@ -18,10 +18,10 @@ RSpec.describe Dry::Validation::ErrorCompiler do
   describe '#call' do
     let(:ast) do
       [
-        [:error, [:input, [:name, nil, [:key, [:name, [:predicate, [:key?, []]]]]]]],
-        [:error, [:input, [:age, 18, [:val, [:age, [:predicate, [:gt?, [18]]]]]]]],
-        [:error, [:input, [:email, "", [:val, [:email, [:predicate, [:filled?, []]]]]]]],
-        [:error, [:input, [:address, "", [:val, [:address, [:predicate, [:filled?, []]]]]]]]
+        [:error, [:input, [:name, nil, [[:key, [:name, [:predicate, [:key?, []]]]]]]]],
+        [:error, [:input, [:age, 18, [[:val, [:age, [:predicate, [:gt?, [18]]]]]]]]],
+        [:error, [:input, [:email, "", [[:val, [:email, [:predicate, [:filled?, []]]]]]]]],
+        [:error, [:input, [:address, "", [[:val, [:address, [:predicate, [:filled?, []]]]]]]]]
       ]
     end
 

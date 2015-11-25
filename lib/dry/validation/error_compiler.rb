@@ -1,3 +1,5 @@
+require 'byebug'
+
 module Dry
   module Validation
     class ErrorCompiler
@@ -19,19 +21,19 @@ module Dry
         visit(error)
       end
 
-      def visit_input(input)
-        name, value, rule = input
-        visit(rule, name, value)
+      def visit_input(input, *args)
+        name, value, rules = input
+        [name, rules.map { |rule| visit(rule, name, value) }]
       end
 
       def visit_key(rule, name, value)
-        name, predicate = rule
-        [name, Array(visit(predicate, value, name))]
+        _, predicate = rule
+        visit(predicate, value, name)
       end
 
       def visit_val(rule, name, value)
         name, predicate = rule
-        [name, Array(visit(predicate, value, name))]
+        visit(predicate, value, name)
       end
 
       def visit_predicate(predicate, value, name)
