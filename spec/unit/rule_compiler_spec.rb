@@ -13,7 +13,7 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
   let(:each_rule) { Rule::Each.new(:email, val_rule) }
 
   it 'compiles key rules' do
-    ast = [[:key_rule, [:email, [:predicate, [:key?, predicate]]]]]
+    ast = [[:key, [:email, [:predicate, [:key?, predicate]]]]]
 
     rules = compiler.(ast)
 
@@ -24,8 +24,8 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
     ast = [
       [
         :and, [
-          [:key_rule, [:email, [:predicate, [:key?, predicate]]]],
-          [:val_rule, [:email, [:predicate, [:filled?, predicate]]]]
+          [:key, [:email, [:predicate, [:key?, predicate]]]],
+          [:val, [:email, [:predicate, [:filled?, predicate]]]]
         ]
       ]
     ]
@@ -39,8 +39,8 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
     ast = [
       [
         :or, [
-          [:key_rule, [:email, [:predicate, [:key?, predicate]]]],
-          [:val_rule, [:email, [:predicate, [:filled?, predicate]]]]
+          [:key, [:email, [:predicate, [:key?, predicate]]]],
+          [:val, [:email, [:predicate, [:filled?, predicate]]]]
         ]
       ]
     ]
@@ -53,9 +53,9 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
   it 'compiles set rules' do
     ast = [
       [
-        :set_rule, [
+        :set, [
           :email, [
-            [:val_rule, [:email, [:predicate, [:filled?, predicate]]]]
+            [:val, [:email, [:predicate, [:filled?, predicate]]]]
           ]
         ]
       ]
@@ -69,8 +69,8 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
   it 'compiles each rules' do
     ast = [
       [
-        :each_rule, [
-          :email, [:val_rule, [:email, [:predicate, [:filled?, predicate]]]]
+        :each, [
+          :email, [:val, [:email, [:predicate, [:filled?, predicate]]]]
         ]
       ]
     ]

@@ -12,22 +12,22 @@ module Dry
         send(:"visit_#{name}", nodes)
       end
 
-      def visit_key_rule(node)
+      def visit_key(node)
         name, predicate = node
         Rule::Key.new(name, visit(predicate))
       end
 
-      def visit_val_rule(node)
+      def visit_val(node)
         name, predicate = node
         Rule::Value.new(name, visit(predicate))
       end
 
-      def visit_set_rule(node)
+      def visit_set(node)
         name, rules = node
         Rule::Set.new(name, rules.map { |rule| visit(rule) })
       end
 
-      def visit_each_rule(node)
+      def visit_each(node)
         name, rule = node
         Rule::Each.new(name, visit(rule))
       end
