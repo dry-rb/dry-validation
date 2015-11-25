@@ -17,9 +17,24 @@ module Dry
         Rule::Key.new(name, visit(predicate))
       end
 
+      def visit_val_rule(node)
+        name, predicate = node
+        Rule::Value.new(name, visit(predicate))
+      end
+
       def visit_predicate(node)
         _, fn = node
         fn
+      end
+
+      def visit_and(node)
+        left, right = node
+        visit(left) & visit(right)
+      end
+
+      def visit_or(node)
+        left, right = node
+        visit(left) | visit(right)
       end
     end
   end
