@@ -2,6 +2,8 @@ empty?: "%{name} cannot be empty"
 
 exclusion?: "%{name} must not be one of: %{list}"
 
+eql?: "%{name} must be equal to %{eql_value}"
+
 filled?: "%{name} must be filled"
 
 format?: "%{name} is in invalid format"

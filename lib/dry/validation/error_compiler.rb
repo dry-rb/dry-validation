@@ -82,6 +82,10 @@ module Dry
         { num: args[0][0], value: value }
       end
 
+      def visit_eql?(*args, value)
+        { eql_value: args[0][0], value: value }
+      end
+
       def visit_size?(*args, value)
         num = args[0][0]
 

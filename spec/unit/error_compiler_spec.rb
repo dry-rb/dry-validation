@@ -153,5 +153,13 @@ RSpec.describe Dry::Validation::ErrorCompiler do
         expect(msg).to eql('str is in invalid format')
       end
     end
+
+    describe ':eql?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:eql?, ['Bar']], 'Foo', :str)
+
+        expect(msg).to eql('str must be equal to Bar')
+      end
+    end
   end
 end

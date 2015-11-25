@@ -76,6 +76,10 @@ module Dry
         !self[:inclusion?].(list, input)
       end
 
+      predicate(:eql?) do |left, right|
+        left.eql?(right)
+      end
+
       predicate(:format?) do |regex, input|
         !regex.match(input).nil?
       end
