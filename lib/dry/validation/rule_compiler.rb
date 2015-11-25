@@ -3,6 +3,12 @@ require 'dry/validation/rule'
 module Dry
   module Validation
     class RuleCompiler
+      attr_reader :predicates
+
+      def initialize(predicates)
+        @predicates = predicates
+      end
+
       def call(ast)
         ast.map { |node| visit(node) }
       end
@@ -24,7 +30,7 @@ module Dry
 
       def visit_set(node)
         name, rules = node
-        Rule::Set.new(name, rules.map { |rule| visit(rule) })
+        Rule::Set.new(name, call(rules))
       end
 
       def visit_each(node)
@@ -33,8 +39,8 @@ module Dry
       end
 
       def visit_predicate(node)
-        _, fn = node
-        fn
+        name, args = node
+        predicates[name].curry(*args)
       end
 
       def visit_and(node)
