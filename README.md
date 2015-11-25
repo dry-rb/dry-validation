@@ -33,19 +33,13 @@ libraries, which is quite important and useful. It means you can compose a valid
 that does rely on the type of a given value. In example it makes no sense to validate
 each element of an array when it turns out to be an empty string.
 
-### The DSL
+## The DSL
 
 The core of `dry-validation` is rules composition and predicate logic. The DSL
 is a simple front-end for that. It only allows you to define the rules by using
 predicate identifiers. There are no magical options, conditionals and custom
 validation blocks known from other libraries. The focus is on pure validation
 logic.
-
-### Error Messages
-
-A default error message compiler is shipped with the library. It can use a configuration
-hash which maps predicates to error messages. `Error::Set` object does not generate
-error messages, it's only a source of information about the validation results.
 
 ## Examples
 
@@ -130,7 +124,41 @@ puts errors.inspect
 # [[:address, [[:street, ["street is missing"]], [:country, ["country is missing"]]]]]
 ```
 
-### Error Messages
+### Defining Custom Predicates
+
+You can simply define predicate methods on your schema object:
+
+``` ruby
+class Schema < Dry::Validation::Schema
+  key(:email) { |value| value.str? & value.email? }
+
+  def email?(value)
+    ! /magical-regex-that-matches-emails/.match(value).nil?
+  end
+end
+```
+
+You can also re-use a predicate container across multiple schemas:
+
+``` ruby
+module MyPredicates
+  include Dry::Validation::Predicates
+
+  predicate(:email?) do |input|
+    ! /magical-regex-that-matches-emails/.match(value).nil?
+  end
+end
+
+class Schema < Dry::Validation::Schema
+  configure do |config|
+    config.predicates = MyPredicates
+  end
+
+  key(:email) { |value| value.str? & value.email? }
+end
+```
+
+## Error Messages
 
 By default `dry-validation` comes with a set of pre-defined error messages for
 every built-in predicate. They are defined in [a yaml file](https://github.com/dryrb/dry-validation/blob/master/config/errors.yml)
