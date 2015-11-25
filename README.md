@@ -186,11 +186,56 @@ user_messages.lookup(:filled?, :address) # "You gotta tell us where you live"
 ```
 
 By configuring `messages_file` and/or `namespace` in a schema, default messages
-are going to be automatically merged with defaults and/or namespaced for you.
+are going to be automatically merged with your overrides and/or namespaced.
 
-### I18n Integration
+## I18n Integration
 
 Coming (very) soon...
+
+## Rule AST
+
+Internally, `dry-validation` uses a simple AST representation of rules and errors
+to produce rule objects and error messages. If you would like to programatically
+generate rules, it is a very simple process:
+
+``` ruby
+ast = [
+  [
+    :and,
+    [
+      [:key, [:age, [:predicate, [:key?, []]]]],
+      [
+        :and,
+        [
+          [:val, [:age, [:predicate, [:filled?, []]]]],
+          [:val, [:age, [:predicate, [:gt?, [18]]]]]
+        ]
+      ]
+    ]
+  ]
+]
+
+compiler = Dry::Validation::RuleCompiler.new(Dry::Validation::Predicates)
+
+# compile an array of rule objects
+rules = compiler.call(ast)
+
+puts rules.inspect
+# [
+#   #<Dry::Validation::Rule::Conjunction
+#     left=#<Dry::Validation::Rule::Key name=:age predicate=#<Dry::Validation::Predicate id=:key?>>
+#     right=#<Dry::Validation::Rule::Conjunction
+#       left=#<Dry::Validation::Rule::Value name=:age predicate=#<Dry::Validation::Predicate id=:filled?>>
+#       right=#<Dry::Validation::Rule::Value name=:age predicate=#<Dry::Validation::Predicate id=:gt?>>>>
+# ]
+
+# dump it back to ast
+puts rules.map(&:to_ary).inspect
+# [[:and, [:key, [:age, [:predicate, [:key?, [:age]]]]], [[:and, [:val, [:age, [:predicate, [:filled?, []]]]], [[:val, [:age, [:predicate, [:gt?, [18]]]]]]]]]]
+```
+
+Complete docs for the AST format are coming soon, for now please refer to
+[this spec](https://github.com/dryrb/dry-validation/blob/master/spec/unit/rule_compiler_spec.rb).
 
 ## Status and Roadmap
 
