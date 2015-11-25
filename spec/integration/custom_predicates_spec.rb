@@ -1,7 +1,21 @@
 RSpec.describe Dry::Validation do
   subject(:validation) { schema.new }
 
-  describe 'defining schema with custom predicates' do
+  shared_context 'uses custom predicates' do
+    it 'uses provided custom predicates' do
+      expect(validation.(email: 'jane@doe')).to be_empty
+
+      expect(validation.(email: nil)).to match_array([
+        [:error, [:input, [:email, nil, [:val, [:email, [:predicate, [:filled?, []]]]]]]]
+      ])
+
+      expect(validation.(email: 'jane')).to match_array([
+        [:error, [:input, [:email, 'jane', [:val, [:email, [:predicate, [:email?, []]]]]]]]
+      ])
+    end
+  end
+
+  describe 'defining schema with custom predicates container' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
         configure do |config|
@@ -24,16 +38,20 @@ RSpec.describe Dry::Validation do
       end
     end
 
-    it 'uses provided custom predicates' do
-      expect(validation.(email: 'jane@doe')).to be_empty
+    include_context 'uses custom predicates'
+  end
 
-      expect(validation.(email: nil)).to match_array([
-        [:error, [:input, [:email, nil, [:val, [:email, [:predicate, [:filled?, []]]]]]]]
-      ])
+  describe 'defining schema with custom predicate methods' do
+    let(:schema) do
+      Class.new(Dry::Validation::Schema) do
+        key(:email) { |value| value.filled? & value.email? }
 
-      expect(validation.(email: 'jane')).to match_array([
-        [:error, [:input, [:email, 'jane', [:val, [:email, [:predicate, [:email?, []]]]]]]]
-      ])
+        def email?(value)
+          value.include?('@')
+        end
+      end
     end
+
+    include_context 'uses custom predicates'
   end
 end

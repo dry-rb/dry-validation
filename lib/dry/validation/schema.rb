@@ -33,7 +33,11 @@ module Dry
       end
 
       def [](name)
-        methods.include?(name) ? method(name) : self.class.predicates[name]
+        if methods.include?(name)
+          Predicate.new(name, &method(name))
+        else
+          self.class.predicates[name]
+        end
       end
     end
   end
