@@ -24,7 +24,7 @@ module Dry
         visit(rule, name, value)
       end
 
-      def visit_rule(rule, name, value)
+      def visit_val(rule, name, value)
         name, predicate = rule
         [name, Array(visit(predicate, value, name))]
       end
