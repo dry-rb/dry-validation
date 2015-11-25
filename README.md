@@ -158,6 +158,26 @@ class Schema < Dry::Validation::Schema
 end
 ```
 
+## List of Built-In Predicates
+
+* `empty?`
+* `eql?`
+* `exclusion?`
+* `filled?`
+* `format?`
+* `gt?`
+* `gteq?`
+* `inclusion?`
+* `int?`
+* `key?`
+* `lt?`
+* `lteq?`
+* `max_size?`
+* `min_size?`
+* `nil?`
+* `size?`
+* `str?`
+
 ## Error Messages
 
 By default `dry-validation` comes with a set of pre-defined error messages for
