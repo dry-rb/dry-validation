@@ -1,21 +1,17 @@
+require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
 
 RSpec.describe Dry::Validation::ErrorCompiler do
-  subject(:error_compiler) { Dry::Validation::ErrorCompiler.new(config) }
+  subject(:error_compiler) { Dry::Validation::ErrorCompiler.new(messages) }
 
-  let(:config) do
-    {
-      errors: {
-        gt?: "%{name} must be greater than %{num} (%{value} was given)",
-        filled?: "%{name} must be filled",
-        key?: "%{name} is missing",
-        attributes: {
-          address: {
-            filled?: 'Please provide your address'
-          }
+  let(:messages) do
+    Dry::Validation.Messages(
+      attributes: {
+        address: {
+          filled?: 'Please provide your address'
         }
       }
-    }
+    )
   end
 
   describe '#call' do

@@ -1,10 +1,10 @@
 module Dry
   module Validation
     class ErrorCompiler
-      attr_reader :config
+      attr_reader :messages
 
-      def initialize(config)
-        @config = config[:errors]
+      def initialize(messages)
+        @messages = messages
       end
 
       def call(ast)
@@ -35,7 +35,7 @@ module Dry
       end
 
       def visit_predicate(predicate, value, name)
-        lookup_message(predicate[0], name) % visit(predicate, value).merge(name: name)
+        messages.lookup(predicate[0], name) % visit(predicate, value).merge(name: name)
       end
 
       def visit_key?(*args, value)
@@ -48,12 +48,6 @@ module Dry
 
       def visit_filled?(*args)
         {}
-      end
-
-      def lookup_message(identifier, key)
-        config.fetch(:attributes, {}).fetch(key, {}).fetch(identifier) {
-          config.fetch(identifier)
-        }
       end
     end
   end

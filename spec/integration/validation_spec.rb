@@ -42,67 +42,77 @@ RSpec.describe Dry::Validation do
       }.freeze
     end
 
-    it 'passes when attributes are valid' do
-      expect(validation.(attrs)).to be_empty
+    describe '#messages' do
+      it 'returns compiled error messages' do
+        expect(validation.messages(attrs.merge(email: ''))).to eql([
+          [:email, ["email must be filled"]]
+        ])
+      end
     end
 
-    it 'validates presence of an email and min age value' do
-      expect(validation.(attrs.merge(email: '', age: 18))).to match_array([
-        [:error, [:input, [:age, 18, [:val, [:age, [:predicate, [:gt?, [18]]]]]]]],
-        [:error, [:input, [:email, "", [:val, [:email, [:predicate, [:filled?, []]]]]]]]
-      ])
-    end
+    describe '#call' do
+      it 'passes when attributes are valid' do
+        expect(validation.(attrs)).to be_empty
+      end
 
-    it 'validates presence of the email key and type of age value' do
-      expect(validation.(name: 'Jane', age: '18', address: attrs[:address], phone_numbers: attrs[:phone_numbers])).to match_array([
-        [:error, [:input, [:age, "18", [:val, [:age, [:predicate, [:int?, []]]]]]]],
-        [:error, [:input, [:email, nil, [:key, [:email, [:predicate, [:key?, [:email]]]]]]]]
-      ])
-    end
+      it 'validates presence of an email and min age value' do
+        expect(validation.(attrs.merge(email: '', age: 18))).to match_array([
+          [:error, [:input, [:age, 18, [:val, [:age, [:predicate, [:gt?, [18]]]]]]]],
+          [:error, [:input, [:email, "", [:val, [:email, [:predicate, [:filled?, []]]]]]]]
+        ])
+      end
 
-    it 'validates presence of the address and phone_number keys' do
-      expect(validation.(email: 'jane@doe.org', age: 19)).to match_array([
-        [:error, [:input, [:address, nil, [:key, [:address, [:predicate, [:key?, [:address]]]]]]]],
-        [:error, [:input, [:phone_numbers, nil, [:key, [:phone_numbers, [:predicate, [:key?, [:phone_numbers]]]]]]]]
-      ])
-    end
+      it 'validates presence of the email key and type of age value' do
+        expect(validation.(name: 'Jane', age: '18', address: attrs[:address], phone_numbers: attrs[:phone_numbers])).to match_array([
+          [:error, [:input, [:age, "18", [:val, [:age, [:predicate, [:int?, []]]]]]]],
+          [:error, [:input, [:email, nil, [:key, [:email, [:predicate, [:key?, [:email]]]]]]]]
+        ])
+      end
 
-    it 'validates presence of keys under address and min size of the city value' do
-      expect(validation.(attrs.merge(address: { city: 'NY' }))).to match_array([
-        [:error, [
-          :input, [
-            :address, {city: "NY"},
-            [
-              [:input, [:city, "NY", [:val, [:city, [:predicate, [:min_size?, [3]]]]]]],
-              [:input, [:street, nil, [:key, [:street, [:predicate, [:key?, [:street]]]]]]],
-              [:input, [:country, nil, [:key, [:country, [:predicate, [:key?, [:country]]]]]]]
-            ]
-          ]
-        ]]
-      ])
-    end
+      it 'validates presence of the address and phone_number keys' do
+        expect(validation.(email: 'jane@doe.org', age: 19)).to match_array([
+          [:error, [:input, [:address, nil, [:key, [:address, [:predicate, [:key?, [:address]]]]]]]],
+          [:error, [:input, [:phone_numbers, nil, [:key, [:phone_numbers, [:predicate, [:key?, [:phone_numbers]]]]]]]]
+        ])
+      end
 
-    it 'validates address code and name values' do
-      expect(validation.(attrs.merge(address: attrs[:address].merge(country: { code: 'US', name: '' })))).to match_array([
-        [:error, [
-          :input, [
-            :address, {city: "NYC", street: "Street 1/2", country: {code: "US", name: ""}},
-            [
+      it 'validates presence of keys under address and min size of the city value' do
+        expect(validation.(attrs.merge(address: { city: 'NY' }))).to match_array([
+          [:error, [
+            :input, [
+              :address, {city: "NY"},
               [
-                :input, [
-                  :country, {code: "US", name: ""}, [
-                    [
-                      :input, [
-                        :name, "", [:val, [:name, [:predicate, [:filled?, []]]]]
+                [:input, [:city, "NY", [:val, [:city, [:predicate, [:min_size?, [3]]]]]]],
+                [:input, [:street, nil, [:key, [:street, [:predicate, [:key?, [:street]]]]]]],
+                [:input, [:country, nil, [:key, [:country, [:predicate, [:key?, [:country]]]]]]]
+              ]
+            ]
+          ]]
+        ])
+      end
+
+      it 'validates address code and name values' do
+        expect(validation.(attrs.merge(address: attrs[:address].merge(country: { code: 'US', name: '' })))).to match_array([
+          [:error, [
+            :input, [
+              :address, {city: "NYC", street: "Street 1/2", country: {code: "US", name: ""}},
+              [
+                [
+                  :input, [
+                    :country, {code: "US", name: ""}, [
+                      [
+                        :input, [
+                          :name, "", [:val, [:name, [:predicate, [:filled?, []]]]]
+                        ]
                       ]
                     ]
                   ]
                 ]
               ]
             ]
-          ]
-        ]]
-      ])
+          ]]
+        ])
+      end
     end
   end
 end
