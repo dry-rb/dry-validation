@@ -2,22 +2,16 @@ require 'yaml'
 
 module Dry
   module Validation
-    def self.Messages(overrides = {})
-      messages = Messages.load
-
-      if overrides.any?
-        messages.merge(overrides)
-      else
-        messages
-      end
-    end
-
     class Messages
       DEFAULT_PATH = Pathname(__dir__).join('../../../config/errors.yml').freeze
 
       attr_reader :data
 
-      def self.load(path = DEFAULT_PATH)
+      def self.default
+        load(DEFAULT_PATH)
+      end
+
+      def self.load(path)
         new(load_yaml(path))
       end
 
@@ -31,17 +25,38 @@ module Dry
         end
       end
 
+      class Namespaced
+        attr_reader :namespace, :fallback
+
+        def initialize(namespace, fallback)
+          @namespace = namespace
+          @fallback = fallback
+        end
+
+        def lookup(*args)
+          namespace.lookup(*args) { fallback.lookup(*args) }
+        end
+      end
+
       def initialize(data)
         @data = data
       end
 
       def merge(overrides)
-        self.class.new(data.merge(overrides))
+        if overrides.is_a?(Hash)
+          self.class.new(data.merge(overrides))
+        else
+          self.class.new(data.merge(Messages.load_yaml(overrides)))
+        end
       end
 
-      def lookup(identifier, key)
+      def namespaced(namespace)
+        Namespaced.new(Messages.new(data[namespace]), self)
+      end
+
+      def lookup(identifier, key, &block)
         data.fetch(:attributes, {}).fetch(key, {}).fetch(identifier) do
-          data.fetch(identifier)
+          data.fetch(identifier, &block)
         end
       end
     end

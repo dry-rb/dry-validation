@@ -1,0 +1,4 @@
+user:
+  attributes:
+    email:
+      filled?: "%{name} can't be blank"

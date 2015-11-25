@@ -12,14 +12,30 @@ module Dry
       extend Definition
 
       setting :predicates, Predicates
-      setting :error_compiler, ErrorCompiler.new(Validation.Messages())
+      setting :messages, Messages.default
+      setting :messages_file
+      setting :namespace
 
       def self.predicates
         config.predicates
       end
 
       def self.error_compiler
-        config.error_compiler
+        ErrorCompiler.new(messages)
+      end
+
+      def self.messages
+        default = config.messages
+
+        if config.messages_file && config.namespace
+          default.merge(config.messages_file).namespaced(config.namespace)
+        elsif config.messages_file
+          default.merge(config.messages_file)
+        elsif config.namespace
+          default.namespaced(config.namespace)
+        else
+          default
+        end
       end
 
       def self.rules

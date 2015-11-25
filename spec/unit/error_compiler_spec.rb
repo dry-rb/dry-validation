@@ -2,10 +2,11 @@ require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
 
 RSpec.describe Dry::Validation::ErrorCompiler do
-  subject(:error_compiler) { Dry::Validation::ErrorCompiler.new(messages) }
+  subject(:error_compiler) { ErrorCompiler.new(messages) }
 
   let(:messages) do
-    Dry::Validation.Messages(
+    Messages.default.merge(
+      key?: '+%{name}+ key is missing in the hash',
       attributes: {
         address: {
           filled?: 'Please provide your address'
@@ -26,7 +27,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     it 'converts error ast into another format' do
       expect(error_compiler.(ast)).to eql([
-        [:name, ["name is missing"]],
+        [:name, ["+name+ key is missing in the hash"]],
         [:age, ["age must be greater than 18 (18 was given)"]],
         [:email, ["email must be filled"]],
         [:address, ["Please provide your address"]]
