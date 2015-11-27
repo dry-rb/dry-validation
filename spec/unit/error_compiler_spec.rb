@@ -100,6 +100,14 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       end
     end
 
+    describe ':array?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:array?, []], '', :phone_numbers)
+
+        expect(msg).to eql('phone_numbers must be an array')
+      end
+    end
+
     describe ':int?' do
       it 'returns valid message' do
         msg = error_compiler.visit_predicate([:int?, []], '2', :num)

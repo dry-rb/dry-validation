@@ -104,6 +104,10 @@ module Dry
         { value: value }
       end
 
+      def visit_array?(*args, value)
+        { value: value }
+      end
+
       def visit_format?(*args, value)
         {}
       end

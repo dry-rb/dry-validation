@@ -1,3 +1,5 @@
+array?: "%{name} must be an array"
+
 empty?: "%{name} cannot be empty"
 
 exclusion?: "%{name} must not be one of: %{list}"

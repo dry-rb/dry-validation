@@ -44,6 +44,10 @@ module Dry
         input.is_a?(Hash)
       end
 
+      predicate(:array?) do |input|
+        input.is_a?(Array)
+      end
+
       predicate(:lt?) do |num, input|
         input < num
       end
