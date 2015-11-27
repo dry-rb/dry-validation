@@ -1,4 +1,4 @@
-RSpec.describe Dry::Validation do
+RSpec.describe Dry::Validation::Schema do
   subject(:validation) { schema.new }
 
   describe 'defining schema' do

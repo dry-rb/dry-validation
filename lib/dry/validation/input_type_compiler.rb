@@ -15,9 +15,8 @@ module Dry
       end
 
       def call(ast)
-        type = type_compiler.([:type, ['hash', [:schema, ast.map { |node| visit(node) }]]])
-
-        -> input { Validation.symbolize_keys(type[input]) }
+        schema = ast.map { |node| visit(node) }
+        type_compiler.([:type, ['hash', [:schema, schema]]])
       end
 
       def visit(node)
@@ -26,7 +25,15 @@ module Dry
 
       def visit_and(node)
         left, right = node
-        [:key, [visit(left), visit(right)]]
+
+        name = visit(left)
+        type = visit(right)
+
+        if type
+          [:key, [name, type]]
+        else
+          name
+        end
       end
 
       def visit_key(node)
@@ -38,7 +45,7 @@ module Dry
       end
 
       def visit_predicate(node)
-        TYPES.fetch(node[0])
+        TYPES[node[0]]
       end
     end
   end
