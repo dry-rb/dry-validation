@@ -160,6 +160,48 @@ puts errors.inspect
 # [[:phone_numbers, [[:phone_numbers, ["phone_numbers must be a string"]]]]]
 ```
 
+### Form Validation With Coercions
+
+Probably the most common use case is to validate form params. This is a special
+kind of a validation for a couple of reasons:
+
+* The input is a hash with stringified keys
+* The input include values that are strings, hashes or arrays
+* Prior validation, we need to coerce values and symbolize keys based on the
+  information from rules
+
+For that reason, `dry-validation` ships with `Schema::Form` class:
+
+``` ruby
+require 'dry-validation'
+require 'dry/validation/schema/form'
+
+class UserFormSchema < Dry::Validation::Schema::Form
+  key(:email) { |value| value.str? & value.filled? }
+
+  key(:age) { |value| value.int? & value.gt?(18) }
+end
+
+schema = UserFormSchema.new
+
+errors = schema.messages('email' => '', 'age' => '18')
+
+puts errors.inspect
+
+# [[:email, ["email must be filled"]], [:age, ["age must be greater than 18 (18 was given)"]]]
+```
+
+There are few major differences between how it works here and in `ActiveModel`:
+
+* We have type checking as predicates, ie `gt?(18)` will not be applied if the value
+  is not an integer
+* Thus, error messages are provided *only for the rules that failed*
+* There's a planned feature for generating "validation hints" which lists information
+  about all possible rules
+* Coercion is handled by `dry-data` coercible hash using its `form.*` types that
+  are dedicated for this type of coercions
+* It's very easy to add your own types and coercions (more info/docs coming soon)
+
 ### Defining Custom Predicates
 
 You can simply define predicate methods on your schema object:
