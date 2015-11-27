@@ -134,6 +134,32 @@ puts errors.inspect
 # [[:address, [[:street, ["street is missing"]], [:country, ["country is missing"]]]]]
 ```
 
+### Array Elements
+
+You can use `each` rule for validating each element in an array:
+
+``` ruby
+class Schema < Dry::Validation::Schema
+  key(:phone_numbers) do |phone_numbers|
+    phone_numbers.array? do
+      phone_numbers.each(&:str?)
+    end
+  end
+end
+
+schema = Schema.new
+
+errors = schema.messages(phone_numbers: '')
+
+puts errors.inspect
+# [[:phone_numbers, ["phone_numbers must be an array"]]]
+
+errors = schema.messages(phone_numbers: ['123456789', 123456789])
+
+puts errors.inspect
+# [[:phone_numbers, [[:phone_numbers, ["phone_numbers must be a string"]]]]]
+```
+
 ### Defining Custom Predicates
 
 You can simply define predicate methods on your schema object:
