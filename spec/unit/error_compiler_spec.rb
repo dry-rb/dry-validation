@@ -92,6 +92,14 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       end
     end
 
+    describe ':hash?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:hash?, []], '', :address)
+
+        expect(msg).to eql('address must be a hash')
+      end
+    end
+
     describe ':int?' do
       it 'returns valid message' do
         msg = error_compiler.visit_predicate([:int?, []], '2', :num)
