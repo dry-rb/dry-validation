@@ -238,6 +238,7 @@ end
 
 ## List of Built-In Predicates
 
+* `array?`
 * `empty?`
 * `eql?`
 * `exclusion?`
