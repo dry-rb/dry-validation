@@ -1,3 +1,5 @@
+require 'byebug'
+
 module Dry
   module Validation
     class Schema
@@ -22,8 +24,13 @@ module Dry
           rule = Definition::Rule.new([:val, [name, [:predicate, [meth, args]]]])
 
           if block
-            yield
-            Definition::Rule.new([:and, [rule, [:set, [name, rules.map(&:to_ary)]]]])
+            val_rule = yield
+
+            if val_rule.is_a?(Definition::Rule)
+              rule & val_rule
+            else
+              Definition::Rule.new([:and, [rule, [:set, [name, rules.map(&:to_ary)]]]])
+            end
           else
             rule
           end

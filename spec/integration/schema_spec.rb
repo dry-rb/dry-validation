@@ -28,7 +28,7 @@ RSpec.describe Dry::Validation::Schema do
         end
 
         key(:phone_numbers) do |phone_numbers|
-          phone_numbers.each(&:str?)
+          phone_numbers.array? { phone_numbers.each(&:str?) }
         end
       end
     end
