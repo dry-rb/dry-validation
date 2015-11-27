@@ -121,6 +121,25 @@ RSpec.describe Dry::Validation::Schema do
           ]]
         ])
       end
+
+      it 'validates each phone number' do
+        expect(validation.(attrs.merge(phone_numbers: ['123', 312]))).to match_array([
+          [:error, [
+            :input, [
+              :phone_numbers, ["123", 312],
+              [
+                [
+                  :input, [
+                    :phone_numbers, 312, [
+                      [:val, [:phone_numbers, [:predicate, [:str?, []]]]]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]]
+        ])
+      end
     end
   end
 end
