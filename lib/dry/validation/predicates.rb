@@ -40,6 +40,10 @@ module Dry
         input.is_a?(String)
       end
 
+      predicate(:hash?) do |input|
+        input.is_a?(Hash)
+      end
+
       predicate(:lt?) do |num, input|
         input < num
       end
