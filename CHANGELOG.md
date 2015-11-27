@@ -4,6 +4,7 @@
 
 * `Schema::Form` with a built-in coercer (solnic)
 * Ability to pass a block to predicate check in the DSL ie `value.hash? { ... }` (solnic)
+* `hash?` predicate (solnic)
 
 # v0.1.0 2015-11-25
 
