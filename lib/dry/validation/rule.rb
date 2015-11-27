@@ -41,7 +41,7 @@ module Dry
         end
 
         def to_ary
-          [type, left.to_ary, [right.to_ary]]
+          [type, [left.to_ary, right.to_ary]]
         end
         alias_method :to_a, :to_ary
       end

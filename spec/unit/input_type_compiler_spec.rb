@@ -5,13 +5,13 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
 
   let(:rule_ast) do
     [
-      Rule::Key.new(:email, Predicates[:key?]),
-      Rule::Key.new(:age, Predicates[:key?])
+      Rule::Key.new(:email, Predicates[:key?]) & Rule::Value.new(:email, Predicates[:str?]),
+      Rule::Key.new(:age, Predicates[:key?]) & Rule::Value.new(:age, Predicates[:int?])
     ].map(&:to_ary)
   end
 
   let(:params) do
-    { 'email' => 'jane@doe.org', 'age' => 20 }
+    { 'email' => 'jane@doe.org', 'age' => '20' }
   end
 
   it 'builds an input dry-data type' do

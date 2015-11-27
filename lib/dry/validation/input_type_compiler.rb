@@ -6,6 +6,10 @@ module Dry
     class InputTypeCompiler
       attr_reader :type_compiler
 
+      TYPES = {
+        str?: 'string', int?: 'form.int'
+      }.freeze
+
       def initialize
         @type_compiler = Dry::Data::Compiler.new(Dry::Data)
       end
@@ -20,13 +24,21 @@ module Dry
         send(:"visit_#{node[0]}", node[1])
       end
 
+      def visit_and(node)
+        left, right = node
+        [:key, [visit(left), visit(right)]]
+      end
+
       def visit_key(node)
-        name, predicate = node
-        [:key, [name.to_s, visit(predicate)]]
+        node[0].to_s
+      end
+
+      def visit_val(node)
+        visit(node[1])
       end
 
       def visit_predicate(node)
-        'string'
+        TYPES.fetch(node[0])
       end
     end
   end
