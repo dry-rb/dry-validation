@@ -17,6 +17,16 @@ module Dry
       alias_method :to_a, :to_ary
     end
 
+    class Rule::Implication < Rule::Composite
+      def call(input)
+        left.(input) > right
+      end
+
+      def type
+        :implication
+      end
+    end
+
     class Rule::Conjunction < Rule::Composite
       def call(input)
         left.(input).and(right)

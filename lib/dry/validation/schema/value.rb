@@ -13,21 +13,21 @@ module Dry
 
         def each(&block)
           rule = yield(self).to_ary
-          Definition::Rule.new([:each, [name, rule]])
+          Schema::Rule.new([:each, [name, rule]])
         end
 
         private
 
         def method_missing(meth, *args, &block)
-          rule = Definition::Rule.new([:val, [name, [:predicate, [meth, args]]]])
+          rule = Schema::Rule.new([:val, [name, [:predicate, [meth, args]]]])
 
           if block
             val_rule = yield
 
-            if val_rule.is_a?(Definition::Rule)
+            if val_rule.is_a?(Schema::Rule)
               rule & val_rule
             else
-              Definition::Rule.new([:and, [rule, [:set, [name, rules.map(&:to_ary)]]]])
+              Schema::Rule.new([:and, [rule, [:set, [name, rules.map(&:to_ary)]]]])
             end
           else
             rule

@@ -11,6 +11,20 @@ module Dry
           @rules = rules
         end
 
+        def optional(&block)
+          key_rule = key?
+          val_rule = yield(Value.new(name))
+
+          rules <<
+            if val_rule.is_a?(Array)
+              Schema::Rule.new([:implication, [key_rule, [:set, [name, val_rule.map(&:to_ary)]]]])
+            else
+              Schema::Rule.new([:implication, [key_rule, val_rule.to_ary]])
+            end
+
+          self
+        end
+
         private
 
         def method_missing(meth, *args, &block)
@@ -21,12 +35,12 @@ module Dry
 
             rules <<
               if val_rule.is_a?(Array)
-                Definition::Rule.new([:and, [key_rule, [:set, [name, val_rule.map(&:to_ary)]]]])
+                Schema::Rule.new([:and, [key_rule, [:set, [name, val_rule.map(&:to_ary)]]]])
               else
-                Definition::Rule.new([:and, [key_rule, val_rule.to_ary]])
+                Schema::Rule.new([:and, [key_rule, val_rule.to_ary]])
               end
           else
-            Definition::Rule.new(key_rule)
+            Schema::Rule.new(key_rule)
           end
         end
 

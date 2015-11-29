@@ -5,6 +5,10 @@ module Dry
         def key(name, &block)
           Key.new(name, rules).key?(&block)
         end
+
+        def optional(name, &block)
+          Key.new(name, rules).optional(&block)
+        end
       end
     end
   end

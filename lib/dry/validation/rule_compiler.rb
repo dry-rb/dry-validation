@@ -52,6 +52,11 @@ module Dry
         left, right = node
         visit(left) | visit(right)
       end
+
+      def visit_implication(node)
+        left, right = node
+        visit(left) > visit(right)
+      end
     end
   end
 end

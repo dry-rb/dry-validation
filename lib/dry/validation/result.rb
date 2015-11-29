@@ -36,6 +36,14 @@ module Dry
         @rule = rule
       end
 
+      def >(other)
+        if success?
+          other.(input)
+        else
+          Validation.Result(input, true, rule)
+        end
+      end
+
       def and(other)
         if success?
           other.(input)

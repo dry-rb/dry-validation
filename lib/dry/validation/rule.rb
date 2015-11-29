@@ -27,6 +27,11 @@ module Dry
       end
       alias_method :|, :or
 
+      def then(other)
+        Implication.new(self, other)
+      end
+      alias_method :>, :then
+
       def curry(*args)
         self.class.new(name, predicate.curry(*args))
       end
