@@ -16,7 +16,7 @@ module Dry
 
       def call(ast)
         schema = ast.map { |node| visit(node) }
-        type_compiler.([:type, ['hash', [:schema, schema]]])
+        type_compiler.([:type, ['hash', [:symbolized, schema]]])
       end
 
       def visit(node)

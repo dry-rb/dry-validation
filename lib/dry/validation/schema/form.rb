@@ -12,7 +12,7 @@ module Dry
       end
 
       def call(input)
-        super(Validation.symbolize_keys(input_type[input]))
+        super(input_type[input])
       end
     end
   end
