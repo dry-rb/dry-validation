@@ -4,6 +4,7 @@ require 'dry/validation/error'
 require 'dry/validation/rule_compiler'
 require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
+require 'dry/validation/schema/result'
 
 module Dry
   module Validation
@@ -52,14 +53,16 @@ module Dry
       end
 
       def call(input)
-        rules.each_with_object(Error::Set.new) do |rule, errors|
+        error_set = rules.each_with_object(Error::Set.new) do |rule, errors|
           result = rule.(input)
           errors << Error.new(result) if result.failure?
         end
+
+        Result.new(input, error_set)
       end
 
       def messages(input)
-        error_compiler.call(call(input).map(&:to_ary))
+        Result.new(input, error_compiler.call(call(input).to_ary))
       end
 
       def [](name)

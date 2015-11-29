@@ -50,7 +50,6 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
 
     result = input_type[params]
 
-    expect(result).to include(email: 'jane@doe.org', address: 'City, Street 1/2')
-    expect(result[:age].value).to be(20)
+    expect(result).to eql(email: 'jane@doe.org', age: 20, address: 'City, Street 1/2')
   end
 end

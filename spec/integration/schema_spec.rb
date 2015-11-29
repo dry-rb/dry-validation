@@ -46,7 +46,7 @@ RSpec.describe Dry::Validation::Schema do
 
     describe '#messages' do
       it 'returns compiled error messages' do
-        expect(validation.messages(attrs.merge(email: ''))).to eql([
+        expect(validation.messages(attrs.merge(email: ''))).to match_array([
           [:email, ["email must be filled"]]
         ])
       end

@@ -14,7 +14,7 @@ RSpec.describe Dry::Validation::Schema::Form do
 
     describe '#messages' do
       it 'returns compiled error messages' do
-        expect(validation.messages('email' => '', 'age' => '19')).to eql([
+        expect(validation.messages('email' => '', 'age' => '19')).to match_array([
           [:email, ["email must be filled"]]
         ])
       end
@@ -22,7 +22,10 @@ RSpec.describe Dry::Validation::Schema::Form do
 
     describe '#call' do
       it 'passes when attributes are valid' do
-        expect(validation.('email' => 'jane@doe.org', 'age' => '19')).to be_empty
+        result = validation.('email' => 'jane@doe.org', 'age' => '19')
+
+        expect(result).to be_empty
+        expect(result.params).to eql(email: 'jane@doe.org', age: 19)
       end
 
       it 'validates presence of an email and min age value' do
