@@ -120,7 +120,7 @@ puts errors.inspect
 errors = schema.messages(email: 'jane@doe.org', age: 17)
 
 puts errors.inspect
-# [[:age, ["age must greater than 18 (17 was given)"]]]
+# [[:age, ["age must be greater than 18 (17 was given)"]]]
 ```
 
 ### Optional Values
@@ -153,7 +153,7 @@ puts errors.inspect
 errors = schema.messages(email: 'jane@doe.org', age: 17)
 
 puts errors.inspect
-# [[:age, ["age must greater than 18 (17 was given)"]]]
+# [[:age, ["age must be greater than 18 (17 was given)"]]]
 ```
 
 ### Optional Key vs Value
