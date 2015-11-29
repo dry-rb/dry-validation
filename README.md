@@ -95,6 +95,34 @@ A couple of remarks:
 * Schema object does not carry the input as its state, nor does it know how to access the input values, we
   pass the input to `call` and get error set as the response
 
+### Optional Keys
+
+You can define which keys are optional and define rules for their values:
+
+``` ruby
+require 'dry-validation'
+
+class Schema < Dry::Validation::Schema
+  key(:email) { |email| email.filled? }
+
+  optional(:age) do |age|
+    age.int? & age.gt?(18)
+  end
+end
+
+schema = Schema.new
+
+errors = schema.messages(email: 'jane@doe.org')
+
+puts errors.inspect
+# []
+
+errors = schema.messages(email: 'jane@doe.org', age: 17)
+
+puts errors.inspect
+# [[:age, ["age must greater than 18 (17 was given)"]]]
+```
+
 ### Nested Hash
 
 We are free to define validations for anything, including deeply nested structures:
