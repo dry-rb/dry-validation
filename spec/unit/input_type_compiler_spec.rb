@@ -20,9 +20,14 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
         :and, [
           [:key, [:age, [:predicate, [:key?, [:age]]]]],
           [
-            :and, [
-              [:val, [:age, [:predicate, [:int?, []]]]],
-              [:val, [:age, [:predicate, [:filled?, []]]]]
+            :or, [
+              [:val, [:age, [:predicate, [:none?, []]]]],
+              [
+                :and, [
+                  [:val, [:age, [:predicate, [:int?, []]]]],
+                  [:val, [:age, [:predicate, [:filled?, []]]]]
+                ]
+              ]
             ]
           ]
         ]
@@ -43,8 +48,9 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
   it 'builds an input dry-data type' do
     input_type = compiler.(rule_ast)
 
-    expect(input_type[params]).to eql(
-      'email' => 'jane@doe.org', 'age' => 20, 'address' => 'City, Street 1/2'
-    )
+    result = input_type[params]
+
+    expect(result).to include('email' => 'jane@doe.org', 'address' => 'City, Street 1/2')
+    expect(result['age'].value).to be(20)
   end
 end

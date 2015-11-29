@@ -7,7 +7,7 @@ module Dry
       attr_reader :type_compiler
 
       TYPES = {
-        str?: 'string', int?: 'form.int'
+        str?: 'string', none?: 'form.nil', int?: 'form.int'
       }.freeze
 
       def initialize
@@ -23,6 +23,15 @@ module Dry
         send(:"visit_#{node[0]}", node[1])
       end
 
+      def visit_or(node)
+        left, right = node
+
+        left_type = visit(left)
+        right_type = visit(right)
+
+        [left_type, right_type]
+      end
+
       def visit_and(node)
         left, right = node
 
@@ -30,7 +39,7 @@ module Dry
         type = visit(right)
 
         if type
-          [:key, [name, type]]
+          [:key, [name, Array(type)]]
         else
           name
         end
