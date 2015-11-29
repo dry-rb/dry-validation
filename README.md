@@ -236,6 +236,11 @@ class Schema < Dry::Validation::Schema
 end
 ```
 
+You need to provide error messages for your custom predicates if you want them
+to work with `Schem#messages` interface.
+
+You can learn how to do that in the [Error Messages](https://github.com/dryrb/dry-validation#error-messages) section.
+
 ## List of Built-In Predicates
 
 * `array?`
