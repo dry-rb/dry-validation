@@ -11,7 +11,7 @@ module Dry
         other.import(self)
       end
 
-      predicate(:nil?) do |input|
+      predicate(:none?) do |input|
         input.nil?
       end
 

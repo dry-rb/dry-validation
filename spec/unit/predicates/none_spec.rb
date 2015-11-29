@@ -1,8 +1,8 @@
 require 'dry/validation/predicates'
 
 RSpec.describe Dry::Validation::Predicates do
-  describe '#nil?' do
-    let(:predicate_name) { :nil? }
+  describe '#none?' do
+    let(:predicate_name) { :none? }
 
     context 'when value is nil' do
       let(:arguments_list) { [[nil]] }

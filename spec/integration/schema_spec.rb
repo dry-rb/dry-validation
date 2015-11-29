@@ -7,7 +7,7 @@ RSpec.describe Dry::Validation::Schema do
         key(:email) { |email| email.filled? }
 
         key(:age) do |age|
-          age.int? & age.gt?(18)
+          age.none? | (age.int? & age.gt?(18))
         end
 
         key(:address) do |address|

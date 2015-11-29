@@ -3,7 +3,7 @@ require 'dry/validation/rule'
 RSpec.describe Dry::Validation::Rule::Value do
   include_context 'predicates'
 
-  let(:is_nil) { Dry::Validation::Rule::Value.new(:name, nil?) }
+  let(:is_nil) { Dry::Validation::Rule::Value.new(:name, none?) }
 
   let(:is_string) { Dry::Validation::Rule::Value.new(:name, str?) }
 
