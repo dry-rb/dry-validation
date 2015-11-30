@@ -4,7 +4,7 @@
 
 * `Schema::Form` with a built-in coercer inferred from type-check predicates  (solnic)
 * Ability to pass a block to predicate check in the DSL ie `value.hash? { ... }` (solnic)
-* Optional keys using `option(:key_name) { ... }` interface in the DSL (solnic)
+* Optional keys using `optional(:key_name) { ... }` interface in the DSL (solnic)
 * New predicates:
   - `bool?`
   - `date?`
