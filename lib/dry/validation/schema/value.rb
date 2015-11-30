@@ -27,7 +27,7 @@ module Dry
             if val_rule.is_a?(Schema::Rule)
               rule & val_rule
             else
-              Schema::Rule.new([:and, [rule, [:set, [name, rules.map(&:to_ary)]]]])
+              Schema::Rule.new([:and, [rule.to_ary, [:set, [name, rules.map(&:to_ary)]]]])
             end
           else
             rule

@@ -7,8 +7,18 @@ module Dry
       attr_reader :type_compiler
 
       TYPES = {
-        str?: 'string', none?: 'form.nil', int?: 'form.int'
+        default: 'string',
+        none?: 'form.nil',
+        str?: 'string',
+        int?: 'form.int',
+        float?: 'form.float',
+        decimal?: 'form.decimal',
+        date?: 'form.date',
+        date_time?: 'form.date_time',
+        time?: 'form.time'
       }.freeze
+
+      DEFAULT_TYPE_NODE = [[:type, 'string']].freeze
 
       def initialize
         @type_compiler = Dry::Data::Compiler.new(Dry::Data)
@@ -19,42 +29,44 @@ module Dry
         type_compiler.([:type, ['hash', [:symbolized, schema]]])
       end
 
-      def visit(node)
-        send(:"visit_#{node[0]}", node[1])
+      def visit(node, *args)
+        send(:"visit_#{node[0]}", node[1], *args)
       end
 
-      def visit_or(node)
+      def visit_or(node, *args)
         left, right = node
-
-        left_type = visit(left)
-        right_type = visit(right)
-
-        [left_type, right_type]
+        [:sum, [visit(left, *args), visit(right, *args)]]
       end
 
-      def visit_and(node)
-        left, right = node
-
-        name = visit(left)
-        type = visit(right)
-
-        if type
-          [:key, [name, Array(type)]]
+      def visit_and(node, first = true)
+        if first
+          name, type = node.map { |n| visit(n, false) }.uniq
+          [:key, [name, type]]
         else
-          name
+          result = node.map { |n| visit(n, first) }.uniq
+
+          if result.size == 1
+            result.first
+          else
+            (result - DEFAULT_TYPE_NODE).first
+          end
         end
       end
 
-      def visit_key(node)
+      def visit_key(node, *args)
         node[0].to_s
       end
 
-      def visit_val(node)
-        visit(node[1])
+      def visit_val(node, *args)
+        visit(node[1], *args)
       end
 
-      def visit_predicate(node)
-        TYPES[node[0]]
+      def visit_set(node, *args)
+        [:type, ['hash', [:symbolized, node[1].map { |n| visit(n) }]]]
+      end
+
+      def visit_predicate(node, *args)
+        [:type, TYPES[node[0]] || TYPES[:default]]
       end
     end
   end

@@ -36,6 +36,10 @@ module Dry
         input.is_a?(Fixnum)
       end
 
+      predicate(:float?) do |input|
+        input.is_a?(Float)
+      end
+
       predicate(:str?) do |input|
         input.is_a?(String)
       end
