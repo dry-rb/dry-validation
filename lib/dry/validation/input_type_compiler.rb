@@ -53,6 +53,10 @@ module Dry
         end
       end
 
+      def visit_implication(node)
+        [:key, node.map(&method(:visit))]
+      end
+
       def visit_key(node, *args)
         node[0].to_s
       end
