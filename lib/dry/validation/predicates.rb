@@ -32,12 +32,28 @@ module Dry
         !self[:empty?].(input)
       end
 
+      predicate(:date?) do |input|
+        input.is_a?(Date)
+      end
+
+      predicate(:date_time?) do |input|
+        input.is_a?(DateTime)
+      end
+
+      predicate(:time?) do |input|
+        input.is_a?(Time)
+      end
+
       predicate(:int?) do |input|
         input.is_a?(Fixnum)
       end
 
       predicate(:float?) do |input|
         input.is_a?(Float)
+      end
+
+      predicate(:decimal?) do |input|
+        input.is_a?(BigDecimal)
       end
 
       predicate(:str?) do |input|

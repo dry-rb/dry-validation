@@ -42,10 +42,6 @@ module Dry
         { name: args[0][0] }
       end
 
-      def visit_empty?(*args, value)
-        { value: value }
-      end
-
       def visit_exclusion?(*args, value)
         { list: args[0][0].join(', ') }
       end
@@ -96,28 +92,8 @@ module Dry
         end
       end
 
-      def visit_str?(*args, value)
-        { value: value }
-      end
-
-      def visit_hash?(*args, value)
-        { value: value }
-      end
-
-      def visit_array?(*args, value)
-        { value: value }
-      end
-
-      def visit_format?(*args, value)
-        {}
-      end
-
-      def visit_nil?(*args, value)
-        {}
-      end
-
-      def visit_filled?(*args)
-        {}
+      def method_missing(meth, *args)
+        { value: args[1] }
       end
     end
   end

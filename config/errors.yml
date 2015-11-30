@@ -20,6 +20,16 @@ inclusion?: "%{name} must be one of: %{list}"
 
 int?: "%{name} must be an integer"
 
+float?: "%{name} must be a float"
+
+decimal?: "%{name} must be a decimal"
+
+date?: "%{name} must be a date"
+
+date_time?: "%{name} must be a date time"
+
+time?: "%{name} must be a time"
+
 key?: "%{name} is missing"
 
 lt?: "%{name} must be less than %{num} (%{value} was given)"

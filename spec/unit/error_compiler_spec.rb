@@ -116,6 +116,46 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       end
     end
 
+    describe ':float?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:float?, []], '2', :num)
+
+        expect(msg).to eql('num must be a float')
+      end
+    end
+
+    describe ':decimal?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:decimal?, []], '2', :num)
+
+        expect(msg).to eql('num must be a decimal')
+      end
+    end
+
+    describe ':date?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:date?, []], '2', :num)
+
+        expect(msg).to eql('num must be a date')
+      end
+    end
+
+    describe ':date_time?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:date_time?, []], '2', :num)
+
+        expect(msg).to eql('num must be a date time')
+      end
+    end
+
+    describe ':time?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit_predicate([:time?, []], '2', :num)
+
+        expect(msg).to eql('num must be a time')
+      end
+    end
+
     describe ':max_size?' do
       it 'returns valid message' do
         msg = error_compiler.visit_predicate([:max_size?, [3]], 'abcd', :num)
