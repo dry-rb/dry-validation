@@ -55,7 +55,8 @@ module Dry
       end
 
       def visit_implication(node)
-        [:key, node.map(&method(:visit))]
+        key, types = node
+        [:key, [visit(key), visit(types, false)]]
       end
 
       def visit_key(node, *args)

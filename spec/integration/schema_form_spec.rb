@@ -22,7 +22,9 @@ RSpec.describe Dry::Validation::Schema::Form do
           end
         end
 
-        optional(:phone_number) { |phone_number| phone_number.none? | phone_number.str? }
+        optional(:phone_number) do |phone_number|
+          phone_number.none? | (phone_number.int? & phone_number.gt?(0))
+        end
       end
     end
 
@@ -74,7 +76,7 @@ RSpec.describe Dry::Validation::Schema::Form do
         result = validation.(
           'email' => 'jane@doe.org',
           'age' => '19',
-          'phone_number' => 12,
+          'phone_number' => '12',
           'address' => {
             'city' => 'NYC',
             'street' => 'Street 1/2',
@@ -82,9 +84,7 @@ RSpec.describe Dry::Validation::Schema::Form do
           }
         )
 
-        expect(result).to match_array([
-          [:error, [:input, [:phone_number, 12, [[:val, [:phone_number, [:predicate, [:str?, []]]]]]]]],
-        ])
+        expect(result).to be_empty
 
         expect(result.params).to eql(
           email: 'jane@doe.org', age: 19, phone_number: 12,
