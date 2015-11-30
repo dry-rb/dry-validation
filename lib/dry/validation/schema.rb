@@ -62,7 +62,8 @@ module Dry
       end
 
       def messages(input)
-        Result.new(input, error_compiler.call(call(input).to_ary))
+        result = call(input)
+        Result.new(result.params, error_compiler.(result.to_ary))
       end
 
       def [](name)
