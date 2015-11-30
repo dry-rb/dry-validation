@@ -9,6 +9,7 @@ module Dry
       TYPES = {
         default: 'string',
         none?: 'form.nil',
+        bool?: 'form.bool',
         str?: 'string',
         int?: 'form.int',
         float?: 'form.float',

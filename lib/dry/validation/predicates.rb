@@ -32,6 +32,10 @@ module Dry
         !self[:empty?].(input)
       end
 
+      predicate(:bool?) do |input|
+        input.is_a?(TrueClass) || input.is_a?(FalseClass)
+      end
+
       predicate(:date?) do |input|
         input.is_a?(Date)
       end

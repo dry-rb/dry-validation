@@ -18,6 +18,8 @@ hash?: "%{name} must be a hash"
 
 inclusion?: "%{name} must be one of: %{list}"
 
+bool?: "%{name} must be boolean"
+
 int?: "%{name} must be an integer"
 
 float?: "%{name} must be a float"

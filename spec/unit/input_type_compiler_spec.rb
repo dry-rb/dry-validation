@@ -170,4 +170,36 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
 
     expect(input_type['bday' => '2012-01-23 11:07']).to eql(bday: Time.new(2012, 1, 23, 11, 7))
   end
+
+  it 'supports bool? => "form.bool"' do
+    rule_ast = [
+      [
+        :and,
+        [
+          [:key, [:bday, [:predicate, [:key?, [:bday]]]]],
+          [:val, [:bday, [:predicate, [:time?, []]]]],
+        ]
+      ]
+    ]
+
+    input_type = compiler.(rule_ast)
+
+    expect(input_type['bday' => '2012-01-23 11:07']).to eql(bday: Time.new(2012, 1, 23, 11, 7))
+  end
+  it 'supports time? => "form.time"' do
+    rule_ast = [
+      [
+        :and,
+        [
+          [:key, [:admin, [:predicate, [:key?, [:admin]]]]],
+          [:val, [:admin, [:predicate, [:bool?, []]]]],
+        ]
+      ]
+    ]
+
+    input_type = compiler.(rule_ast)
+
+    expect(input_type['admin' => 'true']).to eql(admin: true)
+    expect(input_type['admin' => 'false']).to eql(admin: false)
+  end
 end
