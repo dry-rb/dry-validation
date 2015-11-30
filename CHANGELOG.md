@@ -2,9 +2,22 @@
 
 ### Added
 
-* `Schema::Form` with a built-in coercer (solnic)
+* `Schema::Form` with a built-in coercer inferred from type-check predicates  (solnic)
 * Ability to pass a block to predicate check in the DSL ie `value.hash? { ... }` (solnic)
-* `hash?` and `array?` predicates (solnic)
+* Optional keys using `option(:key_name) { ... }` interface in the DSL (solnic)
+* New predicates:
+  - `bool?`
+  - `date?`
+  - `date_time?`
+  - `time?`
+  - `float?`
+  - `decimal?`
+  - `hash?`
+  - `array?`
+
+### Fixed
+
+* Added missing `and` / `or` interfaces to composite rules (solnic)
 
 [Compare v0.1.0...HEAD](https://github.com/dryrb/dry-validation/compare/v0.1.0...HEAD)
 
