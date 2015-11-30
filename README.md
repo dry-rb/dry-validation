@@ -321,25 +321,39 @@ You can learn how to do that in the [Error Messages](https://github.com/dryrb/dr
 
 ## List of Built-In Predicates
 
-* `array?`
-* `empty?`
+### Basic
+
+* `none?`
 * `eql?`
-* `exclusion?`
+* `key?`
+
+### Types
+
+* `str?`
+* `int?`
+* `float?`
+* `decimal?`
+* `bool?`
+* `date?`
+* `date_time?`
+* `time?`
+* `array?`
+* `hash?`
+
+### Number, String, Collection
+
+* `empty?`
 * `filled?`
-* `format?`
 * `gt?`
 * `gteq?`
-* `hash?`
-* `inclusion?`
-* `int?`
-* `key?`
 * `lt?`
 * `lteq?`
 * `max_size?`
 * `min_size?`
-* `nil?`
 * `size?`
-* `str?`
+* `format?`
+* `inclusion?`
+* `exclusion?`
 
 ## Error Messages
 
