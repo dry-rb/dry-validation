@@ -13,6 +13,7 @@ module Dry
 
         def optional(&block)
           key_rule = key?
+
           val_rule = yield(Value.new(name))
 
           rules <<
@@ -21,8 +22,6 @@ module Dry
             else
               Schema::Rule.new([:implication, [key_rule.to_ary, val_rule.to_ary]])
             end
-
-          self
         end
 
         private
