@@ -61,17 +61,19 @@ module Dry
       def call(input)
         results = rules.map { |rule| rule.(input) }
 
+        successes = results.select(&:success?)
+        failures = results.select(&:failure?)
+
         errors = Error::Set.new
 
-        results.each do |result|
-          errors << Error.new(result) if result.failure?
+        failures.each do |result|
+          errors << Error.new(result)
         end
 
         groups.each do |group|
-          values = results
-            .select(&:success?)
-            .select { |r| group.rules.include?(r.rule.name) }
-            .map(&:input)
+          values = group.rules.map { |name|
+            successes.detect { |result| result.name == name }.input
+          }
 
           next if values.empty?
 

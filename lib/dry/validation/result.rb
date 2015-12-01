@@ -10,7 +10,7 @@ module Dry
     class Result
       include Dry::Equalizer(:success?, :input, :rule)
 
-      attr_reader :input, :value, :rule
+      attr_reader :input, :value, :rule, :name
 
       class Set < Result
         def success?
@@ -34,6 +34,7 @@ module Dry
         @input = input
         @value = value
         @rule = rule
+        @name = rule.name
       end
 
       def >(other)
