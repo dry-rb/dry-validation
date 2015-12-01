@@ -260,6 +260,9 @@ class Schema < Dry::Validation::Schema
 end
 ```
 
+Notice that you must add `:password_confirmation` error message configuration if
+you want to have the error converted to a message.
+
 ### Form Validation With Coercions
 
 Probably the most common use case is to validate form params. This is a special
