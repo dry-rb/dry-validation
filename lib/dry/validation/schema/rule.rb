@@ -2,7 +2,7 @@ module Dry
   module Validation
     class Schema
       class Rule
-        attr_reader :node
+        attr_reader :name, :node
 
         def initialize(node)
           @node = node
