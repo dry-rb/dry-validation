@@ -10,6 +10,8 @@
 * `optional` rule with coercions work correctly with `|` + multiple `&`s (solnic)
 * `Schema#[]` checks registered predicates first before defaulting to its own predicates (solnic)
 
+[Compare v0.2.0...v0.2.1](https://github.com/dryrb/dry-validation/compare/v0.2.0...v0.2.1)
+
 # v0.2.0 2015-11-30
 
 ### Added
