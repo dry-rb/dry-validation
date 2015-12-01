@@ -10,7 +10,8 @@ module Dry
           Key.new(name, rules).optional(&block)
         end
 
-        def group(*names, predicate)
+        def group(options)
+          predicate, names = options.to_a.first
           groups << [:group, [names, [:predicate, predicate]]]
         end
       end
