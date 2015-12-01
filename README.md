@@ -238,6 +238,28 @@ puts errors.inspect
 # [[:phone_numbers, [[:phone_numbers, ["phone_numbers must be a string"]]]]]
 ```
 
+### Rules Depending On Other Rules
+
+When a rule needs input from other rules and depends on their results you can
+define it using `rule` DSL. A common example of this is "confirmation validation":
+
+``` ruby
+class Schema < Dry::Validation::Schema
+  key(:password, &:filled?)
+  key(:password_confirmation, &:filled?)
+
+  rule(:password_confirmation, eql?: [:password, :password_confirmation])
+end
+```
+
+A short version of the same thing:
+
+``` ruby
+class Schema < Dry::Validation::Schema
+  confirmation(:password)
+end
+```
+
 ### Form Validation With Coercions
 
 Probably the most common use case is to validate form params. This is a special
