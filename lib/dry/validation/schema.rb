@@ -61,7 +61,9 @@ module Dry
       def call(input)
         results = rules.map { |rule| rule.(input) }
 
-        error_set = results.each_with_object(Error::Set.new) do |result, errors|
+        errors = Error::Set.new
+
+        results.each do |result|
           errors << Error.new(result) if result.failure?
         end
 
@@ -70,7 +72,7 @@ module Dry
           errors << Error.new(result) if result.failure?
         end
 
-        Result.new(input, error_set)
+        Result.new(input, errors)
       end
 
       def messages(input)

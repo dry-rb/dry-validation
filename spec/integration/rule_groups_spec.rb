@@ -12,8 +12,19 @@ RSpec.describe Dry::Validation::Schema do
     end
 
     describe '#call' do
-      it 'checks confirmation of password' do
+      it 'returns empty errors when password matches confirmation' do
         expect(validation.(password: 'foo', password_confirmation: 'foo')).to be_empty
+      end
+
+      it 'returns error for a failed group rule' do
+        expect(validation.(password: 'foo', password_confirmation: 'bar')).to match_array([
+          [:error, [
+            :input, [
+              [:password, :password_confirmation],
+              ["foo", "bar"],
+              [[:group, [[:password, :password_confirmation], [:predicate, [:eql?, []]]]]]]]
+          ]
+        ])
       end
     end
   end

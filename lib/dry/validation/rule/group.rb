@@ -15,6 +15,10 @@ module Dry
           Validation.Result(result.map(&:input), false, self)
         end
       end
+
+      def type
+        :group
+      end
     end
   end
 end
