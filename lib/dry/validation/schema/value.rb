@@ -4,11 +4,12 @@ module Dry
       class Value
         include Schema::Definition
 
-        attr_reader :name, :rules
+        attr_reader :name, :rules, :groups
 
         def initialize(name)
           @name = name
           @rules = []
+          @groups = []
         end
 
         def each(&block)

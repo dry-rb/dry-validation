@@ -9,6 +9,22 @@ module Dry
         def optional(name, &block)
           Key.new(name, rules).optional(&block)
         end
+
+        def rule(name, **options)
+          predicate, rules = options.to_a.first
+          identifier = { name => rules }
+
+          groups << [:group, [identifier, [:predicate, predicate]]]
+        end
+
+        def confirmation(name)
+          identifier = :"#{name}_confirmation"
+
+          key(name, &:filled?)
+          key(identifier, &:filled?)
+
+          rule(identifier, eql?: [name, identifier])
+        end
       end
     end
   end

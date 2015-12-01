@@ -57,6 +57,11 @@ module Dry
         left, right = node
         visit(left) > visit(right)
       end
+
+      def visit_group(node)
+        identifier, predicate = node
+        Rule::Group.new(identifier, visit(predicate))
+      end
     end
   end
 end

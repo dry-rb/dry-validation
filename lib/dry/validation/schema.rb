@@ -43,22 +43,45 @@ module Dry
         @__rules__ ||= []
       end
 
-      attr_reader :rules
+      def self.groups
+        @__groups__ ||= []
+      end
+
+      attr_reader :rules, :groups
 
       attr_reader :error_compiler
 
       def initialize(error_compiler = self.class.error_compiler)
-        @rules = RuleCompiler.new(self).(self.class.rules.map(&:to_ary))
+        compiler = RuleCompiler.new(self)
+        @rules = compiler.(self.class.rules.map(&:to_ary))
+        @groups = compiler.(self.class.groups.map(&:to_ary))
         @error_compiler = error_compiler
       end
 
       def call(input)
-        error_set = rules.each_with_object(Error::Set.new) do |rule, errors|
-          result = rule.(input)
+        results = rules.map { |rule| rule.(input) }
+
+        successes = results.select(&:success?)
+        failures = results.select(&:failure?)
+
+        errors = Error::Set.new
+
+        failures.each do |result|
+          errors << Error.new(result)
+        end
+
+        groups.each do |group|
+          values = group.rules.map { |name|
+            successes.detect { |result| result.name == name }.input
+          }
+
+          next if values.empty?
+
+          result = group.(*values)
           errors << Error.new(result) if result.failure?
         end
 
-        Result.new(input, error_set)
+        Result.new(input, errors)
       end
 
       def messages(input)
@@ -67,11 +90,17 @@ module Dry
       end
 
       def [](name)
-        if methods.include?(name)
+        if predicates.key?(name)
+          predicates[name]
+        elsif respond_to?(name)
           Predicate.new(name, &method(name))
         else
-          self.class.predicates[name]
+          raise ArgumentError, "+#{name}+ is not a valid predicate name"
         end
+      end
+
+      def predicates
+        self.class.predicates
       end
     end
   end

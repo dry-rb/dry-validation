@@ -8,6 +8,8 @@ RSpec.shared_examples 'predicates' do
   let(:min_size?) { Dry::Validation::Predicates[:min_size?] }
 
   let(:key?) { Dry::Validation::Predicates[:key?] }
+
+  let(:eql?) { Dry::Validation::Predicates[:eql?] }
 end
 
 RSpec.shared_examples 'a passing predicate' do
