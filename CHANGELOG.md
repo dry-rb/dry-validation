@@ -1,4 +1,16 @@
-# v0.2.0 to-be-released
+# v0.2.1 2015-12-01
+
+### Added
+
+* `rule` interface in DSL for defining rules that depend on other rules (solnic)
+* `confirmation` interface as a shortcut for defining "confirmation of" rule (solnic)
+
+### Fixed
+
+* `optional` rule with coercions work correctly with `|` + multiple `&`s (solnic)
+* `Schema#[]` checks registered predicates first before defaulting to its own predicates (solnic)
+
+# v0.2.0 2015-11-30
 
 ### Added
 
