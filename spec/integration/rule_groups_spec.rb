@@ -4,10 +4,7 @@ RSpec.describe Dry::Validation::Schema do
   describe 'defining schema with rule groups' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
-        key(:password, &:filled?)
-        key(:password_confirmation, &:filled?)
-
-        rule(:password_confirmation, eql?: [:password, :password_confirmation])
+        confirmation(:password)
       end
     end
 

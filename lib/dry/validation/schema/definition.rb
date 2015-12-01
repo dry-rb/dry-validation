@@ -16,6 +16,15 @@ module Dry
 
           groups << [:group, [identifier, [:predicate, predicate]]]
         end
+
+        def confirmation(name)
+          identifier = :"#{name}_confirmation"
+
+          key(name, &:filled?)
+          key(identifier, &:filled?)
+
+          rule(identifier, eql?: [name, identifier])
+        end
       end
     end
   end
