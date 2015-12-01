@@ -7,7 +7,7 @@ RSpec.describe Dry::Validation::Schema do
         key(:password, &:filled?)
         key(:password_confirmation, &:filled?)
 
-        group(eql?: [:password, :password_confirmation])
+        rule(eql?: [:password, :password_confirmation])
       end
     end
 
