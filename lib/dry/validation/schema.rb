@@ -68,7 +68,14 @@ module Dry
         end
 
         groups.each do |group|
-          result = group.(results)
+          values = results
+            .select(&:success?)
+            .select { |r| group.rules.include?(r.rule.name) }
+            .map(&:input)
+
+          next if values.empty?
+
+          result = group.(*values)
           errors << Error.new(result) if result.failure?
         end
 
