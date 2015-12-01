@@ -7,7 +7,7 @@ RSpec.describe Dry::Validation::Schema do
         key(:password, &:filled?)
         key(:password_confirmation, &:filled?)
 
-        rule(eql?: [:password, :password_confirmation])
+        rule(:password_confirmation, eql?: [:password, :password_confirmation])
       end
     end
 
@@ -20,9 +20,9 @@ RSpec.describe Dry::Validation::Schema do
         expect(validation.(password: 'foo', password_confirmation: 'bar')).to match_array([
           [:error, [
             :input, [
-              [:password, :password_confirmation],
+              :password_confirmation,
               ["foo", "bar"],
-              [[:group, [[:password, :password_confirmation], [:predicate, [:eql?, []]]]]]]]
+              [[:group, [:password_confirmation, [:predicate, [:eql?, []]]]]]]]
           ]
         ])
       end

@@ -10,9 +10,11 @@ module Dry
           Key.new(name, rules).optional(&block)
         end
 
-        def rule(options)
-          predicate, names = options.to_a.first
-          groups << [:group, [names, [:predicate, predicate]]]
+        def rule(name, **options)
+          predicate, rules = options.to_a.first
+          identifier = { name => rules }
+
+          groups << [:group, [identifier, [:predicate, predicate]]]
         end
       end
     end

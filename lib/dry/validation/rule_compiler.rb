@@ -59,8 +59,8 @@ module Dry
       end
 
       def visit_group(node)
-        names, predicate = node
-        Rule::Group.new(names, visit(predicate))
+        identifier, predicate = node
+        Rule::Group.new(identifier, visit(predicate))
       end
     end
   end
