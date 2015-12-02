@@ -2,6 +2,10 @@ source 'https://rubygems.org'
 
 gemspec
 
+group :test do
+  gem 'i18n'
+end
+
 group :tools do
   gem 'rubocop'
   gem 'guard'

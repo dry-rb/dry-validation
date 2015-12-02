@@ -1,0 +1,3 @@
+en:
+  errors:
+    eql?: "%{name} can't be blank"
