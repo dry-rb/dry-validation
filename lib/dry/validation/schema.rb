@@ -82,12 +82,7 @@ module Dry
           errors << Error.new(result) if result.failure?
         end
 
-        Result.new(input, errors)
-      end
-
-      def messages(input)
-        result = call(input)
-        Result.new(result.params, error_compiler.(result.to_ary))
+        Result.new(input, results, errors, error_compiler)
       end
 
       def [](name)

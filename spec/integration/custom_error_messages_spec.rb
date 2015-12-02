@@ -26,7 +26,7 @@ RSpec.describe Dry::Validation, 'with custom messages' do
 
     describe '#messages' do
       it 'returns compiled error messages' do
-        expect(validation.messages(attrs.merge(email: ''))).to match_array([
+        expect(validation.(attrs.merge(email: '')).messages).to match_array([
           [:email, ["email can't be blank"]]
         ])
       end
