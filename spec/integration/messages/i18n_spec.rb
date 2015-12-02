@@ -11,10 +11,28 @@ RSpec.describe Messages::I18n do
   end
 
   describe '#lookup' do
-    it 'returns a message for a predicate and its args' do
-      message = messages.lookup(:eql?, [], )
+    it 'returns a message for a predicate' do
+      message = messages.lookup(:filled?, :name)
 
       expect(message).to eql("%{name} can't be blank")
+    end
+
+    it 'returns a message for a specific rule' do
+      message = messages.lookup(:filled?, :email)
+
+      expect(message).to eql("Please provide your email")
+    end
+
+    it 'returns a message for a specific rule and its default arg type' do
+      message = messages.lookup(:size?, :size, 1)
+
+      expect(message).to eql("size must be %{num}")
+    end
+
+    it 'returns a message for a specific rule and its arg type' do
+      message = messages.lookup(:size?, :size, 1..10)
+
+      expect(message).to eql("size must be between %{left} and %{right}")
     end
   end
 end
