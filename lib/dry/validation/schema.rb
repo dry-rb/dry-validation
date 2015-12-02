@@ -61,20 +61,14 @@ module Dry
 
       def call(input)
         result = Validation::Result.new(rules.map { |rule| rule.(input) })
-        errors = Error::Set.new
-
-        result.failures.each do |failure|
-          errors << Error.new(failure)
-        end
 
         groups.each do |group|
           result.with_values(group.rules) do |values|
-            rule_result = group.(*values)
-
-            result << rule_result
-            errors << Error.new(rule_result) if rule_result.failure?
+            result << group.(*values)
           end
         end
+
+        errors = Error::Set.new(result.failures.map { |failure| Error.new(failure) })
 
         Schema::Result.new(input, result, errors, error_compiler)
       end
