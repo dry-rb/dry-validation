@@ -36,11 +36,11 @@ module Dry
       end
 
       def successes
-        result.select(&:successes?)
+        result.successes
       end
 
       def failures
-        result.select(&:failure?)
+        result.failures
       end
     end
   end

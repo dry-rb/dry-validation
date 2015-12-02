@@ -4,6 +4,7 @@ require 'dry/validation/error'
 require 'dry/validation/rule_compiler'
 require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
+require 'dry/validation/result'
 require 'dry/validation/schema/result'
 
 module Dry
@@ -59,30 +60,28 @@ module Dry
       end
 
       def call(input)
-        results = rules.map { |rule| rule.(input) }
-
-        successes = results.select(&:success?)
-        failures = results.select(&:failure?)
-
+        result = Validation::Result.new(rules.map { |rule| rule.(input) })
         errors = Error::Set.new
 
-        failures.each do |result|
-          errors << Error.new(result)
+        result.failures.each do |failure|
+          errors << Error.new(failure)
         end
 
         groups.each do |group|
           values = group.rules.map { |name|
-            success = successes.detect { |result| result.name == name }
+            success = result.successes.detect { |r| r.name == name }
             success && success.input
           }.compact
 
           next if values.empty?
 
-          result = group.(*values)
-          errors << Error.new(result) if result.failure?
+          rule_result = group.(*values)
+
+          result << rule_result
+          errors << Error.new(rule_result) if rule_result.failure?
         end
 
-        Result.new(input, results, errors, error_compiler)
+        Schema::Result.new(input, result, errors, error_compiler)
       end
 
       def [](name)
