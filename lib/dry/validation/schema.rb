@@ -68,17 +68,12 @@ module Dry
         end
 
         groups.each do |group|
-          values = group.rules.map { |name|
-            success = result.successes.detect { |r| r.name == name }
-            success && success.input
-          }.compact
+          result.with_values(group.rules) do |values|
+            rule_result = group.(*values)
 
-          next if values.empty?
-
-          rule_result = group.(*values)
-
-          result << rule_result
-          errors << Error.new(rule_result) if rule_result.failure?
+            result << rule_result
+            errors << Error.new(rule_result) if rule_result.failure?
+          end
         end
 
         Schema::Result.new(input, result, errors, error_compiler)

@@ -21,6 +21,15 @@ module Dry
         rule_results << rule_result
       end
 
+      def with_values(names, &block)
+        values = names.map { |name| by_name(name) }.compact.map(&:input)
+        yield(values) if values.size == names.size
+      end
+
+      def by_name(name)
+        successes.detect { |rule_result| rule_result.name == name }
+      end
+
       def successes
         rule_results.select(&:success?)
       end
