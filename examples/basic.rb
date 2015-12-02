@@ -10,12 +10,10 @@ end
 
 schema = Schema.new
 
-errors = schema.messages(email: 'jane@doe.org', age: 19)
+errors = schema.call(email: 'jane@doe.org', age: 19).messages
 
 puts errors.inspect
-# []
 
-errors = schema.messages(email: nil, age: 19)
+errors = schema.call(email: nil, age: 19).messages
 
 puts errors.inspect
-# [[:email, ["email must be filled"]]]

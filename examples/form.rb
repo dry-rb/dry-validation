@@ -9,7 +9,6 @@ end
 
 schema = UserFormSchema.new
 
-errors = schema.messages('email' => '', 'age' => '18')
+errors = schema.call('email' => '', 'age' => '18').messages
 
 puts errors.inspect
-# [[:email, ["email must be filled"]], [:age, ["age must be greater than 18 (18 was given)"]]]

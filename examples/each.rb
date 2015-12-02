@@ -10,10 +10,10 @@ end
 
 schema = Schema.new
 
-errors = schema.messages(phone_numbers: '')
+errors = schema.call(phone_numbers: '').messages
 
 puts errors.inspect
 
-errors = schema.messages(phone_numbers: ['123456789', 123456789])
+errors = schema.call(phone_numbers: ['123456789', 123456789]).messages
 
 puts errors.inspect
