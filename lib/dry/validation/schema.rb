@@ -72,8 +72,9 @@ module Dry
 
         groups.each do |group|
           values = group.rules.map { |name|
-            successes.detect { |result| result.name == name }.input
-          }
+            success = successes.detect { |result| result.name == name }
+            success && success.input
+          }.compact
 
           next if values.empty?
 
