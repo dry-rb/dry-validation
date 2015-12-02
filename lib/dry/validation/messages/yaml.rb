@@ -1,0 +1,61 @@
+require 'yaml'
+require 'pathname'
+
+module Dry
+  module Validation
+    class Messages::YAML
+      DEFAULT_PATH = Pathname(__dir__).join('../../../../config/errors.yml').freeze
+
+      attr_reader :data
+
+      def self.load(path = DEFAULT_PATH)
+        new(load_file(path))
+      end
+
+      def self.load_file(path)
+        Validation.symbolize_keys(YAML.load_file(path))
+      end
+
+      class Namespaced
+        attr_reader :namespace, :fallback
+
+        def initialize(namespace, fallback)
+          @namespace = namespace
+          @fallback = fallback
+        end
+
+        def lookup(*args)
+          namespace.lookup(*args) { fallback.lookup(*args) }
+        end
+      end
+
+      def initialize(data)
+        @data = data
+      end
+
+      def merge(overrides)
+        if overrides.is_a?(Hash)
+          self.class.new(data.merge(overrides))
+        else
+          self.class.new(data.merge(Messages::YAML.load_file(overrides)))
+        end
+      end
+
+      def namespaced(namespace)
+        Namespaced.new(Messages::YAML.new(data[namespace]), self)
+      end
+
+      def lookup(identifier, key, arg, &block)
+        message = data.fetch(:attributes, {}).fetch(key, {}).fetch(identifier) do
+          data.fetch(identifier, &block)
+        end
+
+        if message.is_a?(Hash)
+          message.fetch(arg.class.name.downcase.to_sym, message.fetch(:default))
+        else
+          message
+        end
+      end
+    end
+  end
+end
