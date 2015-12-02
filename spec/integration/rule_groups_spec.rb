@@ -23,6 +23,13 @@ RSpec.describe Dry::Validation::Schema do
           ]
         ])
       end
+
+      it 'returns errors for the dependent predicates, not the group rule, when any of the dependent predicates fail' do
+        expect(validation.(password: '', password_confirmation: '')).to match_array([
+          [:error, [:input, [:password, "", [[:val, [:password, [:predicate, [:filled?, []]]]]]]]],
+          [:error, [:input, [:password_confirmation, "", [[:val, [:password_confirmation, [:predicate, [:filled?, []]]]]]]]]
+        ])
+      end
     end
   end
 end
