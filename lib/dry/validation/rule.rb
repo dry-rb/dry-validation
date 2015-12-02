@@ -1,5 +1,3 @@
-require 'dry/validation/result'
-
 module Dry
   module Validation
     class Rule
@@ -45,3 +43,4 @@ require 'dry/validation/rule/each'
 require 'dry/validation/rule/set'
 require 'dry/validation/rule/composite'
 require 'dry/validation/rule/group'
+require 'dry/validation/rule/result'

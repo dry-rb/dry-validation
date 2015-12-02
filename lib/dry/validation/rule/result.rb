@@ -2,17 +2,17 @@ module Dry
   module Validation
     def self.Result(input, value, rule)
       case value
-      when Array then Result::Set.new(input, value, rule)
-      else Result::Value.new(input, value, rule)
+      when Array then Rule::Result::Set.new(input, value, rule)
+      else Rule::Result::Value.new(input, value, rule)
       end
     end
 
-    class Result
+    class Rule::Result
       include Dry::Equalizer(:success?, :input, :rule)
 
       attr_reader :input, :value, :rule, :name
 
-      class Set < Result
+      class Rule::Result::Set < Rule::Result
         def success?
           value.all?(&:success?)
         end
@@ -23,7 +23,7 @@ module Dry
         end
       end
 
-      class Value < Result
+      class Rule::Result::Value < Rule::Result
         def to_ary
           [:input, [rule.name, input, [rule.to_ary]]]
         end
