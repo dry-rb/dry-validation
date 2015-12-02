@@ -1,72 +1,41 @@
 module Dry
   module Validation
-    def self.Result(input, value, rule)
-      case value
-      when Array then Result::Set.new(input, value, rule)
-      else Result::Value.new(input, value, rule)
-      end
-    end
-
     class Result
-      include Dry::Equalizer(:success?, :input, :rule)
+      include Enumerable
 
-      attr_reader :input, :value, :rule, :name
+      attr_reader :rule_results
 
-      class Set < Result
-        def success?
-          value.all?(&:success?)
-        end
-
-        def to_ary
-          indices = value.map { |v| v.failure? ? value.index(v) : nil }.compact
-          [:input, [rule.name, input, value.values_at(*indices).map(&:to_ary)]]
-        end
+      def initialize(rule_results)
+        @rule_results = rule_results
       end
 
-      class Value < Result
-        def to_ary
-          [:input, [rule.name, input, [rule.to_ary]]]
-        end
-        alias_method :to_a, :to_ary
+      def each(&block)
+        rule_results.each(&block)
       end
 
-      def initialize(input, value, rule)
-        @input = input
-        @value = value
-        @rule = rule
-        @name = rule.name
+      def to_ary
+        failures.map(&:to_ary)
       end
 
-      def >(other)
-        if success?
-          other.(input)
-        else
-          Validation.Result(input, true, rule)
-        end
+      def <<(rule_result)
+        rule_results << rule_result
       end
 
-      def and(other)
-        if success?
-          other.(input)
-        else
-          self
-        end
+      def with_values(names, &block)
+        values = names.map { |name| by_name(name) }.compact.map(&:input)
+        yield(values) if values.size == names.size
       end
 
-      def or(other)
-        if success?
-          self
-        else
-          other.(input)
-        end
+      def by_name(name)
+        successes.detect { |rule_result| rule_result.name == name }
       end
 
-      def success?
-        @value
+      def successes
+        rule_results.select(&:success?)
       end
 
-      def failure?
-        ! success?
+      def failures
+        rule_results.select(&:failure?)
       end
     end
   end

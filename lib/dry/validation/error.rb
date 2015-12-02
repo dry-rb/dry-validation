@@ -6,8 +6,8 @@ module Dry
 
         attr_reader :errors
 
-        def initialize
-          @errors = []
+        def initialize(errors)
+          @errors = errors
         end
 
         def each(&block)
@@ -16,10 +16,6 @@ module Dry
 
         def empty?
           errors.empty?
-        end
-
-        def <<(error)
-          errors << error
         end
 
         def to_ary

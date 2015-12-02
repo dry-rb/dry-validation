@@ -30,9 +30,9 @@ RSpec.describe Dry::Validation::Schema::Form do
 
     describe '#messages' do
       it 'returns compiled error messages' do
-        result = validation.messages('email' => '', 'age' => '19')
+        result = validation.('email' => '', 'age' => '19')
 
-        expect(result).to match_array([
+        expect(result.messages).to match_array([
           [:email, ["email must be filled"]],
           [:address, ["address is missing"]]
         ])
