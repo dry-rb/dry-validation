@@ -75,12 +75,12 @@ end
 
 schema = Schema.new
 
-errors = schema.messages(email: 'jane@doe.org', age: 19)
+errors = schema.call(email: 'jane@doe.org', age: 19).messages
 
 puts errors.inspect
 # []
 
-errors = schema.messages(email: nil, age: 19)
+errors = schema.call(email: nil, age: 19).messages
 
 puts errors.inspect
 # [[:email, ["email must be filled"]]]
@@ -112,12 +112,12 @@ end
 
 schema = Schema.new
 
-errors = schema.messages(email: 'jane@doe.org')
+errors = schema.call(email: 'jane@doe.org').messages
 
 puts errors.inspect
 # []
 
-errors = schema.messages(email: 'jane@doe.org', age: 17)
+errors = schema.call(email: 'jane@doe.org', age: 17).messages
 
 puts errors.inspect
 # [[:age, ["age must be greater than 18 (17 was given)"]]]
@@ -140,17 +140,17 @@ end
 
 schema = Schema.new
 
-errors = schema.messages(email: 'jane@doe.org', age: nil)
+errors = schema.call(email: 'jane@doe.org', age: nil).messages
 
 puts errors.inspect
 # []
 
-errors = schema.messages(email: 'jane@doe.org', age: 19)
+errors = schema.call(email: 'jane@doe.org', age: 19).messages
 
 puts errors.inspect
 # []
 
-errors = schema.messages(email: 'jane@doe.org', age: 17)
+errors = schema.call(email: 'jane@doe.org', age: 17).messages
 
 puts errors.inspect
 # [[:age, ["age must be greater than 18 (17 was given)"]]]
@@ -201,12 +201,12 @@ end
 
 schema = Schema.new
 
-errors = schema.messages({})
+errors = schema.call({}).messages
 
 puts errors.inspect
 # [[:address, ["address is missing"]]]
 
-errors = schema.messages(address: { city: 'NYC' })
+errors = schema.call(address: { city: 'NYC' }).messages
 
 puts errors.inspect
 # [[:address, [[:street, ["street is missing"]], [:country, ["country is missing"]]]]]
@@ -227,12 +227,12 @@ end
 
 schema = Schema.new
 
-errors = schema.messages(phone_numbers: '')
+errors = schema.call(phone_numbers: '').messages
 
 puts errors.inspect
 # [[:phone_numbers, ["phone_numbers must be an array"]]]
 
-errors = schema.messages(phone_numbers: ['123456789', 123456789])
+errors = schema.call(phone_numbers: ['123456789', 123456789]).messages
 
 puts errors.inspect
 # [[:phone_numbers, [[:phone_numbers, ["phone_numbers must be a string"]]]]]
@@ -287,7 +287,7 @@ end
 
 schema = UserFormSchema.new
 
-errors = schema.messages('email' => '', 'age' => '18')
+errors = schema.call('email' => '', 'age' => '18').messages
 
 puts errors.inspect
 
