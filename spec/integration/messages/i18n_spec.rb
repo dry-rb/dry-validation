@@ -10,27 +10,27 @@ RSpec.describe Messages::I18n do
     I18n.backend.load_translations
   end
 
-  describe '#lookup' do
+  describe '#[]' do
     it 'returns a message for a predicate' do
-      message = messages.lookup(:filled?, :name)
+      message = messages[:filled?, :name]
 
       expect(message).to eql("%{name} can't be blank")
     end
 
     it 'returns a message for a specific rule' do
-      message = messages.lookup(:filled?, :email)
+      message = messages[:filled?, :email]
 
       expect(message).to eql("Please provide your email")
     end
 
     it 'returns a message for a specific rule and its default arg type' do
-      message = messages.lookup(:size?, :size, 1)
+      message = messages[:size?, :pages, 1]
 
       expect(message).to eql("size must be %{num}")
     end
 
     it 'returns a message for a specific rule and its arg type' do
-      message = messages.lookup(:size?, :size, 1..10)
+      message = messages[:size?, :pages, 1..10]
 
       expect(message).to eql("size must be between %{left} and %{right}")
     end

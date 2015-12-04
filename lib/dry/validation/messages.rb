@@ -8,4 +8,6 @@ module Dry
   end
 end
 
+require 'dry/validation/messages/abstract'
+require 'dry/validation/messages/namespaced'
 require 'dry/validation/messages/yaml'

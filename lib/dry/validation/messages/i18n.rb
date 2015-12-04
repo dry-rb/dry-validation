@@ -1,35 +1,22 @@
 require 'i18n'
+require 'dry/validation/messages/abstract'
 
 module Dry
   module Validation
-    class Messages::I18n
+    class Messages::I18n < Messages::Abstract
       attr_reader :t
 
       def initialize
         @t = I18n.method(:t)
       end
 
-      def exists?(key)
-        I18n.exists?(key)
+      def get(key)
+        t.(key)
       end
+      alias_method :[], :call
 
-      def lookup(predicate, rule, predicate_arg = nil)
-        keys = [
-          "errors.attributes.#{rule}.#{predicate}",
-          "errors.#{predicate}"
-        ]
-
-        key = keys.detect { |name| exists?(name) }
-
-        message = t.(key)
-
-        if message.is_a?(Hash)
-          message.fetch(predicate_arg.class.name.downcase.to_sym) {
-            message.fetch(:default)
-          }
-        else
-          message
-        end
+      def key?(key)
+        I18n.exists?(key)
       end
     end
   end

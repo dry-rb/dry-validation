@@ -7,10 +7,8 @@ RSpec.describe Dry::Validation::ErrorCompiler do
   let(:messages) do
     Messages.default.merge(
       key?: '+%{name}+ key is missing in the hash',
-      attributes: {
-        address: {
-          filled?: 'Please provide your address'
-        }
+      address: {
+        filled?: 'Please provide your address'
       }
     )
   end

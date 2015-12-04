@@ -45,7 +45,7 @@ min_size?: "%{name} size cannot be less than %{num}"
 nil?: "%{name} cannot be nil"
 
 size?:
+  fixnum: "%{name} size must be %{num}"
   range: "%{name} size must be within %{left} - %{right}"
-  default: "%{name} size must be %{num}"
 
 str?: "%{name} must be a string"
