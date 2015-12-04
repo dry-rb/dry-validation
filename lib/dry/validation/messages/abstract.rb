@@ -4,13 +4,19 @@ module Dry
       class Abstract
         extend Dry::Configurable
 
-        setting :root, 'errors'
+        setting :root, 'errors'.freeze
 
         setting :lookup_paths, %w(
           %{root}.%{rule}.%{predicate}.%{predicate_arg_type}
           %{root}.%{rule}.%{predicate}
           %{root}.%{predicate}.%{predicate_arg_type}
           %{root}.%{predicate}
+        ).freeze
+
+        setting :predicate_arg_default, 'default'.freeze
+
+        setting :predicate_arg_types, Hash.new { |*| config.predicate_arg_default }.update(
+          Range => 'range'
         )
 
         def call(*args)
@@ -18,12 +24,12 @@ module Dry
         end
         alias_method :[], :call
 
-        def lookup(predicate, rule, predicate_arg = nil)
+        def lookup(predicate, rule, predicate_arg_class = NilClass)
           tokens = {
             root: root,
             rule: rule,
             predicate: predicate,
-            predicate_arg_type: predicate_arg.class.name.downcase.to_sym
+            predicate_arg_type: config.predicate_arg_types[predicate_arg_class]
           }
 
           lookup_paths(tokens).detect { |key| key?(key) && get(key).is_a?(String) }

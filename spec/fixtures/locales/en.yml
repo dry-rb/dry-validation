@@ -2,7 +2,7 @@ en:
   errors:
     filled?: "%{name} can't be blank"
     size?:
-      fixnum: "size must be %{num}"
+      default: "size must be %{num}"
       range: "size must be between %{left} and %{right}"
     email:
       filled?: "Please provide your email"

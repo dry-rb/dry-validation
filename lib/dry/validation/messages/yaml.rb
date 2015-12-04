@@ -19,7 +19,7 @@ module Dry
       end
 
       def self.flat_hash(h, f = [config.root], g = {})
-        return g.update(f.join('.') => h) unless h.is_a? Hash
+        return g.update(f.join('.'.freeze) => h) unless h.is_a? Hash
         h.each { |k, r| flat_hash(r, f + [k], g) }
         g
       end

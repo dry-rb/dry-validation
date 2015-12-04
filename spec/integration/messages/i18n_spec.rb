@@ -24,13 +24,13 @@ RSpec.describe Messages::I18n do
     end
 
     it 'returns a message for a specific rule and its default arg type' do
-      message = messages[:size?, :pages, 1]
+      message = messages[:size?, :pages]
 
       expect(message).to eql("size must be %{num}")
     end
 
     it 'returns a message for a specific rule and its arg type' do
-      message = messages[:size?, :pages, 1..10]
+      message = messages[:size?, :pages, Range]
 
       expect(message).to eql("size must be between %{left} and %{right}")
     end
