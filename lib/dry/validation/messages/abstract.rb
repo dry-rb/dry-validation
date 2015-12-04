@@ -18,7 +18,7 @@ module Dry
         end
         alias_method :[], :call
 
-        def lookup(predicate, rule, predicate_arg = nil, &block)
+        def lookup(predicate, rule, predicate_arg = nil)
           tokens = {
             root: root,
             rule: rule,
@@ -26,13 +26,7 @@ module Dry
             predicate_arg_type: predicate_arg.class.name.downcase.to_sym
           }
 
-          path = lookup_paths(tokens).detect { |key| key?(key) && get(key).is_a?(String) }
-
-          if path
-            path
-          elsif block
-            yield
-          end
+          lookup_paths(tokens).detect { |key| key?(key) && get(key).is_a?(String) }
         end
 
         def lookup_paths(tokens)
