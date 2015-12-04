@@ -1,3 +1,5 @@
+require 'thread_safe/cache'
+
 module Dry
   module Validation
     module Messages
@@ -20,7 +22,7 @@ module Dry
         )
 
         def call(*args)
-          get(lookup(*args))
+          cache.fetch_or_store(args.hash) { get(lookup(*args)) }
         end
         alias_method :[], :call
 
@@ -49,6 +51,10 @@ module Dry
 
         def config
           self.class.config
+        end
+
+        def cache
+          @cache ||= ThreadSafe::Cache.new
         end
       end
     end
