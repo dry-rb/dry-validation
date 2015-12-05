@@ -14,8 +14,8 @@ module Dry
         t.(key, options)
       end
 
-      def key?(key)
-        I18n.exists?(key)
+      def key?(key, options)
+        I18n.exists?(key, options.fetch(:locale, I18n.default_locale))
       end
     end
   end

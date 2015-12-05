@@ -35,8 +35,8 @@ module Dry
             arg_type: config.arg_types[options[:arg_type]]
           )
 
-          path = lookup_paths(tokens).detect { |key| key?(key) && get(key).is_a?(String) }
           opts = options.reject { |k, _| config.lookup_options.include?(k) }
+          path = lookup_paths(tokens).detect { |key| key?(key, opts) && get(key).is_a?(String) }
 
           [path, opts]
         end

@@ -6,3 +6,6 @@ pl:
       range: "wielkość musi być między %{left} a %{right}"
     email:
       filled?: "Proszę podać adres email"
+    user:
+      email:
+        filled?: "Hej user! Dawaj ten email no!"

@@ -10,8 +10,8 @@ module Dry
           @root = messages.root
         end
 
-        def key?(key)
-          messages.key?(key)
+        def key?(key, *args)
+          messages.key?(key, *args)
         end
 
         def get(key, options = {})
