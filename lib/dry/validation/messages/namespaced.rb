@@ -14,8 +14,8 @@ module Dry
           messages.key?(key)
         end
 
-        def get(key)
-          messages.get(key)
+        def get(key, options = {})
+          messages.get(key, options)
         end
 
         def lookup_paths(tokens)

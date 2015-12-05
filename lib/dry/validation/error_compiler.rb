@@ -35,7 +35,12 @@ module Dry
       end
 
       def visit_predicate(predicate, value, name)
-        messages[predicate[0], name, predicate[1][0].class] % visit(predicate, value).merge(name: name)
+        predicate_name, args = predicate
+
+        template = messages[predicate_name, rule: name, arg_type: args[0].class]
+        tokens = visit(predicate, value).merge(name: name)
+
+        template % tokens
       end
 
       def visit_key?(*args, value)

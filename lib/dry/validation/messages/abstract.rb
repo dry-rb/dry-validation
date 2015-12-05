@@ -8,33 +8,37 @@ module Dry
 
         setting :root, 'errors'.freeze
 
+        setting :lookup_options, [:root, :predicate, :rule, :arg_type].freeze
+
         setting :lookup_paths, %w(
-          %{root}.%{rule}.%{predicate}.%{predicate_arg_type}
+          %{root}.%{rule}.%{predicate}.%{arg_type}
           %{root}.%{rule}.%{predicate}
-          %{root}.%{predicate}.%{predicate_arg_type}
+          %{root}.%{predicate}.%{arg_type}
           %{root}.%{predicate}
         ).freeze
 
-        setting :predicate_arg_default, 'default'.freeze
+        setting :arg_type_default, 'default'.freeze
 
-        setting :predicate_arg_types, Hash.new { |*| config.predicate_arg_default }.update(
+        setting :arg_types, Hash.new { |*| config.arg_type_default }.update(
           Range => 'range'
         )
 
         def call(*args)
-          cache.fetch_or_store(args.hash) { get(lookup(*args)) }
+          cache.fetch_or_store(args.hash) { get(*lookup(*args)) }
         end
         alias_method :[], :call
 
-        def lookup(predicate, rule, predicate_arg_class = NilClass)
-          tokens = {
+        def lookup(predicate, options)
+          tokens = options.merge(
             root: root,
-            rule: rule,
             predicate: predicate,
-            predicate_arg_type: config.predicate_arg_types[predicate_arg_class]
-          }
+            arg_type: config.arg_types[options[:arg_type]]
+          )
 
-          lookup_paths(tokens).detect { |key| key?(key) && get(key).is_a?(String) }
+          path = lookup_paths(tokens).detect { |key| key?(key) && get(key).is_a?(String) }
+          opts = options.reject { |k, _| config.lookup_options.include?(k) }
+
+          [path, opts]
         end
 
         def lookup_paths(tokens)

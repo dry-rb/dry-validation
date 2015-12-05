@@ -28,7 +28,7 @@ module Dry
         @data = data
       end
 
-      def get(key)
+      def get(key, _options = {})
         data[key]
       end
 

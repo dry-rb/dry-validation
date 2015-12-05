@@ -10,10 +10,9 @@ module Dry
         @t = I18n.method(:t)
       end
 
-      def get(key)
-        t.(key)
+      def get(key, options = {})
+        t.(key, options)
       end
-      alias_method :[], :call
 
       def key?(key)
         I18n.exists?(key)
