@@ -1,0 +1,11 @@
+pl:
+  errors:
+    filled?: "%{name} nie może być pusty"
+    size?:
+      default: "wielkość musi być równa %{num}"
+      range: "wielkość musi być między %{left} a %{right}"
+    email:
+      filled?: "Proszę podać adres email"
+    user:
+      email:
+        filled?: "Hej user! Dawaj ten email no!"

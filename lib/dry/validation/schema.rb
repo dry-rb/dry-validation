@@ -14,7 +14,7 @@ module Dry
       extend Definition
 
       setting :predicates, Predicates
-      setting :messages, Messages.default
+      setting :messages, :yaml
       setting :messages_file
       setting :namespace
 
@@ -27,7 +27,13 @@ module Dry
       end
 
       def self.messages
-        default = config.messages
+        default =
+          case config.messages
+          when :yaml then Messages.default
+          when :i18n then Messages::I18n.new
+          else
+            raise RuntimeError, "+#{config.messages}+ is not a valid messages identifier"
+          end
 
         if config.messages_file && config.namespace
           default.merge(config.messages_file).namespaced(config.namespace)

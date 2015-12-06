@@ -31,8 +31,8 @@ module Dry
         errors.map(&:to_ary)
       end
 
-      def messages
-        @messages ||= error_compiler.(errors.map(&:to_ary))
+      def messages(options = {})
+        @messages ||= error_compiler.with(options).(errors.map(&:to_ary))
       end
 
       def successes

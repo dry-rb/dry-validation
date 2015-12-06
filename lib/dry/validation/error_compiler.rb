@@ -1,14 +1,19 @@
 module Dry
   module Validation
     class ErrorCompiler
-      attr_reader :messages
+      attr_reader :messages, :options
 
-      def initialize(messages)
+      def initialize(messages, options = {})
         @messages = messages
+        @options = options
       end
 
       def call(ast)
         ast.map { |node| visit(node) }
+      end
+
+      def with(options)
+        self.class.new(messages, options)
       end
 
       def visit(node, *args)
@@ -35,7 +40,13 @@ module Dry
       end
 
       def visit_predicate(predicate, value, name)
-        messages.lookup(predicate[0], name, predicate[1][0]) % visit(predicate, value).merge(name: name)
+        predicate_name, args = predicate
+
+        lookup_options = options.merge(rule: name, arg_type: args[0].class)
+        template = messages[predicate_name, lookup_options]
+        tokens = visit(predicate, value).merge(name: name)
+
+        template % tokens
       end
 
       def visit_key?(*args, value)

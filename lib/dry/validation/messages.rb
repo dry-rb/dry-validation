@@ -1,65 +1,14 @@
-require 'yaml'
-require 'pathname'
-
 module Dry
   module Validation
-    class Messages
-      DEFAULT_PATH = Pathname(__dir__).join('../../../config/errors.yml').freeze
-
-      attr_reader :data
-
+    module Messages
       def self.default
-        load(DEFAULT_PATH)
-      end
-
-      def self.load(path)
-        new(load_yaml(path))
-      end
-
-      def self.load_yaml(path)
-        Validation.symbolize_keys(YAML.load_file(path))
-      end
-
-      class Namespaced
-        attr_reader :namespace, :fallback
-
-        def initialize(namespace, fallback)
-          @namespace = namespace
-          @fallback = fallback
-        end
-
-        def lookup(*args)
-          namespace.lookup(*args) { fallback.lookup(*args) }
-        end
-      end
-
-      def initialize(data)
-        @data = data
-      end
-
-      def merge(overrides)
-        if overrides.is_a?(Hash)
-          self.class.new(data.merge(overrides))
-        else
-          self.class.new(data.merge(Messages.load_yaml(overrides)))
-        end
-      end
-
-      def namespaced(namespace)
-        Namespaced.new(Messages.new(data[namespace]), self)
-      end
-
-      def lookup(identifier, key, arg, &block)
-        message = data.fetch(:attributes, {}).fetch(key, {}).fetch(identifier) do
-          data.fetch(identifier, &block)
-        end
-
-        if message.is_a?(Hash)
-          message.fetch(arg.class.name.downcase.to_sym, message.fetch(:default))
-        else
-          message
-        end
+        Messages::YAML.load
       end
     end
   end
 end
+
+require 'dry/validation/messages/abstract'
+require 'dry/validation/messages/namespaced'
+require 'dry/validation/messages/yaml'
+require 'dry/validation/messages/i18n' if defined?(I18n)

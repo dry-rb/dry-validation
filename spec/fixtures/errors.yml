@@ -1,4 +1,5 @@
-user:
-  attributes:
-    email:
-      filled?: "%{name} can't be blank"
+en:
+  errors:
+    user:
+      email:
+        filled?: "%{name} can't be blank"
