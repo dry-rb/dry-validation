@@ -44,7 +44,7 @@ en:
 
     min_size?: "%{name} size cannot be less than %{num}"
 
-    nil?: "%{name} cannot be nil"
+    none?: "%{name} cannot be defined"
 
     size?:
       default: "%{name} size must be %{num}"

@@ -174,11 +174,11 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       end
     end
 
-    describe ':nil?' do
+    describe ':none?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:nil?, []], nil, :num)
+        msg = error_compiler.visit_predicate([:none?, []], nil, :num)
 
-        expect(msg).to eql('num cannot be nil')
+        expect(msg).to eql('num cannot be defined')
       end
     end
 
