@@ -6,11 +6,13 @@ require 'dry/validation/messages/abstract'
 module Dry
   module Validation
     class Messages::YAML < Messages::Abstract
-      DEFAULT_PATH = Pathname(__dir__).join('../../../../config/errors.yml').freeze
-
       attr_reader :data
 
-      def self.load(path = DEFAULT_PATH)
+      configure do |config|
+        config.root = 'en.errors'.freeze
+      end
+
+      def self.load(path = config.path)
         new(load_file(path))
       end
 
@@ -18,7 +20,7 @@ module Dry
         flat_hash(YAML.load_file(path))
       end
 
-      def self.flat_hash(h, f = [config.root], g = {})
+      def self.flat_hash(h, f = [], g = {})
         return g.update(f.join('.'.freeze) => h) unless h.is_a? Hash
         h.each { |k, r| flat_hash(r, f + [k], g) }
         g

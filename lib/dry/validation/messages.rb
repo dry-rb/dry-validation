@@ -11,4 +11,4 @@ end
 require 'dry/validation/messages/abstract'
 require 'dry/validation/messages/namespaced'
 require 'dry/validation/messages/yaml'
-require 'dry/validation/messages/i18n'
+require 'dry/validation/messages/i18n' if defined?(I18n)

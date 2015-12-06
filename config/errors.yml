@@ -1,51 +1,53 @@
-array?: "%{name} must be an array"
+en:
+  errors:
+    array?: "%{name} must be an array"
 
-empty?: "%{name} cannot be empty"
+    empty?: "%{name} cannot be empty"
 
-exclusion?: "%{name} must not be one of: %{list}"
+    exclusion?: "%{name} must not be one of: %{list}"
 
-eql?: "%{name} must be equal to %{eql_value}"
+    eql?: "%{name} must be equal to %{eql_value}"
 
-filled?: "%{name} must be filled"
+    filled?: "%{name} must be filled"
 
-format?: "%{name} is in invalid format"
+    format?: "%{name} is in invalid format"
 
-gt?: "%{name} must be greater than %{num} (%{value} was given)"
+    gt?: "%{name} must be greater than %{num} (%{value} was given)"
 
-gteq?: "%{name} must be greater than or equal to %{num}"
+    gteq?: "%{name} must be greater than or equal to %{num}"
 
-hash?: "%{name} must be a hash"
+    hash?: "%{name} must be a hash"
 
-inclusion?: "%{name} must be one of: %{list}"
+    inclusion?: "%{name} must be one of: %{list}"
 
-bool?: "%{name} must be boolean"
+    bool?: "%{name} must be boolean"
 
-int?: "%{name} must be an integer"
+    int?: "%{name} must be an integer"
 
-float?: "%{name} must be a float"
+    float?: "%{name} must be a float"
 
-decimal?: "%{name} must be a decimal"
+    decimal?: "%{name} must be a decimal"
 
-date?: "%{name} must be a date"
+    date?: "%{name} must be a date"
 
-date_time?: "%{name} must be a date time"
+    date_time?: "%{name} must be a date time"
 
-time?: "%{name} must be a time"
+    time?: "%{name} must be a time"
 
-key?: "%{name} is missing"
+    key?: "%{name} is missing"
 
-lt?: "%{name} must be less than %{num} (%{value} was given)"
+    lt?: "%{name} must be less than %{num} (%{value} was given)"
 
-lteq?: "%{name} must be less than or equal to %{num}"
+    lteq?: "%{name} must be less than or equal to %{num}"
 
-max_size?: "%{name} size cannot be greater than %{num}"
+    max_size?: "%{name} size cannot be greater than %{num}"
 
-min_size?: "%{name} size cannot be less than %{num}"
+    min_size?: "%{name} size cannot be less than %{num}"
 
-nil?: "%{name} cannot be nil"
+    nil?: "%{name} cannot be nil"
 
-size?:
-  default: "%{name} size must be %{num}"
-  range: "%{name} size must be within %{left} - %{right}"
+    size?:
+      default: "%{name} size must be %{num}"
+      range: "%{name} size must be within %{left} - %{right}"
 
-str?: "%{name} must be a string"
+    str?: "%{name} must be a string"

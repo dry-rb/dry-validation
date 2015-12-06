@@ -1,3 +1,4 @@
+require 'pathname'
 require 'thread_safe/cache'
 
 module Dry
@@ -22,6 +23,8 @@ module Dry
         setting :arg_types, Hash.new { |*| config.arg_type_default }.update(
           Range => 'range'
         )
+
+        setting :path, Pathname(__dir__).join('../../../../config/errors.yml').realpath.freeze
 
         def call(*args)
           cache.fetch_or_store(args.hash) { get(*lookup(*args)) }
