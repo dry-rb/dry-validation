@@ -1,7 +1,9 @@
-# v0.2.1 2015-12-01
+# v0.3.0 2015-12-06
 
 ### Added
 
+* I18n messages support (solnic)
+* Ability to configure `messages` via `configure { config.messages = :i18n }` (solnic)
 * `rule` interface in DSL for defining rules that depend on other rules (solnic)
 * `confirmation` interface as a shortcut for defining "confirmation of" rule (solnic)
 
@@ -10,7 +12,13 @@
 * `optional` rule with coercions work correctly with `|` + multiple `&`s (solnic)
 * `Schema#[]` checks registered predicates first before defaulting to its own predicates (solnic)
 
-[Compare v0.2.0...v0.2.1](https://github.com/dryrb/dry-validation/compare/v0.2.0...v0.2.1)
+### Changed
+
+* `Schema#messages(input)` => `Schema#call(input).messages` (solnic)
+* `Schema#call` returns `Schema::Result` which has access to all rule results,
+  errors and messages
+
+[Compare v0.2.0...HEAD](https://github.com/dryrb/dry-validation/compare/v0.2.0...HEAD)
 
 # v0.2.0 2015-11-30
 
