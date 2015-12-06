@@ -12,7 +12,7 @@ RSpec.describe Dry::Validation, 'with localized messages' do
       let(:schema) do
         Class.new(Dry::Validation::Schema) do
           configure do |config|
-            config.messages = Dry::Validation::Messages::I18n.new
+            config.messages = :i18n
           end
 
           key(:email) { |email| email.filled? }
@@ -32,7 +32,7 @@ RSpec.describe Dry::Validation, 'with localized messages' do
       let(:schema) do
         Class.new(Dry::Validation::Schema) do
           configure do |config|
-            config.messages = Dry::Validation::Messages::I18n.new
+            config.messages = :i18n
             config.namespace = :user
           end
 
