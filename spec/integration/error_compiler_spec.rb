@@ -9,8 +9,10 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       en: {
         errors: {
           key?: '+%{name}+ key is missing in the hash',
-          address: {
-            filled?: 'Please provide your address'
+          rules: {
+            address: {
+              filled?: 'Please provide your address'
+            }
           }
         }
       }
@@ -183,16 +185,28 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     end
 
     describe ':size?' do
+      it 'returns valid message when val is array and arg is int' do
+        msg = error_compiler.visit_predicate([:size?, [3]], [1], :numbers)
+
+        expect(msg).to eql('numbers size must be 3')
+      end
+
+      it 'returns valid message when val is array and arg is range' do
+        msg = error_compiler.visit_predicate([:size?, [3..4]], [1], :numbers)
+
+        expect(msg).to eql('numbers size must be within 3 - 4')
+      end
+
       it 'returns valid message when arg is int' do
         msg = error_compiler.visit_predicate([:size?, [3]], 'ab', :num)
 
-        expect(msg).to eql('num size must be 3')
+        expect(msg).to eql('num length must be 3')
       end
 
       it 'returns valid message when arg is range' do
         msg = error_compiler.visit_predicate([:size?, [3..4]], 'ab', :num)
 
-        expect(msg).to eql('num size must be within 3 - 4')
+        expect(msg).to eql('num length must be within 3 - 4')
       end
     end
 

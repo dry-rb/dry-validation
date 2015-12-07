@@ -1,8 +1,5 @@
 en:
   errors:
-    filled?: "%{name} can't be blank"
-    size?:
-      default: "size must be %{num}"
-      range: "size must be between %{left} and %{right}"
-    email:
-      filled?: "Please provide your email"
+    rules:
+      email:
+        filled?: "Please provide your email"

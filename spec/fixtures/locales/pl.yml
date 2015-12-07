@@ -2,10 +2,13 @@ pl:
   errors:
     filled?: "%{name} nie może być pusty"
     size?:
-      default: "wielkość musi być równa %{num}"
-      range: "wielkość musi być między %{left} a %{right}"
-    email:
-      filled?: "Proszę podać adres email"
-    user:
+      arg:
+        default: "wielkość musi być równa %{num}"
+        range: "wielkość musi być między %{left} a %{right}"
+    rules:
       email:
-        filled?: "Hej user! Dawaj ten email no!"
+        filled?: "Proszę podać adres email"
+      user:
+        rules:
+          email:
+            filled?: "Hej user! Dawaj ten email no!"

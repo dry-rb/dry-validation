@@ -1,4 +1,3 @@
-require 'pathname'
 require 'thread_safe/cache'
 
 module Dry
@@ -7,24 +6,30 @@ module Dry
       class Abstract
         extend Dry::Configurable
 
+        setting :path, Pathname(__dir__).join('../../../../config/errors.yml').realpath.freeze
         setting :root, 'errors'.freeze
-
-        setting :lookup_options, [:root, :predicate, :rule, :arg_type].freeze
+        setting :lookup_options, [:root, :predicate, :rule, :val_type, :arg_type].freeze
 
         setting :lookup_paths, %w(
-          %{root}.%{rule}.%{predicate}.%{arg_type}
-          %{root}.%{rule}.%{predicate}
-          %{root}.%{predicate}.%{arg_type}
+          %{root}.rules.%{rule}.%{predicate}.arg.%{arg_type}
+          %{root}.rules.%{rule}.%{predicate}
+          %{root}.%{predicate}.value.%{val_type}.arg.%{arg_type}
+          %{root}.%{predicate}.value.%{val_type}
+          %{root}.%{predicate}.arg.%{arg_type}
           %{root}.%{predicate}
         ).freeze
 
         setting :arg_type_default, 'default'.freeze
+        setting :val_type_default, 'default'.freeze
 
         setting :arg_types, Hash.new { |*| config.arg_type_default }.update(
           Range => 'range'
         )
 
-        setting :path, Pathname(__dir__).join('../../../../config/errors.yml').realpath.freeze
+        setting :val_types, Hash.new { |*| config.val_type_default }.update(
+          Range => 'range',
+          String => 'string'
+        )
 
         def call(*args)
           cache.fetch_or_store(args.hash) { get(*lookup(*args)) }
@@ -35,7 +40,8 @@ module Dry
           tokens = options.merge(
             root: root,
             predicate: predicate,
-            arg_type: config.arg_types[options[:arg_type]]
+            arg_type: config.arg_types[options[:arg_type]],
+            val_type: config.val_types[options[:val_type]]
           )
 
           opts = options.reject { |k, _| config.lookup_options.include?(k) }

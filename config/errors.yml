@@ -46,8 +46,15 @@ en:
 
     none?: "%{name} cannot be defined"
 
-    size?:
-      default: "%{name} size must be %{num}"
-      range: "%{name} size must be within %{left} - %{right}"
-
     str?: "%{name} must be a string"
+
+    size?:
+      arg:
+        default: "%{name} size must be %{num}"
+        range: "%{name} size must be within %{left} - %{right}"
+
+      value:
+        string:
+          arg:
+            default: "%{name} length must be %{num}"
+            range: "%{name} length must be within %{left} - %{right}"

@@ -14,7 +14,7 @@ RSpec.describe Messages::I18n do
       it 'returns a message for a predicate' do
         message = messages[:filled?, rule: :name]
 
-        expect(message).to eql("%{name} can't be blank")
+        expect(message).to eql("%{name} must be filled")
       end
 
       it 'returns a message for a specific rule' do
@@ -23,16 +23,22 @@ RSpec.describe Messages::I18n do
         expect(message).to eql("Please provide your email")
       end
 
+      it 'returns a message for a specific val type' do
+        message = messages[:size?, rule: :pages, val_type: String]
+
+        expect(message).to eql("%{name} length must be %{num}")
+      end
+
       it 'returns a message for a specific rule and its default arg type' do
         message = messages[:size?, rule: :pages]
 
-        expect(message).to eql("size must be %{num}")
+        expect(message).to eql("%{name} size must be %{num}")
       end
 
       it 'returns a message for a specific rule and its arg type' do
         message = messages[:size?, rule: :pages, arg_type: Range]
 
-        expect(message).to eql("size must be between %{left} and %{right}")
+        expect(message).to eql("%{name} size must be within %{left} - %{right}")
       end
     end
 

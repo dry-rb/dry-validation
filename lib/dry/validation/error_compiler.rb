@@ -42,7 +42,10 @@ module Dry
       def visit_predicate(predicate, value, name)
         predicate_name, args = predicate
 
-        lookup_options = options.merge(rule: name, arg_type: args[0].class)
+        lookup_options = options.merge(
+          rule: name, val_type: value.class, arg_type: args[0].class
+        )
+
         template = messages[predicate_name, lookup_options]
         tokens = visit(predicate, value).merge(name: name)
 

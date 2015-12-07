@@ -1,5 +1,0 @@
-en:
-  errors:
-    user:
-      email:
-        filled?: "%{name} can't be blank"

@@ -19,7 +19,7 @@ module Dry
         end
 
         def lookup_paths(tokens)
-          super(tokens.merge(root: "#{root}.#{namespace}")) + super
+          super(tokens.merge(root: "#{root}.rules.#{namespace}")) + super
         end
       end
     end
