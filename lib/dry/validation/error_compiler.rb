@@ -9,7 +9,7 @@ module Dry
       end
 
       def call(ast)
-        ast.map { |node| visit(node) }
+        ast.map { |node| visit(node) }.reduce(:merge)
       end
 
       def with(options)
@@ -26,7 +26,7 @@ module Dry
 
       def visit_input(input, *args)
         name, value, rules = input
-        [name, rules.map { |rule| visit(rule, name, value) }]
+        { name => rules.map { |rule| visit(rule, name, value) } }
       end
 
       def visit_key(rule, name, value)

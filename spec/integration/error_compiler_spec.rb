@@ -30,12 +30,12 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     end
 
     it 'converts error ast into another format' do
-      expect(error_compiler.(ast)).to eql([
-        [:name, ["+name+ key is missing in the hash"]],
-        [:age, ["age must be greater than 18 (18 was given)"]],
-        [:email, ["email must be filled"]],
-        [:address, ["Please provide your address"]]
-      ])
+      expect(error_compiler.(ast)).to eql(
+        name: ["+name+ key is missing in the hash"],
+        age: ["age must be greater than 18 (18 was given)"],
+        email: ["email must be filled"],
+        address: ["Please provide your address"]
+      )
     end
   end
 
