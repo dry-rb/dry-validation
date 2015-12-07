@@ -6,6 +6,7 @@
 * Ability to configure `messages` via `configure { config.messages = :i18n }` (solnic)
 * `rule` interface in DSL for defining rules that depend on other rules (solnic)
 * `confirmation` interface as a shortcut for defining "confirmation of" rule (solnic)
+* Error messages can be now matched by input value type too (solnic)
 
 ### Fixed
 
@@ -17,6 +18,7 @@
 * `Schema#messages(input)` => `Schema#call(input).messages` (solnic)
 * `Schema#call` returns `Schema::Result` which has access to all rule results,
   errors and messages
+* `Schema::Result#messages` returns a hash with rule names, messages and input values (solnic)
 
 [Compare v0.2.0...HEAD](https://github.com/dryrb/dry-validation/compare/v0.2.0...HEAD)
 
