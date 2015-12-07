@@ -33,8 +33,8 @@ RSpec.describe Dry::Validation::Schema::Form do
         result = validation.('email' => '', 'age' => '19')
 
         expect(result.messages).to match_array([
-          [:email, ["email must be filled"]],
-          [:address, ["address is missing"]]
+          [:email, [['email must be filled', '']]],
+          [:address, [['address is missing', nil]]]
         ])
 
         expect(result.params).to eql(email: '', age: 19)

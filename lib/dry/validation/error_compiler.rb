@@ -49,7 +49,7 @@ module Dry
         template = messages[predicate_name, lookup_options]
         tokens = visit(predicate, value).merge(name: name)
 
-        template % tokens
+        [template % tokens, value]
       end
 
       def visit_key?(*args, value)
