@@ -204,12 +204,17 @@ schema = Schema.new
 errors = schema.call({}).messages
 
 puts errors.inspect
-# [[:address, ["address is missing"]]]
+# { :address => ["address is missing"] }
 
 errors = schema.call(address: { city: 'NYC' }).messages
 
-puts errors.inspect
-# [[:address, [[:street, ["street is missing"]], [:country, ["country is missing"]]]]]
+puts errors.to_h.inspect
+# {
+#   :address => [
+#     { :street => ["street is missing"] },
+#     { :country => ["country is missing"] }
+#   ]
+# }
 ```
 
 ### Array Elements
@@ -230,12 +235,20 @@ schema = Schema.new
 errors = schema.call(phone_numbers: '').messages
 
 puts errors.inspect
-# [[:phone_numbers, ["phone_numbers must be an array"]]]
+# { :phone_numbers => [["phone_numbers must be an array", ""]] }
 
 errors = schema.call(phone_numbers: ['123456789', 123456789]).messages
 
 puts errors.inspect
-# [[:phone_numbers, [[:phone_numbers, ["phone_numbers must be a string"]]]]]
+# {
+#   :phone_numbers => [
+#     {
+#       :phone_numbers => [
+#         ["phone_numbers must be a string", 123456789]
+#       ]
+#     }
+#   ]
+# }
 ```
 
 ### Rules Depending On Other Rules
@@ -290,8 +303,10 @@ schema = UserFormSchema.new
 errors = schema.call('email' => '', 'age' => '18').messages
 
 puts errors.inspect
-
-# [[:email, ["email must be filled"]], [:age, ["age must be greater than 18 (18 was given)"]]]
+# {
+#   :email => [["email must be filled", nil]],
+#   :age => [["age must be greater than 18 (18 was given)", 18]]
+# }
 ```
 
 There are few major differences between how it works here and in `ActiveModel`:
@@ -375,7 +390,8 @@ You can learn how to do that in the [Error Messages](https://github.com/dryrb/dr
 * `lteq?`
 * `max_size?`
 * `min_size?`
-* `size?`
+* `size?(int)`
+* `size?(range)`
 * `format?`
 * `inclusion?`
 * `exclusion?`
@@ -478,11 +494,11 @@ schema = Schema.new
 
 # return default translations
 puts schema.call(email: '').messages
-[[:email, ["email must be filled"]]]
+{ :email => ["email must be filled"] }
 
 # return other translations (assuming you have it :))
 puts schema.call(email: '').messages(locale: :pl)
-[[:email, ["email musi być wypełniony"]]]
+{ :email => ["email musi być wypełniony"] }
 ```
 
 Important: I18n must be initialized before using schema, `dry-validation` does
