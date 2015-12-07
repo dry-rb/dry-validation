@@ -436,14 +436,16 @@ en:
 
     filled?: "%{name} must be filled"
 
-    email:
-      filled?: "the email is missing"
+    rules:
+      email:
+        filled?: "the email is missing"
 
-    user:
-      filled?: "%{name} name cannot be blank"
+      user:
+        filled?: "%{name} name cannot be blank"
 
-      address:
-        filled?: "You gotta tell us where you live"
+        rules:
+          address:
+            filled?: "You gotta tell us where you live"
 ```
 
 Given the yaml file above, messages lookup works as follows:
