@@ -83,7 +83,7 @@ puts errors.inspect
 errors = schema.call(email: nil, age: 19).messages
 
 puts errors.inspect
-# [[:email, ["email must be filled"]]]
+# { :email => [["email must be filled", nil]] }
 ```
 
 A couple of remarks:
@@ -120,7 +120,7 @@ puts errors.inspect
 errors = schema.call(email: 'jane@doe.org', age: 17).messages
 
 puts errors.inspect
-# [[:age, ["age must be greater than 18 (17 was given)"]]]
+# { :age => [["age must be greater than 18"], 17] }
 ```
 
 ### Optional Values
@@ -153,7 +153,7 @@ puts errors.inspect
 errors = schema.call(email: 'jane@doe.org', age: 17).messages
 
 puts errors.inspect
-# [[:age, ["age must be greater than 18 (17 was given)"]]]
+# { :age => [["age must be greater than 18"], 17] }
 ```
 
 ### Optional Key vs Value
