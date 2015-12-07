@@ -407,16 +407,27 @@ Lookup rules:
 ``` yaml
 en:
   errors:
-  filled?: "%{name} must be filled"
+    size?:
+      arg:
+        default: "%{name} size must be %{num}"
+        range: "%{name} size must be within %{left} - %{right}"
 
-  email:
-    filled?: "the email is missing"
+      value:
+        string:
+          arg:
+            default: "%{name} length must be %{num}"
+            range: "%{name} length must be within %{left} - %{right}"
 
-  user:
-    filled?: "%{name} name cannot be blank"
+    filled?: "%{name} must be filled"
 
-    address:
-      filled?: "You gotta tell us where you live"
+    email:
+      filled?: "the email is missing"
+
+    user:
+      filled?: "%{name} name cannot be blank"
+
+      address:
+        filled?: "You gotta tell us where you live"
 ```
 
 Given the yaml file above, messages lookup works as follows:
@@ -424,14 +435,24 @@ Given the yaml file above, messages lookup works as follows:
 ``` ruby
 messages = Dry::Validation::Messages.load('/path/to/our/errors.yml')
 
-messages[:filled?, rule: :age] # => "age must be filled"
-messages[:filled?, rule: :address] # => "address must be filled"
+# matching arg type for size? predicate
+messages[:size?, rule: :name, arg_type: Fixnum] # => "%{name} size must be %{num}"
+messages[:size?, rule: :name, arg_type: Range] # => "%{name} size must within %{left} - %{right}"
+
+# matching val type for size? predicate
+messages[:size?, rule: :name, val_type: String] # => "%{name} length must be %{num}"
+
+# matching predicate
+messages[:filled?, rule: :age] # => "%{name} must be filled"
+messages[:filled?, rule: :address] # => "%{name} must be filled"
+
+# matching predicate for a specific rule
 messages[:filled?, rule: :email] # => "the email is missing"
 
 # with namespaced messages
 user_messages = messages.namespaced(:user)
 
-user_messages[:filled?, rule: :age] # "age cannot be blank"
+user_messages[:filled?, rule: :age] # "%{name} cannot be blank"
 user_messages[:filled?, rule: :address] # "You gotta tell us where you live"
 ```
 
