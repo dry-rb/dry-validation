@@ -54,6 +54,11 @@ module Dry
         visit(predicate, value, name)
       end
 
+      def visit_attr(rule, name, value)
+        _, predicate = rule
+        visit(predicate, value, name)
+      end
+
       def visit_val(rule, name, value)
         name, predicate = rule
         visit(predicate, value, name)
@@ -72,15 +77,19 @@ module Dry
         template % tokens
       end
 
-      def visit_key?(*args, value)
+      def visit_key?(*args, _value)
         { name: args[0][0] }
       end
 
-      def visit_exclusion?(*args, value)
+      def visit_attr?(*args, _value)
+        { name: args[0][0] }
+      end
+
+      def visit_exclusion?(*args, _value)
         { list: args[0][0].join(', ') }
       end
 
-      def visit_inclusion?(*args, value)
+      def visit_inclusion?(*args, _value)
         { list: args[0][0].join(', ') }
       end
 
@@ -140,7 +149,7 @@ module Dry
         }
       end
 
-      def method_missing(meth, *args)
+      def method_missing(_meth, *args)
         { value: args[1] }
       end
     end

@@ -61,6 +61,11 @@ module Dry
         name
       end
 
+      def visit_attr(node)
+        name, _ = node
+        name
+      end
+
       def method_missing(name, *args)
         nil
       end

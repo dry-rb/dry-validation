@@ -36,6 +36,8 @@ en:
 
     key?: "%{name} is missing"
 
+    attr?: "%{name} is missing"
+
     lt?: "%{name} must be less than %{num} (%{value} was given)"
 
     lteq?: "%{name} must be less than or equal to %{num}"
