@@ -8,7 +8,7 @@
 
 * Error compiler returns an empty hash rather than a nil when there are no errors (solnic)
 
-[Compare v0.3.0...HEAD](https://github.com/dryrb/dry-validation/compare/v0.3.0...HEAD)
+[Compare v0.3.0...v0.3.1](https://github.com/dryrb/dry-validation/compare/v0.3.0...v0.3.1)
 
 # v0.3.0 2015-12-07
 
