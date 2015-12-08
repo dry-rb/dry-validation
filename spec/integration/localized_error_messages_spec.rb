@@ -1,9 +1,11 @@
+require 'dry/validation/messages/i18n'
+
 RSpec.describe Dry::Validation, 'with localized messages' do
   subject(:validation) { schema.new }
 
   before do
     I18n.config.available_locales_set << :pl
-    I18n.load_path = %w(en pl).map { |l| SPEC_ROOT.join("fixtures/locales/#{l}.yml") }
+    I18n.load_path.concat(%w(en pl).map { |l| SPEC_ROOT.join("fixtures/locales/#{l}.yml") })
     I18n.backend.load_translations
   end
 

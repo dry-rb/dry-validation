@@ -5,7 +5,7 @@ RSpec.describe Messages::I18n do
 
   before do
     I18n.config.available_locales_set << :pl
-    I18n.load_path << %w(en pl).map { |l| SPEC_ROOT.join("fixtures/locales/#{l}.yml") }
+    I18n.load_path.concat(%w(en pl).map { |l| SPEC_ROOT.join("fixtures/locales/#{l}.yml") })
     I18n.backend.load_translations
   end
 

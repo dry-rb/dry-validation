@@ -5,9 +5,11 @@ module Dry
   module Validation
     module Messages
       class Abstract
+        DEFAULT_PATH = Pathname(__dir__).join('../../../../config/errors.yml').realpath.freeze
+
         extend Dry::Configurable
 
-        setting :path, Pathname(__dir__).join('../../../../config/errors.yml').realpath.freeze
+        setting :paths, [DEFAULT_PATH]
         setting :root, 'errors'.freeze
         setting :lookup_options, [:root, :predicate, :rule, :val_type, :arg_type].freeze
 

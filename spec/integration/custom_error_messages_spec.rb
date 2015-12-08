@@ -1,3 +1,5 @@
+require 'dry/validation/messages/i18n'
+
 RSpec.describe Dry::Validation do
   subject(:validation) { schema.new }
 
@@ -26,19 +28,23 @@ RSpec.describe Dry::Validation do
   end
 
   context 'i18n' do
-    let(:schema) do
-      require 'dry/validation/messages/i18n'
-
-      Class.new(Dry::Validation::Schema) do
-        configure do |config|
-          config.messages = :i18n
-          config.messages_file = SPEC_ROOT.join('fixtures/locales/en.yml')
-        end
-
-        key(:email, &:filled?)
+    context 'with custom messages set globally' do
+      before do
+        I18n.load_path << SPEC_ROOT.join('fixtures/locales/en.yml')
+        I18n.backend.load_translations
       end
-    end
 
-    include_context 'schema with customized messages'
+      let(:schema) do
+        Class.new(Dry::Validation::Schema) do
+          configure do |config|
+            config.messages = :i18n
+          end
+
+          key(:email, &:filled?)
+        end
+      end
+
+      include_context 'schema with customized messages'
+    end
   end
 end

@@ -6,6 +6,9 @@ require 'dry-container'
 # a common task in Ruby
 module Dry
   module Validation
+    def self.messages_paths
+      Messages::Abstract.config.paths
+    end
   end
 end
 

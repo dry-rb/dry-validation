@@ -15,4 +15,11 @@ include Dry::Validation
 
 RSpec.configure do |config|
   config.disable_monkey_patching!
+
+  config.after do
+    if defined?(I18n)
+      I18n.load_path = Dry::Validation.messages_paths.dup
+      I18n.backend.reload!
+    end
+  end
 end

@@ -12,8 +12,8 @@ module Dry
         config.root = 'en.errors'.freeze
       end
 
-      def self.load(path = config.path)
-        new(load_file(path))
+      def self.load(paths = config.paths)
+        new(paths.map { |path| load_file(path) }.reduce(:merge))
       end
 
       def self.load_file(path)
