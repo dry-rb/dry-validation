@@ -1,3 +1,4 @@
+require 'pathname'
 require 'thread_safe/cache'
 
 module Dry
