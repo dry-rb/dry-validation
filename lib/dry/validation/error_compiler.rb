@@ -3,13 +3,15 @@ module Dry
     class ErrorCompiler
       attr_reader :messages, :options
 
+      DEFAULT_RESULT = {}.freeze
+
       def initialize(messages, options = {})
         @messages = messages
         @options = options
       end
 
       def call(ast)
-        ast.map { |node| visit(node) }.reduce(:merge)
+        ast.map { |node| visit(node) }.reduce(:merge) || DEFAULT_RESULT
       end
 
       def with(options)
