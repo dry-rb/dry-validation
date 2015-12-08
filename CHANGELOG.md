@@ -1,4 +1,16 @@
-# v0.3.0 to-be-released
+# v0.3.1 2015-12-08
+
+### Added
+
+* Support for `Range` and `Array` as an argument in `size?` predicate (solnic)
+
+### Fixed
+
+* Error compiler returns an empty hash rather than a nil when there are no errors (solnic)
+
+[Compare v0.3.0...HEAD](https://github.com/dryrb/dry-validation/compare/v0.3.0...HEAD)
+
+# v0.3.0 2015-12-07
 
 ### Added
 
