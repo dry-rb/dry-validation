@@ -16,8 +16,8 @@ RSpec.shared_examples 'a passing predicate' do
   let(:predicate) { Dry::Validation::Predicates[predicate_name] }
 
   it do
-    arguments_list.each do |args|
-      expect(predicate.call(*args)).to be true
+    arguments_list.each do |(left, right)|
+      expect(predicate.call(left, right)).to be(true)
     end
   end
 end
@@ -26,8 +26,8 @@ RSpec.shared_examples 'a failing predicate' do
   let(:predicate) { Dry::Validation::Predicates[predicate_name] }
 
   it do
-    arguments_list.each do |args|
-      expect(predicate.call(*args)).to be false
+    arguments_list.each do |(left, right)|
+      expect(predicate.call(left, right)).to be(false)
     end
   end
 end

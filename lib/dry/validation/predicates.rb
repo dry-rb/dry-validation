@@ -88,8 +88,13 @@ module Dry
         !self[:lt?].(num, input)
       end
 
-      predicate(:size?) do |num, input|
-        input.size == num
+      predicate(:size?) do |size, input|
+        case size
+        when Fixnum then size == input.size
+        when Range, Array then size.include?(input.size)
+        else
+          raise ArgumentError, "+#{size}+ is not supported type for size? predicate"
+        end
       end
 
       predicate(:min_size?) do |num, input|
