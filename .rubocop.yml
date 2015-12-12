@@ -10,6 +10,9 @@ Style/Documentation:
 Style/LambdaCall:
   Enabled: false
 
+Style/WordArray:
+  Enabled: false
+
 Lint/HandleExceptions:
   Exclude:
     - rakelib/*.rake
