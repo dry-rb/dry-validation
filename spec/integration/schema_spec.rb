@@ -4,7 +4,7 @@ RSpec.describe Dry::Validation::Schema do
   describe 'defining schema' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
-        key(:email) { |email| email.filled? }
+        key(:email, &:filled?)
 
         key(:age) do |age|
           age.none? | (age.int? & age.gt?(18))
@@ -16,9 +16,7 @@ RSpec.describe Dry::Validation::Schema do
               city.min_size?(3)
             end
 
-            address.key(:street) do |street|
-              street.filled?
-            end
+            address.key(:street, &:filled?)
 
             address.key(:country) do |country|
               country.key(:name, &:filled?)

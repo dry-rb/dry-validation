@@ -4,7 +4,7 @@ RSpec.describe Dry::Validation::Schema do
   describe 'defining schema with optional keys' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
-        optional(:email) { |email| email.filled? }
+        optional(:email, &:filled?)
 
         key(:address) do |address|
           address.key(:city, &:filled?)

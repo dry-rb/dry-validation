@@ -7,9 +7,7 @@ class Schema < Dry::Validation::Schema
         city.min_size?(3)
       end
 
-      address.key(:street) do |street|
-        street.filled?
-      end
+      address.key(:street, &:filled?)
 
       address.key(:country) do |country|
         country.key(:name, &:filled?)

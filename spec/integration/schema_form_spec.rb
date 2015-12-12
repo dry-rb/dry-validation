@@ -6,7 +6,7 @@ RSpec.describe Dry::Validation::Schema::Form do
   describe 'defining schema' do
     let(:schema) do
       Class.new(Dry::Validation::Schema::Form) do
-        key(:email) { |email| email.filled? }
+        key(:email, &:filled?)
 
         key(:age) { |age| age.none? | (age.int? & age.gt?(18)) }
 
