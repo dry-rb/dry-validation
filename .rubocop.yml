@@ -7,6 +7,9 @@ Metrics/LineLength:
 Style/Documentation:
   Enabled: false
 
+Style/LambdaCall:
+  Enabled: false
+
 Lint/HandleExceptions:
   Exclude:
     - rakelib/*.rake
