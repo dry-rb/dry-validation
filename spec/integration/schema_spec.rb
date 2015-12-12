@@ -140,6 +140,10 @@ RSpec.describe Dry::Validation::Schema do
           ]]
         ])
       end
+
+      it 'raises argument error if key and valid are not provided' do
+        expect { validation.(:phone_numbers) }.to raise_error(ArgumentError, /expected a Hash/)
+      end
     end
   end
 end

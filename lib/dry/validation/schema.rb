@@ -66,6 +66,8 @@ module Dry
       end
 
       def call(input)
+        validate_input(input)
+
         result = Validation::Result.new(rules.map { |rule| rule.(input) })
 
         groups.each do |group|
@@ -91,6 +93,14 @@ module Dry
 
       def predicates
         self.class.predicates
+      end
+
+      private
+
+      def validate_input(input)
+        unless input.is_a?(Hash)
+          raise ArgumentError, "expected a Hash but received +#{input.inspect}+"
+        end
       end
     end
   end
