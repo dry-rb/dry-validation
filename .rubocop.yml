@@ -16,6 +16,7 @@ Style/WordArray:
 Lint/HandleExceptions:
   Exclude:
     - rakelib/*.rake
+    - spec/spec_helper.rb
 
 Style/FileName:
   Exclude:
