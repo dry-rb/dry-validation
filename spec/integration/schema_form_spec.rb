@@ -66,9 +66,18 @@ RSpec.describe Dry::Validation::Schema::Form do
 
       it 'validates presence of an email and min age value' do
         expect(validation.('email' => '', 'age' => '18')).to match_array([
-          [:error, [:input, [:age, 18, [[:val, [:age, [:predicate, [:gt?, [18]]]]]]]]],
-          [:error, [:input, [:email, "", [[:val, [:email, [:predicate, [:filled?, []]]]]]]]],
-          [:error, [:input, [:address, nil, [[:key, [:address, [:predicate, [:key?, [:address]]]]]]]]]
+          [
+            :error, [
+              :input, [:age, 18, [[:val, [:age, [:predicate, [:gt?, [18]]]]]]]]
+          ],
+          [
+            :error, [
+              :input, [:email, '', [[:val, [:email, [:predicate, [:filled?, []]]]]]]]
+          ],
+          [
+            :error, [
+              :input, [:address, nil, [[:key, [:address, [:predicate, [:key?, [:address]]]]]]]]
+          ]
         ])
       end
 
