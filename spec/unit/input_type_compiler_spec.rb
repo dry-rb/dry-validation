@@ -59,7 +59,7 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
         :and,
         [
           [:key, [:age, [:predicate, [:key?, [:age]]]]],
-          [:val, [:age, [:predicate, [:int?, []]]]],
+          [:val, [:age, [:predicate, [:int?, []]]]]
         ]
       ]
     ]
@@ -78,7 +78,7 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
           [
             :or, [
               [:val, [:age, [:predicate, [:none?, []]]]],
-              [:val, [:age, [:predicate, [:int?, []]]]],
+              [:val, [:age, [:predicate, [:int?, []]]]]
             ]
           ]
         ]
@@ -97,7 +97,7 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
         :and,
         [
           [:key, [:lat, [:predicate, [:key?, [:lat]]]]],
-          [:val, [:lat, [:predicate, [:float?, []]]]],
+          [:val, [:lat, [:predicate, [:float?, []]]]]
         ]
       ]
     ]
@@ -113,7 +113,7 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
         :and,
         [
           [:key, [:lat, [:predicate, [:key?, [:lat]]]]],
-          [:val, [:lat, [:predicate, [:decimal?, []]]]],
+          [:val, [:lat, [:predicate, [:decimal?, []]]]]
         ]
       ]
     ]
@@ -129,7 +129,7 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
         :and,
         [
           [:key, [:bday, [:predicate, [:key?, [:bday]]]]],
-          [:val, [:bday, [:predicate, [:date?, []]]]],
+          [:val, [:bday, [:predicate, [:date?, []]]]]
         ]
       ]
     ]
@@ -145,7 +145,7 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
         :and,
         [
           [:key, [:bday, [:predicate, [:key?, [:bday]]]]],
-          [:val, [:bday, [:predicate, [:date_time?, []]]]],
+          [:val, [:bday, [:predicate, [:date_time?, []]]]]
         ]
       ]
     ]
@@ -161,7 +161,7 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
         :and,
         [
           [:key, [:bday, [:predicate, [:key?, [:bday]]]]],
-          [:val, [:bday, [:predicate, [:time?, []]]]],
+          [:val, [:bday, [:predicate, [:time?, []]]]]
         ]
       ]
     ]
@@ -177,7 +177,7 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
         :and,
         [
           [:key, [:bday, [:predicate, [:key?, [:bday]]]]],
-          [:val, [:bday, [:predicate, [:time?, []]]]],
+          [:val, [:bday, [:predicate, [:time?, []]]]]
         ]
       ]
     ]
@@ -192,7 +192,7 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
         :and,
         [
           [:key, [:admin, [:predicate, [:key?, [:admin]]]]],
-          [:val, [:admin, [:predicate, [:bool?, []]]]],
+          [:val, [:admin, [:predicate, [:bool?, []]]]]
         ]
       ]
     ]

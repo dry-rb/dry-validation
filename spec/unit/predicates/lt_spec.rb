@@ -8,7 +8,7 @@ RSpec.describe Dry::Validation::Predicates do
       let(:arguments_list) do
         [
           [13, 12],
-          [13.37, 13.36],
+          [13.37, 13.36]
         ]
       end
 
