@@ -6,12 +6,12 @@ module Dry
       class Key
         attr_reader :name, :rules
 
-        def initialize(name, rules, &block)
+        def initialize(name, rules, &_block)
           @name = name
           @rules = rules
         end
 
-        def optional(&block)
+        def optional(&_block)
           key_rule = key?
 
           val_rule = yield(Value.new(name))
@@ -43,7 +43,7 @@ module Dry
           end
         end
 
-        def respond_to_missing?(meth, _include_private = false)
+        def respond_to_missing?(_meth, _include_private = false)
           true
         end
       end

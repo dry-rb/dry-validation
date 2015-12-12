@@ -12,7 +12,7 @@ module Dry
           @groups = []
         end
 
-        def each(&block)
+        def each(&_block)
           rule = yield(self).to_ary
           Schema::Rule.new([:each, [name, rule]])
         end
@@ -35,7 +35,7 @@ module Dry
           end
         end
 
-        def respond_to_missing?(meth, _include_private = false)
+        def respond_to_missing?(_meth, _include_private = false)
           true
         end
       end
