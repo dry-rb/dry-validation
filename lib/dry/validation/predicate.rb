@@ -2,8 +2,10 @@ module Dry
   module Validation
     def self.Predicate(block)
       case block
-      when Method then Predicate.new(block.name, &block)
-      else raise ArgumentError, 'predicate needs an :id'
+      when Method
+        Predicate.new(block.name, &block)
+      else
+        fail ArgumentError, 'predicate needs an :id'
       end
     end
 

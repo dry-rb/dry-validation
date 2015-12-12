@@ -93,7 +93,7 @@ module Dry
         when Fixnum then size == input.size
         when Range, Array then size.include?(input.size)
         else
-          raise ArgumentError, "+#{size}+ is not supported type for size? predicate"
+          fail ArgumentError, "+#{size}+ is not supported type for size? predicate"
         end
       end
 
