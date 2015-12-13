@@ -115,7 +115,7 @@ schema = Schema.new
 errors = schema.call(email: 'jane@doe.org').messages
 
 puts errors.inspect
-# []
+# {}
 
 errors = schema.call(email: 'jane@doe.org', age: 17).messages
 
@@ -143,12 +143,12 @@ schema = Schema.new
 errors = schema.call(email: 'jane@doe.org', age: nil).messages
 
 puts errors.inspect
-# []
+# {}
 
 errors = schema.call(email: 'jane@doe.org', age: 19).messages
 
 puts errors.inspect
-# []
+# {}
 
 errors = schema.call(email: 'jane@doe.org', age: 17).messages
 
