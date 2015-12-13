@@ -3,7 +3,7 @@ require 'dry/validation/predicate'
 RSpec.describe Dry::Validation::Predicate do
   describe '#call' do
     it 'returns result of the predicate function' do
-      is_empty = Dry::Validation::Predicate.new(:is_empty) { |str| str.empty? }
+      is_empty = Dry::Validation::Predicate.new(:is_empty, &:empty?)
 
       expect(is_empty.('')).to be(true)
 
@@ -13,7 +13,7 @@ RSpec.describe Dry::Validation::Predicate do
 
   describe '#negation' do
     it 'returns a negated version of a predicate' do
-      is_empty = Dry::Validation::Predicate.new(:is_empty) { |str| str.empty? }
+      is_empty = Dry::Validation::Predicate.new(:is_empty, &:empty?)
       is_filled = is_empty.negation
 
       expect(is_filled.('')).to be(false)

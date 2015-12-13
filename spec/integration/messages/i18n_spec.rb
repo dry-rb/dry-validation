@@ -14,31 +14,31 @@ RSpec.describe Messages::I18n do
       it 'returns a message for a predicate' do
         message = messages[:filled?, rule: :name]
 
-        expect(message).to eql("%{name} must be filled")
+        expect(message).to eql('%{name} must be filled')
       end
 
       it 'returns a message for a specific rule' do
         message = messages[:filled?, rule: :email]
 
-        expect(message).to eql("Please provide your email")
+        expect(message).to eql('Please provide your email')
       end
 
       it 'returns a message for a specific val type' do
         message = messages[:size?, rule: :pages, val_type: String]
 
-        expect(message).to eql("%{name} length must be %{num}")
+        expect(message).to eql('%{name} length must be %{num}')
       end
 
       it 'returns a message for a specific rule and its default arg type' do
         message = messages[:size?, rule: :pages]
 
-        expect(message).to eql("%{name} size must be %{num}")
+        expect(message).to eql('%{name} size must be %{num}')
       end
 
       it 'returns a message for a specific rule and its arg type' do
         message = messages[:size?, rule: :pages, arg_type: Range]
 
-        expect(message).to eql("%{name} size must be within %{left} - %{right}")
+        expect(message).to eql('%{name} size must be within %{left} - %{right}')
       end
     end
 
@@ -46,25 +46,25 @@ RSpec.describe Messages::I18n do
       it 'returns a message for a predicate' do
         message = messages[:filled?, rule: :name, locale: :pl]
 
-        expect(message).to eql("%{name} nie może być pusty")
+        expect(message).to eql('%{name} nie może być pusty')
       end
 
       it 'returns a message for a specific rule' do
         message = messages[:filled?, rule: :email, locale: :pl]
 
-        expect(message).to eql("Proszę podać adres email")
+        expect(message).to eql('Proszę podać adres email')
       end
 
       it 'returns a message for a specific rule and its default arg type' do
         message = messages[:size?, rule: :pages, locale: :pl]
 
-        expect(message).to eql("wielkość musi być równa %{num}")
+        expect(message).to eql('wielkość musi być równa %{num}')
       end
 
       it 'returns a message for a specific rule and its arg type' do
         message = messages[:size?, rule: :pages, arg_type: Range, locale: :pl]
 
-        expect(message).to eql("wielkość musi być między %{left} a %{right}")
+        expect(message).to eql('wielkość musi być między %{left} a %{right}')
       end
     end
   end

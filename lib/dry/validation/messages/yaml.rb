@@ -34,7 +34,7 @@ module Dry
         data[key]
       end
 
-      def key?(key, *args)
+      def key?(key, *_args)
         data.key?(key)
       end
 

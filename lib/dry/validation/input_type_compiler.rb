@@ -59,7 +59,7 @@ module Dry
         [:key, [visit(key), visit(types, false)]]
       end
 
-      def visit_key(node, *args)
+      def visit_key(node, *_args)
         node[0].to_s
       end
 
@@ -67,11 +67,11 @@ module Dry
         visit(node[1], *args)
       end
 
-      def visit_set(node, *args)
+      def visit_set(node, *_args)
         [:type, ['hash', [:symbolized, node[1].map { |n| visit(n) }]]]
       end
 
-      def visit_predicate(node, *args)
+      def visit_predicate(node, *_args)
         [:type, TYPES[node[0]] || TYPES[:default]]
       end
     end

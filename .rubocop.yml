@@ -7,9 +7,16 @@ Metrics/LineLength:
 Style/Documentation:
   Enabled: false
 
+Style/LambdaCall:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
 Lint/HandleExceptions:
   Exclude:
     - rakelib/*.rake
+    - spec/spec_helper.rb
 
 Style/FileName:
   Exclude:

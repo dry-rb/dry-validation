@@ -6,7 +6,7 @@ RSpec.describe Dry::Validation::Schema::Form do
   describe 'defining schema' do
     let(:schema) do
       Class.new(Dry::Validation::Schema::Form) do
-        key(:email) { |email| email.filled? }
+        key(:email, &:filled?)
 
         key(:age) { |age| age.none? | (age.int? & age.gt?(18)) }
 
@@ -66,9 +66,18 @@ RSpec.describe Dry::Validation::Schema::Form do
 
       it 'validates presence of an email and min age value' do
         expect(validation.('email' => '', 'age' => '18')).to match_array([
-          [:error, [:input, [:age, 18, [[:val, [:age, [:predicate, [:gt?, [18]]]]]]]]],
-          [:error, [:input, [:email, "", [[:val, [:email, [:predicate, [:filled?, []]]]]]]]],
-          [:error, [:input, [:address, nil, [[:key, [:address, [:predicate, [:key?, [:address]]]]]]]]]
+          [
+            :error, [
+              :input, [:age, 18, [[:val, [:age, [:predicate, [:gt?, [18]]]]]]]]
+          ],
+          [
+            :error, [
+              :input, [:email, '', [[:val, [:email, [:predicate, [:filled?, []]]]]]]]
+          ],
+          [
+            :error, [
+              :input, [:address, nil, [[:key, [:address, [:predicate, [:key?, [:address]]]]]]]]
+          ]
         ])
       end
 

@@ -66,7 +66,7 @@ module Dry
       end
 
       def failure?
-        ! success?
+        !success?
       end
     end
   end

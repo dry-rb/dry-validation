@@ -1,7 +1,7 @@
 require 'dry-validation'
 
 class Schema < Dry::Validation::Schema
-  key(:email) { |email| email.filled? }
+  key(:email, &:filled?)
 
   key(:age) do |age|
     age.int? & age.gt?(18)

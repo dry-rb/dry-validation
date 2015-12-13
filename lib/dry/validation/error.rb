@@ -19,7 +19,7 @@ module Dry
         end
 
         def to_ary
-          errors.map { |error| error.to_ary }
+          errors.map(&:to_ary)
         end
         alias_method :to_a, :to_ary
       end

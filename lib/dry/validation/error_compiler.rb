@@ -26,7 +26,7 @@ module Dry
         visit(error)
       end
 
-      def visit_input(input, *args)
+      def visit_input(input, *_args)
         name, value, rules = input
         { name => rules.map { |rule| visit(rule, name, value) } }
       end
@@ -54,15 +54,15 @@ module Dry
         [template % tokens, value]
       end
 
-      def visit_key?(*args, value)
+      def visit_key?(*args, _value)
         { name: args[0][0] }
       end
 
-      def visit_exclusion?(*args, value)
+      def visit_exclusion?(*args, _value)
         { list: args[0][0].join(', ') }
       end
 
-      def visit_inclusion?(*args, value)
+      def visit_inclusion?(*args, _value)
         { list: args[0][0].join(', ') }
       end
 
@@ -108,7 +108,7 @@ module Dry
         end
       end
 
-      def method_missing(meth, *args)
+      def method_missing(_meth, *args)
         { value: args[1] }
       end
     end

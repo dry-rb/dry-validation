@@ -14,6 +14,6 @@ errors = schema.call(phone_numbers: '').messages
 
 puts errors.inspect
 
-errors = schema.call(phone_numbers: ['123456789', 123456789]).messages
+errors = schema.call(phone_numbers: ['123456789', 123_456_789]).messages
 
 puts errors.inspect
