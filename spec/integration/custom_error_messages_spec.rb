@@ -7,7 +7,7 @@ RSpec.describe Dry::Validation do
     describe '#messages' do
       it 'returns compiled error messages' do
         expect(validation.(email: '').messages).to match_array([
-          [:email, [['Please provide your email', '']]]
+          [:email, [['Please provide your email'], '']]
         ])
       end
     end

@@ -28,7 +28,7 @@ module Dry
 
       def visit_input(input, *args)
         name, value, rules = input
-        { name => rules.map { |rule| visit(rule, name, value) } }
+        { name => [rules.map { |rule| visit(rule, name, value) }, value] }
       end
 
       def visit_key(rule, name, value)
@@ -51,7 +51,7 @@ module Dry
         template = messages[predicate_name, lookup_options]
         tokens = visit(predicate, value).merge(name: name)
 
-        [template % tokens, value]
+        template % tokens
       end
 
       def visit_key?(*args, value)

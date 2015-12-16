@@ -24,7 +24,7 @@ RSpec.describe Dry::Validation, 'with localized messages' do
       describe '#messages' do
         it 'returns localized error messages' do
           expect(validation.(email: '').messages(locale: :pl)).to match_array([
-            [:email, [['Proszę podać adres email', '']]]
+            [:email, [['Proszę podać adres email'], '']]
           ])
         end
       end
@@ -45,7 +45,7 @@ RSpec.describe Dry::Validation, 'with localized messages' do
       describe '#messages' do
         it 'returns localized error messages' do
           expect(validation.(email: '').messages(locale: :pl)).to match_array([
-            [:email, [['Hej user! Dawaj ten email no!', '']]]
+            [:email, [['Hej user! Dawaj ten email no!'], '']]
           ])
         end
       end
