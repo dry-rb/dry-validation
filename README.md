@@ -83,7 +83,7 @@ puts errors.inspect
 errors = schema.call(email: nil, age: 19).messages
 
 puts errors.inspect
-# { :email => [["email must be filled", nil]] }
+# { :email => [["email must be filled"], nil] }
 ```
 
 A couple of remarks:
@@ -211,8 +211,8 @@ errors = schema.call(address: { city: 'NYC' }).messages
 puts errors.to_h.inspect
 # {
 #   :address => [
-#     { :street => ["street is missing"] },
-#     { :country => ["country is missing"] }
+#     { :street => [["street is missing"], nil] },
+#     { :country => [["country is missing"], nil] }
 #   ]
 # }
 ```
@@ -235,18 +235,15 @@ schema = Schema.new
 errors = schema.call(phone_numbers: '').messages
 
 puts errors.inspect
-# { :phone_numbers => [["phone_numbers must be an array", ""]] }
+# { :phone_numbers => [["phone_numbers must be an array"], ""] }
 
 errors = schema.call(phone_numbers: ['123456789', 123456789]).messages
 
 puts errors.inspect
 # {
 #   :phone_numbers => [
-#     {
-#       :phone_numbers => [
-#         ["phone_numbers must be a string", 123456789]
-#       ]
-#     }
+#     [{ :phone_numbers => [["phone_numbers must be a string"], 123456789] }],
+#     ["123456789", 123456789]
 #   ]
 # }
 ```
@@ -304,8 +301,8 @@ errors = schema.call('email' => '', 'age' => '18').messages
 
 puts errors.inspect
 # {
-#   :email => [["email must be filled", nil]],
-#   :age => [["age must be greater than 18 (18 was given)", 18]]
+#   :email => [["email must be filled"], nil],
+#   :age => [["age must be greater than 18"], 18]
 # }
 ```
 
