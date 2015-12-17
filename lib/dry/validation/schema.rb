@@ -4,6 +4,7 @@ require 'dry/validation/error'
 require 'dry/validation/rule_compiler'
 require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
+require 'dry/validation/hint_compiler'
 require 'dry/validation/result'
 require 'dry/validation/schema/result'
 
@@ -24,6 +25,10 @@ module Dry
 
       def self.error_compiler
         ErrorCompiler.new(messages)
+      end
+
+      def self.hint_compiler
+        HintCompiler.new(messages, rules: rules.map(&:to_ary))
       end
 
       def self.messages
@@ -58,11 +63,14 @@ module Dry
 
       attr_reader :error_compiler
 
-      def initialize(error_compiler = self.class.error_compiler)
+      attr_reader :hint_compiler
+
+      def initialize(error_compiler = self.class.error_compiler, hint_compiler = self.class.hint_compiler)
         compiler = RuleCompiler.new(self)
         @rules = compiler.(self.class.rules.map(&:to_ary))
         @groups = compiler.(self.class.groups.map(&:to_ary))
         @error_compiler = error_compiler
+        @hint_compiler = hint_compiler
       end
 
       def call(input)
@@ -76,7 +84,7 @@ module Dry
 
         errors = Error::Set.new(result.failures.map { |failure| Error.new(failure) })
 
-        Schema::Result.new(input, result, errors, error_compiler)
+        Schema::Result.new(input, result, errors, error_compiler, hint_compiler)
       end
 
       def [](name)

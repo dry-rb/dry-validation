@@ -3,36 +3,38 @@ require 'dry/validation/error_compiler'
 module Dry
   module Validation
     class HintCompiler < ErrorCompiler
-      attr_reader :messages, :options
+      attr_reader :messages, :rules, :options
 
       def initialize(messages, options = {})
         @messages = messages
+        @rules = options.fetch(:rules)
         @options = options
       end
 
-      def call(ast)
+      def call
         messages = Hash.new { |h, k| h[k] = [] }
 
-        ast.flat_map { |node| visit(node) }.each do |hints|
-          name, message = hints
-          messages[name] << message
+        rules.map { |node| visit(node) }.compact.each do |hints|
+          name, msgs = hints
+          messages[name].concat(msgs)
         end
 
         messages
       end
 
-      def visit_and(node)
+      def visit_or(node)
         left, right = node
-        [visit(left), visit(right)].compact
+        [visit(left), Array(visit(right)).flatten.compact].compact
       end
 
-      def visit_key(node)
-        nil
+      def visit_and(node)
+        left, right = node
+        [visit(left), Array(visit(right)).flatten.compact].compact
       end
 
       def visit_val(node)
         name, predicate = node
-        [name, visit(predicate, name)]
+        visit(predicate, name)
       end
 
       def visit_predicate(node, name)
@@ -41,9 +43,22 @@ module Dry
         lookup_options = options.merge(rule: name, arg_type: args[0].class)
 
         template = messages[predicate_name, lookup_options]
-        tokens = visit(predicate, value).merge(name: name)
+        predicate_opts = visit(node, args)
+
+        return unless predicate_opts
+
+        tokens = predicate_opts.merge(name: name)
 
         template % tokens
+      end
+
+      def visit_key(node)
+        name, _ = node
+        name
+      end
+
+      def method_missing(name, *args)
+        nil
       end
     end
   end

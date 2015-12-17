@@ -14,8 +14,8 @@ module Dry
         ast.map { |node| visit(node) }.reduce(:merge) || DEFAULT_RESULT
       end
 
-      def with(options)
-        self.class.new(messages, options)
+      def with(new_options)
+        self.class.new(messages, options.merge(new_options))
       end
 
       def visit(node, *args)
