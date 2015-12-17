@@ -13,8 +13,16 @@ module Dry
         end
 
         def each(&block)
-          rule = yield(self).to_ary
-          Schema::Rule.new([:each, [name, rule]])
+          val_rule = yield(self)
+
+          each_rule =
+            if val_rule.is_a?(Schema::Rule)
+              val_rule.to_ary
+            else
+              [:set, [name, rules.map(&:to_ary)]]
+            end
+
+          Schema::Rule.new([:each, [name, each_rule]])
         end
 
         private
