@@ -13,13 +13,20 @@ module Dry
         end
         alias_method :to_a, :to_ary
 
-        def &(other)
+        def and(other)
           self.class.new([:and, [node, other.to_ary]])
         end
+        alias_method :&, :and
 
-        def |(other)
+        def or(other)
           self.class.new([:or, [node, other.to_ary]])
         end
+        alias_method :|, :or
+
+        def then(other)
+          self.class.new([:implication, [node, other.to_ary]])
+        end
+        alias_method :>, :then
       end
     end
   end
