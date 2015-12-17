@@ -7,8 +7,12 @@ module Dry
 
       def initialize(messages, options = {})
         @messages = messages
-        @rules = options.fetch(:rules)
-        @options = options
+        @options = Hash[options]
+        @rules = @options.delete(:rules)
+      end
+
+      def with(new_options)
+        super(new_options.merge(rules: rules))
       end
 
       def call
