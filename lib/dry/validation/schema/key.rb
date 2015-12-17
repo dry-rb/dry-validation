@@ -3,7 +3,7 @@ require 'dry/validation/rule'
 module Dry
   module Validation
     class Schema
-      class Key
+      class Key < BasicObject
         attr_reader :name, :rules
 
         def initialize(name, rules, &block)
@@ -17,7 +17,7 @@ module Dry
           val_rule = yield(Value.new(name))
 
           rules <<
-            if val_rule.is_a?(Array)
+            if val_rule.is_a?(::Array)
               Schema::Rule.new([:implication, [key_rule.to_ary, [:set, [name, val_rule.map(&:to_ary)]]]])
             else
               Schema::Rule.new([:implication, [key_rule.to_ary, val_rule.to_ary]])
@@ -33,7 +33,7 @@ module Dry
             val_rule = yield(Value.new(name))
 
             rules <<
-              if val_rule.is_a?(Array)
+              if val_rule.is_a?(::Array)
                 Schema::Rule.new([:and, [key_rule, [:set, [name, val_rule.map(&:to_ary)]]]])
               else
                 Schema::Rule.new([:and, [key_rule, val_rule.to_ary]])

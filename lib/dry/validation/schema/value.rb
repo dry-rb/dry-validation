@@ -1,7 +1,7 @@
 module Dry
   module Validation
     class Schema
-      class Value
+      class Value < BasicObject
         include Schema::Definition
 
         attr_reader :name, :rules, :groups
