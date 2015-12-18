@@ -5,6 +5,7 @@
 * Support for high-level rule composition via `rule` interface (solnic)
 * Support for exclusive disjunction (aka xor/^ operator) (solnic)
 * Support for nested schemas within a schema class (solnic)
+* Support for negating rules via `rule(name).not` (solnic)
 * Support for `validation hints` that are included in the error messages (solnic)
 
 ### Fixed
