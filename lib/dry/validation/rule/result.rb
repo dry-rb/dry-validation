@@ -2,6 +2,7 @@ module Dry
   module Validation
     def self.Result(input, value, rule)
       case value
+      when Rule::Result then value.class.new(value.input, value.success?, rule)
       when Array then Rule::Result::Set.new(input, value, rule)
       else Rule::Result::Value.new(input, value, rule)
       end
@@ -35,6 +36,14 @@ module Dry
         @value = value
         @rule = rule
         @name = rule.name
+      end
+
+      def call
+        self
+      end
+
+      def curry(*args)
+        self
       end
 
       def >(other)

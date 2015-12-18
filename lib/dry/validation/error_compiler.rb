@@ -31,6 +31,11 @@ module Dry
         { name => [rules.map { |rule| visit(rule, name, value) }, value] }
       end
 
+      def visit_rule(node, *args)
+        name, _ = node
+        messages[name, rule: name]
+      end
+
       def visit_key(rule, name, value)
         _, predicate = rule
         visit(predicate, value, name)

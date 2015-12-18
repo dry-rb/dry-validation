@@ -15,19 +15,19 @@ RSpec.describe Rule do
 
     describe '#and' do
       it 'returns a conjunction' do
-        expect(left.and(right).call('input')).to be_failure
+        expect(left.and(right).call).to be_failure
       end
     end
 
     describe '#or' do
       it 'returns a conjunction' do
-        expect(left.or(right).call('input')).to be_success
+        expect(left.or(right).call).to be_success
       end
     end
 
     describe '#then' do
       it 'returns an implication' do
-        expect(left.then(right).call('input')).to be_failure
+        expect(left.then(right).call).to be_failure
       end
     end
   end

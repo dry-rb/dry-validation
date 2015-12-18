@@ -22,17 +22,17 @@ module Dry
         end
 
         def and(other)
-          self.class.new(name, [:and, [node, other.to_ary]])
+          self.class.new(:"#{name}_and_#{other.name}", [:and, [node, other.to_ary]])
         end
         alias_method :&, :and
 
         def or(other)
-          self.class.new(name, [:or, [node, other.to_ary]])
+          self.class.new(:"#{name}_or_#{other.name}", [:or, [node, other.to_ary]])
         end
         alias_method :|, :or
 
         def then(other)
-          self.class.new(name, [:implication, [node, other.to_ary]])
+          self.class.new(:"#{name}_then_#{other.name}", [:implication, [node, other.to_ary]])
         end
         alias_method :>, :then
       end

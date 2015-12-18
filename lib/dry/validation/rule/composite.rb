@@ -6,9 +6,12 @@ module Dry
       attr_reader :name, :left, :right
 
       def initialize(left, right)
-        @name = left.name
         @left = left
         @right = right
+      end
+
+      def name
+        :"#{left.name}_#{type}_#{right.name}"
       end
 
       def to_ary
@@ -18,8 +21,8 @@ module Dry
     end
 
     class Rule::Implication < Rule::Composite
-      def call(input)
-        left.(input) > right
+      def call(*args)
+        left.(*args) > right
       end
 
       def type
@@ -28,8 +31,8 @@ module Dry
     end
 
     class Rule::Conjunction < Rule::Composite
-      def call(input)
-        left.(input).and(right)
+      def call(*args)
+        left.(*args).and(right)
       end
 
       def type
@@ -38,8 +41,8 @@ module Dry
     end
 
     class Rule::Disjunction < Rule::Composite
-      def call(input)
-        left.(input).or(right)
+      def call(*args)
+        left.(*args).or(right)
       end
 
       def type
