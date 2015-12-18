@@ -10,11 +10,18 @@ module Dry
           Key.new(name, rules).optional(&block)
         end
 
-        def rule(name, **options)
-          predicate, rules = options.to_a.first
-          identifier = { name => rules }
+        def rule(name, **options, &block)
+          if block
+            gen_name, rule_names = name.to_a.first
+            gen_rule = yield(*rule_names.map { |rule| rule_by_name(rule).to_generic })
 
-          groups << [:group, [identifier, [:predicate, predicate]]]
+            generics << Schema::Rule.new(gen_name, [:rule, [gen_name, gen_rule.to_ary]])
+          else
+            predicate, rule_names = options.to_a.first
+            identifier = { name => rule_names }
+
+            groups << [:group, [identifier, [:predicate, predicate]]]
+          end
         end
 
         def confirmation(name)
@@ -24,6 +31,12 @@ module Dry
           key(identifier, &:filled?)
 
           rule(identifier, eql?: [name, identifier])
+        end
+
+        private
+
+        def rule_by_name(name)
+          rules.detect { |rule| rule.name == name }
         end
       end
     end

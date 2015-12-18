@@ -2,8 +2,8 @@ RSpec.describe Schema::Rule do
   let(:filled) { [:val, [:email, [:predicate, [:filled?, []]]]] }
   let(:format) { [:val, [:email, [:predicate, [:format?, [/regex/]]]]] }
 
-  let(:left) { Schema::Rule.new(filled) }
-  let(:right) { Schema::Rule.new(format) }
+  let(:left) { Schema::Rule.new(:email, filled) }
+  let(:right) { Schema::Rule.new(:email, format) }
 
   describe '#and' do
     it 'returns a conjunction' do

@@ -59,6 +59,10 @@ module Dry
         @__groups__ ||= []
       end
 
+      def self.generics
+        @__generics__ ||= []
+      end
+
       attr_reader :rules, :groups
 
       attr_reader :error_compiler

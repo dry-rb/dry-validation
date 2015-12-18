@@ -10,6 +10,10 @@ module Dry
         @predicate = predicate
       end
 
+      def call(*args)
+        Validation.Result(args, predicate.call, self)
+      end
+
       def to_ary
         [type, [name, predicate.to_ary]]
       end
