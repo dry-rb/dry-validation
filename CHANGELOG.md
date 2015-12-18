@@ -1,3 +1,18 @@
+# v0.4.0 to-be-released
+
+### Added
+
+* Support for high-level rule composition via `rule` interface (solnic)
+* Support for exclusive disjunction (aka xor/^ operator) (solnic)
+* Support for nested schemas within a schema class (solnic)
+* Support for `validation hints` that are included in the error messages (solnic)
+
+### Fixed
+
+* Error messages hash has now consistent structure `rule_name => [msgs_array, input_value]` (solnic)
+
+[Compare v0.3.1...v0.4.0](https://github.com/dryrb/dry-validation/compare/v0.3.1...v0.4.0)
+
 # v0.3.1 2015-12-08
 
 ### Added
