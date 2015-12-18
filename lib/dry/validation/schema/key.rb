@@ -18,9 +18,9 @@ module Dry
 
           rules <<
             if val_rule.is_a?(::Array)
-              Schema::Rule.new([:implication, [key_rule.to_ary, [:set, [name, val_rule.map(&:to_ary)]]]])
+              Schema::Rule.new(name, [:implication, [key_rule.to_ary, [:set, [name, val_rule.map(&:to_ary)]]]])
             else
-              Schema::Rule.new([:implication, [key_rule.to_ary, val_rule.to_ary]])
+              Schema::Rule.new(name, [:implication, [key_rule.to_ary, val_rule.to_ary]])
             end
         end
 
@@ -34,12 +34,12 @@ module Dry
 
             rules <<
               if val_rule.is_a?(::Array)
-                Schema::Rule.new([:and, [key_rule, [:set, [name, val_rule.map(&:to_ary)]]]])
+                Schema::Rule.new(name, [:and, [key_rule, [:set, [name, val_rule.map(&:to_ary)]]]])
               else
-                Schema::Rule.new([:and, [key_rule, val_rule.to_ary]])
+                Schema::Rule.new(name, [:and, [key_rule, val_rule.to_ary]])
               end
           else
-            Schema::Rule.new(key_rule)
+            Schema::Rule.new(name, key_rule)
           end
         end
 

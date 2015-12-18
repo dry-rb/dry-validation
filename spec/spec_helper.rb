@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-require 'dry-validation'
-
 begin
   require 'byebug'
 rescue LoadError; end
+
+require 'dry-validation'
 
 SPEC_ROOT = Pathname(__dir__)
 

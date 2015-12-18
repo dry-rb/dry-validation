@@ -9,12 +9,21 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
 
   let(:predicate) { double(:predicate).as_null_object }
 
+  let(:generic_rule) { Rule.new(:generic, predicate) }
   let(:key_rule) { Rule::Key.new(:email, predicate) }
   let(:val_rule) { Rule::Value.new(:email, predicate) }
   let(:and_rule) { key_rule & val_rule }
   let(:or_rule) { key_rule | val_rule }
   let(:set_rule) { Rule::Set.new(:email, [val_rule]) }
   let(:each_rule) { Rule::Each.new(:email, val_rule) }
+
+  it 'compiles generic rule' do
+    ast = [[:rule, [:generic, [:predicate, [:key?, []]]]]]
+
+    rules = compiler.(ast)
+
+    expect(rules).to eql([generic_rule])
+  end
 
   it 'compiles key rules' do
     ast = [[:key, [:email, [:predicate, [:key?, predicate]]]]]
@@ -28,8 +37,8 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
     ast = [
       [
         :and, [
-          [:key, [:email, [:predicate, [:key?, predicate]]]],
-          [:val, [:email, [:predicate, [:filled?, predicate]]]]
+          [:key, [:email, [:predicate, [:key?, []]]]],
+          [:val, [:email, [:predicate, [:filled?, []]]]]
         ]
       ]
     ]
@@ -43,8 +52,8 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
     ast = [
       [
         :or, [
-          [:key, [:email, [:predicate, [:key?, predicate]]]],
-          [:val, [:email, [:predicate, [:filled?, predicate]]]]
+          [:key, [:email, [:predicate, [:key?, []]]]],
+          [:val, [:email, [:predicate, [:filled?, []]]]]
         ]
       ]
     ]
@@ -59,7 +68,7 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
       [
         :set, [
           :email, [
-            [:val, [:email, [:predicate, [:filled?, predicate]]]]
+            [:val, [:email, [:predicate, [:filled?, []]]]]
           ]
         ]
       ]
@@ -74,7 +83,7 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
     ast = [
       [
         :each, [
-          :email, [:val, [:email, [:predicate, [:filled?, predicate]]]]
+          :email, [:val, [:email, [:predicate, [:filled?, []]]]]
         ]
       ]
     ]

@@ -13,6 +13,14 @@ module Dry
         rule_results.each(&block)
       end
 
+      def to_h
+        each_with_object({}) { |result, hash| hash[result.name] = result }
+      end
+
+      def merge!(other)
+        rule_results.concat(other.rule_results)
+      end
+
       def to_ary
         failures.map(&:to_ary)
       end

@@ -18,6 +18,11 @@ module Dry
         send(:"visit_#{name}", nodes)
       end
 
+      def visit_rule(node)
+        name, predicate = node
+        Rule.new(name, visit(predicate))
+      end
+
       def visit_key(node)
         name, predicate = node
         Rule::Key.new(name, visit(predicate))

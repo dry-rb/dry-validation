@@ -4,12 +4,13 @@ module Dry
       class Value < BasicObject
         include Schema::Definition
 
-        attr_reader :name, :rules, :groups
+        attr_reader :name, :rules, :groups, :generics
 
         def initialize(name)
           @name = name
           @rules = []
           @groups = []
+          @generics = []
         end
 
         def each(&block)
@@ -22,13 +23,13 @@ module Dry
               [:set, [name, rules.map(&:to_ary)]]
             end
 
-          Schema::Rule.new([:each, [name, each_rule]])
+          Schema::Rule.new(name, [:each, [name, each_rule]])
         end
 
         private
 
         def method_missing(meth, *args, &block)
-          rule = Schema::Rule.new([:val, [name, [:predicate, [meth, args]]]])
+          rule = Schema::Rule.new(name, [:val, [name, [:predicate, [meth, args]]]])
 
           if block
             val_rule = yield
@@ -36,7 +37,7 @@ module Dry
             if val_rule.is_a?(Schema::Rule)
               rule & val_rule
             else
-              Schema::Rule.new([:and, [rule.to_ary, [:set, [name, rules.map(&:to_ary)]]]])
+              Schema::Rule.new(name, [:and, [rule.to_ary, [:set, [name, rules.map(&:to_ary)]]]])
             end
           else
             rule
