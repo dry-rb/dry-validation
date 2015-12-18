@@ -11,16 +11,6 @@ RSpec.describe Dry::Validation::Predicate do
     end
   end
 
-  describe '#negation' do
-    it 'returns a negated version of a predicate' do
-      is_empty = Dry::Validation::Predicate.new(:is_empty) { |str| str.empty? }
-      is_filled = is_empty.negation
-
-      expect(is_filled.('')).to be(false)
-      expect(is_filled.('filled')).to be(true)
-    end
-  end
-
   describe '#curry' do
     it 'returns curried predicate' do
       min_age = Dry::Validation::Predicate.new(:min_age) { |age, input| input >= age }

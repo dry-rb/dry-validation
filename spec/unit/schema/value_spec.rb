@@ -1,7 +1,7 @@
 RSpec.describe Schema::Value do
-  subject(:value) { Schema::Value.new(:payments) }
-
   describe '#each' do
+    subject(:value) { Schema::Value.new(:payments) }
+
     it 'creates an each rule with another rule returned from the block' do
       rule = value.each do
         value.key?(:method)
@@ -59,6 +59,23 @@ RSpec.describe Schema::Value do
                 [:rule, [:blue, [:predicate, [:blue, []]]]]
               ]
             ]
+          ]
+        ]
+      ])
+    end
+  end
+
+  describe '#not' do
+    subject(:user) { Schema::Value.new(:user) }
+
+    it 'builds a negated rule' do
+      not_email = user.key(:email, &:str?).first.not
+
+      expect(not_email.to_ary).to eql([
+        :not, [
+          :and, [
+            [:key, [:email, [:predicate, [:key?, []]]]],
+            [:val, [:email, [:predicate, [:str?, []]]]]
           ]
         ]
       ])

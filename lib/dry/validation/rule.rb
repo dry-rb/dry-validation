@@ -5,6 +5,24 @@ module Dry
 
       attr_reader :name, :predicate
 
+      class Negation < Rule
+        include Dry::Equalizer(:rule)
+
+        attr_reader :rule
+
+        def initialize(rule)
+          @rule = rule
+        end
+
+        def call(*args)
+          rule.(*args).negated
+        end
+
+        def to_ary
+          [:not, rule.to_ary]
+        end
+      end
+
       def initialize(name, predicate)
         @name = name
         @predicate = predicate
@@ -42,6 +60,14 @@ module Dry
         Implication.new(self, other)
       end
       alias_method :>, :then
+
+      def negation
+        Negation.new(self)
+      end
+
+      def new(predicate)
+        self.class.new(name, predicate)
+      end
 
       def curry(*args)
         self.class.new(name, predicate.curry(*args))

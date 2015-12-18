@@ -46,6 +46,10 @@ module Dry
         self
       end
 
+      def negated
+        self.class.new(input, !value, rule)
+      end
+
       def >(other)
         if success?
           other.(input)

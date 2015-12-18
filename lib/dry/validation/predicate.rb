@@ -22,10 +22,6 @@ module Dry
         fn.(*args)
       end
 
-      def negation
-        self.class.new(:"not_#{id}") { |input| !fn.(input) }
-      end
-
       def curry(*args)
         self.class.new(id, *args, &fn.curry.(*args))
       end

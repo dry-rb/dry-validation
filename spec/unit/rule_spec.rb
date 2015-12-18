@@ -1,11 +1,17 @@
 RSpec.describe Rule do
+  subject(:rule) { Rule.new(:name, predicate) }
+
+  let(:predicate) { -> { true } }
+
   describe '#call' do
-    subject(:rule) { Rule.new(:name, predicate) }
-
-    let(:predicate) { -> { true } }
-
     it 'returns result of its predicate' do
       expect(rule.call).to be_success
+    end
+  end
+
+  describe '#negation' do
+    it 'returns negated rule' do
+      expect(rule.negation.call).to be_failure
     end
   end
 

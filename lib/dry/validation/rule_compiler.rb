@@ -23,6 +23,10 @@ module Dry
         Rule.new(name, visit(predicate))
       end
 
+      def visit_not(node)
+        visit(node).negation
+      end
+
       def visit_key(node)
         name, predicate = node
         Rule::Key.new(name, visit(predicate))

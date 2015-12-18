@@ -21,6 +21,10 @@ module Dry
           Rule::Generic.new(name, [:rule, [name, [:predicate, [name, []]]]])
         end
 
+        def not
+          self.class.new(:"not_#{name}", [:not, node])
+        end
+
         def and(other)
           self.class.new(:"#{name}_and_#{other.name}", [:and, [node, other.to_ary]])
         end

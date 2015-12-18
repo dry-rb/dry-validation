@@ -11,6 +11,7 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
 
   let(:generic_rule) { Rule.new(:generic, predicate) }
   let(:key_rule) { Rule::Key.new(:email, predicate) }
+  let(:not_key_rule) { Rule::Key.new(:email, predicate).negation }
   let(:val_rule) { Rule::Value.new(:email, predicate) }
   let(:and_rule) { key_rule & val_rule }
   let(:or_rule) { key_rule | val_rule }
@@ -32,6 +33,14 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
     rules = compiler.(ast)
 
     expect(rules).to eql([key_rule])
+  end
+
+  it 'compiles negated rules' do
+    ast = [[:not, [:key, [:email, [:predicate, [:key?, predicate]]]]]]
+
+    rules = compiler.(ast)
+
+    expect(rules).to eql([not_key_rule])
   end
 
   it 'compiles conjunction rules' do
