@@ -31,6 +31,11 @@ module Dry
         end
         alias_method :|, :or
 
+        def xor(other)
+          self.class.new(:"#{name}_xor_#{other.name}", [:xor, [node, other.to_ary]])
+        end
+        alias_method :^, :xor
+
         def then(other)
           self.class.new(:"#{name}_then_#{other.name}", [:implication, [node, other.to_ary]])
         end

@@ -20,8 +20,16 @@ RSpec.describe Rule do
     end
 
     describe '#or' do
-      it 'returns a conjunction' do
+      it 'returns a disjunction' do
         expect(left.or(right).call).to be_success
+      end
+    end
+
+    describe '#xor' do
+      it 'returns an exclusive disjunction' do
+        expect(left.xor(right).call).to be_success
+        expect(left.xor(left).call).to be_failure
+        expect(right.xor(right).call).to be_failure
       end
     end
 

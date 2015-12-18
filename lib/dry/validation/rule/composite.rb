@@ -49,5 +49,15 @@ module Dry
         :or
       end
     end
+
+    class Rule::ExclusiveDisjunction < Rule::Composite
+      def call(*args)
+        left.(*args).xor(right)
+      end
+
+      def type
+        :xor
+      end
+    end
   end
 end

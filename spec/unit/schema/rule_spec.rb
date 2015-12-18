@@ -17,6 +17,12 @@ RSpec.describe Schema::Rule do
     end
   end
 
+  describe '#xor' do
+    it 'returns an exclusive disjunction' do
+      expect(left.xor(right)).to match_array([:xor, [filled, format]])
+    end
+  end
+
   describe '#then' do
     it 'returns an implication' do
       expect(left.then(right)).to match_array([:implication, [filled, format]])

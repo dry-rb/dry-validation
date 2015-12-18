@@ -14,6 +14,7 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
   let(:val_rule) { Rule::Value.new(:email, predicate) }
   let(:and_rule) { key_rule & val_rule }
   let(:or_rule) { key_rule | val_rule }
+  let(:xor_rule) { key_rule ^ val_rule }
   let(:set_rule) { Rule::Set.new(:email, [val_rule]) }
   let(:each_rule) { Rule::Each.new(:email, val_rule) }
 
@@ -61,6 +62,21 @@ RSpec.describe Dry::Validation::RuleCompiler, '#call' do
     rules = compiler.(ast)
 
     expect(rules).to eql([or_rule])
+  end
+
+  it 'compiles exclusive disjunction rules' do
+    ast = [
+      [
+        :xor, [
+          [:key, [:email, [:predicate, [:key?, []]]]],
+          [:val, [:email, [:predicate, [:filled?, []]]]]
+        ]
+      ]
+    ]
+
+    rules = compiler.(ast)
+
+    expect(rules).to eql([xor_rule])
   end
 
   it 'compiles set rules' do

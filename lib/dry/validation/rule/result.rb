@@ -70,6 +70,10 @@ module Dry
         end
       end
 
+      def xor(other)
+        Validation.Result(input, success? ^ other.(input).success?, rule)
+      end
+
       def success?
         @value
       end
