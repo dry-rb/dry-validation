@@ -18,16 +18,17 @@ module Dry
         end
 
         def rule(name, **options, &block)
-          if block
-            gen_name, rule_names = name.to_a.first
-            gen_rule = yield(*rule_names.map { |rule| rule_by_name(rule).to_generic })
-
-            generics << Schema::Rule.new(gen_name, [:rule, [gen_name, gen_rule.to_ary]])
-          else
+          if options.any?
             predicate, rule_names = options.to_a.first
             identifier = { name => rule_names }
 
             groups << [:group, [identifier, [:predicate, predicate]]]
+          else
+            if block
+              generics << Schema::Rule.new(name, [:rule, [name, yield.to_ary]])
+            else
+              rule_by_name(name).to_generic
+            end
           end
         end
 

@@ -48,7 +48,7 @@ RSpec.describe Schema::Value do
       pills.key(:red, &:filled?)
       pills.key(:blue, &:filled?)
 
-      pills.rule(destiny: [:red, :blue]) { |red, blue| red | blue }
+      pills.rule(:destiny) { pills.rule(:red) | pills.rule(:blue) }
 
       expect(pills.generics.map(&:to_ary)).to match_array([
         [

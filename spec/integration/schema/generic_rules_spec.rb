@@ -12,7 +12,7 @@ RSpec.describe Schema, 'using generic rules' do
       optional(:red, &:filled?)
       optional(:blue, &:filled?)
 
-      rule(destiny: [:red, :blue]) { |red, blue| red | blue }
+      rule(:destiny) { rule(:red) | rule(:blue) }
     end
   end
 
