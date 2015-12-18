@@ -13,6 +13,10 @@ module Dry
         rule_results.each(&block)
       end
 
+      def merge!(other)
+        rule_results.concat(other.rule_results)
+      end
+
       def to_ary
         failures.map(&:to_ary)
       end

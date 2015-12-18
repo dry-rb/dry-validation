@@ -55,6 +55,10 @@ module Dry
         @__rules__ ||= []
       end
 
+      def self.schemas
+        @__schemas__ ||= []
+      end
+
       def self.groups
         @__groups__ ||= []
       end
@@ -63,7 +67,7 @@ module Dry
         @__generics__ ||= []
       end
 
-      attr_reader :rules, :groups
+      attr_reader :rules, :schemas, :groups
 
       attr_reader :error_compiler
 
@@ -72,6 +76,7 @@ module Dry
       def initialize(error_compiler = self.class.error_compiler, hint_compiler = self.class.hint_compiler)
         compiler = RuleCompiler.new(self)
         @rules = compiler.(self.class.rules.map(&:to_ary))
+        @schemas = self.class.schemas.map(&:new)
         @groups = compiler.(self.class.groups.map(&:to_ary))
         @error_compiler = error_compiler
         @hint_compiler = hint_compiler
@@ -79,6 +84,10 @@ module Dry
 
       def call(input)
         result = Validation::Result.new(rules.map { |rule| rule.(input) })
+
+        schemas.each do |schema|
+          result.merge!(schema.(input).result)
+        end
 
         groups.each do |group|
           result.with_values(group.rules) do |values|

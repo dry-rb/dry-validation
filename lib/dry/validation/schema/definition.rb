@@ -2,6 +2,13 @@ module Dry
   module Validation
     class Schema
       module Definition
+        def schema(name, &block)
+          schema = Class.new(superclass)
+          schema.key(name, &block)
+          schemas << schema
+          self
+        end
+
         def key(name, &block)
           Key.new(name, rules).key?(&block)
         end
