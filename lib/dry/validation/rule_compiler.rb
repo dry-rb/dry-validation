@@ -18,9 +18,9 @@ module Dry
         send(:"visit_#{name}", nodes)
       end
 
-      def visit_rule(node)
+      def visit_check(node)
         name, predicate = node
-        Rule.new(name, visit(predicate))
+        Rule::Check.new(name, visit(predicate))
       end
 
       def visit_not(node)

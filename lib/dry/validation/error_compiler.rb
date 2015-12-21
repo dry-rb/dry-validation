@@ -31,7 +31,7 @@ module Dry
         { name => [rules.map { |rule| visit(rule, name, value) }, value] }
       end
 
-      def visit_rule(node, *args)
+      def visit_check(node, *args)
         name, _ = node
         messages[name, rule: name]
       end

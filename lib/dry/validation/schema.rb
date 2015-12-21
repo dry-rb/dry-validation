@@ -63,11 +63,11 @@ module Dry
         @__groups__ ||= []
       end
 
-      def self.generics
-        @__generics__ ||= []
+      def self.checks
+        @__checks__ ||= []
       end
 
-      attr_reader :rules, :schemas, :groups, :generics
+      attr_reader :rules, :schemas, :groups, :checks
 
       attr_reader :error_compiler
 
@@ -76,7 +76,7 @@ module Dry
       def initialize(error_compiler = self.class.error_compiler, hint_compiler = self.class.hint_compiler)
         compiler = RuleCompiler.new(self)
         @rules = compiler.(self.class.rules.map(&:to_ary))
-        @generics = self.class.generics
+        @checks = self.class.checks
         @groups = compiler.(self.class.groups.map(&:to_ary))
         @schemas = self.class.schemas.map(&:new)
         @error_compiler = error_compiler
@@ -90,10 +90,10 @@ module Dry
           result.merge!(schema.(input).result)
         end
 
-        if generics.size > 0
-          compiled_generics = RuleCompiler.new(result.to_h).(generics)
+        if checks.size > 0
+          compiled_checks = RuleCompiler.new(result.to_h).(checks)
 
-          compiled_generics.each do |rule|
+          compiled_checks.each do |rule|
             result << rule.()
           end
         end

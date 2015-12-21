@@ -25,9 +25,9 @@ module Dry
             groups << [:group, [identifier, [:predicate, predicate]]]
           else
             if block
-              generics << Schema::Rule.new(name, [:rule, [name, yield.to_ary]])
+              checks << Schema::Rule.new(name, [:check, [name, yield.to_ary]])
             else
-              rule_by_name(name).to_generic
+              rule_by_name(name).to_check
             end
           end
         end

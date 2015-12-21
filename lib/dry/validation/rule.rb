@@ -28,6 +28,10 @@ module Dry
         @predicate = predicate
       end
 
+      def predicate_id
+        predicate.id
+      end
+
       def type
         :rule
       end
@@ -81,5 +85,6 @@ require 'dry/validation/rule/value'
 require 'dry/validation/rule/each'
 require 'dry/validation/rule/set'
 require 'dry/validation/rule/composite'
+require 'dry/validation/rule/check'
 require 'dry/validation/rule/group'
 require 'dry/validation/rule/result'

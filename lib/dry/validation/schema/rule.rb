@@ -4,7 +4,10 @@ module Dry
       class Rule
         attr_reader :name, :node
 
-        class Generic < Rule
+        class Check < Rule
+          def method_missing(meth, *)
+            self.class.new(name, [:check, [name, [:predicate, [name, [meth]]]]])
+          end
         end
 
         def initialize(name, node)
@@ -17,8 +20,8 @@ module Dry
         end
         alias_method :to_a, :to_ary
 
-        def to_generic
-          Rule::Generic.new(name, [:rule, [name, [:predicate, [name, []]]]])
+        def to_check
+          Rule::Check.new(name, [:check, [name, [:predicate, [name, []]]]])
         end
 
         def not

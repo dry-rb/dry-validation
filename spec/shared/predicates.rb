@@ -5,6 +5,8 @@ RSpec.shared_examples 'predicates' do
 
   let(:str?) { Dry::Validation::Predicates[:str?] }
 
+  let(:filled?) { Dry::Validation::Predicates[:filled?] }
+
   let(:min_size?) { Dry::Validation::Predicates[:min_size?] }
 
   let(:key?) { Dry::Validation::Predicates[:key?] }

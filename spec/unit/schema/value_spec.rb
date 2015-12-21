@@ -44,19 +44,19 @@ RSpec.describe Schema::Value do
   describe '#rule' do
     subject(:pills) { Schema::Value.new(:pills) }
 
-    it 'appends new group rule' do
+    it 'appends new check rule' do
       pills.key(:red, &:filled?)
       pills.key(:blue, &:filled?)
 
       pills.rule(:destiny) { pills.rule(:red) | pills.rule(:blue) }
 
-      expect(pills.generics.map(&:to_ary)).to match_array([
+      expect(pills.checks.map(&:to_ary)).to match_array([
         [
-          :rule, [
+          :check, [
             :destiny, [
               :or, [
-                [:rule, [:red, [:predicate, [:red, []]]]],
-                [:rule, [:blue, [:predicate, [:blue, []]]]]
+                [:check, [:red, [:predicate, [:red, []]]]],
+                [:check, [:blue, [:predicate, [:blue, []]]]]
               ]
             ]
           ]
