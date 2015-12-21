@@ -23,31 +23,49 @@ a different approach and focuses a lot on explicitness, clarity and preciseness
 of validation logic. It is designed to work with any data input, whether it's a
 simple hash, an array or a complex object with deeply nested data.
 
-It is based on a simple idea that each validation is encapsulated by a simple,
+It is based on an idea that each validation is encapsulated by a simple,
 stateless predicate, that receives some input and returns either `true` or `false`.
 
 Those predicates are encapsulated by `rules` which can be composed together using
 `predicate logic`. This means you can use the common logic operators to build up
 a validation `schema`.
 
-It's very explicit, powerful and extendible.
-
 Validations can be described with great precision, `dry-validation` eliminates
 ambigious concepts like `presence` validation where we can't really say whether
 some attribute or key is *missing* or it's just that the value is `nil`.
 
-There's also the concept of type-safety, completely missing in other validation
-libraries, which is quite important and useful. It means you can compose a validation
-that does rely on the type of a given value. In example it makes no sense to validate
-each element of an array when it turns out to be an empty string.
+In `dry-validation` type-safety is a first-class feature, something that's completely
+missing in other validation libraries, and it's an important and useful feature. It
+means you can compose a validation that does rely on the type of a given value. In
+example it makes no sense to validate each element of an array when it turns out to
+be an empty string.
 
 ## The DSL
 
-The core of `dry-validation` is rules composition and predicate logic. The DSL
+The core of `dry-validation` is rule composition and predicate logic. The DSL
 is a simple front-end for that. It only allows you to define the rules by using
 predicate identifiers. There are no magical options, conditionals and custom
 validation blocks known from other libraries. The focus is on pure validation
-logic.
+logic expressed in a concise way.
+
+The DSL is very abstract, it builds [a rule AST](https://github.com/dryrb/dry-validation/wiki/Rule-AST)
+which is compiled into an array of rule objects. This means alternative interfaces could
+be easily build.
+
+## When To Use?
+
+Always and everywhere. This is a general-purpose validation library that can be used for many things and it's multiple times faster than `ActiveRecord`/`ActiveModel::Validations` *and* `strong-paremeters`.
+
+Possible use-cases include validation of:
+
+* Form params
+* "GET" params
+* JSON documents
+* YAML documents
+* Application configuration (ie stored in ENV)
+* Replacement for `ActiveRecord`/`ActiveModel::Validations`
+* Replacement for `strong-parameters`
+* etc.
 
 ## Synopsis
 
@@ -71,7 +89,7 @@ end
 
 ## Status and Roadmap
 
-This library is in a very early stage of development but you are encauraged to
+This library is in an early stage of development but you are encauraged to
 try it out and provide feedback.
 
 For planned features check out [the issues](https://github.com/dryrb/dry-validation/labels/feature).
