@@ -54,7 +54,7 @@ be easily build.
 
 ## When To Use?
 
-Always and everywhere. This is a general-purpose validation library that can be used for many things and it's multiple times faster than `ActiveRecord`/`ActiveModel::Validations` *and* `strong-paremeters`.
+Always and everywhere. This is a general-purpose validation library that can be used for many things and **it's multiple times faster** than `ActiveRecord`/`ActiveModel::Validations` *and* `strong-parameters`.
 
 Possible use-cases include validation of:
 
