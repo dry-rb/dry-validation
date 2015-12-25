@@ -18,40 +18,47 @@ module Dry
       setting :messages_file
       setting :namespace
 
-      def self.predicates
-        config.predicates
-      end
+      class << self
+        def predicates
+          config.predicates
+        end
 
-      def self.error_compiler
-        ErrorCompiler.new(messages)
-      end
+        def error_compiler
+          ErrorCompiler.new(messages)
+        end
 
-      def self.messages
-        default =
+        def messages
+          if config.messages_file && config.namespace
+            default_messages.merge(config.messages_file).namespaced(config.namespace)
+          elsif config.messages_file
+            default_messages.merge(config.messages_file)
+          elsif config.namespace
+            default_messages.namespaced(config.namespace)
+          else
+            default_messages
+          end
+        end
+
+        def rules
+          @__rules__ ||= []
+        end
+
+        def groups
+          @__groups__ ||= []
+        end
+
+        private
+
+        def default_messages
           case config.messages
-          when :yaml then Messages.default
-          when :i18n then Messages::I18n.new
+          when :yaml
+            Messages.default
+          when :i18n
+            Messages::I18n.new
           else
             fail "+#{config.messages}+ is not a valid messages identifier"
           end
-
-        if config.messages_file && config.namespace
-          default.merge(config.messages_file).namespaced(config.namespace)
-        elsif config.messages_file
-          default.merge(config.messages_file)
-        elsif config.namespace
-          default.namespaced(config.namespace)
-        else
-          default
         end
-      end
-
-      def self.rules
-        @__rules__ ||= []
-      end
-
-      def self.groups
-        @__groups__ ||= []
       end
 
       attr_reader :rules, :groups
