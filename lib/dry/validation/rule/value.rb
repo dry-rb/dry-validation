@@ -1,12 +1,14 @@
 module Dry
   module Validation
-    class Rule::Value < Rule
-      def call(input)
-        Validation.Result(input, predicate.(input), self)
-      end
+    class Rule
+      class Value < Rule
+        def call(input)
+          Validation.Result(input, predicate.(input), self)
+        end
 
-      def type
-        :val
+        def type
+          :val
+        end
       end
     end
   end
