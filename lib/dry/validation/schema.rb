@@ -73,14 +73,7 @@ module Dry
       end
 
       def call(input)
-        result = Validation::Result.new(rules.map { |rule| rule.(input) })
-
-        groups.each do |group|
-          result.with_values(group.rules) do |values|
-            result << group.(*values)
-          end
-        end
-
+        result = validation_result_for(input)
         errors = Error::Set.new(result.failures.map { |failure| Error.new(failure) })
 
         Schema::Result.new(input, result, errors, error_compiler)
@@ -98,6 +91,18 @@ module Dry
 
       def predicates
         self.class.predicates
+      end
+
+      private
+
+      def validation_result_for(input)
+        Validation::Result.new(rules.map { |rule| rule.(input) }).tap do |result|
+          groups.each do |group|
+            result.with_values(group.rules) do |values|
+              result << group.(*values)
+            end
+          end
+        end
       end
     end
   end
