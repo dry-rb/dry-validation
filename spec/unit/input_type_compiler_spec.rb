@@ -186,6 +186,7 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
 
     expect(input_type['bday' => '2012-01-23 11:07']).to eql(bday: Time.new(2012, 1, 23, 11, 7))
   end
+
   it 'supports time? => "form.time"' do
     rule_ast = [
       [
@@ -201,5 +202,53 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
 
     expect(input_type['admin' => 'true']).to eql(admin: true)
     expect(input_type['admin' => 'false']).to eql(admin: false)
+  end
+
+  it 'supports each rule' do
+    rule_ast = [
+      [
+        :and, [
+          [:key, [:author, [:predicate, [:key?, []]]]],
+          [
+            :set, [
+              :author, [
+                [
+                  :and, [
+                    [:key, [:books, [:predicate, [:key?, []]]]],
+                    [
+                      :each, [
+                        :books,
+                        [
+                          :set, [
+                            :books, [
+                              [
+                                :and, [
+                                  [:key, [:published, [:predicate, [:key?, []]]]],
+                                  [:val, [:published, [:predicate, [:bool?, []]]]]
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+
+    input_type = compiler.(rule_ast)
+
+    expect(input_type['author' => { 'books' => [{ 'published' => 'true' }] }]).to eql(
+      author: { books: [published: true] }
+    )
+
+    expect(input_type['author' => { 'books' => [{ 'published' => 'false' }] }]).to eql(
+      author: { books: [published: false] }
+    )
   end
 end
