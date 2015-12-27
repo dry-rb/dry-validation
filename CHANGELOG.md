@@ -1,3 +1,11 @@
+# v0.4.1 2015-12-27
+
+### Added
+
+* Support for `each` and type coercion inference in `Schema::Form` (solnic)
+
+[Compare v0.4.0...v0.4.1](https://github.com/dryrb/dry-validation/compare/v0.4.0...v0.4.1)
+
 # v0.4.0 2015-12-21
 
 ### Added
