@@ -22,16 +22,16 @@ module Dry
         def method_missing(meth, *args, &block)
           rule = Schema::Rule.new([:val, [name, [:predicate, [meth, args]]]])
 
-          if block
-            val_rule = yield
+          block ? handle_block_method(rule, block) : rule
+        end
 
-            if val_rule.is_a?(Schema::Rule)
-              rule & val_rule
-            else
-              Schema::Rule.new([:and, [rule.to_ary, [:set, [name, rules.map(&:to_ary)]]]])
-            end
+        def handle_block_method(rule, block)
+          val_rule = block.call
+
+          if val_rule.is_a?(Schema::Rule)
+            rule & val_rule
           else
-            rule
+            Schema::Rule.new([:and, [rule.to_ary, [:set, [name, rules.map(&:to_ary)]]]])
           end
         end
 
