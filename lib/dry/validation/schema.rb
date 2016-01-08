@@ -28,15 +28,10 @@ module Dry
         end
 
         def messages
-          if config.messages_file && config.namespace
-            default_messages.merge(config.messages_file).namespaced(config.namespace)
-          elsif config.messages_file
-            default_messages.merge(config.messages_file)
-          elsif config.namespace
-            default_messages.namespaced(config.namespace)
-          else
-            default_messages
-          end
+          messages = default_messages
+          messages = messages.merge(config.messages_file) if config.messages_file
+          messages = messages.namespaced(config.namespace) if config.namespace
+          messages
         end
 
         def rules
