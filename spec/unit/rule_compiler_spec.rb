@@ -3,9 +3,7 @@ require 'dry/validation/rule_compiler'
 RSpec.describe Dry::Validation::RuleCompiler, '#call' do
   subject(:compiler) { RuleCompiler.new(predicates) }
 
-  let(:predicates) {
-    { key?: predicate, filled?: predicate }
-  }
+  let(:predicates) { { key?: predicate, filled?: predicate } }
 
   let(:predicate) { double(:predicate).as_null_object }
 
