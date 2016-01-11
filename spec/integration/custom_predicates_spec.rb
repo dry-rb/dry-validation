@@ -29,7 +29,7 @@ RSpec.describe Dry::Validation do
     before do
       module Test
         module Predicates
-          include Dry::Validation::Predicates
+          include Dry::Logic::Predicates
 
           predicate(:email?) do |input|
             input.include?('@') # for the lols

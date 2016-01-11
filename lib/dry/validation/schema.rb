@@ -1,7 +1,7 @@
+require 'dry/logic/predicates'
 require 'dry/logic/rule_compiler'
 
 require 'dry/validation/schema/definition'
-require 'dry/validation/predicates'
 require 'dry/validation/error'
 require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
@@ -15,7 +15,7 @@ module Dry
       extend Dry::Configurable
       extend Definition
 
-      setting :predicates, Predicates
+      setting :predicates, Logic::Predicates
       setting :messages, :yaml
       setting :messages_file
       setting :namespace
