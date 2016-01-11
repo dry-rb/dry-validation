@@ -42,11 +42,11 @@ be an empty string.
 
 ## The DSL
 
-The core of `dry-validation` is rule composition and predicate logic. The DSL
-is a simple front-end for that. It only allows you to define the rules by using
-predicate identifiers. There are no magical options, conditionals and custom
-validation blocks known from other libraries. The focus is on pure validation
-logic expressed in a concise way.
+The core of `dry-validation` is rule composition and predicate logic provided by
+[dry-logic](https://github.com/dryrb/dry-logic). The DSL is a simple front-end
+for it. It only allows you to define the rules by using predicate identifiers.
+There are no magical options, conditionals and custom validation blocks known from
+other libraries. The focus is on pure validation logic expressed in a concise way.
 
 The DSL is very abstract, it builds [a rule AST](https://github.com/dryrb/dry-validation/wiki/Rule-AST)
 which is compiled into an array of rule objects. This means alternative interfaces could
@@ -74,11 +74,11 @@ Please refer to [the wiki](https://github.com/dryrb/dry-validation/wiki) for ful
 ``` ruby
 class UserSchema < Dry::Validation::Schema
   key(:name) { |name| name.filled? }
-  
+
   key(:email) { |email| email.filled? & email.format?(EMAIL_REGEX) }
-  
+
   key(:age) { |age| age.none? | age.int? }
-  
+
   key(:address) do |address|
    address.key(:street, &:filled?)
    address.key(:city, &:filled?)
