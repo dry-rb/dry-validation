@@ -2,7 +2,7 @@
 
 ### Changed
 
-* Now depends on `[dry-logic](https://github.com/dryrb/dry-logic` for predicates and rules (solnic)
+* Now depends on [dry-logic](https://github.com/dryrb/dry-logic for predicates and rules (solnic)
 * `dry/validation/schema/form` is now required by default (solnic)
 
 ### Fixed
