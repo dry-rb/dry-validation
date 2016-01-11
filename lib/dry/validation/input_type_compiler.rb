@@ -68,11 +68,11 @@ module Dry
       end
 
       def visit_set(node, *args)
-        [:type, ['hash', [:symbolized, node[1].map { |n| visit(n) }]]]
+        [:type, ['form.hash', [:symbolized, node[1].map { |n| visit(n) }]]]
       end
 
       def visit_each(node, *args)
-        [:type, ['array', visit(node[1], *args)]]
+        [:type, ['form.array', visit(node[1], *args)]]
       end
 
       def visit_predicate(node, *args)

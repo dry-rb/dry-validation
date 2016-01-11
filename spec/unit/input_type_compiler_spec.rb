@@ -251,4 +251,61 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
       author: { books: [published: false] }
     )
   end
+
+  it 'supports array? with an each rule' do
+    rule_ast = [
+      [
+        :and, [
+          [:key, [:ids, [:predicate, [:key?, []]]]],
+          [
+            :and, [
+              [:val, [:ids, [:predicate, [:array?, []]]]],
+              [:each, [:ids, [:val, [:ids, [:predicate, [:int?, []]]]]]]
+            ]
+          ]
+        ]
+      ]
+    ]
+
+    input_type = compiler.(rule_ast)
+
+    expect(input_type.('ids' => 'oops')).to eql(ids: 'oops')
+
+    expect(input_type.('ids' => %w(1 2 3))).to eql(ids: [1, 2, 3])
+  end
+
+  it 'supports hash? with a set rule' do
+    rule_ast = [
+      [
+        :and, [
+          [:key, [:address, [:predicate, [:key?, []]]]],
+          [
+            :and, [
+              [:val, [:address, [:predicate, [:hash?, []]]]],
+              [
+                :set, [
+                  :address, [
+                    [
+                      :and, [
+                        [:key, [:street, [:predicate, [:key?, []]]]],
+                        [:val, [:street, [:predicate, [:filled?, []]]]]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+
+    input_type = compiler.(rule_ast)
+
+    expect(input_type.('address' => 'oops')).to eql(address: 'oops')
+
+    expect(input_type.('address' => { 'street' => 'ok' })).to eql(
+      address: { street: 'ok' }
+    )
+  end
 end
