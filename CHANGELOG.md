@@ -1,3 +1,15 @@
+# v0.5.0 2016-01-11
+
+### Changed
+
+* Now depends on `[dry-logic](https://github.com/dryrb/dry-logic` for predicates and rules (solnic)
+
+### Fixed
+
+* `Schema::Form` uses safe `form.array` and `form.hash` types which fixes #42 (solnic)
+
+[Compare v0.5.1...v0.5.0](https://github.com/dryrb/dry-validation/compare/v0.4.1...v0.5.0)
+
 # v0.4.1 2015-12-27
 
 ### Added
