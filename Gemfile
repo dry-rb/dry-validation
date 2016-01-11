@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'dry-logic', github: 'dryrb/dry-logic', branch: 'master'
+
 group :test do
   gem 'i18n'
 end

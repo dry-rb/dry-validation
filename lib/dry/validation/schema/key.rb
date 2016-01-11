@@ -1,5 +1,3 @@
-require 'dry/validation/rule'
-
 module Dry
   module Validation
     class Schema

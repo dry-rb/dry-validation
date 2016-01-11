@@ -1,13 +1,13 @@
-require 'dry/validation/predicate_set'
+require 'dry/logic/predicate_set'
 
 module Dry
   module Validation
     module Predicates
-      extend PredicateSet
+      extend Logic::PredicateSet
 
       def self.included(other)
         super
-        other.extend(PredicateSet)
+        other.extend(Logic::PredicateSet)
         other.import(self)
       end
 

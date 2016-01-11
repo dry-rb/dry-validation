@@ -1,7 +1,8 @@
+require 'dry/logic/rule_compiler'
+
 require 'dry/validation/schema/definition'
 require 'dry/validation/predicates'
 require 'dry/validation/error'
-require 'dry/validation/rule_compiler'
 require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
 require 'dry/validation/hint_compiler'
@@ -74,7 +75,7 @@ module Dry
       attr_reader :hint_compiler
 
       def initialize(error_compiler = self.class.error_compiler, hint_compiler = self.class.hint_compiler)
-        compiler = RuleCompiler.new(self)
+        compiler = Logic::RuleCompiler.new(self)
         @rules = compiler.(self.class.rules.map(&:to_ary))
         @checks = self.class.checks
         @groups = compiler.(self.class.groups.map(&:to_ary))
@@ -91,7 +92,7 @@ module Dry
         end
 
         if checks.size > 0
-          compiled_checks = RuleCompiler.new(result.to_h).(checks)
+          compiled_checks = Logic::RuleCompiler.new(result.to_h).(checks)
 
           compiled_checks.each do |rule|
             result << rule.()
@@ -113,7 +114,7 @@ module Dry
         if predicates.key?(name)
           predicates[name]
         elsif respond_to?(name)
-          Predicate.new(name, &method(name))
+          Logic::Predicate.new(name, &method(name))
         else
           raise ArgumentError, "+#{name}+ is not a valid predicate name"
         end
