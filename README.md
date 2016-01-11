@@ -89,7 +89,7 @@ end
 
 ## Status and Roadmap
 
-This library is in an early stage of development but you are encauraged to
+This library is in an early stage of development but you are encouraged to
 try it out and provide feedback.
 
 For planned features check out [the issues](https://github.com/dryrb/dry-validation/labels/feature).
