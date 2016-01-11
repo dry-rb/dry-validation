@@ -13,3 +13,4 @@ module Dry
 end
 
 require 'dry/validation/schema'
+require 'dry/validation/schema/form'

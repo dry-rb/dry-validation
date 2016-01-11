@@ -1,5 +1,3 @@
-require 'dry/validation/schema/form'
-
 RSpec.describe Dry::Validation::Schema::Form do
   subject(:validation) { schema.new }
 
