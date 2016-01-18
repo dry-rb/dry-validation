@@ -35,7 +35,8 @@ RSpec.describe Schema, 'using high-level rules' do
           Messages.default.merge(
             en: {
               errors: {
-                email_presence: 'email must be present when login is set to true'
+                email_presence: 'email must be present when login is set to true',
+                email_absence: 'email must not be present when login is set to false'
               }
             }
           )
@@ -45,11 +46,19 @@ RSpec.describe Schema, 'using high-level rules' do
         key(:email) { |email| email.none? | email.filled? }
 
         rule(:email_presence) { value(:login).true?.then(value(:email).filled?) }
+
+        rule(:email_absence) { value(:login).false?.then(value(:email).none?) }
       end
     end
 
     it 'passes when login is false and email is nil' do
       expect(validate.(login: false, email: nil)).to be_empty
+    end
+
+    it 'fails when login is false and email is present' do
+      expect(validate.(login: false, email: 'jane@doe').messages[:email_absence]).to eql(
+        [['email must not be present when login is set to false'], nil]
+      )
     end
 
     it 'passes when login is true and email is present' do
