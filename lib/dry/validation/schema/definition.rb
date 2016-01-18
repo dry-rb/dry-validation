@@ -17,6 +17,10 @@ module Dry
           Key.new(name, rules).optional(&block)
         end
 
+        def value(name)
+          Schema::Rule::Result.new(name, [])
+        end
+
         def rule(name, **options, &block)
           if options.any?
             predicate, rule_names = options.to_a.first

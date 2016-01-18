@@ -13,8 +13,12 @@ module Dry
         rule_results.each(&block)
       end
 
+      def [](name)
+        to_h[name]
+      end
+
       def to_h
-        each_with_object({}) { |result, hash| hash[result.name] = result }
+        @to_h ||= each_with_object({}) { |result, hash| hash[result.name] = result }
       end
 
       def merge!(other)

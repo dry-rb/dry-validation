@@ -70,15 +70,17 @@ module Dry
 
       attr_reader :rules, :schemas, :groups, :checks
 
+      attr_reader :rule_compiler
+
       attr_reader :error_compiler
 
       attr_reader :hint_compiler
 
       def initialize(error_compiler = self.class.error_compiler, hint_compiler = self.class.hint_compiler)
-        compiler = Logic::RuleCompiler.new(self)
-        @rules = compiler.(self.class.rules.map(&:to_ary))
+        @rule_compiler = Logic::RuleCompiler.new(self)
+        @rules = rule_compiler.(self.class.rules.map(&:to_ary))
         @checks = self.class.checks
-        @groups = compiler.(self.class.groups.map(&:to_ary))
+        @groups = rule_compiler.(self.class.groups.map(&:to_ary))
         @schemas = self.class.schemas.map(&:new)
         @error_compiler = error_compiler
         @hint_compiler = hint_compiler
@@ -92,10 +94,11 @@ module Dry
         end
 
         if checks.size > 0
-          compiled_checks = Logic::RuleCompiler.new(result.to_h).(checks)
+          resolver = -> name { result[name] || self[name] }
+          compiled_checks = Logic::RuleCompiler.new(resolver).(checks)
 
           compiled_checks.each do |rule|
-            result << rule.()
+            result << rule.(result)
           end
         end
 

@@ -10,6 +10,12 @@ module Dry
           end
         end
 
+        class Result < Rule
+          def method_missing(meth, *args)
+            self.class.new(name, [:res, [name, [:predicate, [meth, args]]]])
+          end
+        end
+
         def initialize(name, node)
           @name = name
           @node = node
