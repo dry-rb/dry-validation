@@ -50,7 +50,7 @@ RSpec.describe Schema, 'using high-level grouped rules' do
   it 'provides merged error messages' do
     expect(validate.(login: true, email: 'not-an-email-lol').messages).to eql(
       email: [
-        [["sorry, did not expect this lol"], ["this is not an email lol"]], nil
+        ["sorry, did not expect this lol", "this is not an email lol"], nil
       ]
     )
   end
