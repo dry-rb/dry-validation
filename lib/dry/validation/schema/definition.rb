@@ -37,12 +37,13 @@ module Dry
         end
 
         def confirmation(name)
-          identifier = :"#{name}_confirmation"
+          identifier = { name => :confirmation }
+          conf_name = :"#{name}_confirmation"
 
           key(name, &:filled?)
-          key(identifier, &:filled?)
+          key(conf_name, &:filled?)
 
-          rule(identifier, eql?: [name, identifier])
+          rule(identifier, eql?: [name, conf_name])
         end
 
         private

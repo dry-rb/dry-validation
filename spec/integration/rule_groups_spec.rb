@@ -5,6 +5,18 @@ RSpec.describe Dry::Validation::Schema do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
         confirmation(:password)
+
+        def self.messages
+          Messages.default.merge(
+            en: {
+              errors: {
+                password: {
+                  confirmation: 'password does not match confirmation'
+                }
+              }
+            }
+          )
+        end
       end
     end
 
@@ -17,11 +29,17 @@ RSpec.describe Dry::Validation::Schema do
         expect(validation.(password: 'foo', password_confirmation: 'bar')).to match_array([
           [:error, [
             :input, [
-              :password_confirmation,
+              { password: :confirmation },
               ["foo", "bar"],
-              [[:group, [:password_confirmation, [:predicate, [:eql?, []]]]]]]]
+              [[:group, [{ password: :confirmation }, [:predicate, [:eql?, []]]]]]]]
           ]
         ])
+      end
+
+      it 'returns messages for a failed group rule' do
+        expect(validation.(password: 'foo', password_confirmation: 'bar').messages).to eql(
+          password: [['password does not match confirmation'], ['foo', 'bar']]
+        )
       end
 
       it 'returns errors for the dependent predicates, not the group rule, when any of the dependent predicates fail' do

@@ -44,7 +44,7 @@ module Dry
               msgs, input =
                 if data.is_a?(Hash)
                   values = data.values
-                  [values.map(&:first).concat(hints[name]).uniq.flatten, values[0][1]]
+                  [values.map(&:first).flatten.concat(hints[name]).uniq, values[0][1]]
                 else
                   [data[0].concat(hints[name]).uniq.flatten, data[1]]
                 end

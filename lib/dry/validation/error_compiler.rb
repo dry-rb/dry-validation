@@ -40,6 +40,10 @@ module Dry
         end
       end
 
+      def visit_group(_, name, _)
+        messages[name, rule: name]
+      end
+
       def visit_check(node, *)
         name = normalize_name(node[0])
         messages[name, rule: name]
@@ -130,7 +134,9 @@ module Dry
 
       def merge(result)
         result.reduce { |a, e|
-          e.merge(a) { |_, l, r| l.is_a?(Hash) ? l.merge(r) : l + r }
+          e.merge(a) { |_, l, r|
+            l.is_a?(Hash) ? l.merge(r) : l + r
+          }
         }
       end
 
