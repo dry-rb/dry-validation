@@ -40,11 +40,19 @@ module Dry
             all_msgs = error_compiler.with(options).(errors.map(&:to_ary))
             hints = hint_compiler.with(options).call
 
-            all_msgs.each do |(name, data)|
-              data[0].concat(hints[name]).uniq!
+            msgs_data = all_msgs.map do |(name, data)|
+              msgs, input =
+                if data.is_a?(Hash)
+                  values = data.values
+                  [values.map(&:first).concat(hints[name]).uniq, values[0][1]]
+                else
+                  [data[0].concat(hints[name]).uniq, data[1]]
+                end
+
+              [name, [msgs, input]]
             end
 
-            all_msgs
+            Hash[msgs_data]
           end
       end
 

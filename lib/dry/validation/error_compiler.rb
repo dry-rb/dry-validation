@@ -4,6 +4,7 @@ module Dry
       attr_reader :messages, :options
 
       DEFAULT_RESULT = {}.freeze
+      KEY_SEPARATOR = '.'.freeze
 
       def initialize(messages, options = {})
         @messages = messages
@@ -11,7 +12,7 @@ module Dry
       end
 
       def call(ast)
-        ast.map { |node| visit(node) }.reduce(:merge) || DEFAULT_RESULT
+        merge(ast.map { |node| visit(node) }) || DEFAULT_RESULT
       end
 
       def with(new_options)
@@ -27,12 +28,20 @@ module Dry
       end
 
       def visit_input(input, *args)
-        name, value, rules = input
-        { name => [rules.map { |rule| visit(rule, name, value) }, value] }
+        name = normalize_name(input[0])
+        _, value, rules = input
+        errors = [rules.map { |rule| visit(rule, name, value) }, value]
+
+        if input[0].is_a?(Hash)
+          root, sub = input[0].to_a.flatten
+          { root => { sub => errors } }
+        else
+          { input[0] => errors }
+        end
       end
 
-      def visit_check(node, *args)
-        name, _ = node
+      def visit_check(node, *)
+        name = normalize_name(node[0])
         messages[name, rule: name]
       end
 
@@ -111,6 +120,18 @@ module Dry
         else
           { num: args[0][0], value: value }
         end
+      end
+
+      private
+
+      def normalize_name(name)
+        Array(name).join(KEY_SEPARATOR).to_sym
+      end
+
+      def merge(result)
+        result.reduce { |a, e|
+          e.merge(a) { |_, l, r| l.is_a?(Hash) ? l.merge(r) : l + r }
+        }
       end
 
       def method_missing(meth, *args)
