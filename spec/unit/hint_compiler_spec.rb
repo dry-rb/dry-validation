@@ -19,6 +19,22 @@ RSpec.describe HintCompiler, '#call' do
               ]
             ]
           ]
+        ],
+      ],
+      [
+        :and, [
+          [:attr, [:height, [:predicate, [:attr?, []]]]],
+          [
+            :or, [
+              [:val, [:height, [:predicate, [:none?, []]]]],
+              [
+                :and, [
+                  [:val, [:height, [:predicate, [:int?, []]]]],
+                  [:val, [:height, [:predicate, [:gt?, [180]]]]]
+                ]
+              ]
+            ]
+          ]
         ]
       ]
     ]
@@ -26,7 +42,8 @@ RSpec.describe HintCompiler, '#call' do
 
   it 'returns hint messages for given rules' do
     expect(compiler.call).to eql(
-      age: ['age must be an integer', 'age must be greater than 18']
+      age: ['age must be an integer', 'age must be greater than 18'],
+      height: ['height must be an integer', 'height must be greater than 180'],
     )
   end
 end
