@@ -7,7 +7,7 @@ RSpec.describe Schema::Value do
         value.key?(:method)
       end
 
-      expect(rule).to match_array(
+      expect(rule.to_ary).to match_array(
         [:each, [
           :payments, [:val, [:payments, [:predicate, [:key?, [:method]]]]]]
         ]
@@ -20,7 +20,7 @@ RSpec.describe Schema::Value do
         value.key(:amount) { |amount| amount.float? }
       end
 
-      expect(rule).to match_array(
+      expect(rule.to_ary).to match_array(
         [:each, [
           :payments, [
             :set, [

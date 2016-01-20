@@ -1,16 +1,24 @@
 module Dry
   module Validation
     class Schema
-      class Rule
+      class Rule < BasicObject
         attr_reader :name, :node
 
         class Check < Rule
+          def class
+            Schema::Rule::Check
+          end
+
           def method_missing(meth, *)
             self.class.new(name, [:check, [name, [:predicate, [name, [meth]]]]])
           end
         end
 
         class Result < Rule
+          def class
+            Schema::Rule::Result
+          end
+
           def method_missing(meth, *args)
             self.class.new(name, [:res, [name, [:predicate, [meth, args]]]])
           end
@@ -21,6 +29,10 @@ module Dry
           @node = node
         end
 
+        def class
+          Schema::Rule
+        end
+
         def to_ary
           node
         end
@@ -28,6 +40,10 @@ module Dry
 
         def to_check
           Rule::Check.new(name, [:check, [name, [:predicate, [name, []]]]])
+        end
+
+        def is_a?(other)
+          self.class == other
         end
 
         def not
