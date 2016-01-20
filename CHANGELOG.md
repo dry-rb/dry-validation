@@ -1,3 +1,21 @@
+# v0.6.0 2016-01-20
+
+### Added
+
+* `value` interface in the DSL for composing high-level rules based on values (solnic)
+* `rule(name: :something)` is now supported for grouping high-level rules under
+  the same name (solnic)
+* Schemas support injecting rules from the outside (solnic)
+* Support for error messages for grouped rules (ie `confirmation`) (solnic)
+
+## Changed
+
+* `confirmation(:foo)` now maps to `en.errors.foo.confirmation` in messages (solnic)
+* `rule` uses objects that inherit from `BasicObject` to avoid conflicts with
+  predicate names and built-in `Object` methods (solnic)
+
+[Compare v0.5.0...v0.6.0](https://github.com/dryrb/dry-validation/compare/v0.5.0...v0.6.0)
+
 # v0.5.0 2016-01-11
 
 ### Changed
@@ -9,7 +27,7 @@
 
 * `Schema::Form` uses safe `form.array` and `form.hash` types which fixes #42 (solnic)
 
-[Compare v0.5.1...v0.5.0](https://github.com/dryrb/dry-validation/compare/v0.4.1...v0.5.0)
+[Compare v0.4.1...v0.5.0](https://github.com/dryrb/dry-validation/compare/v0.4.1...v0.5.0)
 
 # v0.4.1 2015-12-27
 
