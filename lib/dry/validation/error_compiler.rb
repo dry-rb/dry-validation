@@ -27,7 +27,7 @@ module Dry
         visit(error)
       end
 
-      def visit_input(input, *args)
+      def visit_input(input, *)
         name = normalize_name(input[0])
         _, value, rules = input
         errors = [rules.map { |rule| visit(rule, name, value) }, value]
@@ -142,11 +142,11 @@ module Dry
       end
 
       def merge(result)
-        result.reduce { |a, e|
-          e.merge(a) { |_, l, r|
+        result.reduce do |a, e|
+          e.merge(a) do |_, l, r|
             l.is_a?(Hash) ? l.merge(r) : l + r
-          }
-        }
+          end
+        end
       end
 
       def method_missing(_meth, *args)
