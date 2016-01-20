@@ -28,7 +28,7 @@ module Dry
           end
         end
 
-        def respond_to_missing?(meth, _include_private = false)
+        def respond_to_missing?(*)
           true
         end
       end

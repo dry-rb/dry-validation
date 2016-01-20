@@ -4,6 +4,8 @@ engines:
     checks:
       Rubocop/Style/LambdaCall:
         enabled: false
+      Rubocop/Style/StabbyLambdaParentheses:
+        enabled: false
 ratings:
   paths:
     - lib/**/*.rb
