@@ -2,8 +2,9 @@
 
 ### Added
 
-* `value` interface in the DSL for composing high-level rules based on values (solnic)
-* `rule(name: :something)` is now supported for grouping high-level rules under
+* Support for validating objects with attr readers via `attr` (SunnyMagadan)
+* Support for `value` interface in the DSL for composing high-level rules based on values (solnic)
+* Support for `rule(name: :something)` syntax for grouping high-level rules under
   the same name (solnic)
 * Schemas support injecting rules from the outside (solnic)
 * Support for error messages for grouped rules (ie `confirmation`) (solnic)
