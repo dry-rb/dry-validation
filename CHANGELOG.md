@@ -6,12 +6,12 @@
 * Support for `value` interface in the DSL for composing high-level rules based on values (solnic)
 * Support for `rule(name: :something)` syntax for grouping high-level rules under
   the same name (solnic)
+* Support for `confirmation(:foo, some_predicate: some_argument)` shortcut syntax (solnic)
+* Support for error messages for grouped rules (like `confirmation`) (solnic)
 * Schemas support injecting rules from the outside (solnic)
-* Support for error messages for grouped rules (ie `confirmation`) (solnic)
 
 ## Changed
 
-* `confirmation(:foo)` now maps to `en.errors.foo.confirmation` in messages (solnic)
 * `rule` uses objects that inherit from `BasicObject` to avoid conflicts with
   predicate names and built-in `Object` methods (solnic)
 * In `Schema::Form` both `key` and `optional` will apply `filled?` predicate by
