@@ -6,6 +6,8 @@ engines:
         enabled: false
       Rubocop/Style/StabbyLambdaParentheses:
         enabled: false
+      Rubocop/Metrics/CyclomaticComplexity:
+        Max: 10
 ratings:
   paths:
     - lib/**/*.rb
