@@ -4,6 +4,11 @@ begin
   require 'byebug'
 rescue LoadError; end
 
+if RUBY_ENGINE == "rbx"
+  require "codeclimate-test-reporter"
+  CodeClimate::TestReporter.start
+end
+
 require 'dry-validation'
 
 SPEC_ROOT = Pathname(__dir__)

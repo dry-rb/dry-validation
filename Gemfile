@@ -4,6 +4,7 @@ gemspec
 
 group :test do
   gem 'i18n'
+  gem 'codeclimate-test-reporter', platform: :rbx
 end
 
 group :tools do
