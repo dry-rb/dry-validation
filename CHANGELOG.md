@@ -14,6 +14,8 @@
 * `confirmation(:foo)` now maps to `en.errors.foo.confirmation` in messages (solnic)
 * `rule` uses objects that inherit from `BasicObject` to avoid conflicts with
   predicate names and built-in `Object` methods (solnic)
+* In `Schema::Form` both `key` and `optional` will apply `filled?` predicate by
+  default when no block is passed (solnic)
 
 [Compare v0.5.0...v0.6.0](https://github.com/dryrb/dry-validation/compare/v0.5.0...v0.6.0)
 
