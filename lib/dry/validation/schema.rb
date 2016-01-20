@@ -79,7 +79,7 @@ module Dry
       def initialize(rules = [])
         @rule_compiler = Logic::RuleCompiler.new(self)
         @rules = rule_compiler.(self.class.rules.map(&:to_ary) + rules.map(&:to_ary))
-        @checks = self.class.checks
+        @checks = self.class.checks.map(&:to_ary)
         @groups = rule_compiler.(self.class.groups.map(&:to_ary))
         @schemas = self.class.schemas.map(&:new)
         @error_compiler = self.class.error_compiler
