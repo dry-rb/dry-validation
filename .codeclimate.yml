@@ -1,0 +1,6 @@
+engines:
+  rubocop:
+    enabled: true
+    checks:
+      Rubocop/Style/LambdaCall:
+        enabled: false
