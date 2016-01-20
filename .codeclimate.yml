@@ -1,8 +1,0 @@
-engines:
-  fixme:
-    enabled: true
-  rubocop:
-    enabled: true
-exclude_paths:
-  - examples/**/*
-  - spec/**/*
