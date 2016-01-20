@@ -76,14 +76,14 @@ module Dry
 
       attr_reader :hint_compiler
 
-      def initialize(error_compiler = self.class.error_compiler, hint_compiler = self.class.hint_compiler)
+      def initialize(rules = [])
         @rule_compiler = Logic::RuleCompiler.new(self)
-        @rules = rule_compiler.(self.class.rules.map(&:to_ary))
+        @rules = rule_compiler.(self.class.rules.map(&:to_ary) + rules.map(&:to_ary))
         @checks = self.class.checks
         @groups = rule_compiler.(self.class.groups.map(&:to_ary))
         @schemas = self.class.schemas.map(&:new)
-        @error_compiler = error_compiler
-        @hint_compiler = hint_compiler
+        @error_compiler = self.class.error_compiler
+        @hint_compiler = self.class.hint_compiler
       end
 
       def call(input)
