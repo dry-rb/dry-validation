@@ -1,22 +1,18 @@
 RSpec.describe Dry::Validation::Schema do
   subject(:validation) { schema.new }
 
+  before do
+    def schema.messages
+      Messages.default.merge(
+        en: { errors: { password_confirmation: 'does not match' } }
+      )
+    end
+  end
+
   describe 'defining schema with rule groups' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
         confirmation(:password)
-
-        def self.messages
-          Messages.default.merge(
-            en: {
-              errors: {
-                password: {
-                  confirmation: 'password does not match confirmation'
-                }
-              }
-            }
-          )
-        end
       end
     end
 
@@ -29,16 +25,16 @@ RSpec.describe Dry::Validation::Schema do
         expect(validation.(password: 'foo', password_confirmation: 'bar')).to match_array([
           [:error, [
             :input, [
-              { password: :confirmation },
+              :password_confirmation,
               ["foo", "bar"],
-              [[:group, [{ password: :confirmation }, [:predicate, [:eql?, []]]]]]]]
+              [[:group, [:password_confirmation, [:predicate, [:eql?, []]]]]]]]
           ]
         ])
       end
 
       it 'returns messages for a failed group rule' do
         expect(validation.(password: 'foo', password_confirmation: 'bar').messages).to eql(
-          password: [['password does not match confirmation'], ['foo', 'bar']]
+          password_confirmation: [['does not match'], ['foo', 'bar']]
         )
       end
 
@@ -47,6 +43,51 @@ RSpec.describe Dry::Validation::Schema do
           [:error, [:input, [:password, "", [[:val, [:password, [:predicate, [:filled?, []]]]]]]]],
           [:error, [:input, [:password_confirmation, "", [[:val, [:password_confirmation, [:predicate, [:filled?, []]]]]]]]]
         ])
+      end
+    end
+
+    describe 'confirmation' do
+      shared_examples_for 'confirmation behavior' do
+        it 'applies custom rules' do
+          expect(validation.(password: 'abcd').messages).to include(
+            password: [['password size cannot be less than 6'], 'abcd']
+          )
+        end
+
+        it 'applies confirmation equality predicate' do
+          expect(validation.(password: 'abcdef', password_confirmation: 'abcd').messages).to include(
+            password_confirmation: [['does not match'], ['abcdef', 'abcd']]
+          )
+        end
+
+        it 'skips default predicate' do
+          expect(validation.(password: '', password_confirmation: '').messages).to include(
+            password: [['password size cannot be less than 6'], ''],
+            password_confirmation: [['password_confirmation must be filled'], '']
+          )
+        end
+      end
+
+      describe 'custom predicates' do
+        let(:schema) do
+          Class.new(Dry::Validation::Schema) do
+            key(:password) { |value| value.min_size?(6) }
+
+            confirmation(:password)
+          end
+        end
+
+        it_behaves_like 'confirmation behavior'
+      end
+
+      describe 'custom predicates using shortcut options' do
+        let(:schema) do
+          Class.new(Dry::Validation::Schema) do
+            confirmation(:password, min_size: 6)
+          end
+        end
+
+        it_behaves_like 'confirmation behavior'
       end
     end
   end

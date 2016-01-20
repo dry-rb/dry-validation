@@ -40,14 +40,22 @@ module Dry
           end
         end
 
-        def confirmation(name)
-          identifier = { name => :confirmation }
+        def confirmation(name, options = {})
           conf_name = :"#{name}_confirmation"
 
-          key(name, &:filled?)
+          unless rule_by_name(name)
+            if options.any?
+              key(name) do |value|
+                options.map { |p, args| value.__send__(:"#{p}?", *args) }.reduce(:&)
+              end
+            else
+              key(name, &:filled?)
+            end
+          end
+
           key(conf_name, &:filled?)
 
-          rule(identifier, eql?: [name, conf_name])
+          rule(conf_name, eql?: [name, conf_name])
         end
 
         private
