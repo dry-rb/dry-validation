@@ -44,28 +44,40 @@ module Dry
         messages[name, rule: name]
       end
 
-      def visit_check(node, *)
-        name = normalize_name(node[0])
-        messages[name, rule: name]
+      def visit_check(node, *args)
+        name, other = node
+        messages[normalize_name(name), rule: name] || visit(other, *args)
       end
 
-      def visit_key(rule, name, value)
+      def visit_implication(node, *args)
+        _, right = node
+        visit(right, *args)
+      end
+
+      def visit_res(node, *args)
+        _, predicate = node
+        visit(predicate, *args)
+      end
+
+      def visit_key(rule, *args)
         _, predicate = rule
-        visit(predicate, value, name)
+        visit(predicate, *args)
       end
 
-      def visit_attr(rule, name, value)
+      def visit_attr(rule, *args)
         _, predicate = rule
-        visit(predicate, value, name)
+        visit(predicate, *args)
       end
 
-      def visit_val(rule, name, value)
-        name, predicate = rule
-        visit(predicate, value, name)
+      def visit_val(rule, *args)
+        _, predicate = rule
+        visit(predicate, *args)
       end
 
-      def visit_predicate(predicate, value, name)
+      def visit_predicate(predicate, identifier, value)
         predicate_name, args = predicate
+
+        name = identifier.to_s.split(KEY_SEPARATOR)[0]
 
         lookup_options = options.merge(
           rule: name, val_type: value.class, arg_type: args[0].class

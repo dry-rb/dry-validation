@@ -45,7 +45,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
   describe '#visit_predicate' do
     describe ':empty?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:empty?, []], [], :tags)
+        msg = error_compiler.visit_predicate([:empty?, []], :tags, [])
 
         expect(msg).to eql('tags cannot be empty')
       end
@@ -53,7 +53,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':exclusion?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:exclusion?, [[1, 2, 3]]], 2, :num)
+        msg = error_compiler.visit_predicate([:exclusion?, [[1, 2, 3]]], :num, 2)
 
         expect(msg).to eql('num must not be one of: 1, 2, 3')
       end
@@ -61,7 +61,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':inclusion?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:inclusion?, [[1, 2, 3]]], 2, :num)
+        msg = error_compiler.visit_predicate([:inclusion?, [[1, 2, 3]]], :num, 2)
 
         expect(msg).to eql('num must be one of: 1, 2, 3')
       end
@@ -69,7 +69,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':gt?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:gt?, [3]], 2, :num)
+        msg = error_compiler.visit_predicate([:gt?, [3]], :num, 2)
 
         expect(msg).to eql('num must be greater than 3')
       end
@@ -77,7 +77,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':gteq?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:gteq?, [3]], 2, :num)
+        msg = error_compiler.visit_predicate([:gteq?, [3]], :num, 2)
 
         expect(msg).to eql('num must be greater than or equal to 3')
       end
@@ -85,7 +85,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':lt?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:lt?, [3]], 2, :num)
+        msg = error_compiler.visit_predicate([:lt?, [3]], :num, 2)
 
         expect(msg).to eql('num must be less than 3 (2 was given)')
       end
@@ -93,7 +93,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':lteq?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:lteq?, [3]], 2, :num)
+        msg = error_compiler.visit_predicate([:lteq?, [3]], :num, 2)
 
         expect(msg).to eql('num must be less than or equal to 3')
       end
@@ -101,7 +101,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':hash?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:hash?, []], '', :address)
+        msg = error_compiler.visit_predicate([:hash?, []], :address, '')
 
         expect(msg).to eql('address must be a hash')
       end
@@ -109,7 +109,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':array?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:array?, []], '', :phone_numbers)
+        msg = error_compiler.visit_predicate([:array?, []], :phone_numbers, '')
 
         expect(msg).to eql('phone_numbers must be an array')
       end
@@ -117,7 +117,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':int?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:int?, []], '2', :num)
+        msg = error_compiler.visit_predicate([:int?, []], :num, '2')
 
         expect(msg).to eql('num must be an integer')
       end
@@ -125,7 +125,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':float?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:float?, []], '2', :num)
+        msg = error_compiler.visit_predicate([:float?, []], :num, '2')
 
         expect(msg).to eql('num must be a float')
       end
@@ -133,7 +133,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':decimal?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:decimal?, []], '2', :num)
+        msg = error_compiler.visit_predicate([:decimal?, []], :num, '2')
 
         expect(msg).to eql('num must be a decimal')
       end
@@ -141,7 +141,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':date?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:date?, []], '2', :num)
+        msg = error_compiler.visit_predicate([:date?, []], :num, '2')
 
         expect(msg).to eql('num must be a date')
       end
@@ -149,7 +149,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':date_time?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:date_time?, []], '2', :num)
+        msg = error_compiler.visit_predicate([:date_time?, []], :num, '2')
 
         expect(msg).to eql('num must be a date time')
       end
@@ -157,7 +157,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':time?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:time?, []], '2', :num)
+        msg = error_compiler.visit_predicate([:time?, []], :num, '2')
 
         expect(msg).to eql('num must be a time')
       end
@@ -165,7 +165,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':max_size?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:max_size?, [3]], 'abcd', :num)
+        msg = error_compiler.visit_predicate([:max_size?, [3]], :num, 'abcd')
 
         expect(msg).to eql('num size cannot be greater than 3')
       end
@@ -173,7 +173,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':min_size?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:min_size?, [3]], 'ab', :num)
+        msg = error_compiler.visit_predicate([:min_size?, [3]], :num, 'ab')
 
         expect(msg).to eql('num size cannot be less than 3')
       end
@@ -181,7 +181,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':none?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:none?, []], nil, :num)
+        msg = error_compiler.visit_predicate([:none?, []], :num, nil)
 
         expect(msg).to eql('num cannot be defined')
       end
@@ -189,25 +189,25 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':size?' do
       it 'returns valid message when val is array and arg is int' do
-        msg = error_compiler.visit_predicate([:size?, [3]], [1], :numbers)
+        msg = error_compiler.visit_predicate([:size?, [3]], :numbers, [1])
 
         expect(msg).to eql('numbers size must be 3')
       end
 
       it 'returns valid message when val is array and arg is range' do
-        msg = error_compiler.visit_predicate([:size?, [3..4]], [1], :numbers)
+        msg = error_compiler.visit_predicate([:size?, [3..4]], :numbers, [1])
 
         expect(msg).to eql('numbers size must be within 3 - 4')
       end
 
       it 'returns valid message when arg is int' do
-        msg = error_compiler.visit_predicate([:size?, [3]], 'ab', :num)
+        msg = error_compiler.visit_predicate([:size?, [3]], :num, 'ab')
 
         expect(msg).to eql('num length must be 3')
       end
 
       it 'returns valid message when arg is range' do
-        msg = error_compiler.visit_predicate([:size?, [3..4]], 'ab', :num)
+        msg = error_compiler.visit_predicate([:size?, [3..4]], :num, 'ab')
 
         expect(msg).to eql('num length must be within 3 - 4')
       end
@@ -215,7 +215,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':str?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:str?, []], 3, :num)
+        msg = error_compiler.visit_predicate([:str?, []], :num, 3)
 
         expect(msg).to eql('num must be a string')
       end
@@ -223,7 +223,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':bool?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:bool?, []], 3, :num)
+        msg = error_compiler.visit_predicate([:bool?, []], :num, 3)
 
         expect(msg).to eql('num must be boolean')
       end
@@ -231,7 +231,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':format?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:format?, [/^F/]], 'Bar', :str)
+        msg = error_compiler.visit_predicate([:format?, [/^F/]], :str, 'Bar')
 
         expect(msg).to eql('str is in invalid format')
       end
@@ -239,7 +239,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     describe ':eql?' do
       it 'returns valid message' do
-        msg = error_compiler.visit_predicate([:eql?, ['Bar']], 'Foo', :str)
+        msg = error_compiler.visit_predicate([:eql?, ['Bar']], :str, 'Foo')
 
         expect(msg).to eql('str must be equal to Bar')
       end

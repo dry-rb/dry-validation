@@ -20,6 +20,7 @@ module Dry
 
         rules.map { |node| visit(node) }.compact.each do |hints|
           name, msgs = hints
+
           messages[name].concat(msgs)
         end
 
@@ -36,9 +37,14 @@ module Dry
         [visit(left), Array(visit(right)).flatten.compact].compact
       end
 
+      def visit_implication(node)
+        left, right = node
+        [visit(left), Array(visit(right)).flatten.compact].compact
+      end
+
       def visit_val(node)
         name, predicate = node
-        visit(predicate, name)
+        Array(visit(predicate, name)).flatten.compact
       end
 
       def visit_predicate(node, name)

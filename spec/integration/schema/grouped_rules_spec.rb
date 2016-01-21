@@ -9,9 +9,7 @@ RSpec.describe Schema, 'using high-level grouped rules' do
             errors: {
               email: {
                 absence: 'email must not be selected',
-                presence: 'email must be selected',
-                format: 'this is not an email lol',
-                inclusion: 'sorry, did not expect this lol'
+                presence: 'email must be selected'
               }
             }
           }
@@ -29,11 +27,11 @@ RSpec.describe Schema, 'using high-level grouped rules' do
         value(:login).true? > value(:email).filled?
       end
 
-      rule(email: :format) do
+      rule(email: :format?) do
         value(:email).filled? > value(:email).format?(/[a-z]@[a-z]/)
       end
 
-      rule(email: :inclusion) do
+      rule(email: :inclusion?) do
         value(:email).filled? > value(:email).inclusion?(%w[jane@doe])
       end
     end
@@ -50,7 +48,7 @@ RSpec.describe Schema, 'using high-level grouped rules' do
   it 'provides merged error messages' do
     expect(validate.(login: true, email: 'not-an-email-lol').messages).to eql(
       email: [
-        ["sorry, did not expect this lol", "this is not an email lol"], nil
+        ["email must be one of: jane@doe", "email is in invalid format"], nil
       ]
     )
   end
