@@ -37,7 +37,7 @@ module Dry
                 Schema::Rule.new(name, [:and, [key_rule, val_rule.to_ary]])
               end
           else
-            Schema::Rule.new(name, key_rule)
+            Schema::Rule.new(name, key_rule, rules)
           end
         end
 
