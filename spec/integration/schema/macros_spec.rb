@@ -14,4 +14,17 @@ RSpec.describe 'Schema / Macros' do
       )
     end
   end
+
+  describe '#maybe' do
+    let(:schema) do
+      Class.new(Dry::Validation::Schema) do
+        key(:email).maybe
+      end
+    end
+
+    it 'generates none? | filled? rule' do
+      expect(validate.(email: nil).messages).to be_empty
+      expect(validate.(email: 'jane@doe').messages).to be_empty
+    end
+  end
 end

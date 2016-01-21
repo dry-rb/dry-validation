@@ -53,6 +53,13 @@ module Dry
           )
         end
 
+        def maybe
+          filled = Rule.new(name, [:val, [name, [:predicate, [:filled?, []]]]])
+          none = Rule.new(name, [:val, [name, [:predicate, [:none?, []]]]])
+
+          rules << self.and(none.or(filled))
+        end
+
         def not
           self.class.new(:"not_#{name}", [:not, node])
         end
