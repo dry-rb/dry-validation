@@ -2,6 +2,22 @@ module Dry
   module Validation
     class Schema
       module Definition
+        def rules
+          @rules ||= []
+        end
+
+        def groups
+          @groups ||= []
+        end
+
+        def checks
+          @checks ||= []
+        end
+
+        def schemas
+          @schemas ||= []
+        end
+
         def schema(name, &block)
           schema = Class.new(superclass)
           schema.key(name, &block)
@@ -10,19 +26,19 @@ module Dry
         end
 
         def key(name, &block)
-          Key.new(name, rules).key?(&block)
+          Key.new(name, self).key?(&block)
         end
 
         def attr(name, &block)
-          Attr.new(name, rules).attr?(&block)
+          Attr.new(name, self).attr?(&block)
         end
 
         def optional(name, &block)
-          Key.new(name, rules).optional(&block)
+          Key.new(name, self).optional(&block)
         end
 
         def value(name)
-          Schema::Rule::Result.new(name, [])
+          Schema::Rule::Result.new(name, [], self)
         end
 
         def rule(name, **options, &block)
@@ -33,7 +49,7 @@ module Dry
             groups << [:group, [identifier, [:predicate, predicate]]]
           else
             if block
-              checks << Schema::Rule.new(name, [:check, [name, yield.to_ary]])
+              checks << Schema::Rule.new(name, [:check, [name, yield.to_ary]], self)
             else
               rule_by_name(name).to_check
             end

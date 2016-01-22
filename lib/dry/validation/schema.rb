@@ -52,22 +52,6 @@ module Dry
         end
       end
 
-      def self.rules
-        @__rules__ ||= []
-      end
-
-      def self.schemas
-        @__schemas__ ||= []
-      end
-
-      def self.groups
-        @__groups__ ||= []
-      end
-
-      def self.checks
-        @__checks__ ||= []
-      end
-
       attr_reader :rules, :schemas, :groups, :checks
 
       attr_reader :rule_compiler

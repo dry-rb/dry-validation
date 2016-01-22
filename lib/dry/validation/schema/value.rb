@@ -4,13 +4,11 @@ module Dry
       class Value < BasicObject
         include Schema::Definition
 
-        attr_reader :name, :rules, :groups, :checks
+        attr_reader :name, :target
 
-        def initialize(name)
+        def initialize(name, target)
           @name = name
-          @rules = []
-          @groups = []
-          @checks = []
+          @target = target
         end
 
         def each(&block)
@@ -23,24 +21,28 @@ module Dry
               [:set, [name, rules.map(&:to_ary)]]
             end
 
-          Schema::Rule.new(name, [:each, [name, each_rule]])
+          create_rule([:each, [name, each_rule]])
         end
 
         private
 
+        def create_rule(node)
+          Schema::Rule.new(name, node, target)
+        end
+
         def method_missing(meth, *args, &block)
-          rule = Schema::Rule.new(name, [:val, [name, [:predicate, [meth, args]]]])
+          new_rule = create_rule([:val, [name, [:predicate, [meth, args]]]])
 
           if block
             val_rule = yield
 
             if val_rule.is_a?(Schema::Rule)
-              rule & val_rule
+              new_rule & val_rule
             else
-              Schema::Rule.new(name, [:and, [rule.to_ary, [:set, [name, rules.map(&:to_ary)]]]])
+              create_rule([:and, [new_rule.to_ary, [:set, [name, rules.map(&:to_ary)]]]])
             end
           else
-            rule
+            new_rule
           end
         end
 
