@@ -48,7 +48,7 @@ module Dry
         end
 
         def required(*predicates)
-          rule = ([val(:filled?)] + predicates.map(&method(:val))).reduce(:and)
+          rule = ([val(:filled?)] + infer_predicates(predicates)).reduce(:and)
 
           target.rules << self.and(rule)
           target.rules.last
@@ -92,6 +92,13 @@ module Dry
         alias_method :>, :then
 
         private
+
+        def infer_predicates(predicates)
+          predicates.map do |predicate|
+            name, args = Array(predicate).flatten
+            val(name, Array(args))
+          end
+        end
 
         def val(predicate, args = [])
           new([:val, [name, [:predicate, [predicate, args]]]])

@@ -29,6 +29,23 @@ RSpec.describe 'Schema / Macros' do
     end
   end
 
+  describe '#required with a predicate with args' do
+    let(:schema) do
+      Class.new(Dry::Validation::Schema) do
+        key(:age).required(:int?, gt?: 18)
+      end
+    end
+
+    it 'generates filled? & int? & gt? rule' do
+      expect(validate.(age: nil).messages).to eql(
+        age: [
+          ['age must be filled',
+           'age must be an integer',
+           'age must be greater than 18'], nil]
+      )
+    end
+  end
+
   describe '#maybe' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
