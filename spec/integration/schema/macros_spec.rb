@@ -71,7 +71,9 @@ RSpec.describe 'Schema / Macros' do
     end
 
     it 'generates high-level rule' do
-      expect(validate.(login: true, email: nil).messages).to_not be_empty
+      expect(validate.(login: true, email: nil).messages).to eql(
+        email: [['email must be filled'], nil]
+      )
     end
   end
 end
