@@ -66,7 +66,7 @@ module Dry
           target.rules.last
         end
 
-        def on(predicate, &block)
+        def when(predicate, &block)
           left = target.value(name).__send__(predicate)
           right = yield
 

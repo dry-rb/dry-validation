@@ -28,12 +28,12 @@ RSpec.describe 'Schema / Macros' do
     end
   end
 
-  describe '#on' do
+  describe '#when' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
         key(:email).maybe
 
-        key(:login).required.on(:true?) do
+        key(:login).required.when(:true?) do
           value(:email).filled?
         end
       end
