@@ -59,6 +59,24 @@ RSpec.describe 'Schema / Macros' do
     end
   end
 
+  describe '#maybe with options' do
+    let(:schema) do
+      Class.new(Dry::Validation::Schema) do
+        key(:name).maybe(min_size?: 3)
+      end
+    end
+
+    it 'generates none? | (filled? & min_size?) rule' do
+      expect(validate.(name: nil).messages).to be_empty
+
+      expect(validate.(name: 'jane').messages).to be_empty
+
+      expect(validate.(name: 'xy').messages).to eql(
+        name: [['name size cannot be less than 3'], 'xy']
+      )
+    end
+  end
+
   describe '#when' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do

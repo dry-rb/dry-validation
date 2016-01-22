@@ -62,8 +62,15 @@ module Dry
           target.rules.last
         end
 
-        def maybe
-          target.rules << self.and(val(:none?).or(val(:filled?)))
+        def maybe(*predicates)
+          rule =
+            if predicates.size > 0
+              val(:none?).or(infer_predicates(predicates).reduce(:and))
+            else
+              val(:none?).or(val(:filled?))
+            end
+
+          target.rules << self.and(rule)
           target.rules.last
         end
 
