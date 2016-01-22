@@ -43,26 +43,19 @@ module Dry
           Rule::Check.new(name, [:check, [name, [:predicate, [name, []]]]], target)
         end
 
-        def new(node, name = self.name)
-          self.class.new(name, node, target)
-        end
-
         def is_a?(other)
           self.class == other
         end
 
-        def required
-          filled = new([:val, [name, [:predicate, [:filled?, []]]]])
+        def required(*predicates)
+          rule = ([val(:filled?)] + predicates.map(&method(:val))).reduce(:and)
 
-          target.rules << self.and(filled)
+          target.rules << self.and(rule)
           target.rules.last
         end
 
         def maybe
-          filled = new([:val, [name, [:predicate, [:filled?, []]]]])
-          none = new([:val, [name, [:predicate, [:none?, []]]]])
-
-          target.rules << self.and(none.or(filled))
+          target.rules << self.and(val(:none?).or(val(:filled?)))
           target.rules.last
         end
 
@@ -97,6 +90,16 @@ module Dry
           new([:implication, [node, other.to_ary]])
         end
         alias_method :>, :then
+
+        private
+
+        def val(predicate, args = [])
+          new([:val, [name, [:predicate, [predicate, args]]]])
+        end
+
+        def new(node, name = self.name)
+          self.class.new(name, node, target)
+        end
       end
     end
   end
