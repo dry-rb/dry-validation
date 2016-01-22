@@ -2,7 +2,7 @@ module Dry
   module Validation
     class Schema
       class Rule < BasicObject
-        attr_reader :name, :node, :rules
+        attr_reader :name, :node, :target
 
         class Check < Rule
           def class
@@ -24,10 +24,10 @@ module Dry
           end
         end
 
-        def initialize(name, node, rules = [])
+        def initialize(name, node, target = [])
           @name = name
           @node = node
-          @rules = rules
+          @target = target
         end
 
         def class
@@ -48,7 +48,7 @@ module Dry
         end
 
         def required
-          rules << self.and(
+          target.rules << self.and(
             Rule.new(name, [:val, [name, [:predicate, [:filled?, []]]]])
           )
         end
@@ -57,7 +57,7 @@ module Dry
           filled = Rule.new(name, [:val, [name, [:predicate, [:filled?, []]]]])
           none = Rule.new(name, [:val, [name, [:predicate, [:none?, []]]]])
 
-          rules << self.and(none.or(filled))
+          target.rules << self.and(none.or(filled))
         end
 
         def not

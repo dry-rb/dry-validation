@@ -4,13 +4,10 @@ module Dry
       class Value < BasicObject
         include Schema::Definition
 
-        attr_reader :name, :rules, :groups, :checks
+        attr_reader :name
 
         def initialize(name)
           @name = name
-          @rules = []
-          @groups = []
-          @checks = []
         end
 
         def each(&block)

@@ -27,4 +27,19 @@ RSpec.describe 'Schema / Macros' do
       expect(validate.(email: 'jane@doe').messages).to be_empty
     end
   end
+
+  describe '#on' do
+    let(:schema) do
+      Class.new(Dry::Validation::Schema) do
+        key(:login).required.on(:true?) do
+          key(:email).required
+        end
+      end
+    end
+
+    it 'generates high-level rule' do
+      pending
+      expect(validate.(login: true, email: nil).messages).to_not be_empty
+    end
+  end
 end

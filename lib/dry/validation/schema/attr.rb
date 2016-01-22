@@ -2,11 +2,11 @@ module Dry
   module Validation
     class Schema
       class Attr < BasicObject
-        attr_reader :name, :rules
+        attr_reader :name, :target
 
-        def initialize(name, rules, &block)
+        def initialize(name, target, &block)
           @name = name
-          @rules = rules
+          @target = target
         end
 
         private
@@ -17,7 +17,7 @@ module Dry
           if block
             val_rule = yield(Value.new(name))
 
-            rules <<
+            target.rules <<
               if val_rule.is_a?(::Array)
                 Schema::Rule.new(name, [:and, [attr_rule, [:set, [name, val_rule.map(&:to_ary)]]]])
               else
