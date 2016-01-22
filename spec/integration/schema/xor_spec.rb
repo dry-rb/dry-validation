@@ -9,10 +9,13 @@ RSpec.describe 'Schema with xor rules' do
         )
       end
 
-      key(:eat_cake) { |v| v.eql?('yes!') }
-      key(:have_cake) { |v| v.eql?('yes!') }
+      key(:eat_cake).required
 
-      rule(:be_reasonable) { rule(:eat_cake) ^ rule(:have_cake) }
+      key(:have_cake).required
+
+      rule(:be_reasonable) do
+        value(:eat_cake).eql?('yes!') ^ value(:have_cake).eql?('yes!')
+      end
     end
   end
 
@@ -26,7 +29,7 @@ RSpec.describe 'Schema with xor rules' do
     it 'fails when both options are selected' do
       messages = validate.(eat_cake: 'yes!', have_cake: 'yes!').messages[:be_reasonable]
 
-      expect(messages).to eql([['you cannot eat cake and have cake!'], 'yes!'])
+      expect(messages).to eql([['you cannot eat cake and have cake!'], ['yes!', 'yes!']])
     end
   end
 end

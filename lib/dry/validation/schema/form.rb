@@ -7,10 +7,12 @@ module Dry
       attr_reader :input_type
 
       def self.key(name, &block)
+        rule = super
+
         if block
-          super
+          rule
         else
-          super(name, &:filled?)
+          rule.required
         end
       end
 
@@ -22,9 +24,9 @@ module Dry
         end
       end
 
-      def initialize
+      def initialize(rules = [])
         super
-        @input_type = InputTypeCompiler.new.(self.class.rules.map(&:to_ary))
+        @input_type = InputTypeCompiler.new.(self.class.rules.map(&:to_ast))
       end
 
       def call(input)
