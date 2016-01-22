@@ -1,7 +1,7 @@
 module Dry
   module Validation
     class Schema
-      class Rule# < BasicObject
+      class Rule < BasicObject
         attr_reader :name, :node, :target
 
         class Check < Rule
@@ -104,8 +104,8 @@ module Dry
 
         def infer_predicates(predicates)
           predicates.map do |predicate|
-            name, args = Array(predicate).flatten
-            val(name, Array(args))
+            name, args = ::Kernel.Array(predicate).flatten
+            val(name, ::Kernel.Array(args))
           end
         end
 
