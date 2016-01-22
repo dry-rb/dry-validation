@@ -9,6 +9,8 @@ module Dry
             Schema::Rule::Check
           end
 
+          private
+
           def method_missing(meth, *)
             new([:check, [name, [:predicate, [name, [meth]]]]])
           end
@@ -18,6 +20,12 @@ module Dry
           def class
             Schema::Rule::Result
           end
+
+          def rename(name)
+            new(node, name)
+          end
+
+          private
 
           def method_missing(meth, *args)
             new([:res, [name, [:predicate, [meth, args]]]])
@@ -59,11 +67,12 @@ module Dry
           target.rules.last
         end
 
-        def when(predicate, &block)
+        def when(predicate, rule_name = nil, &block)
           left = target.value(name).__send__(predicate)
           right = yield
 
-          target.checks << left.then(right)
+          target.rule(rule_name || right.name) { left.then(right) }
+
           target.checks.last
         end
 

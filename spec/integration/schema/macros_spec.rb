@@ -74,6 +74,32 @@ RSpec.describe 'Schema / Macros' do
       expect(validate.(login: true, email: nil).messages).to eql(
         email: [['email must be filled'], nil]
       )
+
+      expect(validate.(login: false, email: nil).messages).to be_empty
+    end
+  end
+
+  describe '#when with a custom name' do
+    let(:schema) do
+      Class.new(Dry::Validation::Schema) do
+        def self.messages
+          Messages.default.merge(
+            en: { errors: { email: { required: 'required when login is true' } } }
+          )
+        end
+
+        key(:email).maybe
+
+        key(:login).required.when(:true?, email: :required) do
+          value(:email).filled?
+        end
+      end
+    end
+
+    it 'generates high-level rule' do
+      expect(validate.(login: true, email: nil).messages).to eql(
+        email: [['required when login is true'], nil]
+      )
     end
   end
 end
