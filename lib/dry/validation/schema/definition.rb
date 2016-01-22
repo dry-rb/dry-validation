@@ -38,7 +38,7 @@ module Dry
         end
 
         def value(name)
-          Schema::Rule::Result.new(name, [])
+          Schema::Rule::Result.new(name, [], self)
         end
 
         def rule(name, **options, &block)
@@ -49,7 +49,7 @@ module Dry
             groups << [:group, [identifier, [:predicate, predicate]]]
           else
             if block
-              checks << Schema::Rule.new(name, [:check, [name, yield.to_ary]])
+              checks << Schema::Rule.new(name, [:check, [name, yield.to_ary]], self)
             else
               rule_by_name(name).to_check
             end

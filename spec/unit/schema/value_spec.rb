@@ -1,6 +1,8 @@
 RSpec.describe Schema::Value do
+  let(:target) { double(:target) }
+
   describe '#each' do
-    subject(:value) { Schema::Value.new(:payments) }
+    subject(:value) { Schema::Value.new(:payments, target) }
 
     it 'creates an each rule with another rule returned from the block' do
       rule = value.each do
@@ -42,7 +44,7 @@ RSpec.describe Schema::Value do
   end
 
   describe '#rule' do
-    subject(:pills) { Schema::Value.new(:pills) }
+    subject(:pills) { Schema::Value.new(:pills, target) }
 
     it 'appends new check rule' do
       pills.key(:red, &:filled?)
@@ -66,7 +68,7 @@ RSpec.describe Schema::Value do
   end
 
   describe '#not' do
-    subject(:user) { Schema::Value.new(:user) }
+    subject(:user) { Schema::Value.new(:user, target) }
 
     it 'builds a negated rule' do
       not_email = user.key(:email, &:str?).first.not

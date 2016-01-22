@@ -1,7 +1,7 @@
 module Dry
   module Validation
     class Schema
-      class Rule < BasicObject
+      class Rule# < BasicObject
         attr_reader :name, :node, :target
 
         class Check < Rule
@@ -10,7 +10,7 @@ module Dry
           end
 
           def method_missing(meth, *)
-            self.class.new(name, [:check, [name, [:predicate, [name, [meth]]]]])
+            new([:check, [name, [:predicate, [name, [meth]]]]])
           end
         end
 
@@ -20,11 +20,11 @@ module Dry
           end
 
           def method_missing(meth, *args)
-            self.class.new(name, [:res, [name, [:predicate, [meth, args]]]])
+            new([:res, [name, [:predicate, [meth, args]]]])
           end
         end
 
-        def initialize(name, node, target = [])
+        def initialize(name, node, target)
           @name = name
           @node = node
           @target = target
@@ -40,7 +40,11 @@ module Dry
         alias_method :to_a, :to_ary
 
         def to_check
-          Rule::Check.new(name, [:check, [name, [:predicate, [name, []]]]])
+          Rule::Check.new(name, [:check, [name, [:predicate, [name, []]]]], target)
+        end
+
+        def new(node, name = self.name)
+          self.class.new(name, node, target)
         end
 
         def is_a?(other)
@@ -48,39 +52,49 @@ module Dry
         end
 
         def required
-          target.rules << self.and(
-            Rule.new(name, [:val, [name, [:predicate, [:filled?, []]]]])
-          )
+          filled = new([:val, [name, [:predicate, [:filled?, []]]]])
+
+          target.rules << self.and(filled)
+          target.rules.last
         end
 
         def maybe
-          filled = Rule.new(name, [:val, [name, [:predicate, [:filled?, []]]]])
-          none = Rule.new(name, [:val, [name, [:predicate, [:none?, []]]]])
+          filled = new([:val, [name, [:predicate, [:filled?, []]]]])
+          none = new([:val, [name, [:predicate, [:none?, []]]]])
 
           target.rules << self.and(none.or(filled))
+          target.rules.last
+        end
+
+        def on(predicate, &block)
+          left = target.value(name).__send__(predicate)
+          right = yield
+
+          target.checks << left.then(right)
+          target.checks.last
         end
 
         def not
-          self.class.new(:"not_#{name}", [:not, node])
+          new([:not, node])
         end
 
         def and(other)
-          self.class.new(:"#{name}_and_#{other.name}", [:and, [node, other.to_ary]])
+          new([:and, [node, other.to_ary]])
         end
         alias_method :&, :and
 
         def or(other)
-          self.class.new(:"#{name}_or_#{other.name}", [:or, [node, other.to_ary]])
+          new([:or, [node, other.to_ary]])
         end
         alias_method :|, :or
 
         def xor(other)
-          self.class.new(:"#{name}_xor_#{other.name}", [:xor, [node, other.to_ary]])
+          new([:xor, [node, other.to_ary]])
         end
         alias_method :^, :xor
 
         def then(other)
-          self.class.new(:"#{name}_then_#{other.name}", [:implication, [node, other.to_ary]])
+          new([:implication, [node, other.to_ary]])
         end
         alias_method :>, :then
       end
