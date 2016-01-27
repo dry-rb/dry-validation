@@ -63,7 +63,7 @@ RSpec.describe Schema::Value do
           [:val, [:user, [:predicate, [:hash?, []]]]],
           [:and, [
             [:key, [:email, [:predicate, [:key?, []]]]],
-            [:val, [:email, [:predicate, [:filled?, []]]]]
+            [:val, [{ user: :email }, [:predicate, [:filled?, []]]]]
           ]]
         ]
       ])

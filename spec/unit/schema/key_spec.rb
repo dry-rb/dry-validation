@@ -22,13 +22,13 @@ RSpec.describe Schema::Key do
             :user, [
               [:and, [
                 [:key, [:email, [:predicate, [:key?, []]]]],
-                [:val, [:email, [:predicate, [:filled?, []]]]]]
+                [:val, [{ user: :email }, [:predicate, [:filled?, []]]]]]
               ],
               [:and, [
                 [:key, [:age, [:predicate, [:key?, []]]]],
                 [:or, [
-                  [:val, [:age, [:predicate, [:none?, []]]]],
-                  [:val, [:age, [:predicate, [:filled?, []]]]]]]]
+                  [:val, [{ user: :age }, [:predicate, [:none?, []]]]],
+                  [:val, [{ user: :age }, [:predicate, [:filled?, []]]]]]]]
               ]]]
           ]
         ]

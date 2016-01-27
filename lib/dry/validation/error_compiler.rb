@@ -77,7 +77,7 @@ module Dry
       def visit_predicate(predicate, identifier, value)
         predicate_name, args = predicate
 
-        name = identifier.to_s.split(KEY_SEPARATOR)[0]
+        name = identifier.to_s.split(KEY_SEPARATOR).last
 
         lookup_options = options.merge(
           rule: name, val_type: value.class, arg_type: args[0].class

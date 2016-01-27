@@ -1,3 +1,28 @@
+# v0.7.0 to-be-released
+
+### Added
+
+* Support for macros:
+  * `required` - when value must be filled
+  * `maybe` - when value can be nil
+  * `when` - for composing high-level rule based on predicates applied to a
+    validated value
+  * `confirmation` - for confirmation validation
+* Support for `value(:foo).eql?(value(:bar))` syntax in high-level rules
+
+### Changed
+
+* `schema` was **removed** from the DSL, just use `key` instead (solnic)
+* `confirmation` is now a macro that you can call on a key rule (solnic)
+* rule names for nested structures are now fully qualified, which means you can
+  provide customized messages for them. ie `user: :email` (solnic)
+
+### Fixed
+
+* Qualified rule names properly use last node by default for error messages (solnic)
+
+[Compare v0.6.0...v0.7.0](https://github.com/dryrb/dry-validation/compare/v0.6.0...v0.7.0)
+
 # v0.6.0 2016-01-20
 
 ### Added

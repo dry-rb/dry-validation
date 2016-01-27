@@ -6,6 +6,8 @@ RSpec.describe Schema, 'using nested values' do
       key(:email).maybe
 
       key(:settings) do |settings|
+        settings.optional(:offers).maybe
+
         settings.key(:newsletter).required(:bool?).when(:true?) do
           value(:email).filled?
         end

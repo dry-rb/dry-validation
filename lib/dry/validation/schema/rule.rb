@@ -21,10 +21,6 @@ module Dry
             Schema::Rule::Result
           end
 
-          def rename(name)
-            new(node, name, options)
-          end
-
           private
 
           def method_missing(meth, *args)
@@ -51,12 +47,12 @@ module Dry
         end
 
         def initialize(name, node, options = {})
-          @name = name
           @node = node
           @target = Buffer::Sourced.new(self, options.fetch(:target))
           @keys = options.fetch(:keys, [name])
           @type = options.fetch(:type, :and)
           @options = options
+          @name = target.name && name.is_a?(::Symbol) ? { target.name => name } : name
         end
 
         def class
@@ -143,10 +139,6 @@ module Dry
 
         def with(new_options)
           self.class.new(name, node, options.merge(new_options))
-        end
-
-        def checks
-          target.checks
         end
 
         private

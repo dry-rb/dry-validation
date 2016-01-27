@@ -29,7 +29,7 @@ module Dry
 
             checks << Schema::Rule.new(
               name,
-              [:check, [name, predicate.to_ary, predicate.keys]],
+              [:check, [name, predicate.to_ast, predicate.keys]],
               target: self, keys: predicate.keys
             )
 
