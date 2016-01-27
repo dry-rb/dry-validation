@@ -7,7 +7,7 @@ module Dry
         include DSL
 
         def target
-          @target ||= Buffer.new(name)
+          @target ||= Buffer.new(id)
         end
 
         def add_rule(rule)

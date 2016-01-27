@@ -52,7 +52,7 @@ module Dry
           @keys = options.fetch(:keys, [name])
           @type = options.fetch(:type, :and)
           @options = options
-          @name = target.name && name.is_a?(::Symbol) ? { target.name => name } : name
+          @name = target.id && name.is_a?(::Symbol) ? { target.id => name } : name
         end
 
         def class

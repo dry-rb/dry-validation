@@ -4,25 +4,25 @@ module Dry
       class Value < BasicObject
         include Schema::Definition
 
-        attr_reader :name
+        attr_reader :id
 
-        def initialize(name)
-          @name = name
+        def initialize(id)
+          @id = id
         end
 
         def each(&block)
           result = yield(self)
-          create_rule([:each, [name, result.to_ast]])
+          create_rule([:each, [id, result.to_ast]])
         end
 
         private
 
         def create_rule(node)
-          Schema::Rule.new(name, node, target: target)
+          Schema::Rule.new(id, node, target: target)
         end
 
         def method_missing(meth, *args, &block)
-          val_rule = create_rule([:val, [name, [:predicate, [meth, args]]]])
+          val_rule = create_rule([:val, [id, [:predicate, [meth, args]]]])
 
           new_rule =
             if block

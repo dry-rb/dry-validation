@@ -1,24 +1,23 @@
-require 'delegate'
 require 'dry/validation/schema/dsl'
 
 module Dry
   module Validation
     class Schema
       class Buffer
-        include Dry::Equalizer(:name, :rules, :checks)
+        include Dry::Equalizer(:id, :rules, :checks)
         include DSL
 
-        attr_reader :name, :rules, :checks
+        attr_reader :id, :rules, :checks
 
         class Sourced
-          include Dry::Equalizer(:name, :source, :buffer)
+          include Dry::Equalizer(:id, :source, :buffer)
 
-          attr_reader :source, :buffer, :name
+          attr_reader :source, :buffer, :id
 
           def initialize(source, buffer)
             @source = source
             @buffer = buffer
-            @name = buffer.name
+            @id = buffer.id
           end
 
           def add_rule(rule)
@@ -51,12 +50,12 @@ module Dry
             buffer.key(*args, &block)
           end
 
-          def value(name)
-            buffer.value(name)
+          def value(id)
+            buffer.value(id)
           end
 
-          def rule(name, &block)
-            buffer.rule(name, &block)
+          def rule(id, &block)
+            buffer.rule(id, &block)
             self
           end
 
@@ -76,8 +75,8 @@ module Dry
           end
         end
 
-        def initialize(name)
-          @name = name
+        def initialize(id)
+          @id = id
           @rules = []
           @checks = []
         end
@@ -97,7 +96,7 @@ module Dry
         end
 
         def rule_ast
-          rules.size > 1 ? [:set, [name, to_ast]] : to_ast[0]
+          rules.size > 1 ? [:set, [id, to_ast]] : to_ast[0]
         end
       end
     end

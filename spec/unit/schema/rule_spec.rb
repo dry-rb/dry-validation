@@ -4,7 +4,7 @@ RSpec.describe Schema::Rule do
 
   let(:left) { Schema::Rule.new(:email, filled, target: target) }
   let(:right) { Schema::Rule.new(:email, format, target: target) }
-  let(:target) { double(:target, name: :user) }
+  let(:target) { double(:target, id: :user) }
 
   describe '#and' do
     it 'returns a conjunction' do

@@ -52,6 +52,10 @@ module Dry
         end
       end
 
+      def self.id
+        nil
+      end
+
       attr_reader :rules, :checks
 
       attr_reader :rule_compiler
