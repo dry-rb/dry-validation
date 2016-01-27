@@ -3,9 +3,9 @@ RSpec.describe Schema, 'using nested schemas' do
 
   let(:schema) do
     Class.new(Schema) do
-      schema(:location) do |loc|
-        loc.key(:lat, &:filled?)
-        loc.key(:lng, &:filled?)
+      key(:location) do |loc|
+        loc.key(:lat).required
+        loc.key(:lng).required
       end
     end
   end

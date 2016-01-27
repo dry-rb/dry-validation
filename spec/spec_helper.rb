@@ -18,6 +18,12 @@ Dir[SPEC_ROOT.join('support/**/*.rb')].each(&method(:require))
 
 include Dry::Validation
 
+class Schema::Rule < BasicObject
+  def inspect
+    to_ary.inspect
+  end
+end
+
 RSpec.configure do |config|
   config.disable_monkey_patching!
 

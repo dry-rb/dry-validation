@@ -2,7 +2,7 @@ module Dry
   module Validation
     class Schema
       class Rule < BasicObject
-        attr_reader :name, :node, :target
+        attr_reader :name, :node, :type, :target, :keys, :options
 
         class Check < Rule
           def class
@@ -11,7 +11,7 @@ module Dry
 
           private
 
-          def method_missing(meth, *)
+          def method_missing(meth, *args)
             new([:check, [name, [:predicate, [name, [meth]]]]])
           end
         end
@@ -22,44 +22,66 @@ module Dry
           end
 
           def rename(name)
-            new(node, name)
+            new(node, name, options)
           end
 
           private
 
           def method_missing(meth, *args)
-            new([:res, [name, [:predicate, [meth, args]]]])
+            if args.size > 0
+              pred_args = args.map { |value|
+                value.class <= Schema::Rule ? [:res_arg, value.name] : [:arg, value]
+              }
+
+              names = args
+                .map { |value| value.class <= Schema::Rule && value.name }
+                .compact
+
+              new_rule = new([:res, [name, [:predicate, [meth, [:args, pred_args]]]]])
+
+              if names.size > 0
+                new_rule.with(keys: [name]+names)
+              else
+                new_rule
+              end
+            else
+              new([:res, [name, [:predicate, [meth, args]]]])
+            end
           end
         end
 
-        def initialize(name, node, target)
+        def initialize(name, node, options = {})
           @name = name
           @node = node
-          @target = target
+          @target = Buffer::Sourced.new(self, options.fetch(:target))
+          @keys = options.fetch(:keys, [name])
+          @type = options.fetch(:type, :and)
+          @options = options
         end
 
         def class
           Schema::Rule
         end
 
-        def to_ary
+        def to_ast
           node
         end
-        alias_method :to_a, :to_ary
+        alias_method :to_ary, :to_ast
 
         def to_check
-          Rule::Check.new(name, [:check, [name, [:predicate, [name, []]]]], target)
+          Rule::Check.new(
+            name, [:check, [name, [:predicate, [name, []]]]], options
+          )
         end
 
-        def is_a?(other)
-          self.class == other
+        def to_implication
+          with(type: :then)
         end
 
         def required(*predicates)
           rule = ([val(:filled?)] + infer_predicates(predicates)).reduce(:and)
 
-          target.rules << self.and(rule)
-          target.rules.last
+          target.add_rule(__send__(type, rule))
         end
 
         def maybe(*predicates)
@@ -70,17 +92,29 @@ module Dry
               val(:none?).or(val(:filled?))
             end
 
-          target.rules << self.and(rule)
-          target.rules.last
+          target.add_rule(__send__(type, rule))
         end
 
-        def when(predicate, rule_name = nil, &block)
-          left = target.value(name).__send__(predicate)
+        def when(*args, &block)
+          predicates, rule_name = args
+
+          left = ::Kernel.Array(predicates).map { |predicate|
+            target.value(name).__send__(*::Kernel.Array(predicate))
+          }.reduce(:and)
+
           right = yield
 
-          target.rule(rule_name || right.name) { left.then(right) }
+          right.target.rule(rule_name || right.name) { left.then(right) }
+        end
 
-          target.checks.last
+        def confirmation
+          conf = :"#{name}_confirmation"
+
+          target.key(conf).maybe
+
+          target.rule(conf) do
+            target.value(conf).eql?(target.value(name))
+          end
         end
 
         def not
@@ -88,24 +122,32 @@ module Dry
         end
 
         def and(other)
-          new([:and, [node, other.to_ary]])
+          new_from([:and, [node, other.to_ast]], other)
         end
         alias_method :&, :and
 
         def or(other)
-          new([:or, [node, other.to_ary]])
+          new_from([:or, [node, other.to_ast]], other)
         end
         alias_method :|, :or
 
         def xor(other)
-          new([:xor, [node, other.to_ary]])
+          new_from([:xor, [node, other.to_ast]], other)
         end
         alias_method :^, :xor
 
         def then(other)
-          new([:implication, [node, other.to_ary]])
+          new_from([:implication, [node, other.to_ast]], other)
         end
         alias_method :>, :then
+
+        def with(new_options)
+          self.class.new(name, node, options.merge(new_options))
+        end
+
+        def checks
+          target.checks
+        end
 
         private
 
@@ -120,8 +162,16 @@ module Dry
           new([:val, [name, [:predicate, [predicate, args]]]])
         end
 
+        def new_from(node, other)
+          self.class.new(
+            name,
+            node,
+            options.merge(target: target, keys: (keys + other.keys).uniq)
+          )
+        end
+
         def new(node, name = self.name)
-          self.class.new(name, node, target)
+          self.class.new(name, node, options)
         end
       end
     end

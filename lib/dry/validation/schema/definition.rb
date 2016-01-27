@@ -1,83 +1,30 @@
+require 'dry/validation/schema/buffer'
+
 module Dry
   module Validation
     class Schema
       module Definition
-        def rules
-          @rules ||= []
+        include DSL
+
+        def target
+          @target ||= Buffer.new(name)
         end
 
-        def groups
-          @groups ||= []
-        end
-
-        def checks
-          @checks ||= []
-        end
-
-        def schemas
-          @schemas ||= []
-        end
-
-        def schema(name, &block)
-          schema = Class.new(superclass)
-          schema.key(name, &block)
-          schemas << schema
+        def add_rule(rule)
+          target.add_rule(rule)
           self
         end
 
-        def key(name, &block)
-          Key.new(name, self).key?(&block)
+        def to_ast
+          target.rule_ast
         end
 
-        def attr(name, &block)
-          Attr.new(name, self).attr?(&block)
+        def rules
+          target.rules
         end
 
-        def optional(name, &block)
-          Key.new(name, self).optional(&block)
-        end
-
-        def value(name)
-          Schema::Rule::Result.new(name, [], self)
-        end
-
-        def rule(name, **options, &block)
-          if options.any?
-            predicate, rule_names = options.to_a.first
-            identifier = { name => rule_names }
-
-            groups << [:group, [identifier, [:predicate, predicate]]]
-          else
-            if block
-              checks << Schema::Rule.new(name, [:check, [name, yield.to_ary]], self)
-            else
-              rule_by_name(name).to_check
-            end
-          end
-        end
-
-        def confirmation(name, options = {})
-          conf_name = :"#{name}_confirmation"
-
-          unless rule_by_name(name)
-            if options.any?
-              key(name) do |value|
-                options.map { |p, args| value.__send__(:"#{p}?", *args) }.reduce(:&)
-              end
-            else
-              key(name, &:filled?)
-            end
-          end
-
-          key(conf_name, &:filled?)
-
-          rule(conf_name, eql?: [name, conf_name])
-        end
-
-        private
-
-        def rule_by_name(name)
-          rules.detect { |rule| rule.name == name }
+        def checks
+          target.checks
         end
       end
     end

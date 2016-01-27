@@ -29,7 +29,7 @@ module Dry
       end
 
       def self.hint_compiler
-        HintCompiler.new(messages, rules: rules.map(&:to_ary))
+        HintCompiler.new(messages, rules: rules.map(&:to_ast))
       end
 
       def self.messages
@@ -52,7 +52,7 @@ module Dry
         end
       end
 
-      attr_reader :rules, :schemas, :groups, :checks
+      attr_reader :rules, :checks
 
       attr_reader :rule_compiler
 
@@ -62,10 +62,8 @@ module Dry
 
       def initialize(rules = [])
         @rule_compiler = Logic::RuleCompiler.new(self)
-        @rules = rule_compiler.(self.class.rules.map(&:to_ary) + rules.map(&:to_ary))
-        @checks = self.class.checks.map(&:to_ary)
-        @groups = rule_compiler.(self.class.groups.map(&:to_ary))
-        @schemas = self.class.schemas.map(&:new)
+        @rules = rule_compiler.(self.class.rules.map(&:to_ast) + rules.map(&:to_ast))
+        @checks = self.class.checks.map(&:to_ast)
         @error_compiler = self.class.error_compiler
         @hint_compiler = self.class.hint_compiler
       end
@@ -73,22 +71,12 @@ module Dry
       def call(input)
         result = Validation::Result.new(rules.map { |rule| rule.(input) })
 
-        schemas.each do |schema|
-          result.merge!(schema.(input).result)
-        end
-
         if checks.size > 0
           resolver = -> name { result[name] || self[name] }
           compiled_checks = Logic::RuleCompiler.new(resolver).(checks)
 
           compiled_checks.each do |rule|
             result << rule.(result)
-          end
-        end
-
-        groups.each do |group|
-          result.with_values(group.rules) do |values|
-            result << group.(*values)
           end
         end
 

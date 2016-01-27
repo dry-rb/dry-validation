@@ -4,50 +4,37 @@ module Dry
       class Value < BasicObject
         include Schema::Definition
 
-        attr_reader :name, :target
+        attr_reader :name
 
-        def initialize(name, target)
+        def initialize(name)
           @name = name
-          @target = target
         end
 
         def each(&block)
-          val_rule = yield(self)
-
-          each_rule =
-            if val_rule.is_a?(Schema::Rule)
-              val_rule.to_ary
-            else
-              [:set, [name, rules.map(&:to_ary)]]
-            end
-
-          create_rule([:each, [name, each_rule]])
+          result = yield(self)
+          create_rule([:each, [name, result.to_ast]])
         end
 
         private
 
         def create_rule(node)
-          Schema::Rule.new(name, node, target)
+          Schema::Rule.new(name, node, target: target)
         end
 
         def method_missing(meth, *args, &block)
-          new_rule = create_rule([:val, [name, [:predicate, [meth, args]]]])
+          val_rule = create_rule([:val, [name, [:predicate, [meth, args]]]])
 
-          if block
-            val_rule = yield
-
-            if val_rule.is_a?(Schema::Rule)
-              new_rule & val_rule
+          new_rule =
+            if block
+              result = yield
+              create_rule([:and, [val_rule.to_ast, result.to_ast]])
             else
-              create_rule([:and, [new_rule.to_ary, [:set, [name, rules.map(&:to_ary)]]]])
+              val_rule
             end
-          else
-            new_rule
-          end
-        end
 
-        def respond_to_missing?(meth, _include_private = false)
-          true
+          add_rule(new_rule)
+
+          new_rule
         end
       end
     end

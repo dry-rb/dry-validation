@@ -90,10 +90,31 @@ RSpec.describe 'Schema / Macros' do
 
     it 'generates high-level rule' do
       expect(validate.(login: true, email: nil).messages).to eql(
-        email: [['email must be filled'], nil]
+        email: [['email must be filled'], [true, nil]]
       )
 
       expect(validate.(login: false, email: nil).messages).to be_empty
+    end
+  end
+
+  describe '#when with a group rule' do
+    let(:schema) do
+      Class.new(Dry::Validation::Schema) do
+        key(:left).maybe(:int?)
+        key(:right).maybe(:int?)
+
+        key(:compare).maybe(:bool?).when(:true?) do
+          value(:left).gt?(value(:right))
+        end
+      end
+    end
+
+    it 'generates high-level rule dependant on another high-level rule' do
+      expect(validate.(compare: false, left: nil, right: nil)).to be_empty
+
+      expect(validate.(compare: true, left: 1, right: 2).messages).to eql(
+        left: [['left must be greater than 2', 'left must be an integer'], [true, 1, 2]]
+      )
     end
   end
 
@@ -116,7 +137,33 @@ RSpec.describe 'Schema / Macros' do
 
     it 'generates high-level rule' do
       expect(validate.(login: true, email: nil).messages).to eql(
-        email: [['required when login is true'], nil]
+        email: [['required when login is true'], [true, nil]]
+      )
+    end
+  end
+
+  describe '#confirmation' do
+    let(:schema) do
+      Class.new(Dry::Validation::Schema) do
+        def self.messages
+          Messages.default.merge(
+            en: { errors: { password_confirmation: 'does not match' } }
+          )
+        end
+
+        key(:password).maybe(min_size?: 3).confirmation
+      end
+    end
+
+    it 'generates confirmation rule' do
+      expect(validate.(password: 'foo', password_confirmation: 'foo')).to be_empty
+
+      expect(validate.(password: 'fo', password_confirmation: 'fo').messages).to eql(
+        password: [['password size cannot be less than 3'], 'fo']
+      )
+
+      expect(validate.(password: 'foo', password_confirmation: 'fo').messages).to eql(
+        password_confirmation: [['does not match'], ['fo', 'foo']]
       )
     end
   end
