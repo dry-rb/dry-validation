@@ -3,9 +3,9 @@ RSpec.describe 'Schema::Form / Default key behavior' do
 
   let(:schema) do
     Class.new(Dry::Validation::Schema::Form) do
-      key(:name)
-      key(:age, &:int?)
-      optional(:address)
+      key(:name).required
+      key(:age).required(:int?)
+      optional(:address).required
     end
   end
 

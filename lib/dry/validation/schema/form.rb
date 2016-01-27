@@ -6,24 +6,6 @@ module Dry
     class Schema::Form < Schema
       attr_reader :input_type
 
-      def self.key(name, &block)
-        rule = super
-
-        if block
-          rule
-        else
-          rule.required
-        end
-      end
-
-      def self.optional(name, &block)
-        if block
-          super
-        else
-          super(name, &:filled?)
-        end
-      end
-
       def initialize(rules = [])
         super
         @input_type = InputTypeCompiler.new.(self.class.rules.map(&:to_ast))
