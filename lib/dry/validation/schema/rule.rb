@@ -109,7 +109,7 @@ module Dry
           target.key(conf).maybe
 
           target.rule(conf) do
-            target.value(conf).eql?(target.value(name))
+            target.value(name).filled?.then(target.value(conf).eql?(target.value(name)))
           end
         end
 
