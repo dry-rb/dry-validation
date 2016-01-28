@@ -41,14 +41,14 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
     ].map(&:to_ary)
   end
 
-  let(:params) do
+  let(:output) do
     { 'email' => 'jane@doe.org', 'age' => '20', 'address' => 'City, Street 1/2' }
   end
 
   it 'builds an input dry-data type' do
     input_type = compiler.(rule_ast)
 
-    result = input_type[params]
+    result = input_type[output]
 
     expect(result).to eql(email: 'jane@doe.org', age: 20, address: 'City, Street 1/2')
   end

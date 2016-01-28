@@ -1,10 +1,10 @@
 module Dry
   module Validation
     class Schema::Result
-      include Dry::Equalizer(:params, :messages)
+      include Dry::Equalizer(:output, :messages)
       include Enumerable
 
-      attr_reader :params
+      attr_reader :output
 
       attr_reader :result
 
@@ -14,8 +14,8 @@ module Dry
 
       attr_reader :hint_compiler
 
-      def initialize(params, result, errors, error_compiler, hint_compiler)
-        @params = params
+      def initialize(output, result, errors, error_compiler, hint_compiler)
+        @output = output
         @result = result
         @errors = errors
         @error_compiler = error_compiler

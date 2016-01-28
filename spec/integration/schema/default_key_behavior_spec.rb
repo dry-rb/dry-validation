@@ -10,13 +10,13 @@ RSpec.describe 'Schema::Form / Default key behavior' do
   end
 
   it 'applies filled? predicate by default' do
-    expect(validate.('name' => 'jane', 'age' => '21').params).to eql(
+    expect(validate.('name' => 'jane', 'age' => '21').output).to eql(
       name: 'jane', age: 21
     )
   end
 
   it 'applies filled? predicate by default to optional key' do
-    expect(validate.('name' => 'jane', 'age' => '21', 'address' => 'Earth').params).to eql(
+    expect(validate.('name' => 'jane', 'age' => '21', 'address' => 'Earth').output).to eql(
       name: 'jane', age: 21, address: 'Earth'
     )
   end

@@ -35,7 +35,7 @@ RSpec.describe Dry::Validation::Schema::Form do
           [:address, [['address is missing'], nil]]
         ])
 
-        expect(result.params).to eql(email: '', age: 19)
+        expect(result.output).to eql(email: '', age: 19)
       end
     end
 
@@ -53,7 +53,7 @@ RSpec.describe Dry::Validation::Schema::Form do
 
         expect(result).to be_success
 
-        expect(result.params).to eql(
+        expect(result.output).to eql(
           email: 'jane@doe.org', age: 19,
           address: {
             city: 'NYC', street: 'Street 1/2',
@@ -84,7 +84,7 @@ RSpec.describe Dry::Validation::Schema::Form do
 
         expect(result).to be_success
 
-        expect(result.params).to eql(
+        expect(result.output).to eql(
           email: 'jane@doe.org', age: 19, phone_number: 12,
           address: {
             city: 'NYC', street: 'Street 1/2',
