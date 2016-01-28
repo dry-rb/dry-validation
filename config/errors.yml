@@ -22,6 +22,10 @@ en:
 
     bool?: "%{name} must be boolean"
 
+    true?: "%{name} must be true"
+
+    false?: "%{name} must be false"
+
     int?: "%{name} must be an integer"
 
     float?: "%{name} must be a float"

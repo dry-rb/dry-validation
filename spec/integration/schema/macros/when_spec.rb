@@ -42,26 +42,25 @@ RSpec.describe 'Macros #when' do
     end
   end
 
-  describe 'providing custom name' do
+  describe 'with multiple result rules' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
-        def self.messages
-          Messages.default.merge(
-            en: { errors: { email: { required: 'required when login is true' } } }
-          )
-        end
-
         key(:email).maybe
+        key(:password).maybe
 
-        key(:login).required.when(:true?, email: :required) do
+        key(:login).maybe(:bool?).when(:true?) do
           value(:email).filled?
+          value(:password).filled?
         end
       end
     end
 
     it 'generates check rule' do
-      expect(validate.(login: true, email: nil).messages).to eql(
-        email: [['required when login is true'], [true, nil]]
+      expect(validate.(login: false, email: nil, password: nil)).to be_empty
+
+      expect(validate.(login: true, email: nil, password: nil).messages).to eql(
+        email: [['email must be filled'], [true, nil]],
+        password: [['password must be filled'], [true, nil]]
       )
     end
   end

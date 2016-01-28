@@ -17,32 +17,54 @@ module Dry
         end
 
         class Result < Rule
+          def self.with_current_rule(rule, &block)
+            @current_rule = rule
+            yield
+          ensure
+            @current_rule = nil
+          end
+
+          def self.current_rule
+            @current_rule
+          end
+
           def class
             Schema::Rule::Result
+          end
+
+          def current_rule
+            self.class.current_rule
           end
 
           private
 
           def method_missing(meth, *args)
-            if args.size > 0
-              pred_args = args.map { |value|
-                value.class <= Schema::Rule ? [:res_arg, value.name] : [:arg, value]
-              }
+            new_rule =
+              if args.size > 0
+                pred_args = args.map { |value|
+                  value.class <= Schema::Rule ? [:res_arg, value.name] : [:arg, value]
+                }
 
-              names = args
-                .map { |value| value.class <= Schema::Rule && value.name }
-                .compact
+                names = args
+                  .map { |value| value.class <= Schema::Rule && value.name }
+                  .compact
 
-              new_rule = new([:res, [name, [:predicate, [meth, [:args, pred_args]]]]])
+                new_rule = new([:res, [name, [:predicate, [meth, [:args, pred_args]]]]])
 
-              if names.size > 0
-                new_rule.with(keys: [name]+names)
+                if names.size > 0
+                  new_rule.with(keys: [name]+names)
+                else
+                  new_rule
+                end
               else
-                new_rule
+                new([:res, [name, [:predicate, [meth, args]]]])
               end
-            else
-              new([:res, [name, [:predicate, [meth, args]]]])
+
+            if current_rule
+              add_check(current_rule.then(new_rule).to_check(name))
             end
+
+            new_rule
           end
         end
 
@@ -55,6 +77,22 @@ module Dry
           @name = target.id && name.is_a?(::Symbol) ? { target.id => name } : name
         end
 
+        def current_rule
+          target.current_rule
+        end
+
+        def add_rule(rule)
+          target.add_rule(rule)
+        end
+
+        def add_check(rule)
+          target.add_check(rule)
+        end
+
+        def checks
+          target.checks
+        end
+
         def class
           Schema::Rule
         end
@@ -64,7 +102,11 @@ module Dry
         end
         alias_method :to_ary, :to_ast
 
-        def to_check
+        def to_check(name = self.name)
+          Rule::Check.new(name, [:check, [name, node, keys]], options)
+        end
+
+        def to_success_check
           Rule::Check.new(
             name, [:check, [name, [:predicate, [name, []]]]], options
           )
@@ -77,7 +119,7 @@ module Dry
         def required(*predicates)
           rule = ([val(:filled?)] + infer_predicates(predicates)).reduce(:and)
 
-          target.add_rule(__send__(type, rule))
+          add_rule(__send__(type, rule))
         end
 
         def maybe(*predicates)
@@ -88,19 +130,15 @@ module Dry
               val(:none?).or(val(:filled?))
             end
 
-          target.add_rule(__send__(type, rule))
+          add_rule(__send__(type, rule))
         end
 
-        def when(*args, &block)
-          predicates, rule_name = args
-
+        def when(*predicates, &block)
           left = ::Kernel.Array(predicates).map { |predicate|
             target.value(name).__send__(*::Kernel.Array(predicate))
           }.reduce(:and)
 
-          right = yield
-
-          right.target.rule(rule_name || right.name) { left.then(right) }
+          Rule::Result.with_current_rule(left, &block)
         end
 
         def confirmation

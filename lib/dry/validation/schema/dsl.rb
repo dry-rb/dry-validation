@@ -2,6 +2,8 @@ module Dry
   module Validation
     class Schema
       module DSL
+        attr_reader :current_rule
+
         def define(type, name, &block)
           key = type.new(name, self)
           key.__send__(key.predicate, &block)
@@ -35,7 +37,7 @@ module Dry
 
             checks.last
           else
-            self[name].to_check
+            self[self.id ? { id => name } : name].to_success_check
           end
         end
 

@@ -10,6 +10,10 @@ module Dry
           @id = id
         end
 
+        def class
+          Value
+        end
+
         def each(&block)
           result = yield(self)
           create_rule([:each, [id, result.to_ast]])

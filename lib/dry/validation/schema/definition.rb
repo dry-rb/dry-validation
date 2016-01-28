@@ -15,6 +15,11 @@ module Dry
           self
         end
 
+        def add_check(rule)
+          target.add_check(rule)
+          self
+        end
+
         def to_ast
           target.rule_ast
         end

@@ -39,6 +39,10 @@ module Dry
             result = yield(Value.new(name))
             new_rule = create_rule([:and, [key_rule.to_ast, result.to_ast]])
 
+            if result.checks.size > 0
+              target.checks.concat(result.checks)
+            end
+
             target.add_rule(new_rule)
           else
             key_rule

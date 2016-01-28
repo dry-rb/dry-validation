@@ -14,10 +14,22 @@ module Dry
 
           attr_reader :source, :buffer, :id
 
+          def self.new(source, buffer)
+            if buffer.class == Sourced
+              buffer.for(source)
+            else
+              super
+            end
+          end
+
           def initialize(source, buffer)
             @source = source
             @buffer = buffer
             @id = buffer.id
+          end
+
+          def for(source)
+            self.class.new(source, buffer)
           end
 
           def add_rule(rule)
