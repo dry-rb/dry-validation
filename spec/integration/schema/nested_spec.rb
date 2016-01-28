@@ -11,7 +11,7 @@ RSpec.describe Schema, 'using nested schemas' do
   end
 
   it 'passes when location has lat and lng filled' do
-    expect(validate.(location: { lat: 1.23, lng: 4.56 })).to be_empty
+    expect(validate.(location: { lat: 1.23, lng: 4.56 })).to be_success
   end
 
   it 'fails when location has missing lat' do

@@ -15,7 +15,7 @@ RSpec.describe 'Macros #confirmation' do
     end
 
     it 'generates confirmation rule' do
-      expect(validate.(password: 'foo', password_confirmation: 'foo')).to be_empty
+      expect(validate.(password: 'foo', password_confirmation: 'foo')).to be_success
 
       expect(validate.(password: 'fo', password_confirmation: '').messages).to eql(
         password: [['password size cannot be less than 3'], 'fo'],

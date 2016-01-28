@@ -18,7 +18,7 @@ RSpec.describe Schema, 'using high-level rules' do
     end
 
     it 'passes when only red is filled' do
-      expect(validate.(red: '1')).to be_empty
+      expect(validate.(red: '1')).to be_success
     end
 
     it 'fails when red and blue are not filled ' do
@@ -52,7 +52,7 @@ RSpec.describe Schema, 'using high-level rules' do
     end
 
     it 'passes when login is false and email is nil' do
-      expect(validate.(login: false, email: nil)).to be_empty
+      expect(validate.(login: false, email: nil)).to be_success
     end
 
     it 'fails when login is false and email is present' do
@@ -62,7 +62,7 @@ RSpec.describe Schema, 'using high-level rules' do
     end
 
     it 'passes when login is true and email is present' do
-      expect(validate.(login: true, email: 'jane@doe')).to be_empty
+      expect(validate.(login: true, email: 'jane@doe')).to be_success
     end
 
     it 'fails when login is true and email is not present' do

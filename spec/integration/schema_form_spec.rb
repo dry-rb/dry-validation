@@ -51,7 +51,7 @@ RSpec.describe Dry::Validation::Schema::Form do
           }
         )
 
-        expect(result).to be_empty
+        expect(result).to be_success
 
         expect(result.params).to eql(
           email: 'jane@doe.org', age: 19,
@@ -82,7 +82,7 @@ RSpec.describe Dry::Validation::Schema::Form do
           }
         )
 
-        expect(result).to be_empty
+        expect(result).to be_success
 
         expect(result.params).to eql(
           email: 'jane@doe.org', age: 19, phone_number: 12,

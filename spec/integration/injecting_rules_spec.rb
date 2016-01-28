@@ -16,8 +16,8 @@ RSpec.describe 'Schema / Injecting Rules' do
   end
 
   it 'appends rules from another schema' do
-    expect(validate.(login: true, email: 'jane@doe')).to be_empty
-    expect(validate.(login: false, email: nil)).to be_empty
-    expect(validate.(login: true, email: nil)).to_not be_empty
+    expect(validate.(login: true, email: 'jane@doe')).to be_success
+    expect(validate.(login: false, email: nil)).to be_success
+    expect(validate.(login: true, email: nil)).to_not be_success
   end
 end

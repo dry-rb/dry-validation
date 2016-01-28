@@ -21,7 +21,7 @@ RSpec.describe Schema, 'defining schema with attrs' do
       end
 
       it 'should be valid' do
-        expect(validation.(input)).to be_empty
+        expect(validation.(input)).to be_success
       end
     end
 
@@ -31,7 +31,7 @@ RSpec.describe Schema, 'defining schema with attrs' do
       end
 
       it 'should not be valid' do
-        expect(validation.(input)).to_not be_empty
+        expect(validation.(input)).to_not be_success
       end
     end
   end

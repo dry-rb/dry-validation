@@ -3,7 +3,7 @@ RSpec.describe Dry::Validation do
 
   shared_context 'uses custom predicates' do
     it 'uses provided custom predicates' do
-      expect(validation.(email: 'jane@doe')).to be_empty
+      expect(validation.(email: 'jane@doe')).to be_success
 
       expect(validation.(email: nil)).to match_array([
         [:error, [:input, [:email, nil, [[:val, [:email, [:predicate, [:filled?, []]]]]]]]]

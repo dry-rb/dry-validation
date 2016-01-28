@@ -18,15 +18,15 @@ RSpec.describe Schema, 'using nested values' do
   end
 
   it 'passes when newsletter setting is false' do
-    expect(validate.(settings: { newsletter: false }, email: nil)).to be_empty
+    expect(validate.(settings: { newsletter: false }, email: nil)).to be_success
   end
 
   it 'passes when newsletter setting is true and email is filled' do
-    expect(validate.(settings: { newsletter: false }, email: 'jane@doe')).to be_empty
+    expect(validate.(settings: { newsletter: false }, email: 'jane@doe')).to be_success
   end
 
   it 'passes when offers is false and newsletter is true' do
-    expect(validate.(settings: { offers: false, newsletter: true }, email: 'jane@doe')).to be_empty
+    expect(validate.(settings: { offers: false, newsletter: true }, email: 'jane@doe')).to be_success
   end
 
   it 'fails when newsletter is true and email is not filled' do

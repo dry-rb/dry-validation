@@ -26,7 +26,7 @@ module Dry
         failures.each(&block)
       end
 
-      def empty?
+      def success?
         errors.empty?
       end
 

@@ -34,7 +34,7 @@ RSpec.describe 'Macros #when' do
     end
 
     it 'generates check rule' do
-      expect(validate.(compare: false, left: nil, right: nil)).to be_empty
+      expect(validate.(compare: false, left: nil, right: nil)).to be_success
 
       expect(validate.(compare: true, left: 1, right: 2).messages).to eql(
         left: [['left must be greater than 2', 'left must be an integer'], [true, 1, 2]]
@@ -56,7 +56,7 @@ RSpec.describe 'Macros #when' do
     end
 
     it 'generates check rule' do
-      expect(validate.(login: false, email: nil, password: nil)).to be_empty
+      expect(validate.(login: false, email: nil, password: nil)).to be_success
 
       expect(validate.(login: true, email: nil, password: nil).messages).to eql(
         email: [['email must be filled'], [true, nil]],

@@ -54,7 +54,7 @@ RSpec.describe Dry::Validation::Schema do
 
     describe '#call' do
       it 'passes when attributes are valid' do
-        expect(validation.(input)).to be_empty
+        expect(validation.(input)).to be_success
       end
 
       it 'validates presence of an email and min age value' do
@@ -198,7 +198,7 @@ RSpec.describe Dry::Validation::Schema do
 
     describe '#call' do
       it 'passes when attributes are valid' do
-        expect(validation.(input)).to be_empty
+        expect(validation.(input)).to be_success
       end
 
       it 'validates presence of an email and min age value' do
