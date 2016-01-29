@@ -19,7 +19,7 @@ module Dry
 
         def optional(&block)
           if block
-            result = yield(Value.new(name))
+            result = yield(Value::Set.new(name))
             target.add_rule(key?.then(result))
           else
             key?.to_implication
@@ -36,7 +36,7 @@ module Dry
           key_rule = create_rule([identifier, [name, [:predicate, [meth, args]]]])
 
           if block
-            result = yield(Value.new(name))
+            result = yield(Value::Set.new(name))
             new_rule = create_rule([:and, [key_rule.to_ast, result.to_ast]])
 
             if result.checks.size > 0

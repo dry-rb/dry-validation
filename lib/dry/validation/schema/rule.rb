@@ -1,3 +1,5 @@
+require 'dry/validation/schema/sourced'
+
 module Dry
   module Validation
     class Schema
@@ -70,11 +72,11 @@ module Dry
 
         def initialize(name, node, options = {})
           @node = node
-          @target = Buffer::Sourced.new(self, options.fetch(:target))
+          @target = Schema::Sourced.new(self, options.fetch(:target))
           @keys = options.fetch(:keys, [name])
           @type = options.fetch(:type, :and)
           @options = options
-          @name = target.id && name.is_a?(::Symbol) ? { target.id => name } : name
+          @name = name.is_a?(::Hash) || target.id == name ? name : { target.id => name }
         end
 
         def current_rule
@@ -89,8 +91,20 @@ module Dry
           target.add_check(rule)
         end
 
+        def rules
+          target.rules
+        end
+
         def checks
           target.checks
+        end
+
+        def rule(name, &block)
+          target.rule(name, &block)
+        end
+
+        def value(name)
+          Rule::Result.new(name, [], target: target)
         end
 
         def class
@@ -144,11 +158,11 @@ module Dry
         def confirmation
           conf = :"#{name}_confirmation"
 
-          target.key(conf).maybe
+          key(conf).maybe
 
-          target.rule(conf) do
-            target.value(name).filled?.then(target.value(conf).eql?(target.value(name)))
-          end
+          ::Kernel.byebug
+
+          rule(conf) { value(conf).eql?(value(name)) }
         end
 
         def not
