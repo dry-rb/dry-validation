@@ -158,11 +158,15 @@ module Dry
         def confirmation
           conf = :"#{name}_confirmation"
 
-          key(conf).maybe
+          key = Value.new(conf).key(conf).maybe
+          val = key.value(conf)
 
-          ::Kernel.byebug
+          result = self.when(:filled?) { val.eql?(value(name)) }
 
-          rule(conf) { value(conf).eql?(value(name)) }
+          rules.concat(val.rules)
+          checks.concat(val.checks)
+
+          result
         end
 
         def not

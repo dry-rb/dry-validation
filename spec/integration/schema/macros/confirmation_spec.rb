@@ -15,8 +15,6 @@ RSpec.describe 'Macros #confirmation' do
     end
 
     it 'generates confirmation rule' do
-      pending
-
       expect(validate.(password: 'foo', password_confirmation: 'foo')).to be_success
 
       expect(validate.(password: 'fo', password_confirmation: '').messages).to eql(
