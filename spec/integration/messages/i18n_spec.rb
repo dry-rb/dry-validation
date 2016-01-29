@@ -11,6 +11,10 @@ RSpec.describe Messages::I18n do
 
   describe '#[]' do
     context 'with the default locale' do
+      it 'returns nil when message is not defined' do
+        expect(messages[:not_here, rule: :srsly]).to be(nil)
+      end
+
       it 'returns a message for a predicate' do
         message = messages[:filled?, rule: :name]
 

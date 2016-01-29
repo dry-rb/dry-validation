@@ -13,7 +13,7 @@ module Dry
       end
 
       def get(key, options = {})
-        t.(key, options)
+        t.(key, options) if key
       end
 
       def key?(key, options)
