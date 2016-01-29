@@ -90,6 +90,10 @@ module Dry
         @checks ||= []
       end
 
+      def self.rule_ast
+        rules.map(&:to_ast)
+      end
+
       def self.check_ast
         (checks + keys.values.flat_map(&:checks)).map(&:to_ast)
       end
@@ -136,7 +140,7 @@ module Dry
 
       def initialize(rules = [])
         @rule_compiler = Logic::RuleCompiler.new(self)
-        @rules = rule_compiler.(self.class.rules.map(&:to_ast) + rules.map(&:to_ast))
+        @rules = rule_compiler.(self.class.rule_ast + rules.map(&:to_ast))
         @checks = self.class.check_ast
         @error_compiler = self.class.error_compiler
         @hint_compiler = self.class.hint_compiler
