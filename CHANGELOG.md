@@ -16,6 +16,7 @@
 * `confirmation` is now a macro that you can call on a key rule (solnic)
 * rule names for nested structures are now fully qualified, which means you can
   provide customized messages for them. ie `user: :email` (solnic)
+* `Schema::Result#params` was renamed to `#output` (solnic)
 
 ### Fixed
 
