@@ -37,7 +37,7 @@ RSpec.describe Schema, 'using nested values' do
 
   it 'fails when offers is true and newsletter is true' do
     expect(validate.(settings: { offers: true, newsletter: true }, email: 'jane@doe').messages).to eql(
-      settings: [['newsletter must be false'], [true, true]]
+      settings: { newsletter: [['newsletter must be false'], [true, true]] }
     )
   end
 end

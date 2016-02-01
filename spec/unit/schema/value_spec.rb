@@ -2,11 +2,23 @@ RSpec.describe Schema::Value do
   describe '#key' do
     subject(:value) { Schema::Value.new(:user) }
 
-    it 'creates a rule for a specified key' do
-      rule_macro = value.key(:address).required
-      rule_block = value.key(:address, &:filled?)
+    let(:expected_ast) do
+      [:and, [
+        [:key, [:address, [:predicate, [:key?, []]]]],
+        [:val, [[:user, :address], [:predicate, [:filled?, []]]]]
+      ]]
+    end
 
-      expect(rule_macro.to_ast).to eql(rule_block.to_ast)
+    it 'creates a rule for a specified key using a block' do
+      value.key(:address, &:filled?)
+
+      expect(value.to_ast).to eql(expected_ast)
+    end
+
+    it 'creates a rule for a specified key using a macro' do
+      value.key(:address).required
+
+      expect(value.to_ast).to eql(expected_ast)
     end
   end
 
@@ -14,8 +26,8 @@ RSpec.describe Schema::Value do
     subject(:value) { Schema::Value.new(:payments) }
 
     it 'creates an each rule with another rule returned from the block' do
-      rule = value.each do
-        value.key?(:method)
+      rule = value.each do |element|
+        element.key?(:method)
       end
 
       expect(rule.to_ast).to eql(
@@ -26,9 +38,9 @@ RSpec.describe Schema::Value do
     end
 
     it 'creates an each rule with other rules returned from the block' do
-      rule = value.each do
-        value.key(:method) { |method| method.str? }
-        value.key(:amount) { |amount| amount.float? }
+      rule = value.each do |element|
+        element.key(:method) { |method| method.str? }
+        element.key(:amount) { |amount| amount.float? }
       end
 
       expect(rule.to_ast).to eql(
@@ -38,12 +50,12 @@ RSpec.describe Schema::Value do
               :payments, [
                 [:and, [
                   [:key, [:method, [:predicate, [:key?, []]]]],
-                  [:val, [:method, [:predicate, [:str?, []]]]]
+                  [:val, [[:payments, :method], [:predicate, [:str?, []]]]]
                 ]],
                 [:and, [
                   [:key, [:amount, [:predicate, [:key?, []]]]],
-                  [:val, [:amount, [:predicate, [:float?, []]]]]
-                ]],
+                  [:val, [[:payments, :amount], [:predicate, [:float?, []]]]]
+                ]]
               ]
             ]
           ]
@@ -63,7 +75,39 @@ RSpec.describe Schema::Value do
           [:val, [:user, [:predicate, [:hash?, []]]]],
           [:and, [
             [:key, [:email, [:predicate, [:key?, []]]]],
-            [:val, [{ user: :email }, [:predicate, [:filled?, []]]]]
+            [:val, [[:user, :email], [:predicate, [:filled?, []]]]]
+          ]]
+        ]
+      ])
+    end
+
+    it 'builds hash? & rule created within the block with deep nesting' do
+      rule = user.hash? do
+        user.key(:address) do |address|
+          address.hash? do
+            address.key(:city).required
+            address.key(:zipcode).required
+          end
+        end
+      end
+
+      expect(rule.to_ast).to eql([
+        :and, [
+          [:val, [:user, [:predicate, [:hash?, []]]]],
+          [:and, [
+            [:key, [:address, [:predicate, [:key?, []]]]],
+            [:and, [
+              [:val, [[:user, :address], [:predicate, [:hash?, []]]]],
+              [:set, [[:user, :address], [
+                [:and, [
+                  [:key, [:city, [:predicate, [:key?, []]]]],
+                  [:val, [[:user, :address, :city], [:predicate, [:filled?, []]]]]]],
+                [:and, [
+                  [:key, [:zipcode, [:predicate, [:key?, []]]]],
+                  [:val, [[:user, :address, :zipcode], [:predicate, [:filled?, []]]]]
+                  ]]
+              ]]]
+            ]]
           ]]
         ]
       ])
@@ -79,7 +123,7 @@ RSpec.describe Schema::Value do
       expect(not_email.to_ast).to eql([
         :and, [
           [:key, [:email, [:predicate, [:key?, []]]]],
-          [:not, [:val, [:email, [:predicate, [:str?, []]]]]]
+          [:not, [:val, [[:user, :email], [:predicate, [:str?, []]]]]]
         ]
       ])
     end

@@ -1,14 +1,15 @@
 module Dry
   module Validation
     class ErrorCompiler
-      attr_reader :messages, :options
+      attr_reader :messages, :hints, :options
 
       DEFAULT_RESULT = {}.freeze
       KEY_SEPARATOR = '.'.freeze
 
       def initialize(messages, options = {})
         @messages = messages
-        @options = options
+        @options = Hash[options]
+        @hints = @options.delete(:hints) || {}
       end
 
       def call(ast)
@@ -27,16 +28,19 @@ module Dry
         visit(error)
       end
 
-      def visit_input(input, *)
-        name = normalize_name(input[0])
-        _, value, rules = input
-        errors = [rules.map { |rule| visit(rule, name, value) }, value]
+      def visit_input(node, *args)
+        path, value, rules = node
+        name = normalize_name(path)
 
-        if input[0].is_a?(Hash)
-          root, sub = input[0].to_a.flatten
-          { root => { sub => errors } }
+        parent, _ = args
+
+        err_hash = ([errors_for(rules, name, value)] + Array(path).reverse)
+          .reduce { |a, e| { e => a } }
+
+        if parent && err_hash.key?(parent)
+          err_hash[parent]
         else
-          { input[0] => errors }
+          err_hash
         end
       end
 
@@ -148,6 +152,17 @@ module Dry
       end
 
       private
+
+      def errors_for(rules, name, value)
+        hints = hints_for(name)
+        errors = rules.map { |rule| visit(rule, name, value) }.flatten
+
+        [(errors + hints).uniq, value]
+      end
+
+      def hints_for(name)
+        hints[name] || []
+      end
 
       def normalize_name(name)
         Array(name).join(KEY_SEPARATOR).to_sym

@@ -19,10 +19,18 @@ module Dry
 
         def optional(&block)
           if block
-            result = yield(Value.new(name))
+            result = yield(Value::Set.new(name))
             target.add_rule(key?.then(result))
           else
             key?.to_implication
+          end
+        end
+
+        def val_name
+          if target.id != name
+            [target.id, name].flatten
+          else
+            name
           end
         end
 
@@ -36,12 +44,10 @@ module Dry
           key_rule = create_rule([identifier, [name, [:predicate, [meth, args]]]])
 
           if block
-            result = yield(Value.new(name))
+            result = yield(Value::Set.new(val_name))
             new_rule = create_rule([:and, [key_rule.to_ast, result.to_ast]])
 
-            if result.checks.size > 0
-              target.checks.concat(result.checks)
-            end
+            target.checks.concat(result.checks)
 
             target.add_rule(new_rule)
           else
