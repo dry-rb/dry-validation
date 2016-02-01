@@ -34,10 +34,12 @@ RSpec.describe 'Schema with each and set rules' do
         ]
       }
 
-      expect(validation.(input).messages[:payments]).to eql([
-        [payments: [[method: [["method is missing"], nil]], input[:payments][1]]],
-        input[:payments]
-      ])
+      expect(validation.(input).messages).to eql(
+        payments: [
+          [{ method: [["method is missing"], nil] }, { amount: 4.56 }],
+          [{ method: "cc", amount: 1.23 }, { amount: 4.56 }]
+        ]
+      )
     end
 
     it 'validates type of the method value for each payment' do
@@ -48,10 +50,12 @@ RSpec.describe 'Schema with each and set rules' do
         ]
       }
 
-      expect(validation.(input).messages[:payments]).to eql([
-        [payments: [[method: [["method must be a string"], 12]], input[:payments][1]]],
-        input[:payments]
-      ])
+      expect(validation.(input).messages).to eql(
+        payments: [
+          [{ method: [["method must be a string"], 12] }, { method: 12, amount: 4.56 }],
+          [{ method: "cc", amount: 1.23 }, { method: 12, amount: 4.56 }]
+        ]
+      )
     end
 
     it 'validates type of the amount value for each payment' do
@@ -63,7 +67,7 @@ RSpec.describe 'Schema with each and set rules' do
       }
 
       expect(validation.(input).messages[:payments]).to eql([
-        [payments: [[amount: [["amount must be a float"], '4.56']], input[:payments][1]]],
+        [{ amount: [["amount must be a float"], '4.56'] }, input[:payments][1]],
         input[:payments]
       ])
     end

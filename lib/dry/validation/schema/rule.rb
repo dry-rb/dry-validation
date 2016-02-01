@@ -76,7 +76,16 @@ module Dry
           @keys = options.fetch(:keys, [name])
           @type = options.fetch(:type, :and)
           @options = options
-          @name = name.is_a?(::Hash) || target.id == name ? name : { target.id => name }
+          initialize_name(name)
+        end
+
+        def initialize_name(name)
+          @name =
+            if name.is_a?(::Symbol) && target.id != name
+              [target.id, name].flatten
+            else
+              name
+            end
         end
 
         def current_rule

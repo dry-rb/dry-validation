@@ -84,7 +84,7 @@ RSpec.describe Dry::Validation::Schema do
             :input, [
               :address, {city: "NY"},
               [
-                [:input, [:city, "NY", [[:val, [:city, [:predicate, [:min_size?, [3]]]]]]]],
+                [:input, [[:address, :city], "NY", [[:val, [[:address, :city], [:predicate, [:min_size?, [3]]]]]]]],
                 [:input, [:street, nil, [[:key, [:street, [:predicate, [:key?, [:street]]]]]]]],
                 [:input, [:country, nil, [[:key, [:country, [:predicate, [:key?, [:country]]]]]]]]
               ]
@@ -107,10 +107,12 @@ RSpec.describe Dry::Validation::Schema do
               [
                 [
                   :input, [
-                    :country, {code: "US", name: ""}, [
+                    [:address, :country], { code: 'US', name: '' }, [
                       [
                         :input, [
-                          :name, "", [[:val, [:name, [:predicate, [:filled?, []]]]]]
+                          [:address, :country, :name], '', [
+                            [:val, [[:address, :country, :name], [:predicate, [:filled?, []]]]]
+                          ]
                         ]
                       ]
                     ]
@@ -250,7 +252,7 @@ RSpec.describe Dry::Validation::Schema do
             :input, [
               :address, address_object,
               [
-                [:input, [:city, "NY", [[:val, [:city, [:predicate, [:min_size?, [3]]]]]]]],
+                [:input, [[:address, :city], "NY", [[:val, [[:address, :city], [:predicate, [:min_size?, [3]]]]]]]],
                 [:input, [:street, address_object, [[:attr, [:street, [:predicate, [:attr?, [:street]]]]]]]],
                 [:input, [:country, address_object, [[:attr, [:country, [:predicate, [:attr?, [:country]]]]]]]]
               ]
@@ -260,21 +262,29 @@ RSpec.describe Dry::Validation::Schema do
       end
 
       it 'validates address code and name values' do
-        input_object = input(input_data.merge(address: input_data[:address].merge(country: { code: 'US', name: '' })))
+        input_object = input(
+          input_data.merge(address: input_data[:address].merge(country: { code: 'US', name: '' }))
+        )
 
         country_object = input_object.address.country.class.from_hash(code: "US", name: "")
 
-        expect(validation.(input_object)).to match_array([
+        address_object = input_object.address.class.from_hash(
+          city: "NYC", street: "Street 1/2", country: country_object
+        )
+
+        expect(validation.(input_object).to_ary).to eql([
           [:error, [
             :input, [
-              :address, input_object.address.class.from_hash(city: "NYC", street: "Street 1/2", country: country_object),
+              :address, address_object,
               [
                 [
                   :input, [
-                    :country, country_object, [
+                    [:address, :country], country_object, [
                       [
                         :input, [
-                          :name, "", [[:val, [:name, [:predicate, [:filled?, []]]]]]
+                          [:address, :country, :name], '', [
+                            [:val, [[:address, :country, :name], [:predicate, [:filled?, []]]]]
+                          ]
                         ]
                       ]
                     ]

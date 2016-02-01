@@ -2,26 +2,23 @@ RSpec.describe Schema::Value do
   describe '#key' do
     subject(:value) { Schema::Value.new(:user) }
 
+    let(:expected_ast) do
+      [:and, [
+        [:key, [:address, [:predicate, [:key?, []]]]],
+        [:val, [[:user, :address], [:predicate, [:filled?, []]]]]
+      ]]
+    end
+
     it 'creates a rule for a specified key using a block' do
       value.key(:address, &:filled?)
 
-      expect(value.to_ast).to eql([
-        :and, [
-          [:key, [:address, [:predicate, [:key?, []]]]],
-          [:val, [:address, [:predicate, [:filled?, []]]]]
-        ]
-      ])
+      expect(value.to_ast).to eql(expected_ast)
     end
 
     it 'creates a rule for a specified key using a macro' do
       value.key(:address).required
 
-      expect(value.to_ast).to eql([
-        :and, [
-          [:key, [:address, [:predicate, [:key?, []]]]],
-          [:val, [{ user: :address }, [:predicate, [:filled?, []]]]]
-        ]
-      ])
+      expect(value.to_ast).to eql(expected_ast)
     end
   end
 
@@ -53,12 +50,12 @@ RSpec.describe Schema::Value do
               :payments, [
                 [:and, [
                   [:key, [:method, [:predicate, [:key?, []]]]],
-                  [:val, [:method, [:predicate, [:str?, []]]]]
+                  [:val, [[:payments, :method], [:predicate, [:str?, []]]]]
                 ]],
                 [:and, [
                   [:key, [:amount, [:predicate, [:key?, []]]]],
-                  [:val, [:amount, [:predicate, [:float?, []]]]]
-                ]],
+                  [:val, [[:payments, :amount], [:predicate, [:float?, []]]]]
+                ]]
               ]
             ]
           ]
@@ -78,7 +75,7 @@ RSpec.describe Schema::Value do
           [:val, [:user, [:predicate, [:hash?, []]]]],
           [:and, [
             [:key, [:email, [:predicate, [:key?, []]]]],
-            [:val, [{ user: :email }, [:predicate, [:filled?, []]]]]
+            [:val, [[:user, :email], [:predicate, [:filled?, []]]]]
           ]]
         ]
       ])
@@ -100,14 +97,14 @@ RSpec.describe Schema::Value do
           [:and, [
             [:key, [:address, [:predicate, [:key?, []]]]],
             [:and, [
-              [:val, [:address, [:predicate, [:hash?, []]]]],
-              [:set, [:address, [
+              [:val, [[:user, :address], [:predicate, [:hash?, []]]]],
+              [:set, [[:user, :address], [
                 [:and, [
                   [:key, [:city, [:predicate, [:key?, []]]]],
-                  [:val, [{:address=>:city}, [:predicate, [:filled?, []]]]]]],
+                  [:val, [[:user, :address, :city], [:predicate, [:filled?, []]]]]]],
                 [:and, [
                   [:key, [:zipcode, [:predicate, [:key?, []]]]],
-                  [:val, [{:address=>:zipcode}, [:predicate, [:filled?, []]]]]
+                  [:val, [[:user, :address, :zipcode], [:predicate, [:filled?, []]]]]
                   ]]
               ]]]
             ]]
@@ -126,7 +123,7 @@ RSpec.describe Schema::Value do
       expect(not_email.to_ast).to eql([
         :and, [
           [:key, [:email, [:predicate, [:key?, []]]]],
-          [:not, [:val, [:email, [:predicate, [:str?, []]]]]]
+          [:not, [:val, [[:user, :email], [:predicate, [:str?, []]]]]]
         ]
       ])
     end
