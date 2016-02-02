@@ -9,7 +9,7 @@ module Dry
       def initialize(messages, options = {})
         @messages = messages
         @options = Hash[options]
-        @hints = @options.delete(:hints) || {}
+        @hints = @options.fetch(:hints, {})
       end
 
       def call(ast)
@@ -39,13 +39,14 @@ module Dry
         if result.is_a?(Array)
           merge(result)
         else
-          result
+          result.each_with_object({}) do |(name, msgs), res|
+            if msgs.is_a?(Hash)
+              res[name] = msgs
+            else
+              res[name] = [(msgs[0] + (hints[name] || [])).uniq, msgs[1]]
+            end
+          end
         end
-      end
-
-      def visit_check(node)
-        name, other = node
-        messages[normalize_name(name), rule: name] || visit(other)
       end
 
       def visit_implication(node)
@@ -81,8 +82,8 @@ module Dry
 
       def merge(result)
         result.reduce do |a, e|
-          e.merge(a) do |_, l, r|
-            l.is_a?(Hash) ? l.merge(r) : l + r
+          e.merge(a) do |_, left, right|
+            left.is_a?(Hash) ? left.merge(right) : right + left
           end
         end
       end

@@ -20,6 +20,17 @@ module Dry
         with(name: [*Array(name), idx], input: input[idx]).(element.last.last)
       end
 
+      def visit_check(node)
+        name, other = node
+        message = messages[normalize_name(name), rule: rule]
+
+        if message
+          { name => [[message], input] }
+        else
+          visit(other)
+        end
+      end
+
       def visit_predicate(node)
         predicate, args = node
 
@@ -27,8 +38,8 @@ module Dry
           rule: rule, val_type: val_type, arg_type: args[0].class
         )
 
-        template = messages[predicate, lookup_options]
         tokens = __send__(:"options_for_#{predicate}", args).merge(name: rule)
+        template = messages[predicate, lookup_options.merge(tokens)]
 
         message = [[template % tokens], input]
 

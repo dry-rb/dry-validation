@@ -3,11 +3,33 @@ require 'dry/validation/error_compiler'
 module Dry
   module Validation
     class HintCompiler < ErrorCompiler
-      attr_reader :rules
+      attr_reader :rules, :excluded
+
+      EXCLUDED = [:none?].freeze
+
+      class Input < ErrorCompiler::Input
+        attr_reader :excluded
+
+        def initialize(messages, options)
+          super
+          @excluded = options.fetch(:excluded)
+        end
+
+        def visit_predicate(node)
+          predicate, _ = node
+
+          return {} if excluded.include?(predicate)
+
+          super.each_with_object({}) { |(name, msgs), result|
+            result[name] = msgs[0]
+          }
+        end
+      end
 
       def initialize(messages, options = {})
         super
         @rules = @options.delete(:rules)
+        @excluded = @options.fetch(:excluded, EXCLUDED)
       end
 
       def with(new_options)
@@ -20,32 +42,28 @@ module Dry
 
       def visit_or(node)
         left, right = node
-        [visit(left), Array(visit(right)).flatten.compact].compact
+        merge([visit(left), visit(right)])
       end
 
       def visit_and(node)
         left, right = node
-        [visit(left), Array(visit(right)).flatten.compact].compact
+        merge([visit(left), visit(right)])
       end
 
       def visit_implication(node)
         left, right = node
-        [visit(left), Array(visit(right)).flatten.compact].compact
+        merge([visit(left), visit(right)])
       end
 
       def visit_val(node)
-        _, predicate = node
-        Array(visit(predicate)).flatten.compact
+        name, predicate = node
+        input_visitor(name).visit(predicate)
       end
 
-      def visit_key(node)
-        name, _ = node
-        name
-      end
-
-      def visit_attr(node)
-        name, _ = node
-        name
+      def input_visitor(name)
+        HintCompiler::Input.new(
+          messages, options.merge(name: name, input: nil, excluded: excluded)
+        )
       end
 
       private

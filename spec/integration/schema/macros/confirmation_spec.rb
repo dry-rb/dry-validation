@@ -23,7 +23,10 @@ RSpec.describe 'Macros #confirmation' do
       )
 
       expect(validate.(password: 'foo', password_confirmation: 'fo').messages).to eql(
-        password_confirmation: [['does not match'], ['foo', 'fo']]
+        password_confirmation: [
+          ['does not match', 'password_confirmation must be filled'],
+          ['foo', 'fo']
+        ]
       )
     end
   end
