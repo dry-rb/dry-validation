@@ -20,7 +20,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     )
   end
 
-  describe '#call' do
+  describe '#call with flat inputs' do
     let(:ast) do
       [
         [:error, [:input, [:name, nil, [[:key, [:name, [:predicate, [:key?, []]]]]]]]],
@@ -38,6 +38,34 @@ RSpec.describe Dry::Validation::ErrorCompiler do
         age: [["age must be greater than 18"], 18],
         email: [["email must be filled"], ''],
         address: [["Please provide your address"], '']
+      )
+    end
+  end
+
+  describe '#call with check errors' do
+    let(:ast) do
+      [
+        [:error, [
+          :input, [
+            [:settings, :newsletter], [true, true], [
+              [
+                :check, [
+                  [:settings, :newsletter],
+                  [:implication, [
+                    [:res, [[:settings, :offers], [:predicate, [:true?, []]]]],
+                    [:res, [[:settings, :newsletter], [:predicate, [:false?, []]]]]]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]]
+      ]
+    end
+
+    it 'converts error ast into another format' do
+      expect(error_compiler.(ast)).to eql(
+        settings: { newsletter: [['newsletter must be false'], [true, true]] }
       )
     end
   end

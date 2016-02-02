@@ -21,7 +21,13 @@ module Dry
         template = messages[predicate, lookup_options]
         tokens = __send__(:"options_for_#{predicate}", args).merge(name: rule)
 
-        template % tokens
+        message = [[template % tokens], input]
+
+        if name.is_a?(Array)
+          [message, *name.reverse].reduce { |a, e| { e => a } }
+        else
+          { name => message }
+        end
       end
 
       def options_for_key?(*args)

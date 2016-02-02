@@ -29,11 +29,8 @@ module Dry
       end
 
       def visit_input(node)
-        name, input, other = node
-
-        messages = Array(input(name, input).(other))
-
-        { name => [messages, input] }
+        name, value, other = node
+        input(name, value).(other)
       end
 
       def visit_error(error)
@@ -81,13 +78,17 @@ module Dry
 
       def visit_val(node)
         _, predicate = node
-        Array(visit(predicate))
+        visit(predicate)
       end
 
       private
 
       def hints_for(name)
         hints[normalize_name(name)] || []
+      end
+
+      def normalize_name(name)
+        Array(name).join('.').to_sym
       end
 
       def merge(result)
