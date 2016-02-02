@@ -11,6 +11,15 @@ module Dry
         @val_type = input.class
       end
 
+      def input_visitor(new_name, value)
+        self.class.new(messages, options.merge(name: [*name, *new_name].uniq, input: value))
+      end
+
+      def visit_el(node)
+        idx, element = node
+        with(name: [*Array(name), idx], input: input[idx]).(element.last.last)
+      end
+
       def visit_predicate(node)
         predicate, args = node
 

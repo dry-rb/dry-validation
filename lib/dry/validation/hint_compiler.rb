@@ -3,11 +3,10 @@ require 'dry/validation/error_compiler'
 module Dry
   module Validation
     class HintCompiler < ErrorCompiler
-      attr_reader :messages, :rules, :options
+      attr_reader :rules
 
       def initialize(messages, options = {})
-        @messages = messages
-        @options = Hash[options]
+        super
         @rules = @options.delete(:rules)
       end
 
@@ -16,15 +15,7 @@ module Dry
       end
 
       def call
-        messages = Hash.new { |h, k| h[k] = [] }
-
-        rules.map { |node| visit(node) }.compact.each do |hints|
-          name, msgs = hints
-
-          messages[name].concat(msgs)
-        end
-
-        messages
+        super(rules)
       end
 
       def visit_or(node)
@@ -43,23 +34,8 @@ module Dry
       end
 
       def visit_val(node)
-        name, predicate = node
-        Array(visit(predicate, name)).flatten.compact
-      end
-
-      def visit_predicate(node, name)
-        predicate_name, args = node
-
-        lookup_options = options.merge(rule: name, arg_type: args[0].class)
-
-        template = messages[predicate_name, lookup_options]
-        predicate_opts = visit(node, args)
-
-        return unless predicate_opts
-
-        tokens = predicate_opts.merge(name: name)
-
-        template % tokens
+        _, predicate = node
+        Array(visit(predicate)).flatten.compact
       end
 
       def visit_key(node)
@@ -72,8 +48,10 @@ module Dry
         name
       end
 
-      def method_missing(name, *args)
-        nil
+      private
+
+      def method_missing(*)
+        {}
       end
     end
   end

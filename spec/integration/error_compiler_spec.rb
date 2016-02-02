@@ -70,6 +70,31 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     end
   end
 
+  describe '#call with arr inputs' do
+    let(:ast) do
+      [[:error, [:input, [
+        :payments,
+        [{ method: "cc", amount: 1.23 }, { amount: 4.56 }], [
+          [:el, [1, [:input, [:payments, { amount: 4.56 }, [
+            [:input, [
+              :method, nil, [[:key, [:method, [:predicate, [:key?, [:method]]]]]]
+            ]]]
+          ]]]]]]
+        ]]
+      ]
+    end
+
+    it 'converts error ast into another format' do
+      expect(error_compiler.(ast)).to eql(
+        payments: {
+          1 => {
+            method: [['+method+ key is missing in the hash'], nil]
+          }
+        }
+      )
+    end
+  end
+
   describe '#visit with an :input node' do
     describe ':empty?' do
       it 'returns valid message' do

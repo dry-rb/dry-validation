@@ -20,7 +20,7 @@ module Dry
         self.class.new(messages, options.merge(new_options))
       end
 
-      def input(name, input)
+      def input_visitor(name, input)
         Input.new(messages, options.merge(name: name, input: input))
       end
 
@@ -30,7 +30,7 @@ module Dry
 
       def visit_input(node)
         name, value, other = node
-        input(name, value).(other)
+        input_visitor(name, value).(other)
       end
 
       def visit_error(error)
@@ -41,14 +41,6 @@ module Dry
         else
           result
         end
-      end
-
-      def visit_arr(node)
-        raise NotImplementedError
-      end
-
-      def visit_el(node)
-        raise NotImplementedError
       end
 
       def visit_check(node)
@@ -82,10 +74,6 @@ module Dry
       end
 
       private
-
-      def hints_for(name)
-        hints[normalize_name(name)] || []
-      end
 
       def normalize_name(name)
         Array(name).join('.').to_sym
