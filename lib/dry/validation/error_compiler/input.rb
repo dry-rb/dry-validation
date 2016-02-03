@@ -25,7 +25,7 @@ module Dry
         message = messages[normalize_name(name), rule: rule]
 
         if message
-          { name => [[message], input] }
+          { name => [message] }
         else
           visit(other)
         end
@@ -41,7 +41,7 @@ module Dry
         tokens = __send__(:"options_for_#{predicate}", args).merge(name: rule)
         template = messages[predicate, lookup_options.merge(tokens)]
 
-        message = [[template % tokens], input]
+        message = [template % tokens]
 
         if name.is_a?(Array)
           [message, *name.reverse].reduce { |a, e| { e => a } }

@@ -29,7 +29,7 @@ RSpec.describe 'Schema with xor rules' do
     it 'fails when both options are selected' do
       messages = validate.(eat_cake: 'yes!', have_cake: 'yes!').messages[:be_reasonable]
 
-      expect(messages).to eql([['you cannot eat cake and have cake!'], ['yes!', 'yes!']])
+      expect(messages).to eql(['you cannot eat cake and have cake!'])
     end
   end
 end

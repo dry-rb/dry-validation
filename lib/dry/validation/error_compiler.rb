@@ -39,13 +39,7 @@ module Dry
         if result.is_a?(Array)
           merge(result)
         else
-          result.each_with_object({}) do |(name, msgs), res|
-            if msgs.is_a?(Hash)
-              res[name] = msgs
-            else
-              res[name] = [(msgs[0] + (hints[name] || [])).uniq, msgs[1]]
-            end
-          end
+          merge_hints(result)
         end
       end
 
@@ -75,6 +69,29 @@ module Dry
       end
 
       private
+
+      def merge_hints(messages)
+        messages.each_with_object({}) do |(name, msgs), res|
+          if msgs.is_a?(Hash)
+            res[name] = merge_hints(msgs)
+          else
+            all_msgs = msgs + hints_for(name)
+            all_msgs.uniq!
+
+            res[name] = all_msgs
+          end
+        end
+      end
+
+      def hints_for(name)
+        messages = hints[name] || []
+
+        if messages.is_a?(Hash)
+          []
+        else
+          messages
+        end
+      end
 
       def normalize_name(name)
         Array(name).join('.').to_sym

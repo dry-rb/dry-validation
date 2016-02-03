@@ -20,9 +20,7 @@ module Dry
 
           return {} if excluded.include?(predicate)
 
-          super.each_with_object({}) { |(name, msgs), result|
-            result[name] = msgs[0]
-          }
+          super
         end
       end
 
@@ -40,6 +38,11 @@ module Dry
         super(rules)
       end
 
+      def visit_set(node)
+        _, other = node
+        merge(other.map { |el| visit(el) })
+      end
+
       def visit_or(node)
         left, right = node
         merge([visit(left), visit(right)])
@@ -53,6 +56,11 @@ module Dry
       def visit_implication(node)
         _, right = node
         visit(right)
+      end
+
+      def visit_key(node)
+        name, predicate = node
+        input_visitor(name).visit(predicate)
       end
 
       def visit_val(node)

@@ -35,7 +35,7 @@ RSpec.describe 'Schema with each and set rules' do
       }
 
       expect(validation.(input).messages).to eql(
-        payments: { 1 => { method: [['method is missing'], nil] } }
+        payments: { 1 => { method: ['method is missing'] } }
       )
     end
 
@@ -48,7 +48,7 @@ RSpec.describe 'Schema with each and set rules' do
       }
 
       expect(validation.(input).messages).to eql(
-        payments: { 1 => { method: [['method must be a string'], 12] } }
+        payments: { 1 => { method: ['method must be a string'] } }
       )
     end
 
@@ -61,7 +61,7 @@ RSpec.describe 'Schema with each and set rules' do
       }
 
       expect(validation.(input).messages).to eql(
-        payments: { 1 => { amount: [['amount must be a float'], '4.56'] } }
+        payments: { 1 => { amount: ['amount must be a float'] } }
       )
     end
   end
