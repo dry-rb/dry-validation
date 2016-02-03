@@ -9,6 +9,12 @@ RSpec.describe 'Validation hints' do
         age: [['age must be an integer', 'age must be greater than 18'], '17']
       )
     end
+
+    it 'skips type-check rules' do
+      expect(validation.(age: 17).messages).to eql(
+        age: [['age must be greater than 18'], 17]
+      )
+    end
   end
 
   context 'with yaml messages' do

@@ -46,13 +46,13 @@ module Dry
       end
 
       def visit_and(node)
-        left, right = node
-        merge([visit(left), visit(right)])
+        _, right = node
+        visit(right)
       end
 
       def visit_implication(node)
-        left, right = node
-        merge([visit(left), visit(right)])
+        _, right = node
+        visit(right)
       end
 
       def visit_val(node)

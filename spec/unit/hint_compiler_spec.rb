@@ -42,8 +42,8 @@ RSpec.describe HintCompiler, '#call' do
 
   it 'returns hint messages for given rules' do
     expect(compiler.call).to eql(
-      age: ['age must be an integer', 'age must be greater than 18'],
-      height: ['height must be an integer', 'height must be greater than 180'],
+      age: ['age must be greater than 18'],
+      height: ['height must be greater than 180'],
     )
   end
 end
