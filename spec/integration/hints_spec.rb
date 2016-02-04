@@ -6,7 +6,13 @@ RSpec.describe 'Validation hints' do
   shared_context '#messages' do
     it 'provides hints for additional rules that were not checked' do
       expect(validation.(age: '17').messages).to eql(
-        age: [['age must be an integer', 'age must be greater than 18'], '17']
+        age: ['age must be an integer', 'age must be greater than 18']
+      )
+    end
+
+    it 'skips type-check rules' do
+      expect(validation.(age: 17).messages).to eql(
+        age: ['age must be greater than 18']
       )
     end
   end

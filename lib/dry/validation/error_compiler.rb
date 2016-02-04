@@ -9,7 +9,7 @@ module Dry
       def initialize(messages, options = {})
         @messages = messages
         @options = Hash[options]
-        @hints = @options.delete(:hints) || {}
+        @hints = @options.fetch(:hints, {})
       end
 
       def call(ast)
@@ -20,165 +20,92 @@ module Dry
         self.class.new(messages, options.merge(new_options))
       end
 
-      def visit(node, *args)
-        __send__(:"visit_#{node[0]}", node[1], *args)
+      def input_visitor(name, input)
+        Input.new(messages, options.merge(name: name, input: input))
+      end
+
+      def visit(node)
+        __send__(:"visit_#{node[0]}", node[1])
+      end
+
+      def visit_input(node)
+        name, value, other = node
+        input_visitor(name, value).(other)
       end
 
       def visit_error(error)
-        visit(error)
-      end
+        result = visit(error)
 
-      def visit_input(node, *args)
-        path, value, rules = node
-        name = normalize_name(path)
-
-        parent, _ = args
-
-        err_hash = ([errors_for(rules, name, value)] + Array(path).reverse)
-          .reduce { |a, e| { e => a } }
-
-        if parent && err_hash.key?(parent)
-          err_hash[parent]
+        if result.is_a?(Array)
+          merge(result)
         else
-          err_hash
+          merge_hints(result)
         end
       end
 
-      def visit_group(_, name, _)
-        messages[name, rule: name]
-      end
-
-      def visit_check(node, *args)
-        name, other = node
-        messages[normalize_name(name), rule: name] || visit(other, *args)
-      end
-
-      def visit_implication(node, *args)
+      def visit_implication(node)
         _, right = node
-        visit(right, *args)
+        visit(right)
       end
 
-      def visit_res(node, *args)
+      def visit_res(node)
         _, predicate = node
-        visit(predicate, *args)
+        visit(predicate)
       end
 
-      def visit_key(rule, *args)
+      def visit_key(rule)
         _, predicate = rule
-        visit(predicate, *args)
+        visit(predicate)
       end
 
-      def visit_attr(rule, *args)
+      def visit_attr(rule)
         _, predicate = rule
-        visit(predicate, *args)
+        visit(predicate)
       end
 
-      def visit_val(rule, *args)
-        _, predicate = rule
-        visit(predicate, *args)
-      end
-
-      def visit_predicate(predicate, identifier, value)
-        predicate_name, args = predicate
-
-        name = identifier.to_s.split(KEY_SEPARATOR).last
-
-        lookup_options = options.merge(
-          rule: name, val_type: value.class, arg_type: args[0].class
-        )
-
-        template = messages[predicate_name, lookup_options]
-        tokens = visit(predicate, value).merge(name: name)
-
-        template % tokens
-      end
-
-      def visit_key?(*args, _value)
-        { name: args[0][0] }
-      end
-
-      def visit_attr?(*args, _value)
-        { name: args[0][0] }
-      end
-
-      def visit_exclusion?(*args, _value)
-        { list: args[0][0].join(', ') }
-      end
-
-      def visit_inclusion?(*args, _value)
-        { list: args[0][0].join(', ') }
-      end
-
-      def visit_gt?(*args, value)
-        { num: args[0][0], value: value }
-      end
-
-      def visit_gteq?(*args, value)
-        { num: args[0][0], value: value }
-      end
-
-      def visit_lt?(*args, value)
-        { num: args[0][0], value: value }
-      end
-
-      def visit_lteq?(*args, value)
-        { num: args[0][0], value: value }
-      end
-
-      def visit_int?(*args, value)
-        { num: args[0][0], value: value }
-      end
-
-      def visit_max_size?(*args, value)
-        { num: args[0][0], value: value }
-      end
-
-      def visit_min_size?(*args, value)
-        { num: args[0][0], value: value }
-      end
-
-      def visit_eql?(*args, value)
-        { eql_value: args[0][0], value: value }
-      end
-
-      def visit_size?(*args, value)
-        num = args[0][0]
-
-        if num.is_a?(Range)
-          { left: num.first, right: num.last, value: value }
-        else
-          { num: args[0][0], value: value }
-        end
+      def visit_val(node)
+        _, predicate = node
+        visit(predicate)
       end
 
       private
 
-      def errors_for(rules, name, value)
-        hints = hints_for(name)
-        errors = rules.map { |rule| visit(rule, name, value) }.flatten
+      def merge_hints(messages)
+        messages.each_with_object({}) do |(name, msgs), res|
+          if msgs.is_a?(Hash)
+            res[name] = merge_hints(msgs)
+          else
+            all_msgs = msgs + hints_for(name)
+            all_msgs.uniq!
 
-        [(errors + hints).uniq, value]
-      end
-
-      def hints_for(name)
-        hints[name] || []
-      end
-
-      def normalize_name(name)
-        Array(name).join(KEY_SEPARATOR).to_sym
-      end
-
-      def merge(result)
-        result.reduce do |a, e|
-          e.merge(a) do |_, l, r|
-            l.is_a?(Hash) ? l.merge(r) : l + r
+            res[name] = all_msgs
           end
         end
       end
 
-      def method_missing(_meth, *args)
-        { value: args[1] }
+      def hints_for(name)
+        messages = hints[name] || []
+
+        if messages.is_a?(Hash)
+          []
+        else
+          messages
+        end
+      end
+
+      def normalize_name(name)
+        Array(name).join('.').to_sym
+      end
+
+      def merge(result)
+        result.reduce do |a, e|
+          e.merge(a) do |_, left, right|
+            left.is_a?(Hash) ? left.merge(right) : right + left
+          end
+        end
       end
     end
   end
 end
+
+require 'dry/validation/error_compiler/input'

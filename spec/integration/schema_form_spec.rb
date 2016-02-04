@@ -30,12 +30,31 @@ RSpec.describe Dry::Validation::Schema::Form do
       it 'returns compiled error messages' do
         result = validation.('email' => '', 'age' => '19')
 
-        expect(result.messages).to match_array([
-          [:email, [['email must be filled'], '']],
-          [:address, [['address is missing'], nil]]
-        ])
+        expect(result.messages).to eql(
+          email: ['email must be filled'],
+          address: ['address is missing']
+        )
 
         expect(result.output).to eql(email: '', age: 19)
+      end
+
+      it 'returns hints for nested data' do
+        result = validation.(
+          'email' => 'jane@doe.org',
+          'age' => '19',
+          'address' => {
+            'city' => '',
+            'street' => 'Street 1/2',
+            'loc' => { 'lat' => '123.456', 'lng' => '' }
+          }
+        )
+
+        expect(result.messages).to eql(
+          address: {
+            loc: { lng: ['lng must be filled'] },
+            city: ['city must be filled']
+          }
+        )
       end
     end
 

@@ -46,9 +46,9 @@ RSpec.describe Dry::Validation::Schema do
 
     describe '#messages' do
       it 'returns compiled error messages' do
-        expect(validation.(input.merge(email: '')).messages).to match_array([
-          [:email, [['email must be filled'], '']]
-        ])
+        expect(validation.(input.merge(email: '')).messages).to eql(
+          email: ['email must be filled']
+        )
       end
     end
 
@@ -130,13 +130,16 @@ RSpec.describe Dry::Validation::Schema do
             :input, [
               :phone_numbers, ["123", 312],
               [
-                [
-                  :input, [
-                    :phone_numbers, 312, [
-                      [:val, [:phone_numbers, [:predicate, [:str?, []]]]]
+                [:el, [
+                  1,
+                  [
+                    :input, [
+                      :phone_numbers, 312, [
+                        [:val, [:phone_numbers, [:predicate, [:str?, []]]]]
+                      ]
                     ]
                   ]
-                ]
+                ]]
               ]
             ]
           ]]
@@ -192,9 +195,9 @@ RSpec.describe Dry::Validation::Schema do
 
     describe '#messages' do
       it 'returns compiled error messages' do
-        expect(validation.(input(input_data.merge(email: ''))).messages).to match_array([
-          [:email, [["email must be filled"], '']]
-        ])
+        expect(validation.(input(input_data.merge(email: ''))).messages).to eql(
+          email: ['email must be filled']
+        )
       end
     end
 
@@ -302,13 +305,9 @@ RSpec.describe Dry::Validation::Schema do
         expect(validation.(input_object)).to match_array([
           [:error, [
             :input, [
-              :phone_numbers, ["123", 312],[
-                [
-                  :input, [
-                    :phone_numbers, 312, [
-                      [:val, [:phone_numbers, [:predicate, [:str?, []]]]]
-                    ]
-                  ]
+              :phone_numbers, ["123", 312], [
+                [:el, [1, [:input, [:phone_numbers, 312, [
+                  [:val, [:phone_numbers, [:predicate, [:str?, []]]]]]]]]
                 ]
               ]
             ]

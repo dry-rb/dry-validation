@@ -6,9 +6,9 @@ RSpec.describe Dry::Validation do
   shared_context 'schema with customized messages' do
     describe '#messages' do
       it 'returns compiled error messages' do
-        expect(validation.(email: '').messages).to match_array([
-          [:email, [['Please provide your email'], '']]
-        ])
+        expect(validation.(email: '').messages).to eql(
+          email: ['Please provide your email']
+        )
       end
     end
   end

@@ -18,6 +18,7 @@ env:
     - JRUBY_OPTS='--dev -J-Xmx1024M'
 matrix:
   allow_failures:
+    - rvm: rbx-2
     - rvm: ruby-head
     - rvm: jruby-head
     - rvm: jruby-9000

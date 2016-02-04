@@ -18,12 +18,12 @@ RSpec.describe 'Macros #confirmation' do
       expect(validate.(password: 'foo', password_confirmation: 'foo')).to be_success
 
       expect(validate.(password: 'fo', password_confirmation: '').messages).to eql(
-        password: [['password size cannot be less than 3'], 'fo'],
-        password_confirmation: [['password_confirmation must be filled'], '']
+        password: ['password size cannot be less than 3'],
+        password_confirmation: ['password_confirmation must be filled']
       )
 
       expect(validate.(password: 'foo', password_confirmation: 'fo').messages).to eql(
-        password_confirmation: [['does not match'], ['foo', 'fo']]
+        password_confirmation: ['does not match', 'password_confirmation must be filled']
       )
     end
   end

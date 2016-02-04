@@ -3,12 +3,31 @@ require 'dry/validation/error_compiler'
 module Dry
   module Validation
     class HintCompiler < ErrorCompiler
-      attr_reader :messages, :rules, :options
+      attr_reader :rules, :excluded
+
+      EXCLUDED = [:none?].freeze
+
+      class Input < ErrorCompiler::Input
+        attr_reader :excluded
+
+        def initialize(messages, options)
+          super
+          @excluded = options.fetch(:excluded)
+        end
+
+        def visit_predicate(node)
+          predicate, _ = node
+
+          return {} if excluded.include?(predicate)
+
+          super
+        end
+      end
 
       def initialize(messages, options = {})
-        @messages = messages
-        @options = Hash[options]
+        super
         @rules = @options.delete(:rules)
+        @excluded = @options.fetch(:excluded, EXCLUDED)
       end
 
       def with(new_options)
@@ -16,64 +35,49 @@ module Dry
       end
 
       def call
-        messages = Hash.new { |h, k| h[k] = [] }
+        super(rules)
+      end
 
-        rules.map { |node| visit(node) }.compact.each do |hints|
-          name, msgs = hints
-
-          messages[name].concat(msgs)
-        end
-
-        messages
+      def visit_set(node)
+        _, other = node
+        merge(other.map { |el| visit(el) })
       end
 
       def visit_or(node)
         left, right = node
-        [visit(left), Array(visit(right)).flatten.compact].compact
+        merge([visit(left), visit(right)])
       end
 
       def visit_and(node)
-        left, right = node
-        [visit(left), Array(visit(right)).flatten.compact].compact
+        _, right = node
+        visit(right)
       end
 
       def visit_implication(node)
-        left, right = node
-        [visit(left), Array(visit(right)).flatten.compact].compact
+        _, right = node
+        visit(right)
+      end
+
+      def visit_key(node)
+        name, predicate = node
+        input_visitor(name).visit(predicate)
       end
 
       def visit_val(node)
         name, predicate = node
-        Array(visit(predicate, name)).flatten.compact
+        input_visitor(name).visit(predicate)
       end
 
-      def visit_predicate(node, name)
-        predicate_name, args = node
-
-        lookup_options = options.merge(rule: name, arg_type: args[0].class)
-
-        template = messages[predicate_name, lookup_options]
-        predicate_opts = visit(node, args)
-
-        return unless predicate_opts
-
-        tokens = predicate_opts.merge(name: name)
-
-        template % tokens
+      def input_visitor(name)
+        HintCompiler::Input.new(
+          messages, options.merge(name: name, input: nil, excluded: excluded)
+        )
       end
 
-      def visit_key(node)
-        name, _ = node
-        name
-      end
+      private
 
-      def visit_attr(node)
-        name, _ = node
-        name
-      end
-
-      def method_missing(name, *args)
-        nil
+      def method_missing(*)
+        {}
       end
     end
   end
