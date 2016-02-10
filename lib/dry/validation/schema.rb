@@ -1,6 +1,7 @@
 require 'dry/logic/predicates'
 require 'dry/logic/rule_compiler'
 
+require 'dry/validation/schema/key'
 require 'dry/validation/schema/value'
 require 'dry/validation/error'
 require 'dry/validation/messages'

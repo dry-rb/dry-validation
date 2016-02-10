@@ -2,9 +2,9 @@ module Dry
   module Validation
     class Schema
       class Sourced
-        include Dry::Equalizer(:id, :source, :target)
+        include Dry::Equalizer(:name, :source, :target)
 
-        attr_reader :source, :target, :id
+        attr_reader :source, :target, :name
 
         def self.new(source, target)
           if target.class == Sourced
@@ -16,8 +16,8 @@ module Dry
 
         def initialize(source, target)
           @source = source
+          @name = source.name
           @target = target
-          @id = target.id
         end
 
         def for(source)
@@ -50,12 +50,12 @@ module Dry
           target.key(*args, &block)
         end
 
-        def value(id)
-          target.value(id)
+        def value(name)
+          target.value(name)
         end
 
-        def rule(id, &block)
-          target.rule(id, &block)
+        def rule(name, &block)
+          target.rule(name, &block)
           self
         end
 

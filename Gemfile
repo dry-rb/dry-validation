@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'dry-logic', github: 'dryrb/dry-logic', branch: 'master'
+gem 'dry-types', github: 'dryrb/dry-types', branch: 'master'
+gem 'dry-logic', github: 'dryrb/dry-logic', branch: 'refactor'
 
 group :test do
   gem 'i18n'

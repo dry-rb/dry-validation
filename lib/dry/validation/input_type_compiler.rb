@@ -1,5 +1,5 @@
-require 'dry/data'
-require 'dry/data/compiler'
+require 'dry/types'
+require 'dry/types/compiler'
 
 module Dry
   module Validation
@@ -22,7 +22,7 @@ module Dry
       DEFAULT_TYPE_NODE = [[:type, 'string']].freeze
 
       def initialize
-        @type_compiler = Dry::Data::Compiler.new(Dry::Data)
+        @type_compiler = Dry::Types::Compiler.new(Dry::Types)
       end
 
       def call(ast)
