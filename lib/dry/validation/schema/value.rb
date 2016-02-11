@@ -21,15 +21,15 @@ module Dry
           key_rule = named(name).key?(name)
 
           if block
-            result = yield(Key.new(name))
-            add_rule(key_rule.and(create_rule(result.to_ast)))
+            key = Key.new(name).instance_eval(&block)
+            add_rule(key_rule.and(create_rule(key.to_ast)))
           else
             key_rule
           end
         end
 
         def each(&block)
-          result = yield(Value.new)
+          result = Value.new(name).instance_eval(&block)
           create_rule([:each, result.to_ast])
         end
 
@@ -50,15 +50,15 @@ module Dry
         end
 
         def method_missing(meth, *args, &block)
-          key_rule = create_rule([:val, [:predicate, [meth, args]]])
+          val_rule = create_rule([:val, [:predicate, [meth, args]]])
 
           if block
-            result = yield(Value.new)
-            new_rule = create_rule([:and, [key_rule.to_ast, result.to_ast]])
+            val = Value.new.instance_eval(&block)
+            new_rule = create_rule([:and, [val_rule.to_ast, val.to_ast]])
 
             add_rule(new_rule)
           else
-            key_rule
+            val_rule
           end
         end
       end

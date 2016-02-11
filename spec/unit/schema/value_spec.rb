@@ -28,10 +28,10 @@ RSpec.describe Schema::Value do
     subject(:value) { Schema::Value.new }
 
     it 'creates a rule for specified keys within the nested blocks' do
-      rule = value.key(:address) do |address|
-        address.key(:location) do |loc|
-          loc.key(:lat, &:filled?)
-          loc.key(:lng, &:filled?)
+      rule = value.key(:address) do
+        key(:location) do
+          key(:lat, &:filled?)
+          key(:lng, &:filled?)
         end
       end
 
@@ -87,9 +87,7 @@ RSpec.describe Schema::Value do
     subject(:value) { Schema::Value.new }
 
     it 'creates an each rule with another rule returned from the block' do
-      rule = value.each do |element|
-        element.key?(:method)
-      end
+      rule = value.each { key?(:method) }
 
       expect(rule.to_ast).to eql(
         [:each, [:val, [:predicate, [:key?, [:method]]]]]
@@ -175,7 +173,7 @@ RSpec.describe Schema::Value do
     subject(:user) { Schema::Value.new }
 
     it 'builds a negated rule' do
-      not_email = user.key(:email) { |email| email.str?.not }
+      not_email = user.key(:email) { str?.not }
 
       expect(not_email.to_ast).to eql([
         :and, [

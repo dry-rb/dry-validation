@@ -25,8 +25,8 @@ module Dry
           key_rule = Value.new(name).key?(name)
 
           if block
-            result = yield(Key.new(name))
-            add_rule(key_rule.and(create_rule(result.to_ast)))
+            key = Key.new(name).instance_eval(&block)
+            add_rule(key_rule.and(create_rule(key.to_ast)))
           else
             key_rule
           end
@@ -34,6 +34,12 @@ module Dry
 
         def add_rule(rule)
           rules << rule
+          self
+        end
+
+        def not
+          negated = create_rule([:not, to_ast])
+          @rules = [negated]
           self
         end
 
@@ -47,10 +53,15 @@ module Dry
           predicate = [:predicate, [meth, args]]
 
           if block
-            result = yield(Value.new(name))
-            create_rule([:key, [name, [:and, [[:val, predicate], result.to_ast]]]])
+            val = Value.new(name).instance_eval(&block)
+
+            add_rule(
+              create_rule([:key, [name, [:and, [[:val, predicate], val.to_ast]]]])
+            )
           else
-            create_rule([:key, [name, predicate]])
+            rule = create_rule([:key, [name, predicate]])
+            add_rule(rule)
+            rule
           end
         end
       end

@@ -1,7 +1,7 @@
 RSpec.describe Schema::Key do
-  subject(:user) { Schema::Key.new(:user) }
-
   describe '#key?' do
+    subject(:user) { Schema::Key.new(:user) }
+
     it 'returns a key rule' do
       rule = user.key?(:address)
 
@@ -9,8 +9,8 @@ RSpec.describe Schema::Key do
     end
 
     it 'returns a key rule & disjunction rule created within the block' do
-      rule = user.hash? do |value|
-        value.key(:email) { |email| email.none? | email.filled? }
+      rule = user.hash? do
+        key(:email) { none? | filled? }
       end
 
       expect(rule.to_ast).to eql([
