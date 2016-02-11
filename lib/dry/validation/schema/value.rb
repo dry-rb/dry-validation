@@ -22,7 +22,7 @@ module Dry
 
           if block
             result = yield(Key.new(name))
-            add_rule(key_rule.and(result))
+            add_rule(key_rule.and(create_rule(result.to_ast)))
           else
             key_rule
           end

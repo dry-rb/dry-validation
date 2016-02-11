@@ -24,6 +24,65 @@ RSpec.describe Schema::Value do
     end
   end
 
+  describe '#key deeply nested' do
+    subject(:value) { Schema::Value.new }
+
+    it 'creates a rule for specified keys within the nested blocks' do
+      rule = value.key(:address) do |address|
+        address.key(:location) do |loc|
+          loc.key(:lat, &:filled?)
+          loc.key(:lng, &:filled?)
+        end
+      end
+
+      expect(rule.to_ast).to eql([
+        :and, [
+          [:val, [:predicate, [:key?, [:address]]]],
+          [:and, [
+            [:val, [:predicate, [:key?, [:location]]]],
+            [:set, [
+              [:and, [
+                [:val, [:predicate, [:key?, [:lat]]]],
+                [:key, [:lat, [:predicate, [:filled?, []]]]]]
+              ],
+              [:and, [
+                [:val, [:predicate, [:key?, [:lng]]]],
+                [:key, [:lng, [:predicate, [:filled?, []]]]]
+              ]]
+            ]]
+          ]]
+        ]
+      ])
+    end
+  end
+
+  describe '#key with multiple inner-keys' do
+    subject(:value) { Schema::Value.new }
+
+    it 'creates a rule for specified keys within the nested block' do
+      rule = value.key(:address) do |address|
+        address.key(:city, &:filled?)
+        address.key(:zipcode, &:filled?)
+      end
+
+      expect(rule.to_ast).to eql([
+        :and, [
+          [:val, [:predicate, [:key?, [:address]]]],
+          [:set, [
+            [:and, [
+              [:val, [:predicate, [:key?, [:city]]]],
+              [:key, [:city, [:predicate, [:filled?, []]]]]]
+            ],
+            [:and, [
+              [:val, [:predicate, [:key?, [:zipcode]]]],
+              [:key, [:zipcode, [:predicate, [:filled?, []]]]]
+            ]]
+          ]]
+        ]
+      ])
+    end
+  end
+
   describe '#each' do
     subject(:value) { Schema::Value.new }
 

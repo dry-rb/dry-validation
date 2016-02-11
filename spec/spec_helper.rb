@@ -24,6 +24,12 @@ class Schema::Value < BasicObject
   end
 end
 
+class Schema::Key < BasicObject
+  def inspect
+    to_ast.inspect
+  end
+end
+
 class Schema::Rule < BasicObject
   def inspect
     to_ast.inspect
