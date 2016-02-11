@@ -1,7 +1,28 @@
-RSpec.describe Dry::Validation::Schema do
-  subject(:validation) { schema.new }
+RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
+  subject(:validate) { schema.new }
 
-  describe 'defining key-based schema (hash-like)' do
+  describe 'with a flat structure' do
+    let(:schema) do
+      Class.new(Dry::Validation::Schema) do
+        key(:email).required
+
+        key(:age) do |age|
+          age.none? | (age.int? & age.gt?(18))
+        end
+      end
+    end
+
+    it 'passes when input is valid' do
+      expect(validate.(email: 'jane@doe', age: 19)).to be_success
+      expect(validate.(email: 'jane@doe', age: nil)).to be_success
+    end
+
+    it 'fails when input is not valid' do
+      expect(validate.(email: 'jane@doe', age: 17)).to_not be_success
+    end
+  end
+
+  describe 'with nested structures' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
         key(:email) { |email| email.filled? }
@@ -46,7 +67,7 @@ RSpec.describe Dry::Validation::Schema do
 
     describe '#messages' do
       it 'returns compiled error messages' do
-        expect(validation.(input.merge(email: '')).messages).to eql(
+        expect(validate.(input.merge(email: '')).messages).to eql(
           email: ['email must be filled']
         )
       end
@@ -54,11 +75,11 @@ RSpec.describe Dry::Validation::Schema do
 
     describe '#call' do
       it 'passes when attributes are valid' do
-        expect(validation.(input)).to be_success
+        expect(validate.(input)).to be_success
       end
 
       it 'validates presence of an email and min age value' do
-        expect(validation.(input.merge(email: '', age: 18))).to match_array([
+        expect(validate.(input.merge(email: '', age: 18))).to match_array([
           [:error, [:input, [:age, 18, [[:key, [:age, [:predicate, [:gt?, [18]]]]]]]]],
           [:error, [:input, [:email, "", [[:key, [:email, [:predicate, [:filled?, []]]]]]]]]
         ])
@@ -71,7 +92,7 @@ RSpec.describe Dry::Validation::Schema do
           address: input[:address], phone_numbers: input[:phone_numbers]
         }
 
-        expect(validation.(attrs)).to match_array([
+        expect(validate.(attrs)).to match_array([
           [:error, [:input, [:age, "18", [[:key, [:age, [:predicate, [:int?, []]]]]]]]],
           [:error, [:input, [:email, attrs, [[:val, [:email, [:predicate, [:key?, [:email]]]]]]]]]
         ])
@@ -80,7 +101,7 @@ RSpec.describe Dry::Validation::Schema do
       it 'validates presence of the address and phone_number keys' do
         attrs = { email: 'jane@doe.org', age: 19 }
 
-        expect(validation.(attrs)).to match_array([
+        expect(validate.(attrs)).to match_array([
           [:error, [:input, [:address, attrs, [[:val, [:address, [:predicate, [:key?, [:address]]]]]]]]],
           [:error, [:input, [:phone_numbers, attrs, [[:val, [:phone_numbers, [:predicate, [:key?, [:phone_numbers]]]]]]]]]
         ])
@@ -89,7 +110,7 @@ RSpec.describe Dry::Validation::Schema do
       it 'validates presence of keys under address and min size of the city value' do
         attrs = input.merge(address: { city: 'NY' })
 
-        expect(validation.(attrs)).to match_array([
+        expect(validate.(attrs)).to match_array([
           [:error, [
             :input, [
               :address, { city: "NY" },
@@ -104,7 +125,7 @@ RSpec.describe Dry::Validation::Schema do
       end
 
       it 'validates address type' do
-        expect(validation.(input.merge(address: 'totally not a hash'))).to match_array([
+        expect(validate.(input.merge(address: 'totally not a hash'))).to match_array([
           [:error, [
             :input, [:address, "totally not a hash", [
               [:key, [:address, [:predicate, [:hash?, []]]]]]]]
@@ -113,7 +134,7 @@ RSpec.describe Dry::Validation::Schema do
       end
 
       it 'validates address code and name values' do
-        expect(validation.(input.merge(address: input[:address].merge(country: { code: 'US', name: '' })))).to match_array([
+        expect(validate.(input.merge(address: input[:address].merge(country: { code: 'US', name: '' })))).to match_array([
           [:error, [
             :input, [
               :address, {city: "NYC", street: "Street 1/2", country: {code: "US", name: ""}},
@@ -138,7 +159,7 @@ RSpec.describe Dry::Validation::Schema do
       end
 
       it 'validates each phone number' do
-        expect(validation.(input.merge(phone_numbers: ['123', 312]))).to match_array([
+        expect(validate.(input.merge(phone_numbers: ['123', 312]))).to match_array([
           [:error, [
             :input, [
               :phone_numbers, ["123", 312],

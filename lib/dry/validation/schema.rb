@@ -57,28 +57,6 @@ module Dry
         end
       end
 
-      def self.rule(identifier, &block)
-        name, _ = Array(identifier).flatten
-        key = keys[name]
-
-        if key
-          if block
-            key.rule(identifier, &block)
-          else
-            rules.detect { |rule| rule.name == name }.to_success_check
-          end
-        else
-          result = yield
-
-          checks << Rule::Check.new(
-            identifier, [:check, [name, result.to_ast, result.keys]],
-            target: result.target
-          )
-
-          checks.last
-        end
-      end
-
       def self.keys
         @keys ||= {}
       end
@@ -87,16 +65,8 @@ module Dry
         keys.values.flat_map(&:rules)
       end
 
-      def self.checks
-        @checks ||= []
-      end
-
       def self.rule_ast
         rules.map(&:to_ast)
-      end
-
-      def self.check_ast
-        (checks + keys.values.flat_map(&:checks)).map(&:to_ast)
       end
 
       def self.predicates
@@ -131,7 +101,7 @@ module Dry
         end
       end
 
-      attr_reader :rules, :checks
+      attr_reader :rules
 
       attr_reader :rule_compiler
 
@@ -142,25 +112,13 @@ module Dry
       def initialize(rules = [])
         @rule_compiler = Logic::RuleCompiler.new(self)
         @rules = rule_compiler.(self.class.rule_ast + rules.map(&:to_ast))
-        @checks = self.class.check_ast
         @error_compiler = self.class.error_compiler
         @hint_compiler = self.class.hint_compiler
       end
 
       def call(input)
         result = Validation::Result.new(rules.map { |rule| rule.(input) })
-
-        if checks.size > 0
-          resolver = -> name { result[name] || self[name] }
-          compiled_checks = Logic::RuleCompiler.new(resolver).(checks)
-
-          compiled_checks.each do |rule|
-            result << rule.(result)
-          end
-        end
-
         errors = Error::Set.new(result.failures.map { |failure| Error.new(failure) })
-
         Schema::Result.new(input, result, errors, error_compiler, hint_compiler)
       end
 
