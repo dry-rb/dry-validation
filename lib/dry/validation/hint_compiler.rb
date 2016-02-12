@@ -62,6 +62,7 @@ module Dry
         name, predicate = node
         input_visitor(name).visit(predicate)
       end
+      alias_method :visit_attr, :visit_key
 
       def visit_val(node)
         name, predicate = node
