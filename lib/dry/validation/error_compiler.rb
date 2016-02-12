@@ -20,17 +20,18 @@ module Dry
         self.class.new(messages, options.merge(new_options))
       end
 
-      def input_visitor(name, input)
-        Input.new(messages, options.merge(name: name, input: input))
-      end
-
-      def visit(node)
-        __send__(:"visit_#{node[0]}", node[1])
+      def visit(node, *args)
+        __send__(:"visit_#{node[0]}", node[1], *args)
       end
 
       def visit_input(node)
-        name, value, other = node
-        input_visitor(name, value).(other)
+        name, result = node
+        visit(result, name)
+      end
+
+      def visit_result(node, name)
+        value, other = node
+        input_visitor(name, value).visit(other)
       end
 
       def visit_error(error)
@@ -64,8 +65,7 @@ module Dry
       end
 
       def visit_val(node)
-        _, predicate = node
-        visit(predicate)
+        visit(node)
       end
 
       private
@@ -103,6 +103,10 @@ module Dry
             left.is_a?(Hash) ? left.merge(right) : right + left
           end
         end
+      end
+
+      def input_visitor(name, input)
+        Input.new(messages, options.merge(name: name, input: input))
       end
     end
   end
