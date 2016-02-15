@@ -30,7 +30,10 @@ module Dry
       end
 
       def visit_set(node)
-        merge(node.map { |el| visit(el) })
+        result = node.map do |el|
+          visit(el)
+        end
+        merge(result)
       end
 
       def visit_or(node)
@@ -54,7 +57,7 @@ module Dry
 
       def visit_key(node)
         name, predicate = node
-        with(name: name).visit(predicate)
+        with(name: Array([*self.name, name])).visit(predicate)
       end
       alias_method :visit_attr, :visit_key
 

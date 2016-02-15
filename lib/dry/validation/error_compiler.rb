@@ -98,7 +98,7 @@ module Dry
       end
 
       def merge(result)
-        result.compact.reduce do |a, e|
+        result.reduce do |a, e|
           e.merge(a) do |_, left, right|
             left.is_a?(Hash) ? left.merge(right) : right + left
           end

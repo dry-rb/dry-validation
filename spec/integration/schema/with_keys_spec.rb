@@ -70,10 +70,9 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
       end
 
       it 'validates presence of an email and min age value' do
-        expect(validate.(input.merge(email: '', age: 18))).to match_array([
-          [:error, [:input, [:age, 18, [[:key, [:age, [:predicate, [:gt?, [18]]]]]]]]],
-          [:error, [:input, [:email, "", [[:key, [:email, [:predicate, [:filled?, []]]]]]]]]
-        ])
+        expect(validate.(input.merge(email: '', age: 18)).messages).to eql(
+          email: ['email must be filled'], age: ['age must be greater than 18']
+        )
       end
 
       it 'validates presence of the email key and type of age value' do
@@ -83,92 +82,50 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
           address: input[:address], phone_numbers: input[:phone_numbers]
         }
 
-        expect(validate.(attrs)).to match_array([
-          [:error, [:input, [:age, "18", [[:key, [:age, [:predicate, [:int?, []]]]]]]]],
-          [:error, [:input, [:email, attrs, [[:val, [:email, [:predicate, [:key?, [:email]]]]]]]]]
-        ])
+        expect(validate.(attrs).messages).to eql(
+          email: ['email is missing'], age: ['age must be an integer']
+        )
       end
 
       it 'validates presence of the address and phone_number keys' do
         attrs = { email: 'jane@doe.org', age: 19 }
 
-        expect(validate.(attrs)).to match_array([
-          [:error, [:input, [:address, attrs, [[:val, [:address, [:predicate, [:key?, [:address]]]]]]]]],
-          [:error, [:input, [:phone_numbers, attrs, [[:val, [:phone_numbers, [:predicate, [:key?, [:phone_numbers]]]]]]]]]
-        ])
+        expect(validate.(attrs).messages).to eql(
+          address: ['address is missing'],
+          phone_numbers: ['phone_numbers is missing']
+        )
       end
 
       it 'validates presence of keys under address and min size of the city value' do
         attrs = input.merge(address: { city: 'NY' })
 
-        expect(validate.(attrs)).to match_array([
-          [:error, [
-            :input, [
-              :address, { city: "NY" },
-              [
-                [:input, [[:address, :city], "NY", [[:key, [[:address, :city], [:predicate, [:min_size?, [3]]]]]]]],
-                [:input, [:street, attrs, [[:val, [:street, [:predicate, [:key?, [:street]]]]]]]],
-                [:input, [:country, attrs, [[:val, [:country, [:predicate, [:key?, [:country]]]]]]]]
-              ]
-            ]
-          ]]
-        ])
+        expect(validate.(attrs).messages).to eql(
+          address: ['zipcode is missing', 'country is missing']
+        )
       end
 
       it 'validates address type' do
-        expect(validate.(input.merge(address: 'totally not a hash'))).to match_array([
-          [:error, [
-            :input, [:address, "totally not a hash", [
-              [:key, [:address, [:predicate, [:hash?, []]]]]]]]
-          ]
-        ])
+        expect(validate.(input.merge(address: 'totally not a hash')).messages).to eql(
+          address: ['address must be a hash']
+        )
       end
 
       it 'validates address code and name values' do
-        expect(validate.(input.merge(address: input[:address].merge(country: { code: 'US', name: '' })))).to match_array([
-          [:error, [
-            :input, [
-              :address, {city: "NYC", street: "Street 1/2", country: {code: "US", name: ""}},
-              [
-                [
-                  :input, [
-                    [:address, :country], { code: 'US', name: '' }, [
-                      [
-                        :input, [
-                          [:address, :country, :name], '', [
-                            [:val, [[:address, :country, :name], [:predicate, [:filled?, []]]]]
-                          ]
-                        ]
-                      ]
-                    ]
-                  ]
-                ]
-              ]
-            ]
-          ]]
-        ])
+        attrs = input.merge(
+          address: input[:address].merge(country: { code: 'US', name: '' })
+        )
+
+        expect(validate.(attrs).messages).to eql(
+          address: { country: { name: ['name must be filled'] } }
+        )
       end
 
       it 'validates each phone number' do
-        expect(validate.(input.merge(phone_numbers: ['123', 312]))).to match_array([
-          [:error, [
-            :input, [
-              :phone_numbers, ["123", 312],
-              [
-                [:el, [
-                  1,
-                  [
-                    :input, [
-                      :rule, 312, [
-                        [:val, [:rule, [:predicate, [:str?, []]]]]
-                      ]
-                    ]
-                  ]
-                ]]
-              ]
-            ]
-          ]]
-        ])
+        attrs = input.merge(phone_numbers: ['123', 312])
+
+        expect(validate.(attrs).messages).to eql(
+          phone_numbers: { 1 => ['1 must be a string'] }
+        )
       end
     end
   end
