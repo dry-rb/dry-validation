@@ -22,7 +22,12 @@ module Dry
 
           if block
             key = Key.new(name).instance_eval(&block)
-            add_rule(key_rule.and(create_rule(key.to_ast)))
+
+            if key.class == Value
+              add_rule(key_rule.and(create_rule([:key, [name, key.to_ast]])))
+            else
+              add_rule(key_rule.and(create_rule(key.to_ast)))
+            end
           else
             key_rule
           end

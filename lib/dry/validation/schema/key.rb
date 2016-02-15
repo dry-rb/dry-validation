@@ -22,15 +22,19 @@ module Dry
 
         def to_ast
           ast = rules.map(&:to_ast)
-          ast.size > 1 ? [:set, ast] : ast[0]
+          [:key, [name, ast.size > 1 ? [:set, ast] : ast[0]]]
         end
 
         def key(name, &block)
           if block
-            key_rule = Value.new(name).key?(name)
+            val = Value.new(name).key?(name)
             key = Key.new(name).instance_eval(&block)
 
-            add_rule(key_rule.and(create_rule(key.to_ast)))
+            if key.class == Value
+              add_rule(val.and(create_rule([:key, [name, key.to_ast]])))
+            else
+              add_rule(val.and(create_rule(key.to_ast)))
+            end
           else
             named(name).key?(name)
           end
@@ -60,7 +64,7 @@ module Dry
             val = Value.new(name).instance_eval(&block)
 
             add_rule(
-              create_rule([:key, [name, [:and, [[:val, predicate], val.to_ast]]]])
+              create_rule([:and, [[:val, predicate], val.to_ast]])
             )
           else
             rule = create_rule([:key, [name, predicate]])

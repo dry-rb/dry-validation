@@ -30,19 +30,22 @@ RSpec.describe Schema::Value do
     let(:expected_ast) do
       [:and, [
         [:val, [:predicate, [:key?, [:address]]]],
-        [:and, [
-          [:val, [:predicate, [:key?, [:location]]]],
-          [:set, [
-            [:and, [
-              [:val, [:predicate, [:key?, [:lat]]]],
-              [:key, [:lat, [:predicate, [:filled?, []]]]]]
-            ],
-            [:and, [
-              [:val, [:predicate, [:key?, [:lng]]]],
-              [:key, [:lng, [:predicate, [:filled?, []]]]]
-            ]]
-          ]]
-        ]]
+        [:key, [:address,
+          [:and, [
+            [:val, [:predicate, [:key?, [:location]]]],
+            [:key, [:location,
+              [:set, [
+                [:and, [
+                  [:val, [:predicate, [:key?, [:lat]]]],
+                  [:key, [:lat, [:predicate, [:filled?, []]]]]]
+                ],
+                [:and, [
+                  [:val, [:predicate, [:key?, [:lng]]]],
+                  [:key, [:lng, [:predicate, [:filled?, []]]]]
+                ]]
+              ]]
+            ]]]
+        ]]]
       ]]
     end
 
@@ -72,27 +75,38 @@ RSpec.describe Schema::Value do
   describe '#key with multiple inner-keys' do
     subject(:value) { Schema::Value.new }
 
-    it 'creates a rule for specified keys within the nested block' do
-      rule = value.key(:address) do |address|
-        address.key(:city, &:filled?)
-        address.key(:zipcode, &:filled?)
+    let(:expected_ast) do
+      [:and, [
+        [:val, [:predicate, [:key?, [:address]]]],
+        [:key, [:address, [:set, [
+          [:and, [
+            [:val, [:predicate, [:key?, [:city]]]],
+            [:key, [:city, [:predicate, [:filled?, []]]]]]
+          ],
+          [:and, [
+            [:val, [:predicate, [:key?, [:zipcode]]]],
+            [:key, [:zipcode, [:predicate, [:filled?, []]]]]
+          ]]
+        ]]]]
+      ]]
+    end
+
+    it 'creates a rule for specified keys using blocks' do
+      rule = value.key(:address) do
+        key(:city) { filled? }
+        key(:zipcode) { filled? }
       end
 
-      expect(rule.to_ast).to eql([
-        :and, [
-          [:val, [:predicate, [:key?, [:address]]]],
-          [:set, [
-            [:and, [
-              [:val, [:predicate, [:key?, [:city]]]],
-              [:key, [:city, [:predicate, [:filled?, []]]]]]
-            ],
-            [:and, [
-              [:val, [:predicate, [:key?, [:zipcode]]]],
-              [:key, [:zipcode, [:predicate, [:filled?, []]]]]
-            ]]
-          ]]
-        ]
-      ])
+      expect(rule.to_ast).to eql(expected_ast)
+    end
+
+    it 'creates a rule for specified keys using macros' do
+      rule = value.key(:address) do
+        key(:city).required
+        key(:zipcode).required
+      end
+
+      expect(rule.to_ast).to eql(expected_ast)
     end
   end
 
@@ -108,9 +122,9 @@ RSpec.describe Schema::Value do
     end
 
     it 'creates an each rule with other rules returned from the block' do
-      rule = value.each do |element|
-        element.key(:method) { |method| method.str? }
-        element.key(:amount) { |amount| amount.float? }
+      rule = value.each do
+        key(:method) { str? }
+        key(:amount) { float? }
       end
 
       expect(rule.to_ast).to eql(
@@ -148,11 +162,11 @@ RSpec.describe Schema::Value do
     end
 
     it 'builds hash? & rule created within the block with deep nesting' do
-      rule = user.hash? do |user_value|
-        user_value.key(:address) do |address|
-          address.hash? do |address_value|
-            address_value.key(:city).required
-            address_value.key(:zipcode).required
+      rule = user.hash? do
+        key(:address) do
+          hash? do
+            key(:city).required
+            key(:zipcode).required
           end
         end
       end
