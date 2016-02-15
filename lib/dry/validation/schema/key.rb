@@ -7,13 +7,17 @@ module Dry
       class Key < BasicObject
         attr_reader :name, :rules
 
-        def initialize(name)
+        def initialize(name, rules = [])
           @name = name
-          @rules = []
+          @rules = rules
         end
 
         def class
           Key
+        end
+
+        def named(name)
+          Value.new(name, rules)
         end
 
         def to_ast
@@ -22,13 +26,13 @@ module Dry
         end
 
         def key(name, &block)
-          key_rule = Value.new(name).key?(name)
-
           if block
+            key_rule = Value.new(name).key?(name)
             key = Key.new(name).instance_eval(&block)
+
             add_rule(key_rule.and(create_rule(key.to_ast)))
           else
-            key_rule
+            named(name).key?(name)
           end
         end
 

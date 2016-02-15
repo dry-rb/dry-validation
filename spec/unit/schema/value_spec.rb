@@ -27,32 +27,45 @@ RSpec.describe Schema::Value do
   describe '#key deeply nested' do
     subject(:value) { Schema::Value.new }
 
-    it 'creates a rule for specified keys within the nested blocks' do
+    let(:expected_ast) do
+      [:and, [
+        [:val, [:predicate, [:key?, [:address]]]],
+        [:and, [
+          [:val, [:predicate, [:key?, [:location]]]],
+          [:set, [
+            [:and, [
+              [:val, [:predicate, [:key?, [:lat]]]],
+              [:key, [:lat, [:predicate, [:filled?, []]]]]]
+            ],
+            [:and, [
+              [:val, [:predicate, [:key?, [:lng]]]],
+              [:key, [:lng, [:predicate, [:filled?, []]]]]
+            ]]
+          ]]
+        ]]
+      ]]
+    end
+
+    it 'creates a rule for specified keys using blocks' do
       rule = value.key(:address) do
         key(:location) do
-          key(:lat, &:filled?)
-          key(:lng, &:filled?)
+          key(:lat) { filled? }
+          key(:lng) { filled? }
         end
       end
 
-      expect(rule.to_ast).to eql([
-        :and, [
-          [:val, [:predicate, [:key?, [:address]]]],
-          [:and, [
-            [:val, [:predicate, [:key?, [:location]]]],
-            [:set, [
-              [:and, [
-                [:val, [:predicate, [:key?, [:lat]]]],
-                [:key, [:lat, [:predicate, [:filled?, []]]]]]
-              ],
-              [:and, [
-                [:val, [:predicate, [:key?, [:lng]]]],
-                [:key, [:lng, [:predicate, [:filled?, []]]]]
-              ]]
-            ]]
-          ]]
-        ]
-      ])
+      expect(rule.to_ast).to eql(expected_ast)
+    end
+
+    it 'creates a rule for specified keys using macros' do
+      rule = value.key(:address) do
+        key(:location) do
+          key(:lat).required
+          key(:lng).required
+        end
+      end
+
+      expect(rule.to_ast).to eql(expected_ast)
     end
   end
 
