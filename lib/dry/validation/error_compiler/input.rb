@@ -15,6 +15,10 @@ module Dry
         node.map { |el| visit(el) }
       end
 
+      def visit_set(node)
+        node.map { |result| visit(result, name) }
+      end
+
       def visit_el(node)
         idx, el = node
         name = [*Array(name), idx]

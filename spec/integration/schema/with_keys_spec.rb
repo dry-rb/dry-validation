@@ -5,10 +5,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
         key(:email).required
-
-        key(:age) do |age|
-          age.none? | (age.int? & age.gt?(18))
-        end
+        key(:age) { none? | (int? & gt?(18)) }
       end
     end
 
@@ -25,31 +22,25 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
   describe 'with nested structures' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
-        key(:email) { |email| email.filled? }
+        key(:email).required
 
-        key(:age) do |age|
-          age.none? | (age.int? & age.gt?(18))
-        end
+        key(:age) { none? | (int? & gt?(18)) }
 
-        key(:address) do |address|
-          address.hash? do
-            address.key(:city) do |city|
-              city.min_size?(3)
-            end
+        key(:address) do
+          hash? do
+            key(:city) { min_size?(3) }
 
-            address.key(:street) do |street|
-              street.filled?
-            end
+            key(:street).required
 
-            address.key(:country) do |country|
-              country.key(:name, &:filled?)
-              country.key(:code, &:filled?)
+            key(:country) do
+              key(:name).required
+              key(:code).required
             end
           end
         end
 
-        key(:phone_numbers) do |phone_numbers|
-          phone_numbers.array? { phone_numbers.each(&:str?) }
+        key(:phone_numbers) do
+          array? { each(&:str?) }
         end
       end
     end
