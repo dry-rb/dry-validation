@@ -50,7 +50,7 @@ other libraries. The focus is on pure validation logic expressed in a concise wa
 
 The DSL is very abstract, it builds [a rule AST](https://github.com/dryrb/dry-validation/wiki/Rule-AST)
 which is compiled into an array of rule objects. This means alternative interfaces could
-be easily build.
+be easily built.
 
 ## When To Use?
 
