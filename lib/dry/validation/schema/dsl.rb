@@ -6,8 +6,8 @@ module Dry
       class DSL < BasicObject
         attr_reader :name, :rules, :options
 
-        def self.[](name)
-          new(name: name)
+        def self.[](name, options = {})
+          new(options.merge(name: name))
         end
 
         def initialize(options = {})
@@ -17,8 +17,9 @@ module Dry
         end
 
         def key(name, &block)
+          val = Value[name, type: :key, rules: rules].key?(name)
+
           if block
-            val = Value[name].key?(name)
             res = Key[name].instance_eval(&block)
 
             if res.class == Value
@@ -27,12 +28,8 @@ module Dry
               add_rule(val.and(create_rule(res.to_ast)))
             end
           else
-            named(name).key?(name)
+            val
           end
-        end
-
-        def named(name)
-          Value.new(name: name, rules: rules)
         end
 
         def not

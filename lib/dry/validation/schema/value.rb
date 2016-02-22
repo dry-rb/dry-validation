@@ -4,6 +4,13 @@ module Dry
   module Validation
     class Schema
       class Value < DSL
+        attr_reader :type
+
+        def initialize(options = {})
+          super
+          @type = options[:type]
+        end
+
         def class
           Value
         end

@@ -110,7 +110,7 @@ module Dry
         end
 
         def key(predicate, args = [])
-          new([:key, [name, [:predicate, [predicate, args]]]])
+          new([target.type, [name, [:predicate, [predicate, args]]]])
         end
 
         def new_from(node, other)
