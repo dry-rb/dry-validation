@@ -18,19 +18,7 @@ Dir[SPEC_ROOT.join('support/**/*.rb')].each(&method(:require))
 
 include Dry::Validation
 
-class Schema::Value < BasicObject
-  def inspect
-    to_ast.inspect
-  end
-end
-
-class Schema::Key < BasicObject
-  def inspect
-    to_ast.inspect
-  end
-end
-
-class Schema::Rule < BasicObject
+class Schema::DSL < BasicObject
   def inspect
     to_ast.inspect
   end

@@ -1,6 +1,6 @@
 RSpec.describe Schema::Key do
   describe '#key?' do
-    subject(:user) { Schema::Key.new(:user) }
+    subject(:user) { Schema::Key[:user] }
 
     it 'returns a key rule' do
       rule = user.key?(:address)

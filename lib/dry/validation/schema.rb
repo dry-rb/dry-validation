@@ -21,12 +21,7 @@ module Dry
       setting :namespace
 
       def self.key(name, &block)
-        value = Value.new(name)
-        key = value.key(name, &block)
-
-        keys[name] = key
-
-        key
+        keys[name] = Value[name].key(name, &block)
       end
 
       def self.optional(name, &block)
