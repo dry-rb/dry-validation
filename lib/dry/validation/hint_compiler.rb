@@ -5,7 +5,7 @@ module Dry
     class HintCompiler < ErrorCompiler::Input
       attr_reader :rules, :excluded
 
-      EXCLUDED = [:none?].freeze
+      EXCLUDED = [:none?, :filled?].freeze
 
       def initialize(messages, options = {})
         super(messages, { name: nil, input: nil }.merge(options))

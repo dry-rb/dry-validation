@@ -29,7 +29,7 @@ module Dry
         visit(result, name)
       end
 
-      def visit_result(node, name)
+      def visit_result(node, name = nil)
         value, other = node
         input_visitor(name, value).visit(other)
       end
@@ -47,11 +47,6 @@ module Dry
       def visit_implication(node)
         _, right = node
         visit(right)
-      end
-
-      def visit_res(node)
-        _, predicate = node
-        visit(predicate)
       end
 
       def visit_key(rule)

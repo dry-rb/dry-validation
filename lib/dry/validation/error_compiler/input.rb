@@ -16,7 +16,10 @@ module Dry
       end
 
       def visit_set(node)
-        node.map { |result| visit(result, name) }
+        result = node.map do |input|
+          visit(input)
+        end
+        merge(result)
       end
 
       def visit_el(node)
@@ -47,12 +50,9 @@ module Dry
         template = messages[predicate, lookup_options.merge(tokens)]
 
         message = [template % tokens]
+        path = [*name, tokens[:name]].compact.uniq.reverse
 
-        if name.is_a?(Array)
-          [message, *name.reverse].reduce { |a, e| { e => a } }
-        else
-          { name => message }
-        end
+        [message, *path].reduce { |a, e| { e => a } }
       end
 
       def options_for_key?(*args)
