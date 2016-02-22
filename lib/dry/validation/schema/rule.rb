@@ -1,5 +1,3 @@
-require 'dry/validation/schema/sourced'
-
 module Dry
   module Validation
     class Schema
