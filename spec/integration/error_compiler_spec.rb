@@ -85,7 +85,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
     it 'converts error ast into another format' do
       expect(error_compiler.(ast)).to eql(
-        payments: { 1 => ['+method+ key is missing in the hash'] }
+        payments: { 1 => { method: ['+method+ key is missing in the hash'] } }
       )
     end
   end
