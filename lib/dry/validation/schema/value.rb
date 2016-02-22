@@ -20,6 +20,21 @@ module Dry
           create_rule([:each, val.to_ast])
         end
 
+        def when(*predicates, &block)
+          left = create_rule([])
+            .infer_predicates(::Kernel.Array(predicates))
+            .reduce(:and)
+
+          right = Value.new
+          right.instance_eval(&block)
+
+          add_rule(left.then(create_rule(right.to_ast)))
+        end
+
+        def value(name)
+          Key[name, rules: rules]
+        end
+
         def to_ast
           ast = rules.map(&:to_ast)
           ast.size > 1 ? [:set, ast] : ast[0]

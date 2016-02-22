@@ -24,6 +24,12 @@ class Schema::DSL < BasicObject
   end
 end
 
+class Schema::Rule < BasicObject
+  def inspect
+    to_ast.inspect
+  end
+end
+
 RSpec.configure do |config|
   config.disable_monkey_patching!
 

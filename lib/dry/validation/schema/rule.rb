@@ -50,14 +50,6 @@ module Dry
           add_rule(__send__(type, rule))
         end
 
-        def when(*predicates, &block)
-          left = ::Kernel.Array(predicates).map { |predicate|
-            target.value(name).__send__(*::Kernel.Array(predicate))
-          }.reduce(:and)
-
-          Rule::Result.with_current_rule(left, &block)
-        end
-
         def confirmation
           conf = :"#{name}_confirmation"
 
@@ -100,14 +92,14 @@ module Dry
           self.class.new(name, node, options.merge(new_options))
         end
 
-        private
-
         def infer_predicates(predicates)
           predicates.map do |predicate|
             name, args = ::Kernel.Array(predicate).flatten
             key(name, ::Kernel.Array(args))
           end
         end
+
+        private
 
         def key(predicate, args = [])
           new([target.type, [name, [:predicate, [predicate, args]]]])
