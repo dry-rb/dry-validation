@@ -5,7 +5,9 @@ module Dry
     class HintCompiler < ErrorCompiler::Input
       attr_reader :rules, :excluded
 
-      EXCLUDED = [:none?, :filled?].freeze
+      EXCLUDED = [
+        :none?, :filled?, :str?, :int?, :float?, :decimal?, :hash?, :array?
+      ].freeze
 
       def initialize(messages, options = {})
         super(messages, { name: nil, input: nil }.merge(options))
@@ -27,6 +29,10 @@ module Dry
         return {} if excluded.include?(predicate)
 
         super
+      end
+
+      def visit_check(node)
+        {}
       end
 
       def visit_set(node)

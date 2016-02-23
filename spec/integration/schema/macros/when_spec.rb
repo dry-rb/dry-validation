@@ -34,12 +34,10 @@ RSpec.describe 'Macros #when' do
     end
 
     it 'generates check rule' do
-      pending
-
       expect(validate.(compare: false, left: nil, right: nil)).to be_success
 
       expect(validate.(compare: true, left: 1, right: 2).messages).to eql(
-        left: ['left must be greater than 2', 'left must be an integer']
+        left: ['left must be greater than 2']
       )
     end
   end

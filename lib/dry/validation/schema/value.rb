@@ -6,6 +6,21 @@ module Dry
       class Value < DSL
         attr_reader :type
 
+        class Check < Value
+          private
+
+          def method_missing(meth, *meth_args)
+            vals, args = meth_args.partition { |arg| arg.class < DSL }
+
+            keys = [name, *vals.map(&:name)]
+            predicate = [:predicate, [meth, args]]
+
+            rule = create_rule([:check, [name, predicate, keys]])
+            add_rule(rule)
+            rule
+          end
+        end
+
         def initialize(options = {})
           super
           @type = options[:type]
@@ -25,14 +40,14 @@ module Dry
             .infer_predicates(::Kernel.Array(predicates))
             .reduce(:and)
 
-          right = Value.new
+          right = Value.new(type: type)
           right.instance_eval(&block)
 
           add_rule(left.then(create_rule(right.to_ast)))
         end
 
         def value(name)
-          Key[name, rules: rules]
+          Check[name, type: type, rules: rules]
         end
 
         def to_ast
