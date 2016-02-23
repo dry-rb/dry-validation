@@ -32,6 +32,22 @@ module Dry
           end
         end
 
+        def optional(name, &block)
+          val = Value[name, type: :key, rules: rules].key?(name)
+
+          if block
+            res = Key[name].instance_eval(&block)
+
+            if res.class == Value
+              add_rule(val.then(create_rule([:key, [name, res.to_ast]])))
+            else
+              add_rule(val.then(create_rule(res.to_ast)))
+            end
+          else
+            val
+          end
+        end
+
         def not
           negated = create_rule([:not, to_ast])
           @rules = [negated]

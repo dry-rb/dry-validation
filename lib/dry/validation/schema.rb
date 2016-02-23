@@ -25,12 +25,7 @@ module Dry
       end
 
       def self.optional(name, &block)
-        value = Value.new(name)
-        key = value.optional(name, &block)
-
-        keys[name] = key
-
-        key
+        keys[name] = Value[name].optional(name, &block)
       end
 
       def self.attr(name, &block)
