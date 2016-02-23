@@ -46,6 +46,10 @@ module Dry
           add_rule(left.then(create_rule(right.to_ast)))
         end
 
+        def confirmation
+          add_rule(value(:"#{name}_confirmation").eql?(value(name)))
+        end
+
         def value(name)
           Check[name, type: type, rules: rules]
         end

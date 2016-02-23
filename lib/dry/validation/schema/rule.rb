@@ -50,20 +50,6 @@ module Dry
           add_rule(__send__(type, rule))
         end
 
-        def confirmation
-          conf = :"#{name}_confirmation"
-
-          key = Value.new(conf).key(conf).maybe
-          val = key.value(conf)
-
-          result = self.when(:filled?) { val.eql?(value(name)) }
-
-          rules.concat(val.rules)
-          checks.concat(val.checks)
-
-          result
-        end
-
         def not
           new([:not, node])
         end
