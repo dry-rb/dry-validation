@@ -60,23 +60,30 @@ module Dry
       end
 
       def visit_key(node, *args)
-        node[0].to_s
+        _, other = node
+        visit(other, *args)
       end
 
       def visit_val(node, *args)
-        visit(node[1], false)
+        visit(node, *args)
       end
 
-      def visit_set(node, *args)
-        [:type, ['form.hash', [:symbolized, node[1].map { |n| visit(n) }]]]
+      def visit_set(node, *)
+        [:type, ['form.hash', [:symbolized, node.map { |n| visit(n) }]]]
       end
 
       def visit_each(node, *args)
-        [:type, ['form.array', visit(node[1], *args)]]
+        [:type, ['form.array', visit(node, *args)]]
       end
 
       def visit_predicate(node, *args)
-        [:type, TYPES[node[0]] || TYPES[:default]]
+        id, args = node
+
+        if id == :key?
+          args[0]
+        else
+          [:type, TYPES[id] || TYPES[:default]]
+        end
       end
     end
   end
