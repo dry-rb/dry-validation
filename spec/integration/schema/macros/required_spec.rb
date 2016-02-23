@@ -24,7 +24,7 @@ RSpec.describe 'Macros #required' do
 
     it 'generates filled? & int? rule' do
       expect(validate.(age: nil).messages).to eql(
-        age: ['age must be filled', 'age must be an integer']
+        age: ['age must be filled']
       )
     end
   end
