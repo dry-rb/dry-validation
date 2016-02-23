@@ -93,7 +93,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
 
         expect(validate.(attrs).messages).to eql(
           address: ['address is missing'],
-          phone_numbers: ['phone_numbers is missing', 'phone_numbers must be a string']
+          phone_numbers: ['phone_numbers is missing']
         )
       end
 

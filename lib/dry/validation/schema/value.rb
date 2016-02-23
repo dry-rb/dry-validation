@@ -23,7 +23,7 @@ module Dry
 
         def initialize(options = {})
           super
-          @type = options[:type]
+          @type = options.fetch(:type, :key)
         end
 
         def class

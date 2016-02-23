@@ -1,5 +1,5 @@
 RSpec.describe 'Schema / Injecting Rules' do
-  let(:validate) { schema.new(other.rules) }
+  let(:validate) { schema.new(other.rule_ast) }
 
   let(:other) do
     Class.new(Dry::Validation::Schema) do
@@ -9,7 +9,7 @@ RSpec.describe 'Schema / Injecting Rules' do
 
   let(:schema) do
     Class.new(Dry::Validation::Schema) do
-      key(:email) { |email| email.none? | email.filled? }
+      key(:email) { none? | filled? }
 
       rule(email: :filled?) { value(:login).true? > value(:email).filled? }
     end

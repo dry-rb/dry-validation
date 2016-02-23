@@ -28,23 +28,9 @@ module Dry
         keys[name] = Value[name].optional(name, &block)
       end
 
-      def self.attr(name, &block)
-        value = Value.new(name)
-        key = value.attr(name, &block)
-
-        keys[name] = key
-
-        key
-      end
-
-      def self.value(name)
-        key = keys[name]
-
-        if key
-          keys[name].value(name)
-        else
-          Rule::Result.new(name, [], target: Value.new(name))
-        end
+      def self.rule(name, &block)
+        val = Value[name].instance_exec(&block)
+        keys[name] = Value.new(rules: [val])
       end
 
       def self.keys
@@ -101,7 +87,7 @@ module Dry
 
       def initialize(rules = [])
         @rule_compiler = Logic::RuleCompiler.new(self)
-        @rules = rule_compiler.(self.class.rule_ast + rules.map(&:to_ast))
+        @rules = rule_compiler.(rules + self.class.rule_ast)
         @error_compiler = self.class.error_compiler
         @hint_compiler = self.class.hint_compiler
       end

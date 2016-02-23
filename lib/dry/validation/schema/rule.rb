@@ -75,7 +75,7 @@ module Dry
         alias_method :>, :then
 
         def with(new_options)
-          self.class.new(name, node, options.merge(new_options))
+          self.class.new(node, options.merge(new_options))
         end
 
         def infer_predicates(predicates)

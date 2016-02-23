@@ -13,7 +13,7 @@ RSpec.describe Schema, 'using high-level rules' do
         optional(:red).maybe
         optional(:blue).maybe
 
-        rule(:destiny) { rule(:red).filled? | rule(:blue).filled? }
+        rule(:destiny) { value(:red).filled? | value(:blue).filled? }
       end
     end
 

@@ -44,7 +44,7 @@ module Dry
               add_rule(val.then(create_rule(res.to_ast)))
             end
           else
-            val
+            val.to_implication
           end
         end
 
