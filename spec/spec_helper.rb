@@ -10,6 +10,7 @@ if RUBY_ENGINE == "rbx"
 end
 
 require 'dry-validation'
+require 'ostruct'
 
 SPEC_ROOT = Pathname(__dir__)
 

@@ -1,23 +1,25 @@
-RSpec.describe Dry::Validation::Schema, 'defining attr-based schema' do
+RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
   subject(:validate) { schema.new }
 
   describe 'with a flat structure' do
     let(:schema) do
-      Class.new(Dry::Validation::Schema) do
+      Class.new(Dry::Validation::Model) do
         attr(:email).required
         attr(:age) { none? | (int? & gt?(18)) }
       end
     end
 
+    let(:model) { Class.new(OpenStruct) }
+
+    before { pending }
+
     it 'passes when input is valid' do
-      pending
-      expect(validate.(email: 'jane@doe', age: 19)).to be_success
-      expect(validate.(email: 'jane@doe', age: nil)).to be_success
+      expect(validate.(model.new(email: 'jane@doe', age: 19))).to be_success
+      expect(validate.(model.new(email: 'jane@doe', age: nil))).to be_success
     end
 
     it 'fails when input is not valid' do
-      pending
-      expect(validate.(email: 'jane@doe', age: 17)).to_not be_success
+      expect(validate.(model.new(email: 'jane@doe', age: 17))).to_not be_success
     end
   end
 
