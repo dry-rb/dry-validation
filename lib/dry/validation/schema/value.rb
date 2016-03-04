@@ -54,11 +54,6 @@ module Dry
           Check[name, type: type, rules: rules]
         end
 
-        def to_ast
-          ast = rules.map(&:to_ast)
-          ast.size > 1 ? [:set, ast] : ast[0]
-        end
-
         private
 
         def method_missing(meth, *args, &block)

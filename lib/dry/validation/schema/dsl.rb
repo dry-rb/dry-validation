@@ -59,6 +59,11 @@ module Dry
           self
         end
 
+        def to_ast
+          ast = rules.map(&:to_ast)
+          ast.size > 1 ? [:set, ast] : ast[0]
+        end
+
         private
 
         def create_rule(node)

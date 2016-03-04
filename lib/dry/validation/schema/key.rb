@@ -9,8 +9,7 @@ module Dry
         end
 
         def to_ast
-          ast = rules.map(&:to_ast)
-          [:key, [name, ast.size > 1 ? [:set, ast] : ast[0]]]
+          [:key, [name, super]]
         end
 
         private
