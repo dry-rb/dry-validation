@@ -2,15 +2,31 @@ module Dry
   module Validation
     class Schema
       class Rule < BasicObject
-        attr_reader :name, :node, :type, :target, :keys, :options
+        attr_reader :name, :node, :type, :target, :options
 
         def initialize(node, options = {})
           @node = node
+          @name = options.fetch(:name)
           @target = options.fetch(:target)
-          @keys = options.fetch(:keys, [name])
           @type = options.fetch(:type, :and)
           @options = options
-          @name = options[:name]
+        end
+
+        def required(*predicates)
+          rule = ([key(:filled?)] + infer_predicates(predicates)).reduce(:and)
+
+          add_rule(__send__(type, rule))
+        end
+
+        def maybe(*predicates)
+          rule =
+            if predicates.size > 0
+              key(:none?).or(infer_predicates(predicates).reduce(:and))
+            else
+              key(:none?).or(key(:filled?))
+            end
+
+          add_rule(__send__(type, rule))
         end
 
         def add_rule(rule)
@@ -33,50 +49,29 @@ module Dry
           with(type: :then)
         end
 
-        def required(*predicates)
-          rule = ([key(:filled?)] + infer_predicates(predicates)).reduce(:and)
-
-          add_rule(__send__(type, rule))
-        end
-
-        def maybe(*predicates)
-          rule =
-            if predicates.size > 0
-              key(:none?).or(infer_predicates(predicates).reduce(:and))
-            else
-              key(:none?).or(key(:filled?))
-            end
-
-          add_rule(__send__(type, rule))
-        end
-
         def not
           new([:not, node])
         end
 
         def and(other)
-          new_from([:and, [node, other.node]], other)
+          new([:and, [node, other.node]])
         end
         alias_method :&, :and
 
         def or(other)
-          new_from([:or, [node, other.node]], other)
+          new([:or, [node, other.node]])
         end
         alias_method :|, :or
 
         def xor(other)
-          new_from([:xor, [node, other.node]], other)
+          new([:xor, [node, other.node]])
         end
         alias_method :^, :xor
 
         def then(other)
-          new_from([:implication, [node, other.node]], other)
+          new([:implication, [node, other.node]])
         end
         alias_method :>, :then
-
-        def with(new_options)
-          self.class.new(node, options.merge(new_options))
-        end
 
         def infer_predicates(predicates)
           predicates.map do |predicate|
@@ -85,18 +80,18 @@ module Dry
           end
         end
 
+        def with(new_options)
+          self.class.new(node, options.merge(new_options))
+        end
+
         private
 
         def key(predicate, args = [])
           new([target.type, [name, [:predicate, [predicate, args]]]])
         end
 
-        def new_from(node, other)
-          self.class.new(node, options.merge(target: target, keys: (keys + other.keys).uniq))
-        end
-
-        def new(node, name = self.name)
-          self.class.new(node, options.merge(name: name))
+        def new(node)
+          self.class.new(node, options)
         end
       end
     end
