@@ -3,6 +3,8 @@ require 'dry/logic/rule_compiler'
 
 require 'dry/validation/schema/key'
 require 'dry/validation/schema/value'
+require 'dry/validation/schema/check'
+
 require 'dry/validation/error'
 require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
