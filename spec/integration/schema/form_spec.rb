@@ -23,6 +23,12 @@ RSpec.describe Dry::Validation::Schema::Form do
         optional(:phone_number) do
           none? | (int? & gt?(0))
         end
+
+        rule(:email_valid) { value(:email).email? }
+
+        def email?(value)
+          true
+        end
       end
     end
 

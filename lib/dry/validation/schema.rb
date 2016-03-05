@@ -32,11 +32,15 @@ module Dry
 
       def self.rule(name, &block)
         val = Value[name].instance_exec(&block)
-        rules[name] = Value.new(rules: [val])
+        checks[name] = Value.new(rules: [val])
       end
 
       def self.rules
         @rules ||= {}
+      end
+
+      def self.checks
+        @checks ||= {}
       end
 
       def self.rule_ast
@@ -90,7 +94,7 @@ module Dry
         @rule_compiler = Logic::RuleCompiler.new(self)
         @error_compiler = self.class.error_compiler
         @hint_compiler = self.class.hint_compiler
-        initialize_rules(rules.merge(self.class.rules))
+        initialize_rules(rules.merge(self.class.rules).merge(self.class.checks))
       end
 
       def initialize_rules(rules)
