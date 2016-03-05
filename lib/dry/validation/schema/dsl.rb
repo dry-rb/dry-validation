@@ -18,60 +18,16 @@ module Dry
           @options = options
         end
 
-        def path
-          items = [parent && parent.path, name].flatten.compact.uniq
-          items.size == 1 ? items[0] : items
-        end
-
         def key(name, &block)
-          val = Value[name, type: :key, parent: self, checks: checks, rules: rules].key?(name)
-
-          if block
-            key = Key[name]
-            res = key.instance_eval(&block)
-
-            if res.class == Value
-              checks.concat(key.checks)
-              add_rule(val.and(create_rule([:key, [name, res.to_ast]])))
-            else
-              add_rule(val.and(create_rule(res.to_ast)))
-            end
-          else
-            val
-          end
-        end
-
-        def attr(name, &block)
-          val = Value[name, type: :attr, parent: self, rules: rules].attr?(name)
-
-          if block
-            res = Attr[name].instance_eval(&block)
-
-            if res.class == Value
-              add_rule(val.and(create_rule([:attr, [name, res.to_ast]])))
-            else
-              add_rule(val.and(create_rule(res.to_ast)))
-            end
-          else
-            val
-          end
+          define(name, Key, &block)
         end
 
         def optional(name, &block)
-          val = Value[name, type: :key, parent: self, checks: checks, rules: rules].key?(name)
+          define(name, Key, :then, &block)
+        end
 
-          if block
-            res = Key[name].instance_eval(&block)
-
-            if res.class == Value
-              checks.concat(res.checks)
-              add_rule(val.then(create_rule([:key, [name, res.to_ast]])))
-            else
-              add_rule(val.then(create_rule(res.to_ast)))
-            end
-          else
-            val.to_implication
-          end
+        def attr(name, &block)
+          define(name, Attr, &block)
         end
 
         def not
@@ -99,10 +55,37 @@ module Dry
           create_rule(to_ast)
         end
 
+        def path
+          items = [parent && parent.path, name].flatten.compact.uniq
+          items.size == 1 ? items[0] : items
+        end
+
         private
 
+        def define(name, key_class, op = :and, &block)
+          type = key_class.type
+
+          val = Value[
+            name, type: type, parent: self, checks: checks, rules: rules
+          ].__send__(:"#{type}?", name)
+
+          if block
+            key = key_class[name]
+            res = key.instance_eval(&block)
+
+            if res.class == Value
+              checks.concat(key.checks)
+              add_rule(val.__send__(op, create_rule([type, [name, res.to_ast]])))
+            else
+              add_rule(val.__send__(op, create_rule(res.to_ast)))
+            end
+          else
+            val.with(type: op)
+          end
+        end
+
         def create_rule(node)
-          Schema::Rule.new(node, name: name, path: path, target: self)
+          Schema::Rule.new(node, name: name, target: self)
         end
       end
     end

@@ -6,12 +6,16 @@ module Dry
       class Key < DSL
         attr_reader :parent
 
+        def self.type
+          :key
+        end
+
         def class
           Key
         end
 
         def type
-          :key
+          self.class.type
         end
 
         def to_ast

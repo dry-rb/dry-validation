@@ -49,10 +49,6 @@ module Dry
           Schema::Rule
         end
 
-        def to_implication
-          with(type: :then)
-        end
-
         def not
           new([:not, node])
         end
