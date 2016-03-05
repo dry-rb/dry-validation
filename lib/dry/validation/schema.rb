@@ -23,28 +23,24 @@ module Dry
       setting :namespace
 
       def self.key(name, &block)
-        keys[name] = Value[name].key(name, &block)
+        rules[name] = Value[name].key(name, &block)
       end
 
       def self.optional(name, &block)
-        keys[name] = Value[name].optional(name, &block)
+        rules[name] = Value[name].optional(name, &block)
       end
 
       def self.rule(name, &block)
         val = Value[name].instance_exec(&block)
-        keys[name] = Value.new(rules: [val])
-      end
-
-      def self.keys
-        @keys ||= {}
+        rules[name] = Value.new(rules: [val])
       end
 
       def self.rules
-        keys.values.flat_map(&:rules)
+        @rules ||= {}
       end
 
       def self.rule_ast
-        rules.map(&:to_ast)
+        rules.values.flat_map(&:rules).map(&:to_ast)
       end
 
       def self.predicates
@@ -56,7 +52,7 @@ module Dry
       end
 
       def self.hint_compiler
-        HintCompiler.new(messages, rules: rules.map(&:to_ast))
+        HintCompiler.new(messages, rules: rule_ast)
       end
 
       def self.messages
@@ -87,16 +83,24 @@ module Dry
 
       attr_reader :hint_compiler
 
-      def initialize(rules = [])
+      def initialize(rules = {})
         @rule_compiler = Logic::RuleCompiler.new(self)
-        @rules = rule_compiler.(rules + self.class.rule_ast)
         @error_compiler = self.class.error_compiler
         @hint_compiler = self.class.hint_compiler
+        initialize_rules(rules.merge(self.class.rules))
+      end
+
+      def initialize_rules(rules)
+        @rules = rules.each_with_object({}) do |(name, rule), result|
+          result[name] = rule_compiler.visit(rule.rules.reduce(:and).to_ast)
+        end
       end
 
       def call(input)
-        result = Validation::Result.new(rules.map { |rule| rule.(input) })
-        errors = Error::Set.new(result.failures.map { |failure| Error.new(failure) })
+        resmap = Hash[rules.map { |name, rule| [name, rule.(input)] }]
+        result = Validation::Result.new(resmap)
+        errors = Error::Set.new(result.failures.map { |name, failure| Error.new(name, failure) })
+
         Schema::Result.new(input, result, errors, error_compiler, hint_compiler)
       end
 

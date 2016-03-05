@@ -24,6 +24,23 @@ module Dry
         __send__(:"visit_#{node[0]}", node[1], *args)
       end
 
+      def visit_error(error)
+        name, other = error
+        message = messages[name, rule: name]
+
+        if message
+          { name => [message] }
+        else
+          result = visit(other)
+
+          if result.is_a?(Array)
+            merge(result)
+          else
+            merge_hints(result)
+          end
+        end
+      end
+
       def visit_input(node)
         name, result = node
         visit(result, name)
@@ -32,16 +49,6 @@ module Dry
       def visit_result(node, name = nil)
         value, other = node
         input_visitor(name, value).visit(other)
-      end
-
-      def visit_error(error)
-        result = visit(error)
-
-        if result.is_a?(Array)
-          merge(result)
-        else
-          merge_hints(result)
-        end
       end
 
       def visit_implication(node)

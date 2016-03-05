@@ -1,5 +1,5 @@
 RSpec.describe 'Schema / Injecting Rules' do
-  let(:validate) { schema.new(other.rule_ast) }
+  let(:validate) { schema.new(other.rules) }
 
   let(:other) do
     Class.new(Dry::Validation::Schema) do

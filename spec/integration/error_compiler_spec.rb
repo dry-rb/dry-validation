@@ -22,10 +22,10 @@ RSpec.describe Dry::Validation::ErrorCompiler do
   describe '#call with flat inputs' do
     let(:ast) do
       [
-        [:error, [:input, [:name, [:result, [nil, [:val, [:predicate, [:key?, [:name]]]]]]]]],
-        [:error, [:input, [:age, [:result, [18, [:val, [:predicate, [:gt?, [18]]]]]]]]],
-        [:error, [:input, [:email, [:result, ["", [:val, [:predicate, [:filled?, []]]]]]]]],
-        [:error, [:input, [:address, [:result, ["", [:val, [:predicate, [:filled?, []]]]]]]]]
+        [:error, [:name, [:input, [:name, [:result, [nil, [:val, [:predicate, [:key?, [:name]]]]]]]]]],
+        [:error, [:age, [:input, [:age, [:result, [18, [:val, [:predicate, [:gt?, [18]]]]]]]]]],
+        [:error, [:email, [:input, [:email, [:result, ["", [:val, [:predicate, [:filled?, []]]]]]]]]],
+        [:error, [:address, [:input, [:address, [:result, ["", [:val, [:predicate, [:filled?, []]]]]]]]]]
       ]
     end
 
@@ -41,7 +41,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
   describe '#call with check errors' do
     let(:ast) do
-      [[:error, [
+      [[:error, [:newsletter, [
           :input, [[:settings, :newsletter], [
             :result, [
               [true, true],
@@ -56,7 +56,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
               ]
             ]
           ]
-        ]]
+        ]]]
       ]]
     end
 
@@ -69,7 +69,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
   describe '#call with arr inputs' do
     let(:ast) do
-      [[:error,
+      [[:error, [:payments,
         [:input, [
           :payments, [:result, [
               [{ method: "cc", amount: 1.23 }, { amount: 4.56 }], [:each, [
@@ -80,7 +80,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
                 ]]
               ]]]
           ]]]
-      ]]
+      ]]]
     end
 
     it 'converts error ast into another format' do

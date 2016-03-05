@@ -14,40 +14,23 @@ module Dry
       end
 
       def [](name)
-        to_h[name]
-      end
-
-      def to_h
-        @to_h ||= each_with_object({}) { |result, hash| hash[result.name] = result }
+        rule_results[name]
       end
 
       def merge!(other)
-        rule_results.concat(other.rule_results)
+        rule_results.merge(other.rule_results)
       end
 
       def to_ary
         failures.map(&:to_ary)
       end
 
-      def <<(rule_result)
-        rule_results << rule_result
-      end
-
-      def with_values(names, &block)
-        values = names.map { |name| by_name(name) }.compact.map(&:input)
-        yield(values) if values.size == names.size
-      end
-
-      def by_name(name)
-        successes.detect { |rule_result| rule_result.name == name }
-      end
-
       def successes
-        rule_results.select(&:success?)
+        rule_results.select { |_, value| value.success? }
       end
 
       def failures
-        rule_results.select(&:failure?)
+        rule_results.select { |_, value| value.failure? }
       end
     end
   end

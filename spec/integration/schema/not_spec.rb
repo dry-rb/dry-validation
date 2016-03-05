@@ -9,11 +9,11 @@ RSpec.describe 'Schema with negated rules' do
         )
       end
 
-      optional(:eat_cake) { |v| v.eql?('yes!') }
-      optional(:have_cake) { |v| v.eql?('yes!') }
+      optional(:eat_cake).required
+      optional(:have_cake).required
 
       rule(:be_reasonable) do
-        rule(:eat_cake) & rule(:have_cake).not
+        value(:eat_cake).eql?('yes!') & value(:have_cake).eql?('yes!').not
       end
     end
   end

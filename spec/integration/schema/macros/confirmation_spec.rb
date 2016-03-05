@@ -18,8 +18,7 @@ RSpec.describe 'Macros #confirmation' do
       expect(validate.(password: 'foo', password_confirmation: 'foo')).to be_success
 
       expect(validate.(password: 'fo', password_confirmation: '').messages).to eql(
-        password: ['password size cannot be less than 3'],
-        password_confirmation: ['does not match']
+        password: ['password size cannot be less than 3']
       )
 
       expect(validate.(password: 'foo', password_confirmation: 'fo').messages).to eql(

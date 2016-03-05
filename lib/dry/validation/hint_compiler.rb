@@ -42,13 +42,21 @@ module Dry
         merge(result)
       end
 
+      def visit_each(node)
+        visit(node)
+      end
+
+      def visit_xor(node)
+        {}
+      end
+
+      def visit_not(node)
+        {}
+      end
+
       def visit_or(node)
         left, right = node
         merge([visit(left), visit(right)])
-      end
-
-      def visit_each(node)
-        visit(node)
       end
 
       def visit_and(node)
