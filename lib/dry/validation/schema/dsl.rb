@@ -32,6 +32,22 @@ module Dry
           end
         end
 
+        def attr(name, &block)
+          val = Value[name, type: :attr, rules: rules].attr?(name)
+
+          if block
+            res = Attr[name].instance_eval(&block)
+
+            if res.class == Value
+              add_rule(val.and(create_rule([:attr, [name, res.to_ast]])))
+            else
+              add_rule(val.and(create_rule(res.to_ast)))
+            end
+          else
+            val
+          end
+        end
+
         def optional(name, &block)
           val = Value[name, type: :key, rules: rules].key?(name)
 
@@ -61,7 +77,11 @@ module Dry
 
         def to_ast
           ast = rules.map(&:to_ast)
-          ast.size > 1 ? [:set, ast] : ast[0]
+          ast.size > 1 ? [:set, ast] : ast[0] || []
+        end
+
+        def to_rule
+          create_rule(to_ast)
         end
 
         private

@@ -11,8 +11,6 @@ RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
 
     let(:model) { Class.new(OpenStruct) }
 
-    before { pending }
-
     it 'passes when input is valid' do
       expect(validate.(model.new(email: 'jane@doe', age: 19))).to be_success
       expect(validate.(model.new(email: 'jane@doe', age: nil))).to be_success
@@ -25,21 +23,19 @@ RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
 
   describe 'with nested structures' do
     let(:schema) do
-      Class.new(Dry::Validation::Schema) do
+      Class.new(Dry::Validation::Model) do
         attr(:email).required
 
         attr(:age) { none? | (int? & gt?(18)) }
 
         attr(:address) do
-          hash? do
-            attr(:city) { min_size?(3) }
+          attr(:city) { min_size?(3) }
 
-            attr(:street).required
+          attr(:street).required
 
-            attr(:country) do
-              attr(:name).required
-              attr(:code).required
-            end
+          attr(:country) do
+            attr(:name).required
+            attr(:code).required
           end
         end
 
@@ -50,21 +46,23 @@ RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
     end
 
     let(:input) do
-      {
+      OpenStruct.new(
         email: 'jane@doe.org',
         age: 19,
-        address: { city: 'NYC', street: 'Street 1/2', country: { code: 'US', name: 'USA' } },
+        address: OpenStruct.new(
+          city: 'NYC', street: 'Street 1/2', country: OpenStruct.new(code: 'US', name: 'USA')
+        ),
         phone_numbers: [
           '123456', '234567'
         ]
-      }.freeze
+      )
     end
-
-    before { pending }
 
     describe '#messages' do
       it 'returns compiled error messages' do
-        expect(validate.(input.merge(email: '')).messages).to eql(
+        input.email = ''
+
+        expect(validate.(input).messages).to eql(
           email: ['email must be filled']
         )
       end
@@ -76,65 +74,48 @@ RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
       end
 
       it 'validates presence of an email and min age value' do
-        expect(validate.(input.merge(email: '', age: 18)).messages).to eql(
+        input.email = ''
+        input.age = 18
+
+        expect(validate.(input).messages).to eql(
           email: ['email must be filled'], age: ['age must be greater than 18']
         )
       end
 
-      it 'validates presence of the email key and type of age value' do
-        attrs = {
-          name: 'Jane',
-          age: '18',
-          address: input[:address], phone_numbers: input[:phone_numbers]
-        }
+      it 'validates type of age value' do
+        input.age = '18'
 
-        expect(validate.(attrs).messages).to eql(
-          email: ['email is missing'],
+        expect(validate.(input).messages).to eql(
           age: ['age must be an integer', 'age must be greater than 18']
         )
       end
 
-      it 'validates presence of the address and phone_number keys' do
-        attrs = { email: 'jane@doe.org', age: 19 }
+      it 'validates presence of phone_number keys' do
+        input.phone_numbers = nil
 
-        expect(validate.(attrs).messages).to eql(
-          address: ['address is missing'],
-          phone_numbers: ['phone_numbers is missing', 'phone_numbers must be a string']
+        expect(validate.(input).messages).to eql(
+          phone_numbers: ['phone_numbers must be an array']
         )
       end
 
-      it 'validates presence of keys under address and min size of the city value' do
-        attrs = input.merge(address: { city: 'NY' })
+      it 'validates presence of address street & county & min size of the city' do
+        input.address.city = 'NY'
+        input.address.street = nil
+        input.address.country.name = nil
 
-        expect(validate.(attrs).messages).to eql(
+        expect(validate.(input).messages).to eql(
           address: {
-            street: ['street is missing'],
-            country: ['country is missing'],
+            street: ['street must be filled'],
+            country: { name: ['name must be filled'] },
             city: ['city size cannot be less than 3']
           }
         )
       end
 
-      it 'validates address type' do
-        expect(validate.(input.merge(address: 'totally not a hash')).messages).to eql(
-          address: ['address must be a hash']
-        )
-      end
-
-      it 'validates address code and name values' do
-        attrs = input.merge(
-          address: input[:address].merge(country: { code: 'US', name: '' })
-        )
-
-        expect(validate.(attrs).messages).to eql(
-          address: { country: { name: ['name must be filled'] } }
-        )
-      end
-
       it 'validates each phone number' do
-        attrs = input.merge(phone_numbers: ['123', 312])
+        input.phone_numbers = ['123', 312]
 
-        expect(validate.(attrs).messages).to eql(
+        expect(validate.(input).messages).to eql(
           phone_numbers: { 1 => ['1 must be a string'] }
         )
       end

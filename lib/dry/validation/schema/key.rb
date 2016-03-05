@@ -8,8 +8,12 @@ module Dry
           Key
         end
 
+        def type
+          :key
+        end
+
         def to_ast
-          [:key, [name, super]]
+          [type, [name, super]]
         end
 
         private
@@ -21,7 +25,7 @@ module Dry
             val = Value[name].instance_eval(&block)
             add_rule(create_rule([:and, [[:val, predicate], val.to_ast]]))
           else
-            rule = create_rule([:key, [name, predicate]])
+            rule = create_rule([type, [name, predicate]])
             add_rule(rule)
             rule
           end

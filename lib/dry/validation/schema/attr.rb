@@ -1,8 +1,12 @@
 module Dry
   module Validation
     class Schema
-      class Attr
-        def identifier
+      class Attr < Key
+        def class
+          Attr
+        end
+
+        def type
           :attr
         end
       end
