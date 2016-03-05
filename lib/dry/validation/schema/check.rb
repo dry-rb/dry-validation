@@ -2,6 +2,10 @@ module Dry
   module Validation
     class Schema
       class Check < Value
+        def class
+          Check
+        end
+
         private
 
         def method_missing(meth, *meth_args)

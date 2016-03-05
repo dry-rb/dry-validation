@@ -92,7 +92,9 @@ module Dry
 
       def initialize_rules(rules)
         @rules = rules.each_with_object({}) do |(name, rule), result|
-          result[name] = rule_compiler.visit(rule.rules.reduce(:and).to_ast)
+          result[name] = rule_compiler.visit(
+            (rule.rules + rule.checks).reduce(:and).to_ast
+          )
         end
       end
 

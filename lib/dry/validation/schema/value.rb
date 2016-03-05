@@ -21,14 +21,14 @@ module Dry
         end
 
         def when(*predicates, &block)
-          left = create_rule([])
-            .infer_predicates(::Kernel.Array(predicates))
-            .reduce(:and)
+          left = predicates.reduce(Check[path, type: type]) { |a, e| a.__send__(*::Kernel.Array(e)) }
 
           right = Value.new(type: type)
           right.instance_eval(&block)
 
-          add_rule(left.then(create_rule(right.to_ast)))
+          parent.add_check(left.then(create_rule(right.to_ast)))
+
+          self
         end
 
         def confirmation

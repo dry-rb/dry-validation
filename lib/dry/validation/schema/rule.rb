@@ -37,6 +37,10 @@ module Dry
           target.rules
         end
 
+        def checks
+          target.checks
+        end
+
         def to_ast
           node
         end

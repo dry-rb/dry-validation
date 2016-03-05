@@ -4,6 +4,8 @@ module Dry
   module Validation
     class Schema
       class Key < DSL
+        attr_reader :parent
+
         def class
           Key
         end
