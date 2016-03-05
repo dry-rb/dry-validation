@@ -61,7 +61,7 @@ module Dry
           when :yaml then Messages.default
           when :i18n then Messages::I18n.new
           else
-            fail "+#{config.messages}+ is not a valid messages identifier"
+            raise "+#{config.messages}+ is not a valid messages identifier"
           end
 
         if config.messages_file && config.namespace
@@ -112,7 +112,7 @@ module Dry
         elsif respond_to?(name)
           Logic::Predicate.new(name, &method(name))
         else
-          fail ArgumentError, "+#{name}+ is not a valid predicate name"
+          raise ArgumentError, "+#{name}+ is not a valid predicate name"
         end
       end
 
