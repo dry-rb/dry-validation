@@ -56,13 +56,7 @@ module Dry
       end
 
       def self.messages
-        default =
-          case config.messages
-          when :yaml then Messages.default
-          when :i18n then Messages::I18n.new
-          else
-            raise "+#{config.messages}+ is not a valid messages identifier"
-          end
+        default = default_messages
 
         if config.messages_file && config.namespace
           default.merge(config.messages_file).namespaced(config.namespace)
@@ -72,6 +66,15 @@ module Dry
           default.namespaced(config.namespace)
         else
           default
+        end
+      end
+
+      def self.default_messages
+        case config.messages
+        when :yaml then Messages.default
+        when :i18n then Messages::I18n.new
+        else
+          raise "+#{config.messages}+ is not a valid messages identifier"
         end
       end
 
