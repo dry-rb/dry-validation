@@ -9,7 +9,6 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       en: {
         errors: {
           key?: '+%{name}+ key is missing in the hash',
-          attr?: 'Object does not respond to the +%{name}+ attr',
           rules: {
             address: {
               filled?: 'Please provide your address'
@@ -23,18 +22,16 @@ RSpec.describe Dry::Validation::ErrorCompiler do
   describe '#call with flat inputs' do
     let(:ast) do
       [
-        [:error, [:input, [:name, nil, [[:key, [:name, [:predicate, [:key?, []]]]]]]]],
-        [:error, [:input, [:phone, nil, [[:attr, [:phone, [:predicate, [:attr?, []]]]]]]]],
-        [:error, [:input, [:age, 18, [[:val, [:age, [:predicate, [:gt?, [18]]]]]]]]],
-        [:error, [:input, [:email, "", [[:val, [:email, [:predicate, [:filled?, []]]]]]]]],
-        [:error, [:input, [:address, "", [[:val, [:address, [:predicate, [:filled?, []]]]]]]]]
+        [:error, [:name, [:input, [:name, [:result, [nil, [:val, [:predicate, [:key?, [:name]]]]]]]]]],
+        [:error, [:age, [:input, [:age, [:result, [18, [:val, [:predicate, [:gt?, [18]]]]]]]]]],
+        [:error, [:email, [:input, [:email, [:result, ["", [:val, [:predicate, [:filled?, []]]]]]]]]],
+        [:error, [:address, [:input, [:address, [:result, ["", [:val, [:predicate, [:filled?, []]]]]]]]]]
       ]
     end
 
     it 'converts error ast into another format' do
       expect(error_compiler.(ast)).to eql(
         name: ["+name+ key is missing in the hash"],
-        phone: ["Object does not respond to the +phone+ attr"],
         age: ["age must be greater than 18"],
         email: ["email must be filled"],
         address: ["Please provide your address"]
@@ -44,23 +41,23 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
   describe '#call with check errors' do
     let(:ast) do
-      [
-        [:error, [
-          :input, [
-            [:settings, :newsletter], [true, true], [
+      [[:error, [:newsletter, [
+          :input, [[:settings, :newsletter], [
+            :result, [
+              [true, true],
               [
                 :check, [
-                  [:settings, :newsletter],
+                  :newsletter,
                   [:implication, [
-                    [:res, [[:settings, :offers], [:predicate, [:true?, []]]]],
-                    [:res, [[:settings, :newsletter], [:predicate, [:false?, []]]]]]
+                    [:key, [[:settings, :offers], [:predicate, [:true?, []]]]],
+                    [:key, [[:settings, :newsletter], [:predicate, [:false?, []]]]]]
                   ]
                 ]
               ]
             ]
           ]
-        ]]
-      ]
+        ]]]
+      ]]
     end
 
     it 'converts error ast into another format' do
@@ -72,25 +69,23 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
   describe '#call with arr inputs' do
     let(:ast) do
-      [[:error, [:input, [
-        :payments,
-        [{ method: "cc", amount: 1.23 }, { amount: 4.56 }], [
-          [:el, [1, [:input, [:payments, { amount: 4.56 }, [
-            [:input, [
-              :method, nil, [[:key, [:method, [:predicate, [:key?, [:method]]]]]]
-            ]]]
-          ]]]]]]
-        ]]
-      ]
+      [[:error, [:payments,
+        [:input, [
+          :payments, [:result, [
+              [{ method: "cc", amount: 1.23 }, { amount: 4.56 }], [:each, [
+                [:el, [
+                  1, [
+                    :result, [{ amount: 4.56 }, [:val, [:predicate, [:key?, [:method]]]]]
+                  ]
+                ]]
+              ]]]
+          ]]]
+      ]]]
     end
 
     it 'converts error ast into another format' do
       expect(error_compiler.(ast)).to eql(
-        payments: {
-          1 => {
-            method: ['+method+ key is missing in the hash']
-          }
-        }
+        payments: { 1 => { method: ['+method+ key is missing in the hash'] } }
       )
     end
   end
@@ -99,7 +94,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':empty?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:tags, nil, [[:val, [:tags, [:predicate, [:empty?, []]]]]]]]
+          [:input, [:tags, [:result, [nil, [:val, [:predicate, [:empty?, []]]]]]]]
         )
 
         expect(msg).to eql(tags: ['tags cannot be empty'])
@@ -109,7 +104,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':exclusion?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, 2, [[:val, [:num, [:predicate, [:exclusion?, [[1, 2, 3]]]]]]]]]
+          [:input, [:num, [
+            :result, [2, [:val, [:predicate, [:exclusion?, [[1, 2, 3]]]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must not be one of: 1, 2, 3'])
@@ -119,7 +116,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':inclusion?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, 2, [[:val, [:num, [:predicate, [:inclusion?, [[1, 2, 3]]]]]]]]]
+          [:input, [:num, [
+            :result, [2, [:val, [:predicate, [:inclusion?, [[1, 2, 3]]]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be one of: 1, 2, 3'])
@@ -129,7 +128,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':gt?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, 2, [[:val, [:num, [:predicate, [:gt?, [3]]]]]]]]
+          [:input, [:num, [
+            :result, [2, [:val, [:predicate, [:gt?, [3]]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be greater than 3'])
@@ -139,7 +140,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':gteq?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, 2, [[:val, [:num, [:predicate, [:gteq?, [3]]]]]]]]
+          [:input, [:num, [
+            :result, [2, [:val, [:predicate, [:gteq?, [3]]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be greater than or equal to 3'])
@@ -149,7 +152,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':lt?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, 2, [[:val, [:num, [:predicate, [:lt?, [3]]]]]]]]
+          [:input, [:num, [
+            :result, [2, [:val, [:predicate, [:lt?, [3]]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be less than 3 (2 was given)'])
@@ -159,7 +164,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':lteq?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, 2, [[:val, [:num, [:predicate, [:lteq?, [3]]]]]]]]
+          [:input, [:num, [
+            :result, [2, [:val, [:predicate, [:lteq?, [3]]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be less than or equal to 3'])
@@ -169,7 +176,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':hash?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:address, '', [[:val, [:address, [:predicate, [:hash?, []]]]]]]]
+          [:input, [:address, [
+            :result, ['', [:val, [:predicate, [:hash?, []]]]]]
+          ]]
         )
 
         expect(msg).to eql(address: ['address must be a hash'])
@@ -179,10 +188,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':array?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [
-            :phone_numbers, '',
-            [[:val, [:phone_numbers, [:predicate, [:array?, []]]]]]]
-          ]
+          [:input, [:phone_numbers, [
+            :result, ['', [:val, [:predicate, [:array?, []]]]]]
+          ]]
         )
 
         expect(msg).to eql(phone_numbers: ['phone_numbers must be an array'])
@@ -192,7 +200,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':int?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, '2', [[:val, [:num, [:predicate, [:int?, []]]]]]]]
+          [:input, [:num, [
+            :result, ['2', [:val, [:predicate, [:int?, []]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be an integer'])
@@ -202,7 +212,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':float?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, '2', [[:val, [:num, [:predicate, [:float?, []]]]]]]]
+          [:input, [:num, [
+            :result, ['2', [:val, [:predicate, [:float?, []]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be a float'])
@@ -212,7 +224,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':decimal?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, '2', [[:val, [:num, [:predicate, [:decimal?, []]]]]]]]
+          [:input, [:num, [
+            :result, ['2', [:val, [:predicate, [:decimal?, []]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be a decimal'])
@@ -222,7 +236,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':date?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, '2', [[:val, [:num, [:predicate, [:date?, []]]]]]]]
+          [:input, [:num, [
+            :result, ['2', [:val, [:predicate, [:date?, []]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be a date'])
@@ -232,7 +248,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':date_time?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, '2', [[:val, [:num, [:predicate, [:date_time?, []]]]]]]]
+          [:input, [:num, [
+            :result, ['2', [:val, [:predicate, [:date_time?, []]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be a date time'])
@@ -242,7 +260,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':time?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, '2', [[:val, [:num, [:predicate, [:time?, []]]]]]]]
+          [:input, [:num, [
+            :result, ['2', [:val, [:predicate, [:time?, []]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be a time'])
@@ -252,7 +272,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':max_size?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, 'abcd', [[:val, [:num, [:predicate, [:max_size?, [3]]]]]]]]
+          [:input, [:num, [
+            :result, ['abcd', [:val, [:predicate, [:max_size?, [3]]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num size cannot be greater than 3'])
@@ -262,7 +284,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':min_size?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, 'ab', [[:val, [:num, [:predicate, [:min_size?, [3]]]]]]]]
+          [:input, [:num, [
+            :result, ['ab', [:val, [:predicate, [:min_size?, [3]]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num size cannot be less than 3'])
@@ -272,7 +296,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':none?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, nil, [[:val, [:num, [:predicate, [:none?, []]]]]]]]
+          [:input, [:num, [
+            :result, [nil, [:val, [:predicate, [:none?, []]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num cannot be defined'])
@@ -282,7 +308,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':size?' do
       it 'returns valid message when val is array and arg is int' do
         msg = error_compiler.visit(
-          [:input, [:numbers, [1], [[:val, [:numbers, [:predicate, [:size?, [3]]]]]]]]
+          [:input, [:numbers, [
+            :result, [[1], [:val, [:predicate, [:size?, [3]]]]]]
+          ]]
         )
 
         expect(msg).to eql(numbers: ['numbers size must be 3'])
@@ -290,7 +318,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
       it 'returns valid message when val is array and arg is range' do
         msg = error_compiler.visit(
-          [:input, [:numbers, [1], [[:val, [:numbers, [:predicate, [:size?, [3..4]]]]]]]]
+          [:input, [:numbers, [
+            :result, [[1], [:val, [:predicate, [:size?, [3..4]]]]]]
+          ]]
         )
 
         expect(msg).to eql(numbers: ['numbers size must be within 3 - 4'])
@@ -298,7 +328,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
       it 'returns valid message when arg is int' do
         msg = error_compiler.visit(
-          [:input, [:num, 'ab', [[:val, [:num, [:predicate, [:size?, [3]]]]]]]]
+          [:input, [:num, [
+            :result, ['ab', [:val, [:predicate, [:size?, [3]]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num length must be 3'])
@@ -306,7 +338,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
 
       it 'returns valid message when arg is range' do
         msg = error_compiler.visit(
-          [:input, [:num, 'ab', [[:val, [:num, [:predicate, [:size?, [3..4]]]]]]]]
+          [:input, [:num, [
+            :result, ['ab', [:val, [:predicate, [:size?, [3..4]]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num length must be within 3 - 4'])
@@ -316,7 +350,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':str?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, 3, [[:val, [:num, [:predicate, [:str?, []]]]]]]]
+          [:input, [:num, [
+            :result, [3, [:val, [:predicate, [:str?, []]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be a string'])
@@ -326,7 +362,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':bool?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:num, 3, [[:val, [:num, [:predicate, [:bool?, []]]]]]]]
+          [:input, [:num, [
+            :result, [3, [:val, [:predicate, [:bool?, []]]]]]
+          ]]
         )
 
         expect(msg).to eql(num: ['num must be boolean'])
@@ -336,7 +374,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':format?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:str, 'Bar', [[:val, [:str, [:predicate, [:format?, [/^F/]]]]]]]]
+          [:input, [:str, [
+            :result, ['Bar', [:val, [:predicate, [:format?, [/^F/]]]]]]
+          ]]
         )
 
         expect(msg).to eql(str: ['str is in invalid format'])
@@ -346,7 +386,9 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     describe ':eql?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
-          [:input, [:str, 'Foo', [[:val, [:str, [:predicate, [:eql?, ['Bar']]]]]]]]
+          [:input, [:str, [
+            :result, ['Foo', [:val, [:predicate, [:eql?, ['Bar']]]]]]
+          ]]
         )
 
         expect(msg).to eql(str: ['str must be equal to Bar'])

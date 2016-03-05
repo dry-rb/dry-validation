@@ -1,110 +1,57 @@
-require 'dry/validation/schema/key'
-require 'dry/validation/schema/attr'
-require 'dry/validation/schema/rule'
+require 'dry/validation/schema/dsl'
 
 module Dry
   module Validation
     class Schema
-      class Value < BasicObject
-        class Set < Value
-          def to_ast
-            rules.size > 1 ? [:set, [id, super]] : super
-          end
-        end
+      class Value < DSL
+        attr_reader :type
 
-        attr_reader :id, :rules, :checks
-
-        def initialize(id = nil)
-          @id = id
-          @rules = []
-          @checks = []
+        def initialize(options = {})
+          super
+          @type = options.fetch(:type, :key)
         end
 
         def class
           Value
         end
 
-        def key(name, &block)
-          define(Key, name, &block)
+        def each(&block)
+          val = Value[name].instance_eval(&block)
+          create_rule([:each, val.to_ast])
         end
 
-        def optional(name, &block)
-          Key.new(name, self).optional(&block)
+        def when(*predicates, &block)
+          left = predicates.reduce(Check[path, type: type]) { |a, e| a.__send__(*::Kernel.Array(e)) }
+
+          right = Value.new(type: type)
+          right.instance_eval(&block)
+
+          parent.add_check(left.then(create_rule(right.to_ast)))
+
+          self
         end
 
-        def attr(name, &block)
-          define(Attr, name, &block)
+        def confirmation
+          add_rule(value(:"#{name}_confirmation").eql?(value(name)))
         end
 
         def value(name)
-          Schema::Rule::Result.new(name, [], target: self)
-        end
-
-        def each(&block)
-          result = yield(Value::Set.new(id))
-          create_rule([:each, [id, result.to_ast]])
-        end
-
-        def rule(name, &block)
-          if block
-            predicate = yield
-
-            checks << Schema::Rule.new(
-              name,
-              [:check, [name, predicate.to_ast, predicate.keys]],
-              target: self, keys: predicate.keys
-            )
-
-            checks.last
-          else
-            self[name].to_success_check
-          end
-        end
-
-        def add_rule(rule)
-          rules << rule
-          self
-        end
-
-        def add_check(rule)
-          checks << rule
-          self
-        end
-
-        def to_ast
-          arr = rules.map(&:to_ast)
-          rules.size > 1 ? arr : arr[0]
+          Check[name, type: type, rules: rules]
         end
 
         private
 
-        def define(type, name, &block)
-          key = type.new(name, self)
-          key.__send__(key.predicate, &block)
-        end
-
-        def [](name)
-          rules.detect { |rule| rule.name == name }
-        end
-
-        def create_rule(node)
-          Schema::Rule.new(id, node, target: self)
-        end
-
         def method_missing(meth, *args, &block)
-          val_rule = create_rule([:val, [id, [:predicate, [meth, args]]]])
+          val_rule = create_rule([:val, [:predicate, [meth, args]]])
 
-          new_rule =
-            if block
-              result = yield
-              create_rule([:and, [val_rule.to_ast, result.to_ast]])
-            else
-              val_rule
-            end
+          if block
+            val = Value.new.instance_eval(&block)
+            new_rule = create_rule([:and, [val_rule.to_ast, val.to_ast]])
 
-          add_rule(new_rule)
-
-          new_rule
+            add_rule(new_rule)
+          else
+            val_rule
+          end
         end
       end
     end

@@ -1,7 +1,10 @@
 require 'dry/logic/predicates'
 require 'dry/logic/rule_compiler'
 
+require 'dry/validation/schema/key'
 require 'dry/validation/schema/value'
+require 'dry/validation/schema/check'
+
 require 'dry/validation/error'
 require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
@@ -20,82 +23,24 @@ module Dry
       setting :namespace
 
       def self.key(name, &block)
-        value = Value.new(name)
-        key = value.key(name, &block)
-
-        keys[name] = key
-
-        key
+        rules[name] = Value[name].key(name, &block)
       end
 
       def self.optional(name, &block)
-        value = Value.new(name)
-        key = value.optional(name, &block)
-
-        keys[name] = key
-
-        key
+        rules[name] = Value[name].optional(name, &block)
       end
 
-      def self.attr(name, &block)
-        value = Value.new(name)
-        key = value.attr(name, &block)
-
-        keys[name] = key
-
-        key
-      end
-
-      def self.value(name)
-        key = keys[name]
-
-        if key
-          keys[name].value(name)
-        else
-          Rule::Result.new(name, [], target: Value.new(name))
-        end
-      end
-
-      def self.rule(identifier, &block)
-        name, _ = Array(identifier).flatten
-        key = keys[name]
-
-        if key
-          if block
-            key.rule(identifier, &block)
-          else
-            rules.detect { |rule| rule.name == name }.to_success_check
-          end
-        else
-          result = yield
-
-          checks << Rule::Check.new(
-            identifier, [:check, [name, result.to_ast, result.keys]],
-            target: result.target
-          )
-
-          checks.last
-        end
-      end
-
-      def self.keys
-        @keys ||= {}
+      def self.rule(name, &block)
+        val = Value[name].instance_exec(&block)
+        rules[name] = Value.new(rules: [val])
       end
 
       def self.rules
-        keys.values.flat_map(&:rules)
-      end
-
-      def self.checks
-        @checks ||= []
+        @rules ||= {}
       end
 
       def self.rule_ast
-        rules.map(&:to_ast)
-      end
-
-      def self.check_ast
-        (checks + keys.values.flat_map(&:checks)).map(&:to_ast)
+        rules.values.flat_map(&:rules).map(&:to_ast)
       end
 
       def self.predicates
@@ -107,7 +52,7 @@ module Dry
       end
 
       def self.hint_compiler
-        HintCompiler.new(messages, rules: rules.map(&:to_ast))
+        HintCompiler.new(messages, rules: rule_ast)
       end
 
       def self.messages
@@ -130,7 +75,7 @@ module Dry
         end
       end
 
-      attr_reader :rules, :checks
+      attr_reader :rules
 
       attr_reader :rule_compiler
 
@@ -138,27 +83,25 @@ module Dry
 
       attr_reader :hint_compiler
 
-      def initialize(rules = [])
+      def initialize(rules = {})
         @rule_compiler = Logic::RuleCompiler.new(self)
-        @rules = rule_compiler.(self.class.rule_ast + rules.map(&:to_ast))
-        @checks = self.class.check_ast
         @error_compiler = self.class.error_compiler
         @hint_compiler = self.class.hint_compiler
+        initialize_rules(rules.merge(self.class.rules))
+      end
+
+      def initialize_rules(rules)
+        @rules = rules.each_with_object({}) do |(name, rule), result|
+          result[name] = rule_compiler.visit(
+            (rule.rules + rule.checks).reduce(:and).to_ast
+          )
+        end
       end
 
       def call(input)
-        result = Validation::Result.new(rules.map { |rule| rule.(input) })
-
-        if checks.size > 0
-          resolver = -> name { result[name] || self[name] }
-          compiled_checks = Logic::RuleCompiler.new(resolver).(checks)
-
-          compiled_checks.each do |rule|
-            result << rule.(result)
-          end
-        end
-
-        errors = Error::Set.new(result.failures.map { |failure| Error.new(failure) })
+        resmap = Hash[rules.map { |name, rule| [name, rule.(input)] }]
+        result = Validation::Result.new(resmap)
+        errors = Error::Set.new(result.failures.map { |name, failure| Error.new(name, failure) })
 
         Schema::Result.new(input, result, errors, error_compiler, hint_compiler)
       end

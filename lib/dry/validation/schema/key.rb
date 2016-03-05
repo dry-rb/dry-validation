@@ -1,57 +1,35 @@
+require 'dry/validation/schema/dsl'
+
 module Dry
   module Validation
     class Schema
-      class Key < BasicObject
-        attr_reader :name, :target
+      class Key < DSL
+        attr_reader :parent
 
-        def initialize(name, target, &block)
-          @name = name
-          @target = target
+        def class
+          Key
         end
 
-        def identifier
+        def type
           :key
         end
 
-        def predicate
-          :"#{identifier}?"
-        end
-
-        def optional(&block)
-          if block
-            result = yield(Value::Set.new(name))
-            target.add_rule(key?.then(result))
-          else
-            key?.to_implication
-          end
-        end
-
-        def val_name
-          if target.id != name
-            [target.id, name].flatten
-          else
-            name
-          end
+        def to_ast
+          [type, [name, super]]
         end
 
         private
 
-        def create_rule(node)
-          Schema::Rule.new(name, node, target: target)
-        end
-
         def method_missing(meth, *args, &block)
-          key_rule = create_rule([identifier, [name, [:predicate, [meth, args]]]])
+          predicate = [:predicate, [meth, args]]
 
           if block
-            result = yield(Value::Set.new(val_name))
-            new_rule = create_rule([:and, [key_rule.to_ast, result.to_ast]])
-
-            target.checks.concat(result.checks)
-
-            target.add_rule(new_rule)
+            val = Value[name].instance_eval(&block)
+            add_rule(create_rule([:and, [[:val, predicate], val.to_ast]]))
           else
-            key_rule
+            rule = create_rule([type, [name, predicate]])
+            add_rule(rule)
+            rule
           end
         end
       end

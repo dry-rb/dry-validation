@@ -3,11 +3,11 @@ RSpec.describe 'Schema with each and set rules' do
 
   let(:schema) do
     Class.new(Dry::Validation::Schema) do
-      key(:payments) do |payments|
-        payments.array? do
-          payments.each do |payment|
-            payment.key(:method, &:str?)
-            payment.key(:amount, &:float?)
+      key(:payments) do
+        array? do
+          each do
+            key(:method, &:str?)
+            key(:amount, &:float?)
           end
         end
       end

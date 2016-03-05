@@ -6,9 +6,9 @@ module Dry
     class Schema::Form < Schema
       attr_reader :input_type
 
-      def initialize(rules = [])
+      def initialize(rules = {})
         super
-        @input_type = InputTypeCompiler.new.(self.class.rules.map(&:to_ast))
+        @input_type = InputTypeCompiler.new.(self.class.rule_ast)
       end
 
       def call(input)

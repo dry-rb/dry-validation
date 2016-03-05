@@ -7,14 +7,14 @@ RSpec.describe HintCompiler, '#call' do
     [
       [
         :and, [
-          [:key, [:age, [:predicate, [:key?, []]]]],
+          [:val, [:predicate, [:key?, [:age]]]],
           [
             :or, [
-              [:val, [:age, [:predicate, [:none?, []]]]],
+              [:key, [:age, [:predicate, [:none?, []]]]],
               [
                 :and, [
-                  [:val, [:age, [:predicate, [:int?, []]]]],
-                  [:val, [:age, [:predicate, [:gt?, [18]]]]]
+                  [:key, [:age, [:predicate, [:int?, []]]]],
+                  [:key, [:age, [:predicate, [:gt?, [18]]]]]
                 ]
               ]
             ]
@@ -23,14 +23,14 @@ RSpec.describe HintCompiler, '#call' do
       ],
       [
         :and, [
-          [:attr, [:height, [:predicate, [:attr?, []]]]],
+          [:val, [:predicate, [:attr?, [:height]]]],
           [
             :or, [
-              [:val, [:height, [:predicate, [:none?, []]]]],
+              [:attr, [:height, [:predicate, [:none?, []]]]],
               [
                 :and, [
-                  [:val, [:height, [:predicate, [:int?, []]]]],
-                  [:val, [:height, [:predicate, [:gt?, [180]]]]]
+                  [:attr, [:height, [:predicate, [:int?, []]]]],
+                  [:attr, [:height, [:predicate, [:gt?, [180]]]]]
                 ]
               ]
             ]

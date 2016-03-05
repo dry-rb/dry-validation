@@ -5,13 +5,13 @@ RSpec.describe Dry::Validation do
     it 'uses provided custom predicates' do
       expect(validation.(email: 'jane@doe')).to be_success
 
-      expect(validation.(email: nil)).to match_array([
-        [:error, [:input, [:email, nil, [[:val, [:email, [:predicate, [:filled?, []]]]]]]]]
-      ])
+      expect(validation.(email: nil).messages).to eql(
+        email: ['email must be filled', 'must be a valid email']
+      )
 
-      expect(validation.(email: 'jane')).to match_array([
-        [:error, [:input, [:email, 'jane', [[:val, [:email, [:predicate, [:email?, []]]]]]]]]
-      ])
+      expect(validation.(email: 'jane').messages).to eql(
+        email: ['must be a valid email']
+      )
     end
   end
 
@@ -22,7 +22,13 @@ RSpec.describe Dry::Validation do
           config.predicates = Test::Predicates
         end
 
-        key(:email) { |value| value.filled? & value.email? }
+        def self.messages
+          Dry::Validation::Messages.default.merge(
+            en: { errors: { email?: 'must be a valid email' } }
+          )
+        end
+
+        key(:email) { filled? & email? }
       end
     end
 
@@ -44,7 +50,13 @@ RSpec.describe Dry::Validation do
   describe 'defining schema with custom predicate methods' do
     let(:schema) do
       Class.new(Dry::Validation::Schema) do
-        key(:email) { |value| value.filled? & value.email? }
+        key(:email) { filled? & email? }
+
+        def self.messages
+          Dry::Validation::Messages.default.merge(
+            en: { errors: { email?: 'must be a valid email' } }
+          )
+        end
 
         def email?(value)
           value.include?('@')

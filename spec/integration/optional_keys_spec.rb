@@ -6,12 +6,12 @@ RSpec.describe Dry::Validation::Schema do
       Class.new(Dry::Validation::Schema) do
         optional(:email) { |email| email.filled? }
 
-        key(:address) do |address|
-          address.key(:city, &:filled?)
-          address.key(:street, &:filled?)
+        key(:address) do
+          key(:city, &:filled?)
+          key(:street, &:filled?)
 
-          address.optional(:phone_number) do |phone_number|
-            phone_number.none? | phone_number.str?
+          optional(:phone_number) do
+            none? | str?
           end
         end
       end

@@ -11,13 +11,21 @@ module Dry
         @val_type = input.class
       end
 
-      def input_visitor(new_name, value)
-        self.class.new(messages, options.merge(name: [*name, *new_name].uniq, input: value))
+      def visit_each(node)
+        node.map { |el| visit(el) }
+      end
+
+      def visit_set(node)
+        result = node.map do |input|
+          visit(input)
+        end
+        merge(result)
       end
 
       def visit_el(node)
-        idx, element = node
-        with(name: [*Array(name), idx], input: input[idx]).(element.last.last)
+        idx, el = node
+        name = [*Array(name), idx]
+        visit(el, name)
       end
 
       def visit_check(node)
@@ -38,16 +46,13 @@ module Dry
           rule: rule, val_type: val_type, arg_type: args[0].class
         )
 
-        tokens = __send__(:"options_for_#{predicate}", args).merge(name: rule)
+        tokens = options_for(predicate, args)
         template = messages[predicate, lookup_options.merge(tokens)]
 
         message = [template % tokens]
+        path = [*name, tokens[:name]].compact.uniq.reverse
 
-        if name.is_a?(Array)
-          [message, *name.reverse].reduce { |a, e| { e => a } }
-        else
-          { name => message }
-        end
+        [message, *path].reduce { |a, e| { e => a } }
       end
 
       def options_for_key?(*args)
@@ -104,14 +109,24 @@ module Dry
         if num.is_a?(Range)
           { left: num.first, right: num.last, value: input }
         else
-          { num: args[0][0], value: value }
+          { num: args[0][0], value: input }
         end
       end
 
-      private
+      def options_for(predicate, args)
+        meth = :"options_for_#{predicate}"
 
-      def method_missing(*)
-        { name: name, value: input }
+        defaults = { name: rule, rule: rule, value: input }
+
+        if respond_to?(meth)
+          defaults.merge(__send__(meth, args))
+        else
+          defaults
+        end
+      end
+
+      def input_visitor(new_name, value)
+        self.class.new(messages, options.merge(name: [*name, *new_name].uniq, input: value))
       end
     end
   end

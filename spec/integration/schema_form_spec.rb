@@ -4,24 +4,24 @@ RSpec.describe Dry::Validation::Schema::Form do
   describe 'defining schema' do
     let(:schema) do
       Class.new(Dry::Validation::Schema::Form) do
-        key(:email) { |email| email.filled? }
+        key(:email) { filled? }
 
-        key(:age) { |age| age.none? | (age.int? & age.gt?(18)) }
+        key(:age) { none? | (int? & gt?(18)) }
 
-        key(:address) do |address|
-          address.hash? do
-            address.key(:city, &:filled?)
-            address.key(:street, &:filled?)
+        key(:address) do
+          hash? do
+            key(:city, &:filled?)
+            key(:street, &:filled?)
 
-            address.key(:loc) do |loc|
-              loc.key(:lat) { |lat| lat.filled? & lat.float? }
-              loc.key(:lng) { |lng| lng.filled? & lng.float? }
+            key(:loc) do
+              key(:lat) { filled? & float? }
+              key(:lng) { filled? & float? }
             end
           end
         end
 
-        optional(:phone_number) do |phone_number|
-          phone_number.none? | (phone_number.int? & phone_number.gt?(0))
+        optional(:phone_number) do
+          none? | (int? & gt?(0))
         end
       end
     end
@@ -82,11 +82,11 @@ RSpec.describe Dry::Validation::Schema::Form do
       end
 
       it 'validates presence of an email and min age value' do
-        expect(validation.('email' => '', 'age' => '18')).to match_array([
-          [:error, [:input, [:age, 18, [[:val, [:age, [:predicate, [:gt?, [18]]]]]]]]],
-          [:error, [:input, [:email, "", [[:val, [:email, [:predicate, [:filled?, []]]]]]]]],
-          [:error, [:input, [:address, nil, [[:key, [:address, [:predicate, [:key?, [:address]]]]]]]]]
-        ])
+        expect(validation.('email' => '', 'age' => '18').messages).to eql(
+          address: ['address is missing'],
+          age: ['age must be greater than 18'],
+          email: ['email must be filled']
+        )
       end
 
       it 'handles optionals' do

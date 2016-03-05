@@ -10,6 +10,7 @@ if RUBY_ENGINE == "rbx"
 end
 
 require 'dry-validation'
+require 'ostruct'
 
 SPEC_ROOT = Pathname(__dir__)
 
@@ -18,7 +19,7 @@ Dir[SPEC_ROOT.join('support/**/*.rb')].each(&method(:require))
 
 include Dry::Validation
 
-class Schema::Value < BasicObject
+class Schema::DSL < BasicObject
   def inspect
     to_ast.inspect
   end

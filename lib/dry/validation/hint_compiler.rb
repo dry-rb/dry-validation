@@ -1,31 +1,16 @@
-require 'dry/validation/error_compiler'
+require 'dry/validation/error_compiler/input'
 
 module Dry
   module Validation
-    class HintCompiler < ErrorCompiler
+    class HintCompiler < ErrorCompiler::Input
       attr_reader :rules, :excluded
 
-      EXCLUDED = [:none?].freeze
-
-      class Input < ErrorCompiler::Input
-        attr_reader :excluded
-
-        def initialize(messages, options)
-          super
-          @excluded = options.fetch(:excluded)
-        end
-
-        def visit_predicate(node)
-          predicate, _ = node
-
-          return {} if excluded.include?(predicate)
-
-          super
-        end
-      end
+      EXCLUDED = [
+        :none?, :filled?, :str?, :int?, :float?, :decimal?, :hash?, :array?
+      ].freeze
 
       def initialize(messages, options = {})
-        super
+        super(messages, { name: nil, input: nil }.merge(options))
         @rules = @options.delete(:rules)
         @excluded = @options.fetch(:excluded, EXCLUDED)
       end
@@ -38,9 +23,35 @@ module Dry
         super(rules)
       end
 
+      def visit_predicate(node)
+        predicate, _ = node
+
+        return {} if excluded.include?(predicate)
+
+        super
+      end
+
+      def visit_check(node)
+        {}
+      end
+
       def visit_set(node)
-        _, other = node
-        merge(other.map { |el| visit(el) })
+        result = node.map do |el|
+          visit(el)
+        end
+        merge(result)
+      end
+
+      def visit_each(node)
+        visit(node)
+      end
+
+      def visit_xor(node)
+        {}
+      end
+
+      def visit_not(node)
+        {}
       end
 
       def visit_or(node)
@@ -60,24 +71,12 @@ module Dry
 
       def visit_key(node)
         name, predicate = node
-        input_visitor(name).visit(predicate)
+        with(name: Array([*self.name, name])).visit(predicate)
       end
+      alias_method :visit_attr, :visit_key
 
       def visit_val(node)
-        name, predicate = node
-        input_visitor(name).visit(predicate)
-      end
-
-      def input_visitor(name)
-        HintCompiler::Input.new(
-          messages, options.merge(name: name, input: nil, excluded: excluded)
-        )
-      end
-
-      private
-
-      def method_missing(*)
-        {}
+        visit(node)
       end
     end
   end

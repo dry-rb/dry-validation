@@ -20,37 +20,40 @@ module Dry
         self.class.new(messages, options.merge(new_options))
       end
 
-      def input_visitor(name, input)
-        Input.new(messages, options.merge(name: name, input: input))
-      end
-
-      def visit(node)
-        __send__(:"visit_#{node[0]}", node[1])
-      end
-
-      def visit_input(node)
-        name, value, other = node
-        input_visitor(name, value).(other)
+      def visit(node, *args)
+        __send__(:"visit_#{node[0]}", node[1], *args)
       end
 
       def visit_error(error)
-        result = visit(error)
+        name, other = error
+        message = messages[name, rule: name]
 
-        if result.is_a?(Array)
-          merge(result)
+        if message
+          { name => [message] }
         else
-          merge_hints(result)
+          result = visit(other)
+
+          if result.is_a?(Array)
+            merge(result)
+          else
+            merge_hints(result)
+          end
         end
+      end
+
+      def visit_input(node)
+        name, result = node
+        visit(result, name)
+      end
+
+      def visit_result(node, name = nil)
+        value, other = node
+        input_visitor(name, value).visit(other)
       end
 
       def visit_implication(node)
         _, right = node
         visit(right)
-      end
-
-      def visit_res(node)
-        _, predicate = node
-        visit(predicate)
       end
 
       def visit_key(rule)
@@ -64,8 +67,7 @@ module Dry
       end
 
       def visit_val(node)
-        _, predicate = node
-        visit(predicate)
+        visit(node)
       end
 
       private
@@ -100,9 +102,13 @@ module Dry
       def merge(result)
         result.reduce do |a, e|
           e.merge(a) do |_, left, right|
-            left.is_a?(Hash) ? left.merge(right) : right + left
+            left.is_a?(Hash) ? left.merge(right) : (right + left).uniq
           end
         end
+      end
+
+      def input_visitor(name, input)
+        Input.new(messages, options.merge(name: name, input: input))
       end
     end
   end
