@@ -80,9 +80,9 @@ class UserSchema < Dry::Validation::Schema
   key(:age).maybe(:int?)
 
   key(:address) do
-   key(:street).required
-   key(:city).required
-   key(:zipcode).required
+    key(:street).required
+    key(:city).required
+    key(:zipcode).required
   end
 end
 ```
