@@ -20,6 +20,8 @@ RSpec.describe Dry::Validation::Schema::Form do
           end
         end
 
+        optional(:password).maybe.confirmation
+
         optional(:phone_number) do
           none? | (int? & gt?(0))
         end

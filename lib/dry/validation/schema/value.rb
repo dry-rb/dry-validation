@@ -32,11 +32,15 @@ module Dry
         end
 
         def confirmation
-          add_rule(value(:"#{name}_confirmation").eql?(value(name)))
+          add_check(check(:"#{name}_confirmation").eql?(check(name)))
         end
 
         def value(name)
-          Check[name, type: type, rules: rules]
+          check(name, rules: rules)
+        end
+
+        def check(name, options = {})
+          Check[name, options.merge(type: type)]
         end
 
         private
