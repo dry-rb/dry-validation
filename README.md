@@ -73,16 +73,16 @@ Please refer to [the wiki](https://github.com/dryrb/dry-validation/wiki) for ful
 
 ``` ruby
 class UserSchema < Dry::Validation::Schema
-  key(:name) { |name| name.filled? }
+  key(:name).required
 
-  key(:email) { |email| email.filled? & email.format?(EMAIL_REGEX) }
+  key(:email).required(format?: EMAIL_REGEX)
 
-  key(:age) { |age| age.none? | age.int? }
+  key(:age).maybe(:int?)
 
-  key(:address) do |address|
-   address.key(:street, &:filled?)
-   address.key(:city, &:filled?)
-   address.key(:zipcode, &:filled?)
+  key(:address) do
+   key(:street).required
+   key(:city).required
+   key(:zipcode).required
   end
 end
 ```
