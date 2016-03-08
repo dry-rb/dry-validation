@@ -1,31 +1,31 @@
 RSpec.describe Dry::Validation do
-  subject(:validation) { schema.new }
-
   shared_context 'uses custom predicates' do
     it 'uses provided custom predicates' do
-      expect(validation.(email: 'jane@doe')).to be_success
+      expect(schema.(email: 'jane@doe')).to be_success
 
-      expect(validation.(email: nil).messages).to eql(
+      expect(schema.(email: nil).messages).to eql(
         email: ['email must be filled', 'must be a valid email']
       )
 
-      expect(validation.(email: 'jane').messages).to eql(
+      expect(schema.(email: 'jane').messages).to eql(
         email: ['must be a valid email']
       )
     end
   end
 
   describe 'defining schema with custom predicates container' do
-    let(:schema) do
-      Class.new(Dry::Validation::Schema) do
-        configure do |config|
-          config.predicates = Test::Predicates
-        end
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          configure do |config|
+            config.predicates = Test::Predicates
+          end
 
-        def self.messages
-          Dry::Validation::Messages.default.merge(
-            en: { errors: { email?: 'must be a valid email' } }
-          )
+          def self.messages
+            Dry::Validation::Messages.default.merge(
+              en: { errors: { email?: 'must be a valid email' } }
+            )
+          end
         end
 
         key(:email) { filled? & email? }
@@ -48,19 +48,21 @@ RSpec.describe Dry::Validation do
   end
 
   describe 'defining schema with custom predicate methods' do
-    let(:schema) do
-      Class.new(Dry::Validation::Schema) do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          def self.messages
+            Dry::Validation::Messages.default.merge(
+              en: { errors: { email?: 'must be a valid email' } }
+            )
+          end
+
+          def email?(value)
+            value.include?('@')
+          end
+        end
+
         key(:email) { filled? & email? }
-
-        def self.messages
-          Dry::Validation::Messages.default.merge(
-            en: { errors: { email?: 'must be a valid email' } }
-          )
-        end
-
-        def email?(value)
-          value.include?('@')
-        end
       end
     end
 

@@ -4,11 +4,18 @@ module Dry
   module Validation
     class Schema
       class Value < DSL
-        attr_reader :type
+        attr_reader :type, :schema_class
 
         def initialize(options = {})
           super
           @type = options.fetch(:type, :key)
+          @schema_class = options.fetch(:schema_class, Schema)
+        end
+
+        def configure(&block)
+          klass = ::Class.new(schema_class, &block)
+          @schema_class = klass
+          self
         end
 
         def class
@@ -26,9 +33,15 @@ module Dry
           right = Value.new(type: type)
           right.instance_eval(&block)
 
-          parent.add_check(left.then(create_rule(right.to_ast)))
+          add_check(left.then(create_rule(right.to_ast)))
 
           self
+        end
+
+        def rule(name, &block)
+          val = Value[name]
+          res = val.instance_exec(&block)
+          add_check(val.with(rules: [res]))
         end
 
         def confirmation

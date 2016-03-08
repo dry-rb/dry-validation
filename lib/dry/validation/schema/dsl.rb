@@ -60,13 +60,17 @@ module Dry
           items.size == 1 ? items[0] : items
         end
 
+        def with(new_options)
+          self.class.new(options.merge(new_options))
+        end
+
         private
 
         def define(name, key_class, op = :and, &block)
           type = key_class.type
 
           val = Value[
-            name, type: type, parent: self, checks: checks, rules: rules
+            name, type: type, parent: self, rules: rules, checks: checks
           ].__send__(:"#{type}?", name)
 
           if block

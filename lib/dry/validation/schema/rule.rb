@@ -54,22 +54,22 @@ module Dry
         end
 
         def and(other)
-          new([:and, [node, other.node]])
+          new([:and, [node, other.to_ast]])
         end
         alias_method :&, :and
 
         def or(other)
-          new([:or, [node, other.node]])
+          new([:or, [node, other.to_ast]])
         end
         alias_method :|, :or
 
         def xor(other)
-          new([:xor, [node, other.node]])
+          new([:xor, [node, other.to_ast]])
         end
         alias_method :^, :xor
 
         def then(other)
-          new([:implication, [node, other.node]])
+          new([:implication, [node, other.to_ast]])
         end
         alias_method :>, :then
 

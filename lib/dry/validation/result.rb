@@ -13,12 +13,16 @@ module Dry
         rule_results.each(&block)
       end
 
+      def success?
+        failures.empty?
+      end
+
       def [](name)
         rule_results[name]
       end
 
-      def merge!(other)
-        rule_results.merge(other.rule_results)
+      def merge!(other_results)
+        rule_results.merge!(other_results)
       end
 
       def to_ary

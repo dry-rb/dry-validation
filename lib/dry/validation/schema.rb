@@ -21,30 +21,15 @@ module Dry
       setting :messages, :yaml
       setting :messages_file
       setting :namespace
+      setting :rules, []
+      setting :checks, []
 
-      def self.key(name, &block)
-        rules[name] = Value[name].key(name, &block)
-      end
-
-      def self.optional(name, &block)
-        rules[name] = Value[name].optional(name, &block)
-      end
-
-      def self.rule(name, &block)
-        val = Value[name].instance_exec(&block)
-        checks[name] = Value.new(rules: [val])
+      def self.new(rules = config.rules, **options)
+        super(rules, default_options.merge(options))
       end
 
       def self.rules
-        @rules ||= {}
-      end
-
-      def self.checks
-        @checks ||= {}
-      end
-
-      def self.rule_ast
-        rules.values.flat_map(&:rules).map(&:to_ast)
+        config.rules
       end
 
       def self.predicates
@@ -57,6 +42,10 @@ module Dry
 
       def self.hint_compiler
         HintCompiler.new(messages, rules: rule_ast)
+      end
+
+      def self.rule_ast
+        config.rules.flat_map(&:rules).map(&:to_ast)
       end
 
       def self.messages
@@ -82,7 +71,15 @@ module Dry
         end
       end
 
+      def self.default_options
+        { error_compiler: error_compiler,
+          hint_compiler: hint_compiler,
+          checks: config.checks }
+      end
+
       attr_reader :rules
+
+      attr_reader :checks
 
       attr_reader :rule_compiler
 
@@ -90,24 +87,36 @@ module Dry
 
       attr_reader :hint_compiler
 
-      def initialize(rules = {})
+      def initialize(rules, options = {})
+        @rules = rules
         @rule_compiler = Logic::RuleCompiler.new(self)
-        @error_compiler = self.class.error_compiler
-        @hint_compiler = self.class.hint_compiler
-        initialize_rules(rules.merge(self.class.rules).merge(self.class.checks))
+        @error_compiler = options.fetch(:error_compiler)
+        @hint_compiler = options.fetch(:hint_compiler)
+        initialize_rules(rules)
+        initialize_checks(options.fetch(:checks, []))
       end
 
       def initialize_rules(rules)
-        @rules = rules.each_with_object({}) do |(name, rule), result|
-          result[name] = rule_compiler.visit(
-            (rule.rules + rule.checks).reduce(:and).to_ast
-          )
+        @rules = rules.each_with_object({}) do |rule, result|
+          result[rule.name] = rule_compiler.visit(rule.to_ast)
+        end
+      end
+
+      def initialize_checks(checks)
+        @checks = checks.each_with_object({}) do |check, result|
+          result[check.name] = rule_compiler.visit(check.to_ast)
         end
       end
 
       def call(input)
         resmap = Hash[rules.map { |name, rule| [name, rule.(input)] }]
         result = Validation::Result.new(resmap)
+
+        if result.success?
+          chkmap = Hash[checks.map { |name, check| [name, check.(input)] }]
+          result.merge!(chkmap)
+        end
+
         errors = Error::Set.new(result.failures.map { |name, failure| Error.new(name, failure) })
 
         Schema::Result.new(input, result, errors, error_compiler, hint_compiler)
