@@ -13,8 +13,8 @@ module Dry
           @options = options
         end
 
-        def schema(&block)
-          schema = Validation.Schema(
+        def schema(other = nil, &block)
+          schema = other ? other.class : Validation.Schema(
             type: target.schema_class, path: target.path, build: false, &block
           )
 
