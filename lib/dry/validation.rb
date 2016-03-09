@@ -13,7 +13,7 @@ module Dry
     end
 
     def self.Schema(options = {}, &block)
-      dsl_opts = { schema_class: options.fetch(:type, Schema) }
+      dsl_opts = { schema_class: options.fetch(:type, Class.new(Schema)) }
 
       dsl = Schema::Value.new(dsl_opts)
       dsl.instance_exec(&block)
@@ -23,9 +23,14 @@ module Dry
       klass.configure do |config|
         config.rules = options.fetch(:rules, []) + dsl.rules
         config.checks = dsl.checks
+        config.path = options[:path]
       end
 
-      klass.new
+      if options[:build] == false
+        klass
+      else
+        klass.new
+      end
     end
 
     def self.Form(options = {}, &block)

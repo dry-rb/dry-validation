@@ -2,7 +2,6 @@ module Dry
   module Validation
     class Schema::Result
       include Dry::Equalizer(:output, :messages)
-      include Enumerable
 
       attr_reader :output
 
@@ -10,32 +9,34 @@ module Dry
 
       attr_reader :errors
 
-      attr_reader :error_compiler
+      EMPTY_MESSAGES = {}.freeze
 
-      attr_reader :hint_compiler
-
-      def initialize(output, result, errors, error_compiler, hint_compiler)
+      def initialize(output, result, errors)
         @output = output
         @result = result
         @errors = errors
-        @error_compiler = error_compiler
-        @hint_compiler = hint_compiler
       end
 
-      def each(&block)
-        failures.each(&block)
+      def [](name)
+        result[name]
       end
 
       def success?
         errors.empty?
       end
 
-      def to_ary
-        errors.map(&:to_ary)
+      def failure?
+        !success?
       end
 
       def messages(options = {})
-        @messages ||= compile_messages(options)
+        @messages ||= errors
+          .map { |error| error.messages(options) }
+          .reduce(:merge) || EMPTY_MESSAGES
+      end
+
+      def to_ast
+        [:set, errors.map(&:to_ast)]
       end
 
       def successes
@@ -44,13 +45,6 @@ module Dry
 
       def failures
         result.failures
-      end
-
-      private
-
-      def compile_messages(options)
-        hints = hint_compiler.with(options).call
-        error_compiler.with(options.merge(hints: hints)).(to_ary)
       end
     end
   end

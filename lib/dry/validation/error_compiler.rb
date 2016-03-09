@@ -24,6 +24,10 @@ module Dry
         __send__(:"visit_#{node[0]}", node[1], *args)
       end
 
+      def visit_set(node)
+        call(node)
+      end
+
       def visit_error(error)
         name, other = error
         message = messages[name, rule: name]

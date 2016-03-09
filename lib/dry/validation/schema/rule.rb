@@ -2,14 +2,25 @@ module Dry
   module Validation
     class Schema
       class Rule < BasicObject
-        attr_reader :name, :node, :type, :target, :options
+        attr_reader :name, :node, :type, :target, :deps, :options
 
         def initialize(node, options = {})
           @node = node
+          @type = options.fetch(:type, :and)
+          @deps = options.fetch(:deps, [])
           @name = options.fetch(:name)
           @target = options.fetch(:target)
-          @type = options.fetch(:type, :and)
           @options = options
+        end
+
+        def schema(&block)
+          schema = Validation.Schema(
+            type: target.schema_class, path: target.path, build: false, &block
+          )
+
+          rule = __send__(type, key(:hash?).and(key(schema)))
+
+          add_rule(rule)
         end
 
         def required(*predicates)
@@ -42,7 +53,11 @@ module Dry
         end
 
         def to_ast
-          node
+          if deps.empty?
+            node
+          else
+            [:guard, [deps, node]]
+          end
         end
 
         def class
@@ -87,7 +102,14 @@ module Dry
         private
 
         def key(predicate, args = [])
-          new([target.type, [name, [:predicate, [predicate, args]]]])
+          node =
+            if predicate.is_a?(::Symbol)
+              [target.type, [name, [:predicate, [predicate, args]]]]
+            else
+              [target.type, [name, predicate.to_ast]]
+            end
+
+          new(node)
         end
 
         def new(node)

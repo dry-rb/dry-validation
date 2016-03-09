@@ -9,7 +9,7 @@ module Dry
         def initialize(options = {})
           super
           @type = options.fetch(:type, :key)
-          @schema_class = options.fetch(:schema_class, Schema)
+          @schema_class = options.fetch(:schema_class, ::Class.new(Schema))
         end
 
         def configure(&block)
@@ -38,14 +38,25 @@ module Dry
           self
         end
 
-        def rule(name, &block)
-          val = Value[name]
-          res = val.instance_exec(&block)
-          add_check(val.with(rules: [res]))
+        def rule(id = nil, **options, &block)
+          if id
+            val = Value[id]
+            res = val.instance_exec(&block)
+          else
+            id, *deps = options.to_a.flatten
+            val = Value[id]
+            res = val.instance_exec(*deps.map { |name| val.value(name) }, &block)
+          end
+
+          add_check(val.with(rules: [res.with(deps: deps || [])]))
         end
 
         def confirmation
-          add_check(check(:"#{name}_confirmation").eql?(check(name)))
+          rule = check(:"#{name}_confirmation")
+            .eql?(check(name))
+            .with(deps: [name])
+
+          add_check(rule)
         end
 
         def value(name)

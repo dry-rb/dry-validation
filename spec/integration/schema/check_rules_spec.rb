@@ -13,12 +13,18 @@ RSpec.describe Schema, 'using high-level rules' do
         optional(:red).maybe
         optional(:blue).maybe
 
-        rule(:destiny) { value(:red).filled? | value(:blue).filled? }
+        rule(destiny: [:red, :blue]) do |red, blue|
+          red.filled? | blue.filled?
+        end
       end
     end
 
     it 'passes when only red is filled' do
       expect(schema.(red: '1')).to be_success
+    end
+
+    it 'fails when keys are missing' do
+      expect(schema.({})).to be_failure
     end
 
     it 'fails when red and blue are not filled ' do

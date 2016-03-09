@@ -25,8 +25,8 @@ module Dry
         rule_results.merge!(other_results)
       end
 
-      def to_ary
-        failures.map(&:to_ary)
+      def to_ast
+        failures.map(&:to_ast)
       end
 
       def successes

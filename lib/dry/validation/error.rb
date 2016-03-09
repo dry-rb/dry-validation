@@ -1,40 +1,31 @@
 module Dry
   module Validation
     class Error
-      class Set
-        include Enumerable
+      include Dry::Equalizer(:name, :result)
 
-        attr_reader :errors
+      attr_reader :name, :result, :error_compiler, :hint_compiler
 
-        def initialize(errors)
-          @errors = errors
-        end
-
-        def each(&block)
-          errors.each(&block)
-        end
-
-        def empty?
-          errors.empty?
-        end
-
-        def to_ary
-          errors.map { |error| error.to_ary }
-        end
-        alias_method :to_a, :to_ary
-      end
-
-      attr_reader :name, :result
-
-      def initialize(name, result)
+      def initialize(name, result, error_compiler, hint_compiler)
         @name = name
         @result = result
+        @error_compiler = error_compiler
+        @hint_compiler = hint_compiler
       end
 
-      def to_ary
-        [:error, [name, result.to_ary]]
+      def messages(options = {})
+        hints = hint_compiler.with(options).call
+        msg_hash = error_compiler.with(options.merge(hints: hints)).([to_ast])
+
+        if msg_hash.key?(name) || name != result.name
+          msg_hash
+        else
+          { name => msg_hash }
+        end
       end
-      alias_method :to_a, :to_ary
+
+      def to_ast
+        [:error, [name, result.to_ast]]
+      end
     end
   end
 end

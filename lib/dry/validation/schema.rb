@@ -1,6 +1,6 @@
 require 'dry/logic/predicates'
-require 'dry/logic/rule_compiler'
 
+require 'dry/validation/schema_compiler'
 require 'dry/validation/schema/key'
 require 'dry/validation/schema/value'
 require 'dry/validation/schema/check'
@@ -17,6 +17,7 @@ module Dry
     class Schema
       extend Dry::Configurable
 
+      setting :path
       setting :predicates, Logic::Predicates
       setting :messages, :yaml
       setting :messages_file
@@ -26,6 +27,10 @@ module Dry
 
       def self.new(rules = config.rules, **options)
         super(rules, default_options.merge(options))
+      end
+
+      def self.to_ast
+        [:schema, self]
       end
 
       def self.rules
@@ -89,7 +94,7 @@ module Dry
 
       def initialize(rules, options = {})
         @rules = rules
-        @rule_compiler = Logic::RuleCompiler.new(self)
+        @rule_compiler = SchemaCompiler.new(self)
         @error_compiler = options.fetch(:error_compiler)
         @hint_compiler = options.fetch(:hint_compiler)
         initialize_rules(rules)
@@ -112,14 +117,24 @@ module Dry
         resmap = Hash[rules.map { |name, rule| [name, rule.(input)] }]
         result = Validation::Result.new(resmap)
 
-        if result.success?
-          chkmap = Hash[checks.map { |name, check| [name, check.(input)] }]
-          result.merge!(chkmap)
+        chkmap = Hash[
+          checks.map { |name, check|
+            check_res = check.is_a?(Guard) ? check.(input, result) : check.(input)
+            [name, check_res] if check_res
+          }.compact
+        ]
+
+        result.merge!(chkmap)
+
+        errors = result.failures.map do |name, failure|
+          if failure.is_a?(Schema::Result)
+            failure
+          else
+            Error.new(name, failure, error_compiler, hint_compiler)
+          end
         end
 
-        errors = Error::Set.new(result.failures.map { |name, failure| Error.new(name, failure) })
-
-        Schema::Result.new(input, result, errors, error_compiler, hint_compiler)
+        Schema::Result.new(input, result, errors)
       end
 
       def [](name)

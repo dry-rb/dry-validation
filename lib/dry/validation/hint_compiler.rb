@@ -23,6 +23,10 @@ module Dry
         super(rules)
       end
 
+      def visit_schema(node)
+        {}
+      end
+
       def visit_predicate(node)
         predicate, _ = node
 

@@ -3,7 +3,7 @@ RSpec.describe 'Schema / Injecting Rules' do
     Dry::Validation.Schema(rules: other.class.rules) do
       key(:email).maybe
 
-      rule(email: :filled?) { value(:login).true? > value(:email).filled? }
+      rule(:email) { value(:login).true? > value(:email).filled? }
     end
   end
 
