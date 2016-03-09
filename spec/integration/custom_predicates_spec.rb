@@ -64,4 +64,28 @@ RSpec.describe Dry::Validation do
 
     include_context 'uses custom predicates'
   end
+
+  describe 'custom predicate which requires an arbitrary dependency' do
+    subject(:schema) do
+      Dry::Validation.Schema(type: base_class) do
+        key(:email).required(:email?)
+
+        configure do
+          option :email_check
+
+          def email?(value)
+            email_check.(value)
+          end
+        end
+      end
+    end
+
+    it 'uses injected dependency for the custom predicate' do
+      email_check = -> input { input.include?('@') }
+
+      expect(schema.with(email_check: email_check).(email: 'foo').messages).to eql(
+        email: ['must be a valid email']
+      )
+    end
+  end
 end

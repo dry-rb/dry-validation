@@ -7,8 +7,8 @@ module Dry
       attr_reader :input_type
 
       def initialize(rules, options = {})
-        super
         @input_type = InputTypeCompiler.new.(self.class.rule_ast)
+        super
       end
 
       def call(input)

@@ -23,6 +23,7 @@ module Dry
       setting :namespace
       setting :rules, []
       setting :checks, []
+      setting :option_names, []
 
       def self.new(rules = config.rules, **options)
         super(rules, default_options.merge(options))
@@ -38,6 +39,10 @@ module Dry
 
       def self.predicates
         config.predicates
+      end
+
+      def self.option_names
+        config.option_names
       end
 
       def self.messages
@@ -94,40 +99,32 @@ module Dry
 
       attr_reader :hint_compiler
 
-      def initialize(rules, options = {})
-        @rules = rules
+      attr_reader :options
+
+      def self.option(name)
+        attr_reader(*name)
+        option_names << name
+      end
+
+      def initialize(rules, options)
         @rule_compiler = SchemaCompiler.new(self)
         @error_compiler = options.fetch(:error_compiler)
         @hint_compiler = options.fetch(:hint_compiler)
         @predicates = options.fetch(:predicates)
+
+        initialize_options(options)
         initialize_rules(rules)
         initialize_checks(options.fetch(:checks, []))
+
+        freeze
       end
 
-      def initialize_rules(rules)
-        @rules = rules.each_with_object({}) do |rule, result|
-          result[rule.name] = rule_compiler.visit(rule.to_ast)
-        end
-      end
-
-      def initialize_checks(checks)
-        @checks = checks.each_with_object({}) do |check, result|
-          result[check.name] = rule_compiler.visit(check.to_ast)
-        end
+      def with(new_options)
+        self.class.new(self.class.rules, options.merge(new_options))
       end
 
       def call(input)
         Result.new(input, errors(input), error_compiler, hint_compiler)
-      end
-
-      def errors(input)
-        results = rule_results(input)
-
-        results.merge!(check_results(input, results)) unless checks.empty?
-
-        results
-          .map { |name, result| Error.new(name, result) if result.failure? }
-          .compact
       end
 
       def [](name)
@@ -142,6 +139,16 @@ module Dry
 
       private
 
+      def errors(input)
+        results = rule_results(input)
+
+        results.merge!(check_results(input, results)) unless checks.empty?
+
+        results
+          .map { |name, result| Error.new(name, result) if result.failure? }
+          .compact
+      end
+
       def rule_results(input)
         rules.each_with_object({}) do |(name, rule), hash|
           hash[name] = rule.(input)
@@ -152,6 +159,25 @@ module Dry
         checks.each_with_object({}) do |(name, check), hash|
           check_res = check.is_a?(Guard) ? check.(input, result) : check.(input)
           hash[name] = check_res if check_res
+        end
+      end
+
+      def initialize_options(options)
+        @options = options
+        self.class.option_names.each do |name|
+          instance_variable_set("@#{name}", options[name])
+        end
+      end
+
+      def initialize_rules(rules)
+        @rules = rules.each_with_object({}) do |rule, result|
+          result[rule.name] = rule_compiler.visit(rule.to_ast)
+        end
+      end
+
+      def initialize_checks(checks)
+        @checks = checks.each_with_object({}) do |check, result|
+          result[check.name] = rule_compiler.visit(check.to_ast)
         end
       end
     end

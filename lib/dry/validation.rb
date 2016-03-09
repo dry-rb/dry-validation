@@ -13,7 +13,7 @@ module Dry
     end
 
     def self.Schema(options = {}, &block)
-      dsl_opts = { schema_class: options.fetch(:type, Class.new(Schema)) }
+      dsl_opts = { schema_class: Class.new(options.fetch(:type, Schema)) }
 
       dsl = Schema::Value.new(dsl_opts)
       dsl.instance_exec(&block)
