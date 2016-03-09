@@ -16,3 +16,10 @@ group :tools do
   gem 'guard-rubocop'
   gem 'byebug', platform: :mri
 end
+
+group :benchmarks do
+  gem 'hotch'
+  gem 'activemodel'
+  gem 'benchmark-ips'
+  gem 'virtus'
+end
