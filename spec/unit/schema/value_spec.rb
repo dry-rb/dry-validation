@@ -117,7 +117,10 @@ RSpec.describe Schema::Value do
       rule = value.each { key?(:method) }
 
       expect(rule.to_ast).to eql(
-        [:each, [:val, [:predicate, [:key?, [:method]]]]]
+        [:and, [
+          [:val, [:predicate, [:array?, []]]],
+          [:each, [:val, [:predicate, [:key?, [:method]]]]]
+        ]]
       )
     end
 
@@ -128,17 +131,19 @@ RSpec.describe Schema::Value do
       end
 
       expect(rule.to_ast).to eql(
-        [:each, [
-          :set, [
-            [:and, [
-              [:val, [:predicate, [:key?, [:method]]]],
-              [:key, [:method, [:predicate, [:str?, []]]]]
-            ]],
-            [:and, [
-              [:val, [:predicate, [:key?, [:amount]]]],
-              [:key, [:amount, [:predicate, [:float?, []]]]]
-            ]]
-          ]
+        [:and, [
+          [:val, [:predicate, [:array?, []]]],
+          [:each,
+            [:set, [
+              [:and, [
+                [:val, [:predicate, [:key?, [:method]]]],
+                [:key, [:method, [:predicate, [:str?, []]]]]
+              ]],
+              [:and, [
+                [:val, [:predicate, [:key?, [:amount]]]],
+                [:key, [:amount, [:predicate, [:float?, []]]]]
+              ]]
+            ]]]
         ]]
       )
     end

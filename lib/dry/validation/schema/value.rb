@@ -22,13 +22,21 @@ module Dry
           Value
         end
 
-        def each(&block)
-          val = Value[name].instance_eval(&block)
-          create_rule([:each, val.to_ast])
+        def each(*predicates, &block)
+          val =
+            if predicates.size > 0
+              predicates
+                .reduce(Value.new) { |a, e| a.__send__(*::Kernel.Array(e)) }
+            else
+              Value[name].instance_eval(&block)
+            end
+
+          array?.and(create_rule([:each, val.to_ast]))
         end
 
         def when(*predicates, &block)
-          left = predicates.reduce(Check[path, type: type]) { |a, e| a.__send__(*::Kernel.Array(e)) }
+          left = predicates
+            .reduce(Check[path, type: type]) { |a, e| a.__send__(*::Kernel.Array(e)) }
 
           right = Value.new(type: type)
           right.instance_eval(&block)

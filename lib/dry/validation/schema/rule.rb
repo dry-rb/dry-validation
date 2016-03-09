@@ -40,6 +40,11 @@ module Dry
           add_rule(__send__(type, rule))
         end
 
+        def each(*predicates, &block)
+          rule = target.each(*predicates, &block)
+          add_rule(__send__(type, new([target.type, [name, rule.to_ast]])))
+        end
+
         def add_rule(rule)
           target.add_rule(rule)
         end
