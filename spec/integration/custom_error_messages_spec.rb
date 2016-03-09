@@ -15,9 +15,7 @@ RSpec.describe Dry::Validation do
     subject(:schema) do
       Dry::Validation.Schema do
         configure do
-          configure do |config|
-            config.messages_file = SPEC_ROOT.join('fixtures/locales/en.yml')
-          end
+          config.messages_file = SPEC_ROOT.join('fixtures/locales/en.yml')
         end
 
         key(:email, &:filled?)
@@ -37,9 +35,7 @@ RSpec.describe Dry::Validation do
       subject(:schema) do
         Dry::Validation.Schema do
           configure do
-            configure do |config|
-              config.messages = :i18n
-            end
+            config.messages = :i18n
           end
 
           key(:email, &:filled?)

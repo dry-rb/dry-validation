@@ -40,18 +40,6 @@ module Dry
         config.predicates
       end
 
-      def self.error_compiler
-        ErrorCompiler.new(messages)
-      end
-
-      def self.hint_compiler
-        HintCompiler.new(messages, rules: rule_ast)
-      end
-
-      def self.rule_ast
-        config.rules.flat_map(&:rules).map(&:to_ast)
-      end
-
       def self.messages
         default = default_messages
 
@@ -75,8 +63,21 @@ module Dry
         end
       end
 
+      def self.error_compiler
+        @error_compiler ||= ErrorCompiler.new(messages)
+      end
+
+      def self.hint_compiler
+        @hint_compiler ||= HintCompiler.new(messages, rules: rule_ast)
+      end
+
+      def self.rule_ast
+        @rule_ast ||= config.rules.flat_map(&:rules).map(&:to_ast)
+      end
+
       def self.default_options
-        { error_compiler: error_compiler,
+        { predicates: predicates,
+          error_compiler: error_compiler,
           hint_compiler: hint_compiler,
           checks: config.checks }
       end
@@ -84,6 +85,8 @@ module Dry
       attr_reader :rules
 
       attr_reader :checks
+
+      attr_reader :predicates
 
       attr_reader :rule_compiler
 
@@ -96,6 +99,7 @@ module Dry
         @rule_compiler = SchemaCompiler.new(self)
         @error_compiler = options.fetch(:error_compiler)
         @hint_compiler = options.fetch(:hint_compiler)
+        @predicates = options.fetch(:predicates)
         initialize_rules(rules)
         initialize_checks(options.fetch(:checks, []))
       end
@@ -137,10 +141,6 @@ module Dry
       end
 
       private
-
-      def predicates
-        self.class.predicates
-      end
 
       def rule_results(input)
         rules.each_with_object({}) do |(name, rule), hash|

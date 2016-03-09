@@ -13,19 +13,21 @@ RSpec.describe Dry::Validation do
     end
   end
 
+  let(:base_class) do
+    Class.new(Dry::Validation::Schema) do
+      def self.messages
+        Dry::Validation::Messages.default.merge(
+          en: { errors: { email?: 'must be a valid email' } }
+        )
+      end
+    end
+  end
+
   describe 'defining schema with custom predicates container' do
     subject(:schema) do
-      Dry::Validation.Schema do
+      Dry::Validation.Schema(type: base_class) do
         configure do
-          configure do |config|
-            config.predicates = Test::Predicates
-          end
-
-          def self.messages
-            Dry::Validation::Messages.default.merge(
-              en: { errors: { email?: 'must be a valid email' } }
-            )
-          end
+          config.predicates = Test::Predicates
         end
 
         key(:email) { filled? & email? }
@@ -49,14 +51,8 @@ RSpec.describe Dry::Validation do
 
   describe 'defining schema with custom predicate methods' do
     subject(:schema) do
-      Dry::Validation.Schema do
+      Dry::Validation.Schema(type: base_class) do
         configure do
-          def self.messages
-            Dry::Validation::Messages.default.merge(
-              en: { errors: { email?: 'must be a valid email' } }
-            )
-          end
-
           def email?(value)
             value.include?('@')
           end
