@@ -1,40 +1,50 @@
 module Dry
   module Validation
     class Result
-      include Enumerable
+      include Dry::Equalizer(:output, :messages)
 
-      attr_reader :rule_results
+      attr_reader :output
+      attr_reader :errors
+      attr_reader :error_compiler
+      attr_reader :hint_compiler
 
-      def initialize(rule_results)
-        @rule_results = rule_results
-      end
+      DEFAULT_MESSAGES = {}.freeze
 
-      def each(&block)
-        rule_results.each(&block)
+      def initialize(output, errors, error_compiler, hint_compiler)
+        @output = output
+        @errors = errors
+        @error_compiler = error_compiler
+        @hint_compiler = hint_compiler
       end
 
       def success?
-        failures.empty?
+        errors.empty?
       end
 
-      def [](name)
-        rule_results[name]
+      def failure?
+        !success?
       end
 
-      def merge!(other_results)
-        rule_results.merge!(other_results)
+      def messages(options = {})
+        @messages ||=
+          begin
+            hints = hint_compiler.with(options).call
+            comp = error_compiler.with(options.merge(hints: hints))
+
+            errors
+              .map { |error| error.messages(comp) }
+              .reduce(:merge) || DEFAULT_MESSAGES
+          end
       end
 
       def to_ast
-        failures.map(&:to_ast)
+        [:set, error_ast]
       end
 
-      def successes
-        rule_results.select { |_, value| value.success? }
-      end
+      private
 
-      def failures
-        rule_results.select { |_, value| value.failure? }
+      def error_ast
+        errors.map { |error| error.to_ast }
       end
     end
   end

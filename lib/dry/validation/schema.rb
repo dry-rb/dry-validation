@@ -6,11 +6,10 @@ require 'dry/validation/schema/value'
 require 'dry/validation/schema/check'
 
 require 'dry/validation/error'
+require 'dry/validation/result'
 require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
 require 'dry/validation/hint_compiler'
-require 'dry/validation/result'
-require 'dry/validation/schema/result'
 
 module Dry
   module Validation
@@ -114,27 +113,17 @@ module Dry
       end
 
       def call(input)
-        resmap = Hash[rules.map { |name, rule| [name, rule.(input)] }]
-        result = Validation::Result.new(resmap)
+        Result.new(input, errors(input), error_compiler, hint_compiler)
+      end
 
-        chkmap = Hash[
-          checks.map { |name, check|
-            check_res = check.is_a?(Guard) ? check.(input, result) : check.(input)
-            [name, check_res] if check_res
-          }.compact
-        ]
+      def errors(input)
+        results = rule_results(input)
 
-        result.merge!(chkmap)
+        results.merge!(check_results(input, results)) unless checks.empty?
 
-        errors = result.failures.map do |name, failure|
-          if failure.is_a?(Schema::Result)
-            failure
-          else
-            Error.new(name, failure, error_compiler, hint_compiler)
-          end
-        end
-
-        Schema::Result.new(input, result, errors)
+        results
+          .map { |name, result| Error.new(name, result) if result.failure? }
+          .compact
       end
 
       def [](name)
@@ -147,8 +136,23 @@ module Dry
         end
       end
 
+      private
+
       def predicates
         self.class.predicates
+      end
+
+      def rule_results(input)
+        rules.each_with_object({}) do |(name, rule), hash|
+          hash[name] = rule.(input)
+        end
+      end
+
+      def check_results(input, result)
+        checks.each_with_object({}) do |(name, check), hash|
+          check_res = check.is_a?(Guard) ? check.(input, result) : check.(input)
+          hash[name] = check_res if check_res
+        end
       end
     end
   end

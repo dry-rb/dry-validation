@@ -3,18 +3,15 @@ module Dry
     class Error
       include Dry::Equalizer(:name, :result)
 
-      attr_reader :name, :result, :error_compiler, :hint_compiler
+      attr_reader :name, :result
 
-      def initialize(name, result, error_compiler, hint_compiler)
+      def initialize(name, result)
         @name = name
         @result = result
-        @error_compiler = error_compiler
-        @hint_compiler = hint_compiler
       end
 
-      def messages(options = {})
-        hints = hint_compiler.with(options).call
-        msg_hash = error_compiler.with(options.merge(hints: hints)).([to_ast])
+      def messages(compiler)
+        msg_hash = compiler.visit(to_ast)
 
         if msg_hash.key?(name) || name != result.name
           msg_hash
