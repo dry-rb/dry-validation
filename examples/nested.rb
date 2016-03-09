@@ -1,25 +1,17 @@
 require 'dry-validation'
 
-class Schema < Dry::Validation::Schema
-  key(:address) do |address|
-    address.hash? do
-      address.key(:city) do |city|
-        city.min_size?(3)
-      end
+schema = Dry::Validation.Schema do
+  key(:address).schema do
+    key(:city).required(min_size?: 3)
 
-      address.key(:street) do |street|
-        street.filled?
-      end
+    key(:street).required
 
-      address.key(:country) do |country|
-        country.key(:name, &:filled?)
-        country.key(:code, &:filled?)
-      end
+    key(:country).schema do
+      key(:name).required
+      key(:code).required
     end
   end
 end
-
-schema = Schema.new
 
 errors = schema.call({}).messages
 
