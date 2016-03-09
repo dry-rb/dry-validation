@@ -10,9 +10,16 @@ module Dry
         @deps = deps
       end
 
-      def call(input, result)
-        if deps.all? { |path| Array(path).reduce(result) { |a, e| a[e] }.success? }
-          rule.(input)
+      def call(input, results)
+        rule.(input) if deps_valid?(results)
+      end
+
+      private
+
+      def deps_valid?(results)
+        deps.all? do |path|
+          result = Array(path).reduce(results) { |a, e| a[e] }
+          result.success? if result
         end
       end
     end

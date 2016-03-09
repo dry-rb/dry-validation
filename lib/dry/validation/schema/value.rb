@@ -51,7 +51,7 @@ module Dry
             val = Value[id]
             res = val.instance_exec(&block)
           else
-            id, *deps = options.to_a.flatten
+            id, deps = options.to_a.first
             val = Value[id]
             res = val.instance_exec(*deps.map { |name| val.value(name) }, &block)
           end
