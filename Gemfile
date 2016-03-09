@@ -19,8 +19,8 @@ end
 
 group :benchmarks do
   gem 'hotch'
-  gem 'activemodel'
-  gem 'actionpack'
+  gem 'activemodel', '5.0.0.beta3'
+  gem 'actionpack', '5.0.0.beta3'
   gem 'benchmark-ips'
   gem 'virtus'
 end
