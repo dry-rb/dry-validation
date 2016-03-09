@@ -72,7 +72,7 @@ Possible use-cases include validation of:
 Please refer to [the wiki](https://github.com/dryrb/dry-validation/wiki) for full usage documentation.
 
 ``` ruby
-class UserSchema < Dry::Validation::Schema
+UserSchema = Dry::Validation.Schema do
   key(:name).required
 
   key(:email).required(format?: EMAIL_REGEX)
@@ -85,6 +85,14 @@ class UserSchema < Dry::Validation::Schema
     key(:zipcode).required
   end
 end
+
+UserSchema.(
+  name: 'Jane',
+  email: 'jane@doe.org',
+  address: { street: 'Street 1', city: 'NYC', zipcode: '1234' }
+).inspect
+
+# #<Dry::Validation::Result output={:name=>"Jane", :email=>"jane@doe.org", :address=>{:street=>"Street 1", :city=>"NYC", :zipcode=>"1234"}} messages={:age=>["age is missing"]}>
 ```
 
 ## Status and Roadmap
