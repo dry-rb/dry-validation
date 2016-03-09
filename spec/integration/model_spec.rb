@@ -1,9 +1,7 @@
-RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
-  subject(:validate) { schema.new }
-
+RSpec.describe Dry::Validation::Schema, 'defining attr-based schema' do
   describe 'with a flat structure' do
-    let(:schema) do
-      Class.new(Dry::Validation::Model) do
+    subject(:schema) do
+      Dry::Validation.Schema do
         attr(:email).required
         attr(:age) { none? | (int? & gt?(18)) }
       end
@@ -12,18 +10,18 @@ RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
     let(:model) { Class.new(OpenStruct) }
 
     it 'passes when input is valid' do
-      expect(validate.(model.new(email: 'jane@doe', age: 19))).to be_success
-      expect(validate.(model.new(email: 'jane@doe', age: nil))).to be_success
+      expect(schema.(model.new(email: 'jane@doe', age: 19))).to be_success
+      expect(schema.(model.new(email: 'jane@doe', age: nil))).to be_success
     end
 
     it 'fails when input is not valid' do
-      expect(validate.(model.new(email: 'jane@doe', age: 17))).to_not be_success
+      expect(schema.(model.new(email: 'jane@doe', age: 17))).to_not be_success
     end
   end
 
   describe 'with nested structures' do
-    let(:schema) do
-      Class.new(Dry::Validation::Model) do
+    subject(:schema) do
+      Dry::Validation.Schema do
         attr(:email).required
 
         attr(:age) { none? | (int? & gt?(18)) }
@@ -62,7 +60,7 @@ RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
       it 'returns compiled error messages' do
         input.email = ''
 
-        expect(validate.(input).messages).to eql(
+        expect(schema.(input).messages).to eql(
           email: ['email must be filled']
         )
       end
@@ -70,14 +68,14 @@ RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
 
     describe '#call' do
       it 'passes when attributes are valid' do
-        expect(validate.(input)).to be_success
+        expect(schema.(input)).to be_success
       end
 
       it 'validates presence of an email and min age value' do
         input.email = ''
         input.age = 18
 
-        expect(validate.(input).messages).to eql(
+        expect(schema.(input).messages).to eql(
           email: ['email must be filled'], age: ['age must be greater than 18']
         )
       end
@@ -85,7 +83,7 @@ RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
       it 'validates type of age value' do
         input.age = '18'
 
-        expect(validate.(input).messages).to eql(
+        expect(schema.(input).messages).to eql(
           age: ['age must be an integer', 'age must be greater than 18']
         )
       end
@@ -93,7 +91,7 @@ RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
       it 'validates presence of phone_number keys' do
         input.phone_numbers = nil
 
-        expect(validate.(input).messages).to eql(
+        expect(schema.(input).messages).to eql(
           phone_numbers: ['phone_numbers must be an array']
         )
       end
@@ -103,7 +101,7 @@ RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
         input.address.street = nil
         input.address.country.name = nil
 
-        expect(validate.(input).messages).to eql(
+        expect(schema.(input).messages).to eql(
           address: {
             street: ['street must be filled'],
             country: { name: ['name must be filled'] },
@@ -115,7 +113,7 @@ RSpec.describe Dry::Validation::Model, 'defining attr-based schema' do
       it 'validates each phone number' do
         input.phone_numbers = ['123', 312]
 
-        expect(validate.(input).messages).to eql(
+        expect(schema.(input).messages).to eql(
           phone_numbers: { 1 => ['1 must be a string'] }
         )
       end

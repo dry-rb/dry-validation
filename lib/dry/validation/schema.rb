@@ -1,62 +1,48 @@
 require 'dry/logic/predicates'
-require 'dry/logic/rule_compiler'
 
+require 'dry/validation/schema_compiler'
 require 'dry/validation/schema/key'
 require 'dry/validation/schema/value'
 require 'dry/validation/schema/check'
 
 require 'dry/validation/error'
+require 'dry/validation/result'
 require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
 require 'dry/validation/hint_compiler'
-require 'dry/validation/result'
-require 'dry/validation/schema/result'
 
 module Dry
   module Validation
     class Schema
       extend Dry::Configurable
 
+      setting :path
       setting :predicates, Logic::Predicates
       setting :messages, :yaml
       setting :messages_file
       setting :namespace
+      setting :rules, []
+      setting :checks, []
+      setting :option_names, []
 
-      def self.key(name, &block)
-        rules[name] = Value[name].key(name, &block)
+      def self.new(rules = config.rules, **options)
+        super(rules, default_options.merge(options))
       end
 
-      def self.optional(name, &block)
-        rules[name] = Value[name].optional(name, &block)
-      end
-
-      def self.rule(name, &block)
-        val = Value[name].instance_exec(&block)
-        checks[name] = Value.new(rules: [val])
+      def self.to_ast
+        [:schema, self]
       end
 
       def self.rules
-        @rules ||= {}
-      end
-
-      def self.checks
-        @checks ||= {}
-      end
-
-      def self.rule_ast
-        rules.values.flat_map(&:rules).map(&:to_ast)
+        config.rules
       end
 
       def self.predicates
         config.predicates
       end
 
-      def self.error_compiler
-        ErrorCompiler.new(messages)
-      end
-
-      def self.hint_compiler
-        HintCompiler.new(messages, rules: rule_ast)
+      def self.option_names
+        config.option_names
       end
 
       def self.messages
@@ -82,7 +68,30 @@ module Dry
         end
       end
 
+      def self.error_compiler
+        @error_compiler ||= ErrorCompiler.new(messages)
+      end
+
+      def self.hint_compiler
+        @hint_compiler ||= HintCompiler.new(messages, rules: rule_ast)
+      end
+
+      def self.rule_ast
+        @rule_ast ||= config.rules.flat_map(&:rules).map(&:to_ast)
+      end
+
+      def self.default_options
+        { predicates: predicates,
+          error_compiler: error_compiler,
+          hint_compiler: hint_compiler,
+          checks: config.checks }
+      end
+
       attr_reader :rules
+
+      attr_reader :checks
+
+      attr_reader :predicates
 
       attr_reader :rule_compiler
 
@@ -90,27 +99,32 @@ module Dry
 
       attr_reader :hint_compiler
 
-      def initialize(rules = {})
-        @rule_compiler = Logic::RuleCompiler.new(self)
-        @error_compiler = self.class.error_compiler
-        @hint_compiler = self.class.hint_compiler
-        initialize_rules(rules.merge(self.class.rules).merge(self.class.checks))
+      attr_reader :options
+
+      def self.option(name)
+        attr_reader(*name)
+        option_names << name
       end
 
-      def initialize_rules(rules)
-        @rules = rules.each_with_object({}) do |(name, rule), result|
-          result[name] = rule_compiler.visit(
-            (rule.rules + rule.checks).reduce(:and).to_ast
-          )
-        end
+      def initialize(rules, options)
+        @rule_compiler = SchemaCompiler.new(self)
+        @error_compiler = options.fetch(:error_compiler)
+        @hint_compiler = options.fetch(:hint_compiler)
+        @predicates = options.fetch(:predicates)
+
+        initialize_options(options)
+        initialize_rules(rules)
+        initialize_checks(options.fetch(:checks, []))
+
+        freeze
+      end
+
+      def with(new_options)
+        self.class.new(self.class.rules, options.merge(new_options))
       end
 
       def call(input)
-        resmap = Hash[rules.map { |name, rule| [name, rule.(input)] }]
-        result = Validation::Result.new(resmap)
-        errors = Error::Set.new(result.failures.map { |name, failure| Error.new(name, failure) })
-
-        Schema::Result.new(input, result, errors, error_compiler, hint_compiler)
+        Result.new(input, errors(input), error_compiler, hint_compiler)
       end
 
       def [](name)
@@ -123,8 +137,48 @@ module Dry
         end
       end
 
-      def predicates
-        self.class.predicates
+      private
+
+      def errors(input)
+        results = rule_results(input)
+
+        results.merge!(check_results(input, results)) unless checks.empty?
+
+        results
+          .map { |name, result| Error.new(name, result) if result.failure? }
+          .compact
+      end
+
+      def rule_results(input)
+        rules.each_with_object({}) do |(name, rule), hash|
+          hash[name] = rule.(input)
+        end
+      end
+
+      def check_results(input, result)
+        checks.each_with_object({}) do |(name, check), hash|
+          check_res = check.is_a?(Guard) ? check.(input, result) : check.(input)
+          hash[name] = check_res if check_res
+        end
+      end
+
+      def initialize_options(options)
+        @options = options
+        self.class.option_names.each do |name|
+          instance_variable_set("@#{name}", options[name])
+        end
+      end
+
+      def initialize_rules(rules)
+        @rules = rules.each_with_object({}) do |rule, result|
+          result[rule.name] = rule_compiler.visit(rule.to_ast)
+        end
+      end
+
+      def initialize_checks(checks)
+        @checks = checks.each_with_object({}) do |check, result|
+          result[check.name] = rule_compiler.visit(check.to_ast)
+        end
       end
     end
   end

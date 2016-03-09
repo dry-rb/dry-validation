@@ -1,9 +1,7 @@
 RSpec.describe Dry::Validation::Schema::Form do
-  subject(:validation) { schema.new }
-
   describe 'defining schema' do
-    let(:schema) do
-      Class.new(Dry::Validation::Schema::Form) do
+    subject(:schema) do
+      Dry::Validation.Form do
         key(:email) { filled? }
 
         key(:age) { none? | (int? & gt?(18)) }
@@ -28,15 +26,17 @@ RSpec.describe Dry::Validation::Schema::Form do
 
         rule(:email_valid) { value(:email).email? }
 
-        def email?(value)
-          true
+        configure do
+          def email?(value)
+            true
+          end
         end
       end
     end
 
     describe '#messages' do
       it 'returns compiled error messages' do
-        result = validation.('email' => '', 'age' => '19')
+        result = schema.('email' => '', 'age' => '19')
 
         expect(result.messages).to eql(
           email: ['email must be filled'],
@@ -47,7 +47,7 @@ RSpec.describe Dry::Validation::Schema::Form do
       end
 
       it 'returns hints for nested data' do
-        result = validation.(
+        result = schema.(
           'email' => 'jane@doe.org',
           'age' => '19',
           'address' => {
@@ -68,7 +68,7 @@ RSpec.describe Dry::Validation::Schema::Form do
 
     describe '#call' do
       it 'passes when attributes are valid' do
-        result = validation.(
+        result = schema.(
           'email' => 'jane@doe.org',
           'age' => '19',
           'address' => {
@@ -90,7 +90,7 @@ RSpec.describe Dry::Validation::Schema::Form do
       end
 
       it 'validates presence of an email and min age value' do
-        expect(validation.('email' => '', 'age' => '18').messages).to eql(
+        expect(schema.('email' => '', 'age' => '18').messages).to eql(
           address: ['address is missing'],
           age: ['age must be greater than 18'],
           email: ['email must be filled']
@@ -98,7 +98,7 @@ RSpec.describe Dry::Validation::Schema::Form do
       end
 
       it 'handles optionals' do
-        result = validation.(
+        result = schema.(
           'email' => 'jane@doe.org',
           'age' => '19',
           'phone_number' => '12',

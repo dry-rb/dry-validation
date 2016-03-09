@@ -1,12 +1,10 @@
 require 'dry/validation/messages/i18n'
 
 RSpec.describe Dry::Validation do
-  subject(:validation) { schema.new }
-
   shared_context 'schema with customized messages' do
     describe '#messages' do
       it 'returns compiled error messages' do
-        expect(validation.(email: '').messages).to eql(
+        expect(schema.(email: '').messages).to eql(
           email: ['Please provide your email']
         )
       end
@@ -14,9 +12,9 @@ RSpec.describe Dry::Validation do
   end
 
   context 'yaml' do
-    let(:schema) do
-      Class.new(Dry::Validation::Schema) do
-        configure do |config|
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
           config.messages_file = SPEC_ROOT.join('fixtures/locales/en.yml')
         end
 
@@ -34,9 +32,9 @@ RSpec.describe Dry::Validation do
         I18n.backend.load_translations
       end
 
-      let(:schema) do
-        Class.new(Dry::Validation::Schema) do
-          configure do |config|
+      subject(:schema) do
+        Dry::Validation.Schema do
+          configure do
             config.messages = :i18n
           end
 

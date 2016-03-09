@@ -1,28 +1,7 @@
 module Dry
   module Validation
     class Error
-      class Set
-        include Enumerable
-
-        attr_reader :errors
-
-        def initialize(errors)
-          @errors = errors
-        end
-
-        def each(&block)
-          errors.each(&block)
-        end
-
-        def empty?
-          errors.empty?
-        end
-
-        def to_ary
-          errors.map { |error| error.to_ary }
-        end
-        alias_method :to_a, :to_ary
-      end
+      include Dry::Equalizer(:name, :result)
 
       attr_reader :name, :result
 
@@ -31,10 +10,19 @@ module Dry
         @result = result
       end
 
-      def to_ary
-        [:error, [name, result.to_ary]]
+      def messages(compiler)
+        msg_hash = compiler.visit(to_ast)
+
+        if msg_hash.key?(name) || name != result.name
+          msg_hash
+        else
+          { name => msg_hash }
+        end
       end
-      alias_method :to_a, :to_ary
+
+      def to_ast
+        [:error, [name, result.to_ast]]
+      end
     end
   end
 end

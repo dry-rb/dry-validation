@@ -1,27 +1,31 @@
 RSpec.describe 'Macros #confirmation' do
-  subject(:validate) { schema.new }
-
   describe 'with a maybe password with min-size specified' do
-    let(:schema) do
-      Class.new(Dry::Validation::Schema) do
-        def self.messages
-          Messages.default.merge(
-            en: { errors: { password_confirmation: 'does not match' } }
-          )
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          def self.messages
+            Messages.default.merge(
+              en: { errors: { password_confirmation: 'does not match' } }
+            )
+          end
         end
 
         key(:password).maybe(min_size?: 3).confirmation
       end
     end
 
-    it 'generates confirmation rule' do
-      expect(validate.(password: 'foo', password_confirmation: 'foo')).to be_success
+    it 'passes when values are equal' do
+      expect(schema.(password: 'foo', password_confirmation: 'foo')).to be_success
+    end
 
-      expect(validate.(password: 'fo', password_confirmation: '').messages).to eql(
+    it 'fails when source value is invalid' do
+      expect(schema.(password: 'fo', password_confirmation: '').messages).to eql(
         password: ['password size cannot be less than 3']
       )
+    end
 
-      expect(validate.(password: 'foo', password_confirmation: 'fo').messages).to eql(
+    it 'fails when values are not equal' do
+      expect(schema.(password: 'foo', password_confirmation: 'fo').messages).to eql(
         password_confirmation: ['does not match']
       )
     end

@@ -1,8 +1,6 @@
 RSpec.describe 'Schema with each and set rules' do
-  subject(:validation) { schema.new }
-
-  let(:schema) do
-    Class.new(Dry::Validation::Schema) do
+  subject(:schema) do
+    Dry::Validation.Schema do
       key(:payments) do
         array? do
           each do
@@ -23,7 +21,7 @@ RSpec.describe 'Schema with each and set rules' do
         ]
       }
 
-      expect(validation.(input).messages).to eql({})
+      expect(schema.(input).messages).to eql({})
     end
 
     it 'validates presence of the method key for each payment' do
@@ -34,7 +32,7 @@ RSpec.describe 'Schema with each and set rules' do
         ]
       }
 
-      expect(validation.(input).messages).to eql(
+      expect(schema.(input).messages).to eql(
         payments: { 1 => { method: ['method is missing'] } }
       )
     end
@@ -47,7 +45,7 @@ RSpec.describe 'Schema with each and set rules' do
         ]
       }
 
-      expect(validation.(input).messages).to eql(
+      expect(schema.(input).messages).to eql(
         payments: { 1 => { method: ['method must be a string'] } }
       )
     end
@@ -60,7 +58,7 @@ RSpec.describe 'Schema with each and set rules' do
         ]
       }
 
-      expect(validation.(input).messages).to eql(
+      expect(schema.(input).messages).to eql(
         payments: { 1 => { amount: ['amount must be a float'] } }
       )
     end
