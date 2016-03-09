@@ -15,7 +15,7 @@ module Dry
 
         def schema(other = nil, &block)
           schema = other ? other.class : Validation.Schema(
-            type: target.schema_class, path: target.path, build: false, &block
+            target.schema_class, path: target.path, build: false, &block
           )
 
           rule = __send__(type, key(:hash?).and(key(schema)))

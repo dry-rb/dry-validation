@@ -25,7 +25,7 @@ RSpec.describe Dry::Validation do
 
   describe 'defining schema with custom predicates container' do
     subject(:schema) do
-      Dry::Validation.Schema(type: base_class) do
+      Dry::Validation.Schema(base_class) do
         configure do
           config.predicates = Test::Predicates
         end
@@ -51,7 +51,7 @@ RSpec.describe Dry::Validation do
 
   describe 'defining schema with custom predicate methods' do
     subject(:schema) do
-      Dry::Validation.Schema(type: base_class) do
+      Dry::Validation.Schema(base_class) do
         configure do
           def email?(value)
             value.include?('@')
@@ -67,7 +67,7 @@ RSpec.describe Dry::Validation do
 
   describe 'custom predicate which requires an arbitrary dependency' do
     subject(:schema) do
-      Dry::Validation.Schema(type: base_class) do
+      Dry::Validation.Schema(base_class) do
         key(:email).required(:email?)
 
         configure do

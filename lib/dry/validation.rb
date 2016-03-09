@@ -12,8 +12,10 @@ module Dry
       Messages::Abstract.config.paths
     end
 
-    def self.Schema(options = {}, &block)
-      dsl_opts = { schema_class: Class.new(options.fetch(:type, Schema)) }
+    def self.Schema(base = Schema, **options, &block)
+      dsl_opts = {
+        schema_class: Class.new(base.is_a?(Schema) ? base.class : base)
+      }
 
       dsl = Schema::Value.new(dsl_opts)
       dsl.instance_exec(&block)
@@ -21,8 +23,8 @@ module Dry
       klass = dsl.schema_class
 
       klass.configure do |config|
-        config.rules = options.fetch(:rules, []) + dsl.rules
-        config.checks = dsl.checks
+        config.rules = config.rules + (options.fetch(:rules, []) + dsl.rules)
+        config.checks = config.checks + dsl.checks
         config.path = options[:path]
       end
 
@@ -34,7 +36,7 @@ module Dry
     end
 
     def self.Form(options = {}, &block)
-      Validation.Schema(options.merge(type: Schema::Form), &block)
+      Validation.Schema(Schema::Form, options, &block)
     end
   end
 end
