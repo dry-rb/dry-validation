@@ -2,6 +2,7 @@ require 'dry/logic/predicates'
 
 require 'dry/validation/schema_compiler'
 require 'dry/validation/schema/key'
+require 'dry/validation/schema/attr'
 require 'dry/validation/schema/value'
 require 'dry/validation/schema/check'
 

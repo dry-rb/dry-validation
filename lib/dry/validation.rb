@@ -4,7 +4,6 @@ require 'dry-container'
 
 require 'dry/validation/schema'
 require 'dry/validation/schema/form'
-require 'dry/validation/model'
 
 module Dry
   module Validation
