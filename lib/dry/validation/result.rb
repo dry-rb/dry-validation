@@ -33,9 +33,7 @@ module Dry
             hints = hint_compiler.with(options).call
             comp = error_compiler.with(options.merge(hints: hints))
 
-            errors
-              .map { |error| error.messages(comp) }
-              .reduce(:merge)
+            comp.(errors.map { |error| error.to_ast })
           end
       end
 

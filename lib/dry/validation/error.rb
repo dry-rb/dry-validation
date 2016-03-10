@@ -14,10 +14,6 @@ module Dry
         result.response.is_a?(Validation::Result)
       end
 
-      def messages(compiler)
-        compiler.visit(to_ast)
-      end
-
       def to_ast
         node = [:error, [name, result.to_ast]]
         schema? ? [:schema, node] : node
