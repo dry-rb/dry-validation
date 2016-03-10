@@ -88,4 +88,20 @@ RSpec.describe Dry::Validation do
       )
     end
   end
+
+  it 'raises an error when message is missing' do
+    schema = Dry::Validation.Schema do
+      configure do
+        def email?(value)
+          false
+        end
+      end
+
+      key(:email).required(:email?)
+    end
+
+    expect { schema.(email: 'foo').messages }.to raise_error(
+      Dry::Validation::MissingMessageError, /email/
+    )
+  end
 end

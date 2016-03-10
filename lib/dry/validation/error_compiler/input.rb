@@ -49,6 +49,10 @@ module Dry
         tokens = options_for(predicate, args)
         template = messages[predicate, lookup_options.merge(tokens)]
 
+        unless template
+          raise MissingMessageError.new("message for #{predicate} was not found")
+        end
+
         message = [template % tokens]
         path = [*name, tokens[:name]].compact.uniq.reverse
 

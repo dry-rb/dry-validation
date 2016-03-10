@@ -7,6 +7,8 @@ require 'dry/validation/schema/form'
 
 module Dry
   module Validation
+    MissingMessageError = Class.new(StandardError)
+
     def self.messages_paths
       Messages::Abstract.config.paths
     end
