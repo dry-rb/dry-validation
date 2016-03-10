@@ -101,7 +101,11 @@ module Dry
       def merge(result)
         result.reduce do |a, e|
           e.merge(a) do |_, left, right|
-            left.is_a?(Hash) ? left.merge(right) : (right + left).uniq
+            if left.is_a?(Hash)
+              left.merge(right)
+            else
+              right + left
+            end
           end
         end
       end

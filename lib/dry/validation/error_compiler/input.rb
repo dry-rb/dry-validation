@@ -53,10 +53,9 @@ module Dry
           raise MissingMessageError.new("message for #{predicate} was not found")
         end
 
-        message = [template % tokens]
-        path = [*name, tokens[:name]].compact.uniq.reverse
+        path = [[template % tokens], *[tokens[:name], *Array(name).reverse].uniq]
 
-        [message, *path].reduce { |a, e| { e => a } }
+        path.reduce { |a, e| { e => a } }
       end
 
       def options_for_key?(*args)
@@ -123,10 +122,10 @@ module Dry
         defaults = { name: rule, rule: rule, value: input }
 
         if respond_to?(meth)
-          defaults.merge(__send__(meth, args))
-        else
-          defaults
+          defaults.merge!(__send__(meth, args))
         end
+
+        defaults
       end
 
       def input_visitor(new_name, value)
