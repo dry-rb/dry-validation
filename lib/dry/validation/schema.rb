@@ -158,8 +158,14 @@ module Dry
         results.merge!(check_results(input, results)) unless checks.empty?
 
         results
-          .map { |name, result| Error.new(name, result) if result.failure? }
-          .compact
+          .select { |_, result| result.failure? }
+          .map { |name, result| Error.new(error_path(name), result) }
+      end
+
+      def error_path(name)
+        full_path = Array[*self.class.config.path]
+        full_path << name
+        full_path.size > 1 ? full_path : full_path[0]
       end
 
       def rule_results(input)

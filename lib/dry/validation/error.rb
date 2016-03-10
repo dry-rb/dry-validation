@@ -10,18 +10,17 @@ module Dry
         @result = result
       end
 
-      def messages(compiler)
-        msg_hash = compiler.visit(to_ast)
+      def schema?
+        result.response.is_a?(Validation::Result)
+      end
 
-        if msg_hash.key?(name) || name != result.name
-          msg_hash
-        else
-          { name => msg_hash }
-        end
+      def messages(compiler)
+        compiler.visit(to_ast)
       end
 
       def to_ast
-        [:error, [name, result.to_ast]]
+        node = [:error, [name, result.to_ast]]
+        schema? ? [:schema, node] : node
       end
     end
   end

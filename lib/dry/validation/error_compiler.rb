@@ -12,8 +12,8 @@ module Dry
         @hints = @options.fetch(:hints, {})
       end
 
-      def call(ast)
-        merge(ast.map { |node| visit(node) }) || DEFAULT_RESULT
+      def call(ast, *args)
+        merge(ast.map { |node| visit(node, *args) }) || DEFAULT_RESULT
       end
 
       def with(new_options)
@@ -24,18 +24,22 @@ module Dry
         __send__(:"visit_#{node[0]}", node[1], *args)
       end
 
-      def visit_set(node)
-        call(node)
+      def visit_schema(node, *args)
+        visit_error(node[1], true)
       end
 
-      def visit_error(error)
+      def visit_set(node, *args)
+        call(node, *args)
+      end
+
+      def visit_error(error, schema = false)
         name, other = error
         message = messages[name, rule: name]
 
         if message
           { name => [message] }
         else
-          result = visit(other)
+          result = schema ? visit(other, name) : visit(other)
 
           if result.is_a?(Array)
             merge(result)
@@ -45,9 +49,9 @@ module Dry
         end
       end
 
-      def visit_input(node)
+      def visit_input(node, path = nil)
         name, result = node
-        visit(result, name)
+        visit(result, path || name)
       end
 
       def visit_result(node, name = nil)

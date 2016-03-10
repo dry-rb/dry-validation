@@ -14,9 +14,11 @@ module Dry
         end
 
         def schema(other = nil, &block)
-          schema = other ? other.class : Validation.Schema(
-            target.schema_class, path: target.path, build: false, &block
+          schema = other ? ::Class.new(other.class) : Validation.Schema(
+            target.schema_class, parent: target, build: false, &block
           )
+
+          schema.config.path = [name] if other
 
           rule = __send__(type, key(:hash?).and(key(schema)))
 

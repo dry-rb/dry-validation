@@ -22,14 +22,14 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
       Dry::Validation.Schema do
         key(:email).required
 
-        key(:age) { none? | (int? & gt?(18)) }
+        key(:age).maybe(:int?, gt?: 18)
 
         key(:address).schema do
-          key(:city) { min_size?(3) }
+          key(:city).required(min_size?: 3)
 
           key(:street).required
 
-          key(:country) do
+          key(:country).schema do
             key(:name).required
             key(:code).required
           end

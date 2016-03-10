@@ -13,7 +13,8 @@ module Dry
 
     def self.Schema(base = Schema, **options, &block)
       dsl_opts = {
-        schema_class: Class.new(base.is_a?(Schema) ? base.class : base)
+        schema_class: Class.new(base.is_a?(Schema) ? base.class : base),
+        parent: options[:parent]
       }
 
       dsl = Schema::Value.new(dsl_opts)
@@ -24,7 +25,7 @@ module Dry
       klass.configure do |config|
         config.rules = config.rules + (options.fetch(:rules, []) + dsl.rules)
         config.checks = config.checks + dsl.checks
-        config.path = options[:path]
+        config.path = dsl.path
       end
 
       if options[:build] == false
