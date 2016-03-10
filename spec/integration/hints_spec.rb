@@ -40,4 +40,19 @@ RSpec.describe 'Validation hints' do
 
     include_context '#messages'
   end
+
+  context 'when type expectation is specified' do
+    subject(:schema)  do
+      Dry::Validation.Schema do
+        key(:email).required
+        key(:name).required(:str?, size?: 5..25)
+      end
+    end
+
+    it 'infers message for specific type' do
+      expect(schema.(email: 'jane@doe', name: 'HN').messages).to eql(
+        name: ['name length must be within 5 - 25']
+      )
+    end
+  end
 end
