@@ -8,7 +8,7 @@ module Dry
       attr_reader :error_compiler
       attr_reader :hint_compiler
 
-      DEFAULT_MESSAGES = {}.freeze
+      EMPTY_MESSAGES = {}.freeze
 
       def initialize(output, errors, error_compiler, hint_compiler)
         @output = output
@@ -28,12 +28,14 @@ module Dry
       def messages(options = {})
         @messages ||=
           begin
+            return EMPTY_MESSAGES if success?
+
             hints = hint_compiler.with(options).call
             comp = error_compiler.with(options.merge(hints: hints))
 
             errors
               .map { |error| error.messages(comp) }
-              .reduce(:merge) || DEFAULT_MESSAGES
+              .reduce(:merge)
           end
       end
 
