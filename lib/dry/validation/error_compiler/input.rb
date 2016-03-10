@@ -29,14 +29,8 @@ module Dry
       end
 
       def visit_check(node)
-        name, other = node
-        message = messages[normalize_name(name), rule: rule]
-
-        if message
-          { name => [message] }
-        else
-          visit(other)
-        end
+        _, other = node
+        visit(other)
       end
 
       def visit_predicate(node)

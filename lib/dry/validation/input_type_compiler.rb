@@ -37,14 +37,8 @@ module Dry
         send(:"visit_#{node[0]}", node[1], *args)
       end
 
-      def visit_schema(node, first = true)
-        type = [:type, ['hash', [:symbolized, node.input_type_ast]]]
-
-        if first
-          [:key, [node.config.path, type]]
-        else
-          type
-        end
+      def visit_schema(node, *args)
+        [:type, ['hash', [:symbolized, node.input_type_ast]]]
       end
 
       def visit_or(node, *args)
