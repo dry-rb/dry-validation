@@ -2,27 +2,23 @@ RSpec.describe Dry::Validation::Schema::Form do
   describe 'defining schema' do
     subject(:schema) do
       Dry::Validation.Form do
-        key(:email) { filled? }
+        key(:email).required
 
-        key(:age) { none? | (int? & gt?(18)) }
+        key(:age).maybe(:int?, gt?: 18)
 
-        key(:address) do
-          hash? do
-            key(:city, &:filled?)
-            key(:street, &:filled?)
+        key(:address).schema do
+          key(:city).required
+          key(:street).required
 
-            key(:loc) do
-              key(:lat) { filled? & float? }
-              key(:lng) { filled? & float? }
-            end
+          key(:loc) do
+            key(:lat).required(:float?)
+            key(:lng).required(:float?)
           end
         end
 
         optional(:password).maybe.confirmation
 
-        optional(:phone_number) do
-          none? | (int? & gt?(0))
-        end
+        optional(:phone_number).maybe(:int?, gt?: 0)
 
         rule(:email_valid) { value(:email).email? }
 

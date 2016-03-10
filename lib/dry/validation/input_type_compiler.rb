@@ -26,12 +26,25 @@ module Dry
       end
 
       def call(ast)
-        schema = ast.map { |node| visit(node) }
-        type_compiler.([:type, ['hash', [:symbolized, schema]]])
+        type_compiler.([:type, ['hash', [:symbolized, schema_ast(ast)]]])
+      end
+
+      def schema_ast(ast)
+        ast.map { |node| visit(node) }
       end
 
       def visit(node, *args)
         send(:"visit_#{node[0]}", node[1], *args)
+      end
+
+      def visit_schema(node, first = true)
+        type = [:type, ['hash', [:symbolized, node.input_type_ast]]]
+
+        if first
+          [:key, [node.config.path, type]]
+        else
+          type
+        end
       end
 
       def visit_or(node, *args)

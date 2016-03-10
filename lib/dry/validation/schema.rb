@@ -77,6 +77,18 @@ module Dry
         @hint_compiler ||= HintCompiler.new(messages, rules: rule_ast)
       end
 
+      def self.input_type_compiler
+        @input_type_compiler = InputTypeCompiler.new
+      end
+
+      def self.input_type_ast
+        input_type_compiler.schema_ast(rule_ast)
+      end
+
+      def self.input_type
+        @input_type ||= input_type_compiler.(rule_ast)
+      end
+
       def self.rule_ast
         @rule_ast ||= config.rules.flat_map(&:rules).map(&:to_ast)
       end
