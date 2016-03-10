@@ -3,11 +3,18 @@ require 'dry/validation/error_compiler/input'
 module Dry
   module Validation
     class HintCompiler < ErrorCompiler::Input
+      include Dry::Equalizer(:messages, :rules, :options)
+
       attr_reader :rules, :excluded
 
       EXCLUDED = [
-        :none?, :filled?, :str?, :int?, :float?, :decimal?, :hash?, :array?
+        :none?, :filled?, :str?, :int?, :float?, :decimal?, :hash?, :array?,
+        :date?, :date_time?, :time?, :bool?
       ].freeze
+
+      def self.cache
+        @cache ||= ThreadSafe::Cache.new
+      end
 
       def initialize(messages, options = {})
         super(messages, { name: nil, input: nil }.merge(options))
@@ -20,7 +27,7 @@ module Dry
       end
 
       def call
-        super(rules)
+        self.class.cache.fetch_or_store(hash) { super(rules) }
       end
 
       def visit_schema(node)

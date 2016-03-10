@@ -5,9 +5,10 @@ module Dry
   module Validation
     module Messages
       class Abstract
-        DEFAULT_PATH = Pathname(__dir__).join('../../../../config/errors.yml').realpath.freeze
-
         extend Dry::Configurable
+        include Dry::Equalizer(:config)
+
+        DEFAULT_PATH = Pathname(__dir__).join('../../../../config/errors.yml').realpath.freeze
 
         setting :paths, [DEFAULT_PATH]
         setting :root, 'errors'.freeze
@@ -33,6 +34,16 @@ module Dry
           Range => 'range',
           String => 'string'
         )
+
+        def self.cache
+          @cache ||= ThreadSafe::Cache.new { |h, k| h[k] = ThreadSafe::Cache.new }
+        end
+
+        attr_reader :config
+
+        def initialize
+          @config = self.class.config
+        end
 
         def call(*args)
           cache.fetch_or_store(args.hash) { get(*lookup(*args)) }
@@ -65,12 +76,8 @@ module Dry
           config.root
         end
 
-        def config
-          self.class.config
-        end
-
         def cache
-          @cache ||= ThreadSafe::Cache.new
+          self.class.cache[self]
         end
       end
     end

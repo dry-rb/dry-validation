@@ -6,6 +6,8 @@ require 'dry/validation/messages/abstract'
 module Dry
   module Validation
     class Messages::YAML < Messages::Abstract
+      include Dry::Equalizer(:data)
+
       attr_reader :data
 
       configure do |config|
@@ -27,6 +29,7 @@ module Dry
       end
 
       def initialize(data)
+        super()
         @data = data
       end
 

@@ -9,6 +9,7 @@ module Dry
       ::I18n.load_path.concat(config.paths)
 
       def initialize
+        super
         @t = I18n.method(:t)
       end
 

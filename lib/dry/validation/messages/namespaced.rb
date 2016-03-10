@@ -5,6 +5,7 @@ module Dry
         attr_reader :namespace, :messages, :root
 
         def initialize(namespace, messages)
+          super()
           @namespace = namespace
           @messages = messages
           @root = messages.root
