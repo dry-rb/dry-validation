@@ -28,16 +28,32 @@ RSpec.describe 'Macros #required' do
   end
 
   describe 'with a predicate with args' do
-    subject(:schema) do
-      Dry::Validation.Schema do
-        key(:age).required(:int?, gt?: 18)
+    context 'with a flat arg' do
+      subject(:schema) do
+        Dry::Validation.Schema do
+          key(:age).required(:int?, gt?: 18)
+        end
+      end
+
+      it 'generates filled? & int? & gt? rule' do
+        expect(schema.(age: nil).messages).to eql(
+          age: ['age must be filled', 'age must be greater than 18']
+        )
       end
     end
 
-    it 'generates filled? & int? & gt? rule' do
-      expect(schema.(age: nil).messages).to eql(
-        age: ['age must be filled', 'age must be greater than 18']
-      )
+    context 'with a range arg' do
+      subject(:schema) do
+        Dry::Validation.Schema do
+          key(:age).required(:int?, size?: 18..24)
+        end
+      end
+
+      it 'generates filled? & int? & gt? rule' do
+        expect(schema.(age: nil).messages).to eql(
+          age: ['age must be filled', 'age size must be within 18 - 24']
+        )
+      end
     end
   end
 end

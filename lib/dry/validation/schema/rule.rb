@@ -97,8 +97,8 @@ module Dry
 
         def infer_predicates(predicates)
           predicates.map do |predicate|
-            name, args = ::Kernel.Array(predicate).flatten
-            key(name, ::Kernel.Array(args))
+            name, *args = ::Kernel.Array(predicate).first
+            key(name, args)
           end
         end
 
