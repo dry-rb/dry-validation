@@ -22,6 +22,8 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
   end
 
   it 'fails when input is not valid' do
+    expect(schema.(email: '', age: 19)).to_not be_success
     expect(schema.(email: 'jane@doe', age: 17)).to_not be_success
+    expect(schema.(email: 'jane@doe', age: '19')).to_not be_success
   end
 end
