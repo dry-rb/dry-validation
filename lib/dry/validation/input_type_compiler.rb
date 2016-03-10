@@ -6,7 +6,7 @@ module Dry
     class InputTypeCompiler
       attr_reader :type_compiler
 
-      TYPES = {
+      FORM_TYPES = {
         default: 'string',
         none?: 'form.nil',
         bool?: 'form.bool',
@@ -17,6 +17,22 @@ module Dry
         date?: 'form.date',
         date_time?: 'form.date_time',
         time?: 'form.time'
+      }.freeze
+
+      CONST_TYPES = {
+        NilClass => 'form.nil',
+        String => 'string',
+        Fixnum => 'form.int',
+        Integer => 'form.int',
+        Float => 'form.float',
+        BigDecimal => 'form.decimal',
+        Array => 'form.array',
+        Hash => 'form.hash',
+        Date => 'form.date',
+        DateTime => 'form.date_time',
+        Time => 'form.time',
+        TrueClass => 'form.true',
+        FalseClass => 'form.false'
       }.freeze
 
       DEFAULT_TYPE_NODE = [[:type, 'string']].freeze
@@ -85,11 +101,15 @@ module Dry
 
       def visit_predicate(node, *args)
         id, args = node
+        default = FORM_TYPES[:default]
 
         if id == :key?
           args[0]
+        elsif id == :type?
+          const = args[0]
+          [:type, CONST_TYPES[const] || Types.identifier(const)]
         else
-          [:type, TYPES[id] || TYPES[:default]]
+          [:type, FORM_TYPES[id] || default]
         end
       end
     end

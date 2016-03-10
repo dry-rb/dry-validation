@@ -53,6 +53,38 @@ RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
     expect(result).to eql(email: 'jane@doe.org', age: 20, address: 'City, Street 1/2')
   end
 
+  it 'supports arbitrary types via type?(const) => "form.const"' do
+    rule_ast = [
+      [
+        :and,
+        [
+          [:val, [:predicate, [:key?, [:age]]]],
+          [:key, [:age, [:predicate, [:type?, [Fixnum]]]]]
+        ]
+      ]
+    ]
+
+    input_type = compiler.(rule_ast)
+
+    expect(input_type['age' => '21']).to eql(age: 21)
+  end
+
+  it 'supports arbitrary types via type?(conts)' do
+    rule_ast = [
+      [
+        :and,
+        [
+          [:val, [:predicate, [:key?, [:admin]]]],
+          [:key, [:admin, [:predicate, [:type?, ['Form::Bool']]]]]
+        ]
+      ]
+    ]
+
+    input_type = compiler.(rule_ast)
+
+    expect(input_type['admin' => '0']).to eql(admin: false)
+  end
+
   it 'supports int? => "form.int"' do
     rule_ast = [
       [
