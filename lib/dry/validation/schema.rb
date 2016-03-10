@@ -1,4 +1,4 @@
-require 'dry/logic/predicates'
+require 'dry/types/constraints'
 
 require 'dry/validation/schema_compiler'
 require 'dry/validation/schema/key'
@@ -18,7 +18,7 @@ module Dry
       extend Dry::Configurable
 
       setting :path
-      setting :predicates, Logic::Predicates
+      setting :predicates, Types::Predicates
       setting :messages, :yaml
       setting :messages_file
       setting :namespace
