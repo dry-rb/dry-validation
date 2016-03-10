@@ -7,10 +7,21 @@ module Dry
 
       attr_reader :rules, :excluded
 
-      EXCLUDED = [
-        :none?, :filled?, :str?, :int?, :float?, :decimal?, :hash?, :array?,
-        :date?, :date_time?, :time?, :bool?
-      ].freeze
+      TYPES = {
+        none?: NilClass,
+        bool?: TrueClass,
+        str?: String,
+        int?: Fixnum,
+        float?: Float,
+        decimal?: BigDecimal,
+        date?: Date,
+        date_time?: DateTime,
+        time?: Time,
+        hash?: Hash,
+        array?: Array
+      }.freeze
+
+      EXCLUDED = [:none?, :filled?, :key?].freeze
 
       def self.cache
         @cache ||= ThreadSafe::Cache.new
@@ -20,6 +31,7 @@ module Dry
         super(messages, { name: nil, input: nil }.merge(options))
         @rules = @options.delete(:rules)
         @excluded = @options.fetch(:excluded, EXCLUDED)
+        @val_type = options[:val_type]
       end
 
       def with(new_options)
@@ -27,23 +39,20 @@ module Dry
       end
 
       def call
-        self.class.cache.fetch_or_store(hash) { super(rules) }
-      end
-
-      def visit_schema(node)
-        {}
+        self.class.cache.fetch_or_store(hash) do
+          super(rules)
+        end
       end
 
       def visit_predicate(node)
         predicate, _ = node
 
+        val_type = TYPES[predicate]
+
+        return with(val_type: val_type) if val_type
         return {} if excluded.include?(predicate)
 
         super
-      end
-
-      def visit_check(node)
-        {}
       end
 
       def visit_set(node)
@@ -57,22 +66,21 @@ module Dry
         visit(node)
       end
 
-      def visit_xor(node)
-        {}
-      end
-
-      def visit_not(node)
-        {}
-      end
-
       def visit_or(node)
         left, right = node
         merge([visit(left), visit(right)])
       end
 
       def visit_and(node)
-        _, right = node
-        visit(right)
+        left, right = node
+
+        result = visit(left)
+
+        if result.is_a?(self.class)
+          result.visit(right)
+        else
+          visit(right)
+        end
       end
 
       def visit_implication(node)
@@ -88,6 +96,28 @@ module Dry
 
       def visit_val(node)
         visit(node)
+      end
+
+      def visit_schema(node)
+        DEFAULT_RESULT
+      end
+
+      def visit_check(node)
+        DEFAULT_RESULT
+      end
+
+      def visit_xor(node)
+        DEFAULT_RESULT
+      end
+
+      def visit_not(node)
+        DEFAULT_RESULT
+      end
+
+      private
+
+      def merge(result)
+        super(result.reject { |el| el.is_a?(self.class) })
       end
     end
   end

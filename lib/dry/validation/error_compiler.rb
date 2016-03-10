@@ -107,7 +107,7 @@ module Dry
               right + left
             end
           end
-        end
+        end || DEFAULT_RESULT
       end
 
       def input_visitor(name, input)
