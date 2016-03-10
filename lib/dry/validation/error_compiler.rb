@@ -4,6 +4,7 @@ module Dry
       attr_reader :messages, :hints, :options
 
       DEFAULT_RESULT = {}.freeze
+      EMPTY_HINTS = [].freeze
       KEY_SEPARATOR = '.'.freeze
 
       def initialize(messages, options = {})
@@ -85,21 +86,11 @@ module Dry
           if msgs.is_a?(Hash)
             res[name] = merge_hints(msgs)
           else
-            all_msgs = msgs + hints_for(name)
+            all_msgs = msgs + (hints[name] || EMPTY_HINTS)
             all_msgs.uniq!
 
             res[name] = all_msgs
           end
-        end
-      end
-
-      def hints_for(name)
-        messages = hints[name] || []
-
-        if messages.is_a?(Hash)
-          []
-        else
-          messages
         end
       end
 
