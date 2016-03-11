@@ -33,7 +33,7 @@ module Dry
             hints = hint_compiler.with(options).call
             comp = error_compiler.with(options.merge(hints: hints))
 
-            comp.(errors.map { |error| error.to_ast })
+            comp.(error_ast)
           end
       end
 
