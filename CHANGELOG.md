@@ -11,11 +11,12 @@
 * Support for `value(:foo).eql?(value(:bar))` syntax in high-level rules (solnic)
 * New DSL for defining schema objects `Dry::Validation.Schema do .. end` (solnic)
 * Ability to define nested schemas via `key(:location).schema do .. end` (solnic)
-* Ability to re-use schemas inside other schemas via `key(:location).schema(LocationSchema) (solnic)
+* Ability to re-use schemas inside other schemas via `key(:location).schema(LocationSchema)` (solnic)
 * Ability to inherit rules from another schema via `Dry::Validation.Schema(Other) do .. end` (solnic)
 * Ability to inject arbitrary dependencies to schemas via `Schema.option` + `Schema#with` (solnic)
 * Ability to provide translations for rule names under `%{locale}.rules.%{name}` pattern (solnic)
 * Ability to configure input processor, either `:form` or `:sanitizer` (solnic)
+* Ability to pass a constrained dry type when defining keys or attrs, ie `key(:age, Types::Age)` (solnic)
 * `Result#messages` supports `:full` option to get messages with rule names, disabled by default (solnic)
 
 ### Changed
@@ -32,6 +33,7 @@
 
 * Qualified rule names properly use last node by default for error messages (solnic)
 * Validation hints only include relevant messages (solnic)
+* `:yaml` messages respect `:locale` option in `Result#messages` (solnic)
 
 [Compare v0.6.0...v0.7.0](https://github.com/dryrb/dry-validation/compare/v0.6.0...v0.7.0)
 
