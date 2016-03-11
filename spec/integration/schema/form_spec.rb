@@ -35,8 +35,8 @@ RSpec.describe Dry::Validation::Schema::Form do
         result = schema.('email' => '', 'age' => '19')
 
         expect(result.messages).to eql(
-          email: ['email must be filled'],
-          address: ['address is missing']
+          email: ['must be filled'],
+          address: ['is missing']
         )
 
         expect(result.output).to eql(email: '', age: 19)
@@ -55,8 +55,8 @@ RSpec.describe Dry::Validation::Schema::Form do
 
         expect(result.messages).to eql(
           address: {
-            loc: { lng: ['lng must be filled'] },
-            city: ['city must be filled']
+            loc: { lng: ['must be filled'] },
+            city: ['must be filled']
           }
         )
       end
@@ -87,9 +87,9 @@ RSpec.describe Dry::Validation::Schema::Form do
 
       it 'validates presence of an email and min age value' do
         expect(schema.('email' => '', 'age' => '18').messages).to eql(
-          address: ['address is missing'],
-          age: ['age must be greater than 18'],
-          email: ['email must be filled']
+          address: ['is missing'],
+          age: ['must be greater than 18'],
+          email: ['must be filled']
         )
       end
 

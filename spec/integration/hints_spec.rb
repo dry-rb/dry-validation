@@ -4,13 +4,13 @@ RSpec.describe 'Validation hints' do
   shared_context '#messages' do
     it 'provides hints for additional rules that were not checked' do
       expect(schema.(age: '17').messages).to eql(
-        age: ['age must be an integer', 'age must be greater than 18']
+        age: ['must be an integer', 'must be greater than 18']
       )
     end
 
     it 'skips type-check rules' do
       expect(schema.(age: 17).messages).to eql(
-        age: ['age must be greater than 18']
+        age: ['must be greater than 18']
       )
     end
   end
@@ -51,7 +51,7 @@ RSpec.describe 'Validation hints' do
 
     it 'infers message for specific type' do
       expect(schema.(email: 'jane@doe', name: 'HN').messages).to eql(
-        name: ['name length must be within 5 - 25']
+        name: ['length must be within 5 - 25']
       )
     end
   end

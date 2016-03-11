@@ -1,6 +1,6 @@
 pl:
   errors:
-    filled?: "%{name} nie może być pusty"
+    filled?: "nie może być pusty"
     size?:
       arg:
         default: "wielkość musi być równa %{num}"

@@ -25,7 +25,7 @@ RSpec.describe 'Macros #maybe' do
       expect(schema.(name: 'jane').messages).to be_empty
 
       expect(schema.(name: 'xy').messages).to eql(
-        name: ['name size cannot be less than 3']
+        name: ['size cannot be less than 3']
       )
     end
   end

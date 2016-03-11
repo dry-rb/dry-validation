@@ -12,7 +12,7 @@ RSpec.describe 'Macros #when' do
 
     it 'generates check rule' do
       expect(schema.(login: true, email: nil).messages).to eql(
-        email: ['email must be filled']
+        email: ['must be filled']
       )
 
       expect(schema.(login: false, email: nil).messages).to be_empty
@@ -35,7 +35,7 @@ RSpec.describe 'Macros #when' do
       expect(schema.(compare: false, left: nil, right: nil)).to be_success
 
       expect(schema.(compare: true, left: 1, right: 2).messages).to eql(
-        left: ['left must be greater than 2']
+        left: ['must be greater than 2']
       )
     end
   end
@@ -57,8 +57,8 @@ RSpec.describe 'Macros #when' do
       expect(schema.(login: false, email: nil, password: nil)).to be_success
 
       expect(schema.(login: true, email: nil, password: nil).messages).to eql(
-        email: ['email must be filled'],
-        password: ['password must be filled']
+        email: ['must be filled'],
+        password: ['must be filled']
       )
     end
   end

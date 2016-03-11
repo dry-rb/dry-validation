@@ -8,7 +8,7 @@ RSpec.describe 'Macros #required' do
 
     it 'generates filled? rule' do
       expect(schema.(email: '').messages).to eql(
-        email: ['email must be filled']
+        email: ['must be filled']
       )
     end
   end
@@ -22,7 +22,7 @@ RSpec.describe 'Macros #required' do
 
     it 'generates filled? & int? rule' do
       expect(schema.(age: nil).messages).to eql(
-        age: ['age must be filled']
+        age: ['must be filled']
       )
     end
   end
@@ -37,7 +37,7 @@ RSpec.describe 'Macros #required' do
 
       it 'generates filled? & int? & gt? rule' do
         expect(schema.(age: nil).messages).to eql(
-          age: ['age must be filled', 'age must be greater than 18']
+          age: ['must be filled', 'must be greater than 18']
         )
       end
     end
@@ -51,7 +51,7 @@ RSpec.describe 'Macros #required' do
 
       it 'generates filled? & int? & gt? rule' do
         expect(schema.(age: nil).messages).to eql(
-          age: ['age must be filled', 'age size must be within 18 - 24']
+          age: ['must be filled', 'size must be within 18 - 24']
         )
       end
     end

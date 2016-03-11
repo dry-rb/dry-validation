@@ -42,8 +42,8 @@ RSpec.describe Schema, 'using high-level rules' do
             Messages.default.merge(
               en: {
                 errors: {
-                  email_presence: 'email must be present when login is set to true',
-                  email_absence: 'email must not be present when login is set to false'
+                  email_presence: 'must be present when login is set to true',
+                  email_absence: 'must not be present when login is set to false'
                 }
               }
             )
@@ -65,7 +65,7 @@ RSpec.describe Schema, 'using high-level rules' do
 
     it 'fails when login is false and email is present' do
       expect(schema.(login: false, email: 'jane@doe').messages).to eql(
-        email_absence: ['email must not be present when login is set to false']
+        email_absence: ['must not be present when login is set to false']
       )
     end
 
@@ -75,7 +75,7 @@ RSpec.describe Schema, 'using high-level rules' do
 
     it 'fails when login is true and email is not present' do
       expect(schema.(login: true, email: nil).messages).to eql(
-        email_presence: ['email must be present when login is set to true']
+        email_presence: ['must be present when login is set to true']
       )
     end
   end

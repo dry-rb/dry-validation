@@ -47,7 +47,14 @@ module Dry
           raise MissingMessageError.new("message for #{predicate} was not found")
         end
 
-        path = [[template % tokens], *[tokens[:name], *Array(name).reverse].uniq]
+        message =
+          if full?
+            "#{tokens[:name]} #{template % tokens}"
+          else
+            template % tokens
+          end
+
+        path = [[message], *[tokens[:name], *Array(name).reverse].uniq]
 
         path.reduce { |a, e| { e => a } }
       end

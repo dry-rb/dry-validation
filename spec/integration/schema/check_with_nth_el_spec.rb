@@ -19,7 +19,7 @@ RSpec.describe 'Check depending on nth element in an array' do
 
   it 'fails when check fails' do
     expect(schema.(tags: %w(blue green red)).messages).to eql(
-      tags: { 0 => ["0 must be equal to red"] }
+      tags: { 0 => ["must be equal to red"] }
     )
   end
 end

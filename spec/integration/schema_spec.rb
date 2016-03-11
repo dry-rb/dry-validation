@@ -55,7 +55,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
     describe '#messages' do
       it 'returns compiled error messages' do
         expect(schema.(input.merge(email: '')).messages).to eql(
-          email: ['email must be filled']
+          email: ['must be filled']
         )
       end
     end
@@ -67,7 +67,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
 
       it 'validates presence of an email and min age value' do
         expect(schema.(input.merge(email: '', age: 18)).messages).to eql(
-          email: ['email must be filled'], age: ['age must be greater than 18']
+          email: ['must be filled'], age: ['must be greater than 18']
         )
       end
 
@@ -79,8 +79,8 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
         }
 
         expect(schema.(attrs).messages).to eql(
-          email: ['email is missing'],
-          age: ['age must be an integer', 'age must be greater than 18']
+          email: ['is missing'],
+          age: ['must be an integer', 'must be greater than 18']
         )
       end
 
@@ -88,8 +88,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
         attrs = { email: 'jane@doe.org', age: 19 }
 
         expect(schema.(attrs).messages).to eql(
-          address: ['address is missing'],
-          phone_numbers: ['phone_numbers is missing']
+          address: ['is missing'], phone_numbers: ['is missing']
         )
       end
 
@@ -98,16 +97,16 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
 
         expect(schema.(attrs).messages).to eql(
           address: {
-            street: ['street is missing'],
-            country: ['country is missing'],
-            city: ['city size cannot be less than 3']
+            street: ['is missing'],
+            country: ['is missing'],
+            city: ['size cannot be less than 3']
           }
         )
       end
 
       it 'validates address type' do
         expect(schema.(input.merge(address: 'totally not a hash')).messages).to eql(
-          address: ['address must be a hash']
+          address: ['must be a hash']
         )
       end
 
@@ -117,7 +116,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
         )
 
         expect(schema.(attrs).messages).to eql(
-          address: { country: { name: ['name must be filled'] } }
+          address: { country: { name: ['must be filled'] } }
         )
       end
 
@@ -125,7 +124,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
         attrs = input.merge(phone_numbers: ['123', 312])
 
         expect(schema.(attrs).messages).to eql(
-          phone_numbers: { 1 => ['1 must be a string'] }
+          phone_numbers: { 1 => ['must be a string'] }
         )
       end
     end

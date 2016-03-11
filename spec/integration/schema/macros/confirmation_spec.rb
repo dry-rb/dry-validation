@@ -20,7 +20,7 @@ RSpec.describe 'Macros #confirmation' do
 
     it 'fails when source value is invalid' do
       expect(schema.(password: 'fo', password_confirmation: '').messages).to eql(
-        password: ['password size cannot be less than 3']
+        password: ['size cannot be less than 3']
       )
     end
 

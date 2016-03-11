@@ -23,8 +23,8 @@ RSpec.describe 'Reusing schemas' do
 
     expect(schema.(city: 'NYC', location: { lat: nil, lng: '45.6' }).messages).to eql(
       location: {
-        lat: ['lat must be filled'],
-        lng: ['lng must be a float']
+        lat: ['must be filled'],
+        lng: ['must be a float']
       }
     )
   end

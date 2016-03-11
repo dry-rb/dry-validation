@@ -4,7 +4,7 @@ RSpec.describe Dry::Validation do
       expect(schema.(email: 'jane@doe')).to be_success
 
       expect(schema.(email: nil).messages).to eql(
-        email: ['email must be filled', 'must be a valid email']
+        email: ['must be filled', 'must be a valid email']
       )
 
       expect(schema.(email: 'jane').messages).to eql(

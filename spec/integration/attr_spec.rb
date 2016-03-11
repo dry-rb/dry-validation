@@ -61,7 +61,7 @@ RSpec.describe Dry::Validation::Schema, 'defining attr-based schema' do
         input.email = ''
 
         expect(schema.(input).messages).to eql(
-          email: ['email must be filled']
+          email: ['must be filled']
         )
       end
     end
@@ -76,7 +76,7 @@ RSpec.describe Dry::Validation::Schema, 'defining attr-based schema' do
         input.age = 18
 
         expect(schema.(input).messages).to eql(
-          email: ['email must be filled'], age: ['age must be greater than 18']
+          email: ['must be filled'], age: ['must be greater than 18']
         )
       end
 
@@ -84,7 +84,7 @@ RSpec.describe Dry::Validation::Schema, 'defining attr-based schema' do
         input.age = '18'
 
         expect(schema.(input).messages).to eql(
-          age: ['age must be an integer', 'age must be greater than 18']
+          age: ['must be an integer', 'must be greater than 18']
         )
       end
 
@@ -92,7 +92,7 @@ RSpec.describe Dry::Validation::Schema, 'defining attr-based schema' do
         input.phone_numbers = nil
 
         expect(schema.(input).messages).to eql(
-          phone_numbers: ['phone_numbers must be an array']
+          phone_numbers: ['must be an array']
         )
       end
 
@@ -103,9 +103,9 @@ RSpec.describe Dry::Validation::Schema, 'defining attr-based schema' do
 
         expect(schema.(input).messages).to eql(
           address: {
-            street: ['street must be filled'],
-            country: { name: ['name must be filled'] },
-            city: ['city size cannot be less than 3']
+            street: ['must be filled'],
+            country: { name: ['must be filled'] },
+            city: ['size cannot be less than 3']
           }
         )
       end
@@ -114,7 +114,7 @@ RSpec.describe Dry::Validation::Schema, 'defining attr-based schema' do
         input.phone_numbers = ['123', 312]
 
         expect(schema.(input).messages).to eql(
-          phone_numbers: { 1 => ['1 must be a string'] }
+          phone_numbers: { 1 => ['must be a string'] }
         )
       end
     end

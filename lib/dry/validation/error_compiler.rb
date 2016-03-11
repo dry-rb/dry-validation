@@ -11,6 +11,11 @@ module Dry
         @messages = messages
         @options = Hash[options]
         @hints = @options.fetch(:hints, {})
+        @full = options.fetch(:full, false)
+      end
+
+      def full?
+        @full
       end
 
       def call(ast, *args)
