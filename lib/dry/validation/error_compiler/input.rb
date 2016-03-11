@@ -66,6 +66,10 @@ module Dry
         path.reduce { |a, e| { e => a } }
       end
 
+      def options_for_type?(*args)
+        { type: args[0][0] }
+      end
+
       def options_for_key?(*args)
         { name: args[0][0] }
       end

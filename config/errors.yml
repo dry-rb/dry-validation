@@ -54,6 +54,8 @@ en:
 
     str?: "must be a string"
 
+    type?: "must be %{type}"
+
     size?:
       arg:
         default: "size must be %{num}"

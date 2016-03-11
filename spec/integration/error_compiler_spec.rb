@@ -426,5 +426,17 @@ RSpec.describe Dry::Validation::ErrorCompiler do
         expect(msg).to eql(str: ['must be equal to Bar'])
       end
     end
+
+    describe ':type??' do
+      it 'returns valid message' do
+        msg = error_compiler.visit(
+          [:input, [:age, [
+            :result, ['1', [:val, [:predicate, [:type?, [Integer]]]]]]
+          ]]
+        )
+
+        expect(msg).to eql(age: ['must be Integer'])
+      end
+    end
   end
 end
