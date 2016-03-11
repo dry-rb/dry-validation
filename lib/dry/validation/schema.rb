@@ -28,17 +28,26 @@ module Dry
       setting :namespace
       setting :rules, []
       setting :checks, []
-      setting :option_names, []
 
       setting :input_processor, :noop
 
       setting :input_processor_map, {
         sanitizer: InputProcessorCompiler::Sanitizer.new,
         form: InputProcessorCompiler::Form.new
-      }
+      }.freeze
+
+      def self.inherited(klass)
+        super
+        klass.setting :options, {}
+      end
 
       def self.new(rules = config.rules, **options)
         super(rules, default_options.merge(options))
+      end
+
+      def self.option(name, default = nil)
+        attr_reader(*name)
+        options.update(name => default)
       end
 
       def self.to_ast
@@ -53,8 +62,8 @@ module Dry
         config.predicates
       end
 
-      def self.option_names
-        config.option_names
+      def self.options
+        config.options
       end
 
       def self.messages
@@ -135,11 +144,6 @@ module Dry
 
       attr_reader :options
 
-      def self.option(name)
-        attr_reader(*name)
-        option_names << name
-      end
-
       def initialize(rules, options)
         @rule_compiler = SchemaCompiler.new(self)
         @error_compiler = options.fetch(:error_compiler)
@@ -206,8 +210,15 @@ module Dry
 
       def initialize_options(options)
         @options = options
-        self.class.option_names.each do |name|
-          instance_variable_set("@#{name}", options[name])
+
+        self.class.options.each do |name, default|
+          value = options.fetch(name) do
+            case default
+            when Proc then default.()
+            else default end
+          end
+
+          instance_variable_set("@#{name}", value)
         end
       end
 
