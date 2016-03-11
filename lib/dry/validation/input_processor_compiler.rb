@@ -25,7 +25,7 @@ module Dry
       end
 
       def visit_schema(node, *args)
-        hash_node(node.input_processor_ast(:form))
+        hash_node(node.input_processor_ast(identifier))
       end
 
       def visit_or(node, *args)

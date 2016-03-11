@@ -30,6 +30,10 @@ module Dry
         FalseClass => 'form.false'
       }.freeze
 
+      def identifier
+        :form
+      end
+
       def hash_node(schema)
         [:type, ['form.hash', [:symbolized, schema]]]
       end

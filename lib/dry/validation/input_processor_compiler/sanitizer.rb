@@ -29,14 +29,18 @@ module Dry
         TrueClass => 'true',
         FalseClass => 'false'
       }.freeze
-    end
 
-    def hash_node(schema)
-      [:type, ['hash', [:schema, schema]]]
-    end
+      def identifier
+        :sanitizer
+      end
 
-    def array_node(members)
-      [:type, ['array', members]]
+      def hash_node(schema)
+        [:type, ['hash', [:schema, schema]]]
+      end
+
+      def array_node(members)
+        [:type, ['array', members]]
+      end
     end
   end
 end
