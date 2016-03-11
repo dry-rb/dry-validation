@@ -11,7 +11,7 @@ module Dry
       attr_reader :data
 
       configure do |config|
-        config.root = 'en.errors'.freeze
+        config.root = '%{locale}.errors'.freeze
       end
 
       def self.load(paths = config.paths)
@@ -33,12 +33,12 @@ module Dry
         @data = data
       end
 
-      def get(key, _options = {})
-        data[key]
+      def get(key, options = {})
+        data[key % { locale: options.fetch(:locale, :en) }]
       end
 
-      def key?(key, *args)
-        data.key?(key)
+      def key?(key, options = {})
+        data.key?(key % { locale: options.fetch(:locale, :en) })
       end
 
       def merge(overrides)

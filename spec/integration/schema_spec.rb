@@ -35,9 +35,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
           end
         end
 
-        key(:phone_numbers) do
-          array? { each(&:str?) }
-        end
+        key(:phone_numbers).each(:str?)
       end
     end
 

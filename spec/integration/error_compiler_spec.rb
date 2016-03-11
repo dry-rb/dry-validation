@@ -15,6 +15,14 @@ RSpec.describe Dry::Validation::ErrorCompiler do
             }
           }
         }
+      },
+      pl: {
+        rules: {
+          email: 'adres email'
+        },
+        errors: {
+          email?: 'nie jest poprawny'
+        }
       }
     )
   end
@@ -100,6 +108,18 @@ RSpec.describe Dry::Validation::ErrorCompiler do
         )
 
         expect(msg).to eql(num: ['num must be an integer'])
+      end
+    end
+
+    context 'rule name translations' do
+      it 'translates rule name and its message' do
+        msg = error_compiler.with(locale: :pl, full: true).visit(
+          [:input, [:email, [
+            :result, ['oops', [:val, [:predicate, [:email?, []]]]]]
+          ]]
+        )
+
+        expect(msg).to eql(email: ['adres email nie jest poprawny'])
       end
     end
 

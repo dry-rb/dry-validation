@@ -40,7 +40,7 @@ module Dry
 
       def visit_error(error, schema = false)
         name, other = error
-        message = messages[name, rule: name]
+        message = messages[name]
 
         if message
           { name => [message] }

@@ -45,12 +45,20 @@ module Dry
           @config = self.class.config
         end
 
+        def rule(name, options = {})
+          path = "%{locale}.rules.#{name}"
+          get(path, options) if key?(path, options)
+        end
+
         def call(*args)
-          cache.fetch_or_store(args.hash) { get(*lookup(*args)) }
+          cache.fetch_or_store(args.hash) do
+            path, opts = lookup(*args)
+            get(path, opts) if path
+          end
         end
         alias_method :[], :call
 
-        def lookup(predicate, options)
+        def lookup(predicate, options = {})
           tokens = options.merge(
             root: root,
             predicate: predicate,
@@ -58,8 +66,13 @@ module Dry
             val_type: config.val_types[options[:val_type]]
           )
 
+          tokens[:rule] = predicate unless tokens.key?(:rule)
+
           opts = options.reject { |k, _| config.lookup_options.include?(k) }
-          path = lookup_paths(tokens).detect { |key| key?(key, opts) && get(key).is_a?(String) }
+
+          path = lookup_paths(tokens).detect do |key|
+            key?(key, opts) && get(key, opts).is_a?(String)
+          end
 
           [path, opts]
         end
