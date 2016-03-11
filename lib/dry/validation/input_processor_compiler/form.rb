@@ -1,0 +1,42 @@
+module Dry
+  module Validation
+    class InputProcessorCompiler::Form < InputProcessorCompiler
+      PREDICATE_MAP = {
+        default: 'string',
+        none?: 'form.nil',
+        bool?: 'form.bool',
+        str?: 'string',
+        int?: 'form.int',
+        float?: 'form.float',
+        decimal?: 'form.decimal',
+        date?: 'form.date',
+        date_time?: 'form.date_time',
+        time?: 'form.time'
+      }.freeze
+
+      CONST_MAP = {
+        NilClass => 'form.nil',
+        String => 'string',
+        Fixnum => 'form.int',
+        Integer => 'form.int',
+        Float => 'form.float',
+        BigDecimal => 'form.decimal',
+        Array => 'form.array',
+        Hash => 'form.hash',
+        Date => 'form.date',
+        DateTime => 'form.date_time',
+        Time => 'form.time',
+        TrueClass => 'form.true',
+        FalseClass => 'form.false'
+      }.freeze
+
+      def hash_node(schema)
+        [:type, ['form.hash', [:symbolized, schema]]]
+      end
+
+      def array_node(members)
+        [:type, ['form.array', members]]
+      end
+    end
+  end
+end

@@ -12,10 +12,14 @@ require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
 require 'dry/validation/hint_compiler'
 
+require 'dry/validation/input_processor_compiler'
+
 module Dry
   module Validation
     class Schema
       extend Dry::Configurable
+
+      NOOP_INPUT_PROCESSOR = -> input { input }
 
       setting :path
       setting :predicates, Types::Predicates
@@ -25,6 +29,13 @@ module Dry
       setting :rules, []
       setting :checks, []
       setting :option_names, []
+
+      setting :input_processor, :noop
+
+      setting :input_processor_map, {
+        sanitizer: InputProcessorCompiler::Sanitizer.new,
+        form: InputProcessorCompiler::Form.new
+      }
 
       def self.new(rules = config.rules, **options)
         super(rules, default_options.merge(options))
@@ -77,16 +88,23 @@ module Dry
         @hint_compiler ||= HintCompiler.new(messages, rules: rule_ast)
       end
 
-      def self.input_type_compiler
-        @input_type_compiler = InputTypeCompiler.new
+      def self.input_processor
+        @input_processor ||=
+          begin
+            if input_processor_compiler
+              input_processor_compiler.(rule_ast)
+            else
+              NOOP_INPUT_PROCESSOR
+            end
+          end
       end
 
-      def self.input_type_ast
-        input_type_compiler.schema_ast(rule_ast)
+      def self.input_processor_ast(type)
+        config.input_processor_map.fetch(type).schema_ast(rule_ast)
       end
 
-      def self.input_type
-        @input_type ||= input_type_compiler.(rule_ast)
+      def self.input_processor_compiler
+        @input_processor_comp ||= config.input_processor_map[config.input_processor]
       end
 
       def self.rule_ast
@@ -97,6 +115,7 @@ module Dry
         { predicates: predicates,
           error_compiler: error_compiler,
           hint_compiler: hint_compiler,
+          input_processor: input_processor,
           checks: config.checks }
       end
 
@@ -105,6 +124,8 @@ module Dry
       attr_reader :checks
 
       attr_reader :predicates
+
+      attr_reader :input_processor
 
       attr_reader :rule_compiler
 
@@ -124,6 +145,7 @@ module Dry
         @error_compiler = options.fetch(:error_compiler)
         @hint_compiler = options.fetch(:hint_compiler)
         @predicates = options.fetch(:predicates)
+        @input_processor = options.fetch(:input_processor, NOOP_INPUT_PROCESSOR)
 
         initialize_options(options)
         initialize_rules(rules)
@@ -137,7 +159,8 @@ module Dry
       end
 
       def call(input)
-        Result.new(input, errors(input), error_compiler, hint_compiler)
+        processed_input = input_processor[input]
+        Result.new(processed_input, apply(processed_input), error_compiler, hint_compiler)
       end
 
       def [](name)
@@ -152,7 +175,7 @@ module Dry
 
       private
 
-      def errors(input)
+      def apply(input)
         results = rule_results(input)
 
         results.merge!(check_results(input, results)) unless checks.empty?

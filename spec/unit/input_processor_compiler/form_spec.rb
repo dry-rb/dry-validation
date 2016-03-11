@@ -1,7 +1,5 @@
-require 'dry/validation/input_type_compiler'
-
-RSpec.describe Dry::Validation::InputTypeCompiler, '#call' do
-  subject(:compiler) { Dry::Validation::InputTypeCompiler.new }
+RSpec.describe Dry::Validation::InputProcessorCompiler::Form, '#call' do
+  subject(:compiler) { Dry::Validation::InputProcessorCompiler::Form.new }
 
   let(:rule_ast) do
     [

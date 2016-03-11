@@ -86,7 +86,9 @@ RSpec.describe Dry::Validation::Schema::Form do
       end
 
       it 'validates presence of an email and min age value' do
-        expect(schema.('email' => '', 'age' => '18').messages).to eql(
+        result = schema.('email' => '', 'age' => '18')
+
+        expect(result.messages).to eql(
           address: ['is missing'],
           age: ['must be greater than 18'],
           email: ['must be filled']

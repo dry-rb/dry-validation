@@ -3,37 +3,8 @@ require 'dry/types/compiler'
 
 module Dry
   module Validation
-    class InputTypeCompiler
+    class InputProcessorCompiler
       attr_reader :type_compiler
-
-      FORM_TYPES = {
-        default: 'string',
-        none?: 'form.nil',
-        bool?: 'form.bool',
-        str?: 'string',
-        int?: 'form.int',
-        float?: 'form.float',
-        decimal?: 'form.decimal',
-        date?: 'form.date',
-        date_time?: 'form.date_time',
-        time?: 'form.time'
-      }.freeze
-
-      CONST_TYPES = {
-        NilClass => 'form.nil',
-        String => 'string',
-        Fixnum => 'form.int',
-        Integer => 'form.int',
-        Float => 'form.float',
-        BigDecimal => 'form.decimal',
-        Array => 'form.array',
-        Hash => 'form.hash',
-        Date => 'form.date',
-        DateTime => 'form.date_time',
-        Time => 'form.time',
-        TrueClass => 'form.true',
-        FalseClass => 'form.false'
-      }.freeze
 
       DEFAULT_TYPE_NODE = [[:type, 'string']].freeze
 
@@ -42,7 +13,7 @@ module Dry
       end
 
       def call(ast)
-        type_compiler.([:type, ['hash', [:symbolized, schema_ast(ast)]]])
+        type_compiler.(hash_node(schema_ast(ast)))
       end
 
       def schema_ast(ast)
@@ -54,7 +25,7 @@ module Dry
       end
 
       def visit_schema(node, *args)
-        [:type, ['hash', [:symbolized, node.input_type_ast]]]
+        hash_node(node.input_processor_ast(:form))
       end
 
       def visit_or(node, *args)
@@ -72,7 +43,7 @@ module Dry
           if result.size == 1
             result.first
           else
-            (result - DEFAULT_TYPE_NODE).first
+            (result - self.class::DEFAULT_TYPE_NODE).first
           end
         end
       end
@@ -92,26 +63,36 @@ module Dry
       end
 
       def visit_set(node, *)
-        [:type, ['form.hash', [:symbolized, node.map { |n| visit(n) }]]]
+        hash_node(node.map { |n| visit(n) })
       end
 
       def visit_each(node, *args)
-        [:type, ['form.array', visit(node, *args)]]
+        array_node(visit(node, *args))
       end
 
       def visit_predicate(node, *args)
         id, args = node
-        default = FORM_TYPES[:default]
 
         if id == :key?
           args[0]
-        elsif id == :type?
-          const = args[0]
-          [:type, CONST_TYPES[const] || Types.identifier(const)]
         else
-          [:type, FORM_TYPES[id] || default]
+          type(id, args)
+        end
+      end
+
+      def type(predicate, args)
+        default = self.class::PREDICATE_MAP[:default]
+
+        if predicate == :type?
+          const = args[0]
+          [:type, self.class::CONST_MAP[const] || Types.identifier(const)]
+        else
+          [:type, self.class::PREDICATE_MAP[predicate] || default]
         end
       end
     end
   end
 end
+
+require 'dry/validation/input_processor_compiler/sanitizer'
+require 'dry/validation/input_processor_compiler/form'
