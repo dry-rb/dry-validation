@@ -19,6 +19,7 @@ module Dry
           )
 
           schema.config.path = [name] if other
+          schema.config.input_processor = :noop
 
           rule = __send__(type, key(:hash?).and(key(schema)))
 
