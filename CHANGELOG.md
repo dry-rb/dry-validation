@@ -10,6 +10,7 @@
   * `confirmation` - for confirmation validation
 * Support for `value(:foo).eql?(value(:bar))` syntax in high-level rules (solnic)
 * New DSL for defining schema objects `Dry::Validation.Schema do .. end` (solnic)
+* Ability to define a schema for an array via top-level `each` rule (solnic)
 * Ability to define nested schemas via `key(:location).schema do .. end` (solnic)
 * Ability to re-use schemas inside other schemas via `key(:location).schema(LocationSchema)` (solnic)
 * Ability to inherit rules from another schema via `Dry::Validation.Schema(Other) do .. end` (solnic)
