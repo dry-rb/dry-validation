@@ -18,6 +18,10 @@ module Dry
           self
         end
 
+        def root?
+          name.nil?
+        end
+
         def class
           Value
         end
@@ -31,7 +35,11 @@ module Dry
               Value[name].instance_eval(&block)
             end
 
-          array?.and(create_rule([:each, val.to_ast]))
+          rule = array?.and(create_rule([:each, val.to_ast]))
+
+          add_rule(rule) if root?
+
+          rule
         end
 
         def when(*predicates, &block)
