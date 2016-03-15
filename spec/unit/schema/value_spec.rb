@@ -153,7 +153,7 @@ RSpec.describe Schema::Value do
     subject(:user) { Schema::Value.new }
 
     it 'builds hash? & rule created within the block' do
-      rule = user.hash? { |value| value.key(:email).required }
+      rule = user.hash? { key(:email).required }
 
       expect(rule.to_ast).to eql([
         :and, [
@@ -181,20 +181,19 @@ RSpec.describe Schema::Value do
           [:val, [:predicate, [:hash?, []]]],
           [:and, [
             [:val, [:predicate, [:key?, [:address]]]],
-            [:key, [:address, [
-              :and, [
-                [:val, [:predicate, [:hash?, []]]],
-                [:set, [
+            [:and, [
+              [:val, [:predicate, [:hash?, []]]],
+              [:key, [
+                :address, [:set, [
                   [:and, [
                     [:val, [:predicate, [:key?, [:city]]]],
-                    [:key, [:city, [:predicate, [:filled?, []]]]]
-                  ]],
+                    [:key, [:city, [:predicate, [:filled?, []]]]]]],
                   [:and, [
                     [:val, [:predicate, [:key?, [:zipcode]]]],
-                    [:key, [:zipcode, [:predicate, [:filled?, []]]]]
-                  ]]
-                ]]]
-            ]]]
+                    [:key, [:zipcode, [:predicate, [:filled?, []]]]]]]
+                ]]
+              ]]
+            ]]
           ]]
         ]]
       )

@@ -22,6 +22,18 @@ module Dry
           [type, [name, super]]
         end
 
+        def hash?(&block)
+          val = Value[name]
+          val.instance_eval(&block)
+
+          rule = create_rule([:val, [:predicate, [:hash?, []]]])
+            .and(create_rule([type, [name, [:set, val.rules.map(&:to_ast)]]]))
+
+          add_rule(rule)
+
+          rule
+        end
+
         private
 
         def method_missing(meth, *args, &block)
