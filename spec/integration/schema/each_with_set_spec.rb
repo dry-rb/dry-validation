@@ -9,6 +9,14 @@ RSpec.describe 'Schema with each and set rules' do
   end
 
   describe '#messages' do
+    it 'validates using all rules' do
+      expect(schema.(payments: [{}]).messages).to eql(
+        { payments: {
+          0 => { method: ['is missing'], amount: ['is missing'] }
+        }}
+      )
+    end
+
     it 'validates each payment against its set of rules' do
       input = {
         payments: [

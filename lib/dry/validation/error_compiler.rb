@@ -104,15 +104,17 @@ module Dry
       end
 
       def merge(result)
-        result.reduce do |a, e|
-          e.merge(a) do |_, left, right|
-            if left.is_a?(Hash)
-              left.merge(right)
-            else
-              right + left
-            end
+        result.reduce { |a, e| deep_merge(a, e) } || DEFAULT_RESULT
+      end
+
+      def deep_merge(left, right)
+        left.merge(right) do |_, a, e|
+          if a.is_a?(Hash)
+            deep_merge(a, e)
+          else
+            a + e
           end
-        end || DEFAULT_RESULT
+        end
       end
 
       def input_visitor(name, input)
