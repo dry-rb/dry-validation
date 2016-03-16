@@ -15,6 +15,16 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
     it 'fails when input is not valid' do
       expect(schema.(email: 'jane@doe', age: 17)).to_not be_success
     end
+
+    it 'returns result which quacks like hash' do
+      input = { email: 'jane@doe', age: 19 }
+      result = schema.(input)
+
+      expect(result[:email]).to eql('jane@doe')
+      expect(Hash[result]).to eql(input)
+
+      expect(result.to_a).to eql([[:email, 'jane@doe'], [:age, 19]])
+    end
   end
 
   describe 'with nested structures' do

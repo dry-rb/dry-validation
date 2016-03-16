@@ -2,11 +2,14 @@ module Dry
   module Validation
     class Result
       include Dry::Equalizer(:output, :messages)
+      include Enumerable
 
       attr_reader :output
       attr_reader :errors
       attr_reader :error_compiler
       attr_reader :hint_compiler
+
+      alias_method :to_hash, :output
 
       EMPTY_MESSAGES = {}.freeze
 
@@ -15,6 +18,14 @@ module Dry
         @errors = errors
         @error_compiler = error_compiler
         @hint_compiler = hint_compiler
+      end
+
+      def each(&block)
+        output.each(&block)
+      end
+
+      def [](name)
+        output.fetch(name)
       end
 
       def success?
