@@ -19,10 +19,12 @@
 * Ability to configure input processor, either `:form` or `:sanitizer` (solnic)
 * Ability to pass a constrained dry type when defining keys or attrs, ie `key(:age, Types::Age)` (solnic)
 * `Result#messages` supports `:full` option to get messages with rule names, disabled by default (solnic)
+* `Validation::Result` responds to `#[]` and `#each` (delegating to its output)
+  and it's an enumerable (solnic)
 
 ### Changed
 
-* `schema` was **removed** from the DSL, just use `key` instead (solnic)
+* `schema` was **removed** from the DSL, just use `key(:name).schema` instead (solnic)
 * `confirmation` is now a macro that you can call on a key rule (solnic)
 * rule names for nested structures are now fully qualified, which means you can
   provide customized messages for them. ie `user: :email` (solnic)
