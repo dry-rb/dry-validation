@@ -1,8 +1,16 @@
-# v0.7.1 to-be-released
+# v0.7.1 2016-03-20
 
 ### Fixed
 
 * `confirmation` macro defines an optional key with maybe value with `_confirmation` suffix (solnic)
+* `each` macro works correctly when its inner rule specify just one key (solnic)
+* error messages for `each` rules where input is equal are now correctly generated (solnic)
+
+### Changed
+
+* Now depends on `dry-logic` >= `0.2.1` (solnic)
+
+[Compare v0.7.0...v0.7.1](https://github.com/dryrb/dry-validation/compare/v0.7.0...v0.7.1)
 
 # v0.7.0 2016-03-16
 
