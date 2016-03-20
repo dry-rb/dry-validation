@@ -60,6 +60,10 @@ module Dry
           target.checks
         end
 
+        def rule_ast
+          rules.size > 0 ? target.rule_ast : [to_ast]
+        end
+
         def to_ast
           if deps.empty?
             node

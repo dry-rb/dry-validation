@@ -55,6 +55,10 @@ module Dry
           create_rule(to_ast)
         end
 
+        def rule_ast
+          rules.map(&:to_ast)
+        end
+
         def path
           items = [parent && parent.path, name].flatten.compact.uniq
           items.size == 1 ? items[0] : items

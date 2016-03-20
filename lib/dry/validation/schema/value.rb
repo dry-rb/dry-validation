@@ -35,7 +35,7 @@ module Dry
               Value[name].instance_eval(&block)
             end
 
-          rule = array?.and(create_rule([:each, val.to_ast]))
+          rule = array?.and(create_rule([:each, [:set, val.rule_ast]]))
 
           add_rule(rule) if root?
 
