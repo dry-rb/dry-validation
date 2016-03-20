@@ -3,6 +3,8 @@ RSpec.describe 'Macros #confirmation' do
     subject(:schema) do
       Dry::Validation.Schema do
         configure do
+          config.input_processor = :sanitizer
+
           def self.messages
             Messages.default.merge(
               en: { errors: { password_confirmation: 'does not match' } }
@@ -19,7 +21,7 @@ RSpec.describe 'Macros #confirmation' do
     end
 
     it 'fails when source value is invalid' do
-      expect(schema.(password: 'fo', password_confirmation: '').messages).to eql(
+      expect(schema.(password: 'fo', password_confirmation: nil).messages).to eql(
         password: ['size cannot be less than 3']
       )
     end

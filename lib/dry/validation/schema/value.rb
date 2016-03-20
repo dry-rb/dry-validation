@@ -68,11 +68,11 @@ module Dry
         end
 
         def confirmation
-          rule = check(:"#{name}_confirmation")
-            .eql?(check(name))
-            .with(deps: [name])
+          conf = :"#{name}_confirmation"
 
-          add_check(rule)
+          parent.optional(conf).maybe
+
+          rule(conf => [conf, name]) { |left, right| left.eql?(right) }
         end
 
         def value(name)
