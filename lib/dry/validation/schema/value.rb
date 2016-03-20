@@ -27,15 +27,21 @@ module Dry
         end
 
         def each(*predicates, &block)
-          val =
+          left = array?
+
+          right =
             if predicates.size > 0
-              predicates
+              inferred = predicates
                 .reduce(Value.new) { |a, e| a.__send__(*::Kernel.Array(e)) }
+
+              create_rule([:each, inferred.to_ast])
             else
-              Value[name].instance_eval(&block)
+              val = Value[name].instance_eval(&block)
+
+              create_rule([:each, [:set, val.rule_ast]])
             end
 
-          rule = array?.and(create_rule([:each, [:set, val.rule_ast]]))
+          rule = left.and(right)
 
           add_rule(rule) if root?
 
