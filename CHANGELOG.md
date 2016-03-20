@@ -1,3 +1,9 @@
+# v0.7.1 to-be-released
+
+### Fixed
+
+* `confirmation` macro defines an optional key with maybe value with `_confirmation` suffix (solnic)
+
 # v0.7.0 2016-03-16
 
 ### Added
