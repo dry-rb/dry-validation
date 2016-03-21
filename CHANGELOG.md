@@ -1,4 +1,8 @@
-# v0.7.1 2016-03-20
+# v0.7.1 2016-03-21
+
+### Added
+
+* You can use `schema` inside `each` macro (solnic)
 
 ### Fixed
 
