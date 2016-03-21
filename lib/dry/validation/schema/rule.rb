@@ -14,15 +14,8 @@ module Dry
         end
 
         def schema(other = nil, &block)
-          schema = other ? ::Class.new(other.class) : Validation.Schema(
-            target.schema_class, parent: target, build: false, &block
-          )
-
-          schema.config.path = [name] if other
-          schema.config.input_processor = :noop
-
+          schema = Schema.create_class(target, other, &block)
           rule = __send__(type, key(:hash?).and(key(schema)))
-
           add_rule(rule)
         end
 

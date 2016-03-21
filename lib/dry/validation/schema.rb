@@ -45,6 +45,20 @@ module Dry
         super(rules, default_options.merge(options))
       end
 
+      def self.create_class(target, other = nil, &block)
+        klass =
+          if other
+            Class.new(other.class)
+          else
+            Validation.Schema(target.schema_class, parent: target, build: false, &block)
+          end
+
+        klass.config.path = [target.name] if other
+        klass.config.input_processor = :noop
+
+        klass
+      end
+
       def self.option(name, default = nil)
         attr_reader(*name)
         options.update(name => default)

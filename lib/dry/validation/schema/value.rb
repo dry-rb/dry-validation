@@ -26,6 +26,11 @@ module Dry
           Value
         end
 
+        def schema(other = nil, &block)
+          schema = Schema.create_class(self, other, &block)
+          hash?.and(schema)
+        end
+
         def each(*predicates, &block)
           left = array?
 
