@@ -1,5 +1,5 @@
 require 'pathname'
-require 'thread_safe/cache'
+require 'concurrent/map'
 
 module Dry
   module Validation
@@ -36,7 +36,7 @@ module Dry
         )
 
         def self.cache
-          @cache ||= ThreadSafe::Cache.new { |h, k| h[k] = ThreadSafe::Cache.new }
+          @cache ||= Concurrent::Map.new { |h, k| h[k] = Concurrent::Map.new }
         end
 
         attr_reader :config

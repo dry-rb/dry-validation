@@ -24,7 +24,7 @@ module Dry
       EXCLUDED = [:none?, :filled?, :key?].freeze
 
       def self.cache
-        @cache ||= ThreadSafe::Cache.new
+        @cache ||= Concurrent::Map.new
       end
 
       def initialize(messages, options = {})
