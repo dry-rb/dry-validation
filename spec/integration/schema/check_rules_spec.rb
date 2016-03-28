@@ -83,9 +83,9 @@ RSpec.describe Schema, 'using high-level rules' do
   describe 'with nested schemas' do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:args).required(:hash?)
+        key(:command).required(:str?, inclusion?: %w(First Second))
 
-        key(:command).required(:str?)
+        key(:args).required(:hash?)
 
         rule(first_args: [:command, :args]) do |command, args|
           command.eql?('First')
@@ -102,6 +102,10 @@ RSpec.describe Schema, 'using high-level rules' do
     it 'generates check rule matching on value' do
       expect(schema.(command: 'First', args: { first: true })).to be_success
       expect(schema.(command: 'Second', args: { second: true })).to be_success
+
+      expect(schema.(command: 'oops', args: { such: 'validation' }).messages).to eql(
+        command: ['must be one of: First, Second']
+      )
 
       expect(schema.(command: 'First', args: { second: true }).messages).to eql(
         args: { first: ['is missing'] }
