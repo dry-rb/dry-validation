@@ -119,4 +119,42 @@ RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
       )
     end
   end
+
+  describe 'with nested schema in a high-level rule' do
+    subject(:schema) do
+      Dry::Validation.Form do
+        key(:address).maybe
+
+        key(:delivery).required(:bool?)
+
+        rule(address: [:delivery, :address]) do |delivery, address|
+          delivery.true?.then(address.schema(AddressSchema))
+        end
+      end
+    end
+
+    before do
+      AddressSchema = Dry::Validation.Form do
+        key(:city).required
+        key(:zipcode).required(:int?)
+      end
+    end
+
+    after do
+      Object.send(:remove_const, :AddressSchema)
+    end
+
+    it 'applies nested form schema' do
+      result = schema.(delivery: '1', address: { city: 'NYC', zipcode: '123' })
+      expect(result).to be_success
+
+      result = schema.(delivery: '1', address: { city: 'NYC', zipcode: 'foo' })
+      expect(result.messages).to eql(
+        address: { zipcode: ['must be an integer'] }
+      )
+
+      result = schema.(delivery: '0', address: nil)
+      expect(result).to be_success
+    end
+  end
 end

@@ -8,6 +8,11 @@ module Dry
 
         def schema(other = nil, &block)
           schema = Schema.create_class(self, other, &block)
+
+          if other
+            schema.config.input_processor = other.class.config.input_processor
+          end
+
           hash?.and(create_rule([:check, [name, schema.to_ast], [path]]))
         end
 
