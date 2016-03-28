@@ -1,3 +1,7 @@
+# v0.7.2 to-be-released
+
+[Compare v0.7.1...HEAD](https://github.com/dryrb/dry-validation/compare/v0.7.1...HEAD)
+
 # v0.7.1 2016-03-21
 
 ### Added
