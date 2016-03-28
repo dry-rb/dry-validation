@@ -1,11 +1,11 @@
-# v0.7.2 to-be-released
+# v0.7.2 2016-03-28
 
 ### Added
 
 * Support for nested schemas inside high-level rules (solnic)
 * `Schema#to_proc` so that you can do `data.each(&schema)` (solnic)
 
-[Compare v0.7.1...HEAD](https://github.com/dryrb/dry-validation/compare/v0.7.1...HEAD)
+[Compare v0.7.1...v0.7.2](https://github.com/dryrb/dry-validation/compare/v0.7.1...v0.7.2)
 
 # v0.7.1 2016-03-21
 
