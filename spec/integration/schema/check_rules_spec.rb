@@ -79,4 +79,37 @@ RSpec.describe Schema, 'using high-level rules' do
       )
     end
   end
+
+  describe 'with nested schemas' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        key(:args).required(:hash?)
+
+        key(:command).required(:str?)
+
+        rule(first_args: [:command, :args]) do |command, args|
+          command.eql?('First')
+            .then(args.schema { key(:first).required(:bool?) })
+        end
+
+        rule(second_args: [:command, :args]) do |command, args|
+          command.eql?('Second')
+            .then(args.schema { key(:second).required(:bool?) })
+        end
+      end
+    end
+
+    it 'generates check rule matching on value' do
+      expect(schema.(command: 'First', args: { first: true })).to be_success
+      expect(schema.(command: 'Second', args: { second: true })).to be_success
+
+      expect(schema.(command: 'First', args: { second: true }).messages).to eql(
+        args: { first: ['is missing'] }
+      )
+
+      expect(schema.(command: 'Second', args: { first: true }).messages).to eql(
+        args: { second: ['is missing'] }
+      )
+    end
+  end
 end

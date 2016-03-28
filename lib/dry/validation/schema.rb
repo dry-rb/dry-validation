@@ -191,6 +191,14 @@ module Dry
         end
       end
 
+      def curry(*args)
+        to_proc.curry.(*args)
+      end
+
+      def to_proc
+        -> input { self.call(input) }
+      end
+
       private
 
       def apply(input)

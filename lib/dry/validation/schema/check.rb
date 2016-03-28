@@ -6,6 +6,11 @@ module Dry
           Check
         end
 
+        def schema(other = nil, &block)
+          schema = Schema.create_class(self, other, &block)
+          hash?.and(create_rule([:check, [name, schema.to_ast], [path]]))
+        end
+
         private
 
         def method_missing(meth, *meth_args)
