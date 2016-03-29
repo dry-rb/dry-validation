@@ -110,7 +110,7 @@ module Dry
           node =
             if predicate.is_a?(::Symbol)
               [target.type, [name, [:predicate, [predicate, args]]]]
-            elsif predicate.is_a?(Types::Constrained)
+            elsif predicate.respond_to?(:rule)
               [target.type, [name, predicate.rule.to_ast]]
             else
               [target.type, [name, predicate.to_ast]]
