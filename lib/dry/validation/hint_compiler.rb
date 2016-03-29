@@ -114,6 +114,10 @@ module Dry
         DEFAULT_RESULT
       end
 
+      def visit_type(node)
+        visit(node.rule.to_ast)
+      end
+
       private
 
       def merge(result)

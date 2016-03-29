@@ -29,4 +29,12 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
     expect(schema.(email: 'jane@doe', age: 17)).to_not be_success
     expect(schema.(email: 'jane@doe', age: '19')).to_not be_success
   end
+
+  it 'correctly responds to messages' do
+    expect(schema.({}).messages).to eq(
+      age: ["is missing", "must be greater than 18"],
+      country: ["is missing", "must be one of: Australia, Poland"],
+      email: ["is missing", "must be String"],
+    )
+  end
 end
