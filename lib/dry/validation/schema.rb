@@ -48,7 +48,13 @@ module Dry
       def self.create_class(target, other = nil, &block)
         klass =
           if other
-            Class.new(other.class)
+            if other < Types::Struct
+              Validation.Schema(parent: target, build: false) do
+                other.schema.each { |attr, type| key(attr).required(type) }
+              end
+            else
+              Class.new(other.class)
+            end
           else
             Validation.Schema(target.schema_class, parent: target, build: false, &block)
           end
