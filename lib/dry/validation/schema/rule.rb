@@ -111,7 +111,7 @@ module Dry
             if predicate.is_a?(::Symbol)
               [target.type, [name, [:predicate, [predicate, args]]]]
             elsif predicate.respond_to?(:rule)
-              [target.type, [name, predicate.rule.to_ast]]
+              [target.type, [name, [:type, predicate]]]
             else
               [target.type, [name, predicate.to_ast]]
             end
