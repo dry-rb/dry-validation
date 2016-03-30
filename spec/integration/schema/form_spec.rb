@@ -9,11 +9,9 @@ RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
         key(:city).required
         key(:street).required
 
-        key(:loc) do
-          hash? do
-            key(:lat).required(:float?)
-            key(:lng).required(:float?)
-          end
+        key(:loc).schema do
+          key(:lat).required(:float?)
+          key(:lng).required(:float?)
         end
       end
 
@@ -123,7 +121,7 @@ RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
   describe 'with nested schema in a high-level rule' do
     subject(:schema) do
       Dry::Validation.Form do
-        key(:address).maybe
+        key(:address).maybe(:hash?)
 
         key(:delivery).required(:bool?)
 
@@ -144,17 +142,21 @@ RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
       Object.send(:remove_const, :AddressSchema)
     end
 
-    it 'applies nested form schema' do
+    it 'succeeds when nested form schema succeeds' do
       result = schema.(delivery: '1', address: { city: 'NYC', zipcode: '123' })
       expect(result).to be_success
+    end
 
+    it 'does not apply schema when there is no match' do
+      result = schema.(delivery: '0', address: nil)
+      expect(result).to be_success
+    end
+
+    it 'fails when nested schema fails' do
       result = schema.(delivery: '1', address: { city: 'NYC', zipcode: 'foo' })
       expect(result.messages).to eql(
         address: { zipcode: ['must be an integer'] }
       )
-
-      result = schema.(delivery: '0', address: nil)
-      expect(result).to be_success
     end
   end
 end

@@ -24,6 +24,14 @@ module Dry
         send(:"visit_#{node[0]}", node[1], *args)
       end
 
+      def visit_type(type, *args)
+        if type.is_a?(Types::Constructor)
+          [:constructor, [type.primitive, type.fn]]
+        else
+          DEFAULT_TYPE_NODE
+        end
+      end
+
       def visit_schema(node, *args)
         hash_node(node.input_processor_ast(identifier))
       end
@@ -43,7 +51,7 @@ module Dry
           if result.size == 1
             result.first
           else
-            (result - self.class::DEFAULT_TYPE_NODE).first
+            (result - self.class::DEFAULT_TYPE_NODE).last
           end
         end
       end
@@ -70,7 +78,7 @@ module Dry
         array_node(visit(node, *args))
       end
 
-      def visit_predicate(node, *args)
+      def visit_predicate(node, *)
         id, args = node
 
         if id == :key?

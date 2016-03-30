@@ -24,21 +24,6 @@ module Dry
       end
     end
 
-    class DryType
-      attr_reader :type
-
-      def initialize(type)
-        @type = type
-      end
-
-      def rule_ast
-        case type
-        when Dry::Types::Constrained, Dry::Types::Enum
-          type.rule
-        end
-      end
-    end
-
     class SchemaCompiler < Logic::RuleCompiler
       def visit_schema(klass)
         klass.new
@@ -50,7 +35,7 @@ module Dry
       end
 
       def visit_type(type)
-        DryType.new(type).rule_ast
+        type.rule
       end
     end
   end

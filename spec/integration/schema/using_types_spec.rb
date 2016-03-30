@@ -64,4 +64,21 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
       )
     end
   end
+
+  context 'custom coercions' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure { config.input_processor = :sanitizer }
+
+        key(:email).required(Dry::Types['strict.string'].constructor(&:strip))
+      end
+    end
+
+    it 'applies custom types to input prior validation' do
+      result = schema.(email: ' jane@doe.org  ')
+
+      expect(result).to be_success
+      expect(result.to_h).to eql(email: 'jane@doe.org')
+    end
+  end
 end

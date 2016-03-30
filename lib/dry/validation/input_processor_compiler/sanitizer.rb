@@ -11,7 +11,9 @@ module Dry
         decimal?: 'decimal',
         date?: 'date',
         date_time?: 'date_time',
-        time?: 'time'
+        time?: 'time',
+        hash?: 'hash',
+        array?: 'array'
       }.freeze
 
       CONST_MAP = {

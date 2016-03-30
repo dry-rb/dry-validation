@@ -112,7 +112,7 @@ module Dry
               [target.type, [name, [:predicate, [predicate, args]]]]
             elsif predicate.respond_to?(:rule)
               [target.type, [name, [:type, predicate]]]
-            elsif predicate < ::Dry::Types::Struct
+            elsif predicate.is_a?(::Class) && predicate < ::Dry::Types::Struct
               [target.type, [name, [:schema, Schema.create_class(target, predicate)]]]
             else
               [target.type, [name, predicate.to_ast]]
