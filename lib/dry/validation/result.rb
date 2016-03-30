@@ -10,6 +10,7 @@ module Dry
       attr_reader :hint_compiler
 
       alias_method :to_hash, :output
+      alias_method :to_h, :output # for MRI 2.0, remove it when drop support
 
       EMPTY_MESSAGES = {}.freeze
 
