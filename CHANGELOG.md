@@ -1,3 +1,16 @@
+# v0.7.3 2016-03-30
+
+### Added
+
+* Support for inferring rules from constrained type (coop + solnic)
+* Support for inferring nested schemas from `Dry::Types::Struct` classes (coop)
+
+### Fixed
+
+* Creating a nested schema properly sets full path to nested data structure (solnic)
+
+[Compare v0.7.2...v0.7.3](https://github.com/dryrb/dry-validation/compare/v0.7.2...v0.7.3)
+
 # v0.7.2 2016-03-28
 
 ### Added
