@@ -12,6 +12,8 @@ en:
 
     format?: "is in invalid format"
 
+    number?: "must be a number"
+
     gt?: "must be greater than %{num}"
 
     gteq?: "must be greater than or equal to %{num}"
