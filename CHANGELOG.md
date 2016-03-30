@@ -9,6 +9,10 @@
 
 * Creating a nested schema properly sets full path to nested data structure (solnic)
 
+### Internal
+
+* Switch from `thread_safe` to `concurrent` (joevandyk)
+
 [Compare v0.7.2...v0.7.3](https://github.com/dryrb/dry-validation/compare/v0.7.2...v0.7.3)
 
 # v0.7.2 2016-03-28
