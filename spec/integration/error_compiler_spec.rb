@@ -129,7 +129,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
           [:input, [:tags, [:result, [nil, [:val, [:predicate, [:empty?, []]]]]]]]
         )
 
-        expect(msg).to eql(tags: ['cannot be empty'])
+        expect(msg).to eql(tags: ['must be empty'])
       end
     end
 
