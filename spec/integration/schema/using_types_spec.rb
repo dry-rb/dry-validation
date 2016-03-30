@@ -37,4 +37,31 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
       email: ["is missing", "must be String"],
     )
   end
+
+  context "structs" do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        key(:person).required(Person)
+      end
+    end
+
+    class Name < Dry::Types::Value
+      attribute :given_name, Dry::Types['strict.string']
+      attribute :family_name, Dry::Types['strict.string']
+    end
+
+    class Person < Dry::Types::Value
+      attribute :name, Name
+    end
+
+    it 'handles nested structs' do
+      expect(schema.(person: { name: { given_name: 'Tim', family_name: 'Cooper' } })).to be_success
+    end
+
+    it 'fails when input is not valid' do
+      expect(schema.(person: {name: {given_name: 'Tim'}}).messages).to eq(
+        person: { name: { family_name: ["is missing"] } }
+      )
+    end
+  end
 end
