@@ -55,16 +55,12 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
     end
 
     it 'handles nested structs' do
-      expect(schema.(person: {name: {given_name: 'Tim', family_name: 'Cooper'}})).to be_success
+      expect(schema.(person: { name: { given_name: 'Tim', family_name: 'Cooper' } })).to be_success
     end
 
     it 'fails when input is not valid' do
       expect(schema.(person: {name: {given_name: 'Tim'}}).messages).to eq(
-        person: {
-          name: {
-            family_name: ["is missing"],
-          },
-        },
+        person: { name: { family_name: ["is missing"] } }
       )
     end
   end

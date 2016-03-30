@@ -47,19 +47,17 @@ module Dry
 
       def self.create_class(target, other = nil, &block)
         klass =
-          if other
-            if other < Types::Struct
-              Validation.Schema(parent: target, build: false) do
-                other.schema.each { |attr, type| key(attr).required(type) }
-              end
-            else
-              Class.new(other.class)
+          if other.is_a?(self)
+            Class.new(other.class)
+          elsif other.is_a?(Class) && other < Types::Struct
+            Validation.Schema(parent: target, build: false) do
+              other.schema.each { |attr, type| key(attr).required(type) }
             end
           else
             Validation.Schema(target.schema_class, parent: target, build: false, &block)
           end
 
-        klass.config.path = [target.name] if other
+        klass.config.path = target.path if other
         klass.config.input_processor = :noop
 
         klass
