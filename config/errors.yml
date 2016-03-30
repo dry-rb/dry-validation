@@ -2,7 +2,7 @@ en:
   errors:
     array?: "must be an array"
 
-    empty?: "cannot be empty"
+    empty?: "must be empty"
 
     exclusion?: "must not be one of: %{list}"
 
