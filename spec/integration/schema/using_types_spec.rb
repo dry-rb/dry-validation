@@ -4,6 +4,7 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
       key(:email).required(Email)
       key(:age).maybe(Age)
       key(:country).required(Country)
+      optional(:admin).maybe(AdminBit)
     end
   end
 
@@ -11,12 +12,14 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
     Email = Dry::Types['strict.string']
     Age = Dry::Types['strict.int'].constrained(gt: 18)
     Country = Dry::Types['strict.string'].enum('Australia', 'Poland')
+    AdminBit = Dry::Types['strict.bool']
   end
 
   after do
     Object.send(:remove_const, :Email)
     Object.send(:remove_const, :Age)
     Object.send(:remove_const, :Country)
+    Object.send(:remove_const, :AdminBit)
   end
 
   it 'passes when input is valid' do
@@ -35,6 +38,12 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
       age: ["is missing", "must be greater than 18"],
       country: ["is missing", "must be one of: Australia, Poland"],
       email: ["is missing", "must be String"],
+    )
+  end
+
+  it 'fails when sum-type rule did not pass' do
+    expect(schema.(email: 'jane@doe', age: 19, country: 'Australia', admin: 'foo').messages).to eql(
+      admin: ['must be FalseClass', 'must be TrueClass']
     )
   end
 
