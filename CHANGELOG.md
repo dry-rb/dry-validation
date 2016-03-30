@@ -4,6 +4,7 @@
 
 * Support for inferring rules from constrained type (coop + solnic)
 * Support for inferring nested schemas from `Dry::Types::Struct` classes (coop)
+* Support for `number?` predicate (solnic)
 
 ### Fixed
 
