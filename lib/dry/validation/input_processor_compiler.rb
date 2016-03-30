@@ -103,4 +103,5 @@ module Dry
 end
 
 require 'dry/validation/input_processor_compiler/sanitizer'
+require 'dry/validation/input_processor_compiler/json'
 require 'dry/validation/input_processor_compiler/form'

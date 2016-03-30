@@ -4,6 +4,7 @@ require 'dry-container'
 
 require 'dry/validation/schema'
 require 'dry/validation/schema/form'
+require 'dry/validation/schema/json'
 
 module Dry
   module Validation
@@ -39,6 +40,10 @@ module Dry
 
     def self.Form(options = {}, &block)
       Validation.Schema(Schema::Form, options, &block)
+    end
+
+    def self.JSON(options = {}, &block)
+      Validation.Schema(Schema::JSON, options, &block)
     end
   end
 end
