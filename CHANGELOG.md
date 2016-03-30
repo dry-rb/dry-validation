@@ -9,6 +9,7 @@
 ### Fixed
 
 * Creating a nested schema properly sets full path to nested data structure (solnic)
+* Error message for `empty?` predicate is now correct (jodosha)
 
 ### Internal
 
