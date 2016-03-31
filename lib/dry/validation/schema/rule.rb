@@ -13,6 +13,11 @@ module Dry
           @options = options
         end
 
+        def inspect
+          to_ast.inspect
+        end
+        alias_method :to_s, :inspect
+
         def schema(other = nil, &block)
           schema = Schema.create_class(target, other, &block)
           rule = __send__(type, key(:hash?).and(key(schema)))

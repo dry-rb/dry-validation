@@ -18,6 +18,11 @@ module Dry
           @options = options
         end
 
+        def inspect
+          to_ast.inspect
+        end
+        alias_method :to_s, :inspect
+
         def key(name, &block)
           define(name, Key, &block)
         end

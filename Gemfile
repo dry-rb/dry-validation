@@ -8,10 +8,8 @@ group :test do
 end
 
 group :tools do
-  gem 'guard'
-  gem 'guard-rspec'
-  gem 'guard-rubocop'
   gem 'byebug', platform: :mri
+  gem 'pry'
 end
 
 group :benchmarks do
