@@ -1,14 +1,14 @@
 require 'dry-validation'
 
 schema = Dry::Validation.Schema do
-  key(:address).schema do
-    key(:city).required(min_size?: 3)
+  required(:address).schema do
+    required(:city).not_nil(min_size?: 3)
 
-    key(:street).required
+    required(:street).not_nil
 
-    key(:country).schema do
-      key(:name).required
-      key(:code).required
+    required(:country).schema do
+      required(:name).not_nil
+      required(:code).not_nil
     end
   end
 end

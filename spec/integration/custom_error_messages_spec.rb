@@ -18,7 +18,7 @@ RSpec.describe Dry::Validation do
           config.messages_file = SPEC_ROOT.join('fixtures/locales/en.yml')
         end
 
-        key(:email, &:filled?)
+        required(:email, &:filled?)
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe Dry::Validation do
             config.messages = :i18n
           end
 
-          key(:email, &:filled?)
+          required(:email, &:filled?)
         end
       end
 

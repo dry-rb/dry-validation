@@ -15,7 +15,7 @@ RSpec.describe Dry::Validation, 'with localized messages' do
             config.messages = :i18n
           end
 
-          key(:email) { |email| email.filled? }
+          required(:email) { |email| email.filled? }
         end
       end
 
@@ -38,7 +38,7 @@ RSpec.describe Dry::Validation, 'with localized messages' do
             end
           end
 
-          key(:email) { |email| email.filled? }
+          required(:email) { |email| email.filled? }
         end
       end
 

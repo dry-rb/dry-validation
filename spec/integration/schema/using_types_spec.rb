@@ -1,9 +1,9 @@
 RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
   subject(:schema) do
     Dry::Validation.Schema do
-      key(:email).required(Email)
-      key(:age).maybe(Age)
-      key(:country).required(Country)
+      required(:email).not_nil(Email)
+      required(:age).maybe(Age)
+      required(:country).not_nil(Country)
       optional(:admin).maybe(AdminBit)
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
   context "structs" do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:person).required(Person)
+        required(:person).not_nil(Person)
       end
     end
 
@@ -79,7 +79,7 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
       Dry::Validation.Schema do
         configure { config.input_processor = :sanitizer }
 
-        key(:email).required(Dry::Types['strict.string'].constructor(&:strip))
+        required(:email).not_nil(Dry::Types['strict.string'].constructor(&:strip))
       end
     end
 

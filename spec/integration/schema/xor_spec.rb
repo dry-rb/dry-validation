@@ -9,9 +9,9 @@ RSpec.describe 'Schema with xor rules' do
         end
       end
 
-      key(:eat_cake).required
+      required(:eat_cake).not_nil
 
-      key(:have_cake).required
+      required(:have_cake).not_nil
 
       rule(:be_reasonable) do
         value(:eat_cake).eql?('yes!') ^ value(:have_cake).eql?('yes!')

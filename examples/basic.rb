@@ -1,9 +1,9 @@
 require 'dry-validation'
 
 schema = Dry::Validation.Schema do
-  key(:email).required
+  required(:email).not_nil
 
-  key(:age).required(:int?, gt?: 18)
+  required(:age).not_nil(:int?, gt?: 18)
 end
 
 errors = schema.call(email: 'jane@doe.org', age: 19).messages

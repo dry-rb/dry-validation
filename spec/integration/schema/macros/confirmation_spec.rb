@@ -12,7 +12,7 @@ RSpec.describe 'Macros #confirmation' do
           end
         end
 
-        key(:password).maybe(min_size?: 3).confirmation
+        required(:password).maybe(min_size?: 3).confirmation
       end
     end
 
