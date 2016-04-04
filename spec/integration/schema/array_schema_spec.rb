@@ -20,4 +20,8 @@ RSpec.describe Dry::Validation::Schema, 'for an array' do
       1 => { prefix: ["must be filled"] }
     )
   end
+
+  it 'does not explode if array does not contain hashes' do
+    schema.(['hello', 'world'])
+  end
 end
