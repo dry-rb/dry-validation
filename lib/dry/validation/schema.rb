@@ -33,7 +33,8 @@ module Dry
 
       setting :input_processor_map, {
         sanitizer: InputProcessorCompiler::Sanitizer.new,
-        form: InputProcessorCompiler::Form.new
+        json: InputProcessorCompiler::JSON.new,
+        form: InputProcessorCompiler::Form.new,
       }.freeze
 
       def self.inherited(klass)
