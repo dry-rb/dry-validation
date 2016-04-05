@@ -14,6 +14,10 @@ en:
 
     number?: "must be a number"
 
+    odd?: "must be odd"
+
+    even?: "must be even"
+
     gt?: "must be greater than %{num}"
 
     gteq?: "must be greater than or equal to %{num}"
