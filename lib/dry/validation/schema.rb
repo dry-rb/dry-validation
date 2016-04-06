@@ -132,7 +132,14 @@ module Dry
       end
 
       def self.input_processor_compiler
-        @input_processor_comp ||= config.input_processor_map[config.input_processor]
+        @input_processor_comp ||=
+          begin
+            if config.input_processor.is_a?(Symbol)
+              config.input_processor_map[config.input_processor]
+            else
+              config.input_processor
+            end
+          end
       end
 
       def self.rule_ast
