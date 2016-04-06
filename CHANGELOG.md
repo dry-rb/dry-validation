@@ -1,3 +1,16 @@
+# v0.7.4 to-be-released
+
+### Added
+
+* `Schema.JSON` with json-specific coercions (coop)
+* Support for error messages for `odd? and `even?` predicates (fran-worley)
+
+### Fixed
+
+* Depending on deeply nested values in high-level rules works now (solnic)
+
+[Compare v0.7.3...HEAD](https://github.com/dryrb/dry-validation/compare/v0.7.3...HEAD)
+
 # v0.7.3 2016-03-30
 
 ### Added
