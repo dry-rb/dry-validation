@@ -1,4 +1,4 @@
-# v0.7.4 to-be-released
+# v0.7.4 2016-04-06
 
 ### Added
 
@@ -9,7 +9,7 @@
 
 * Depending on deeply nested values in high-level rules works now (solnic)
 
-[Compare v0.7.3...HEAD](https://github.com/dryrb/dry-validation/compare/v0.7.3...HEAD)
+[Compare v0.7.3...v0.7.4](https://github.com/dryrb/dry-validation/compare/v0.7.3...v0.7.4)
 
 # v0.7.3 2016-03-30
 
