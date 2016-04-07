@@ -24,6 +24,10 @@ module Dry
           add_rule(rule)
         end
 
+        def schema?
+          target.schema?
+        end
+
         def required(*predicates)
           rule = ([key(:filled?)] + infer_predicates(predicates)).reduce(:and)
 
