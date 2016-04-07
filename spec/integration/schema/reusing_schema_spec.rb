@@ -1,9 +1,9 @@
 RSpec.describe 'Reusing schemas' do
   subject(:schema) do
     Dry::Validation.Schema do
-      key(:city).required
+      required(:city).not_nil
 
-      key(:location).schema(LocationSchema)
+      required(:location).schema(LocationSchema)
     end
   end
 
@@ -11,8 +11,8 @@ RSpec.describe 'Reusing schemas' do
     LocationSchema = Dry::Validation.Schema do
       configure { config.input_processor = :form }
 
-      key(:lat).required(:float?)
-      key(:lng).required(:float?)
+      required(:lat).not_nil(:float?)
+      required(:lng).not_nil(:float?)
     end
   end
 

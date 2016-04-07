@@ -23,9 +23,10 @@ module Dry
         end
         alias_method :to_s, :inspect
 
-        def key(name, &block)
+        def required(name, &block)
           define(name, Key, &block)
         end
+        alias_method :key, :required
 
         def optional(name, &block)
           define(name, Key, :then, &block)

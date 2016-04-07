@@ -50,8 +50,8 @@ RSpec.describe Schema, 'using high-level rules' do
           end
         end
 
-        key(:login).required(:bool?)
-        key(:email).maybe
+        required(:login).not_nil(:bool?)
+        required(:email).maybe
 
         rule(:email_presence) { value(:login).true?.then(value(:email).filled?) }
 
@@ -83,18 +83,18 @@ RSpec.describe Schema, 'using high-level rules' do
   describe 'with nested schemas' do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:command).required(:str?, inclusion?: %w(First Second))
+        required(:command).not_nil(:str?, inclusion?: %w(First Second))
 
-        key(:args).required(:hash?)
+        required(:args).not_nil(:hash?)
 
         rule(first_args: [:command, :args]) do |command, args|
           command.eql?('First')
-            .then(args.schema { key(:first).required(:bool?) })
+            .then(args.schema { required(:first).not_nil(:bool?) })
         end
 
         rule(second_args: [:command, :args]) do |command, args|
           command.eql?('Second')
-            .then(args.schema { key(:second).required(:bool?) })
+            .then(args.schema { required(:second).not_nil(:bool?) })
         end
       end
     end

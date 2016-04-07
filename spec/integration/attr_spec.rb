@@ -2,7 +2,7 @@ RSpec.describe Dry::Validation::Schema, 'defining attr-based schema' do
   describe 'with a flat structure' do
     subject(:schema) do
       Dry::Validation.Schema do
-        attr(:email).required
+        attr(:email).not_nil
         attr(:age) { none? | (int? & gt?(18)) }
       end
     end
@@ -22,18 +22,18 @@ RSpec.describe Dry::Validation::Schema, 'defining attr-based schema' do
   describe 'with nested structures' do
     subject(:schema) do
       Dry::Validation.Schema do
-        attr(:email).required
+        attr(:email).not_nil
 
         attr(:age) { none? | (int? & gt?(18)) }
 
         attr(:address) do
           attr(:city) { min_size?(3) }
 
-          attr(:street).required
+          attr(:street).not_nil
 
           attr(:country) do
-            attr(:name).required
-            attr(:code).required
+            attr(:name).not_nil
+            attr(:code).not_nil
           end
         end
 

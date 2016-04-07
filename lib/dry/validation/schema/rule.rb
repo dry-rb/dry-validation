@@ -24,11 +24,12 @@ module Dry
           add_rule(rule)
         end
 
-        def required(*predicates)
+        def not_nil(*predicates)
           rule = ([key(:filled?)] + infer_predicates(predicates)).reduce(:and)
 
           add_rule(__send__(type, rule))
         end
+        alias_method :required, :not_nil
 
         def maybe(*predicates)
           rule =

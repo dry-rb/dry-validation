@@ -1,17 +1,17 @@
 RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
   subject(:schema) do
     Dry::Validation.Form do
-      key(:email).required
+      required(:email).not_nil
 
-      key(:age).maybe(:int?, gt?: 18)
+      required(:age).maybe(:int?, gt?: 18)
 
-      key(:address).schema do
-        key(:city).required
-        key(:street).required
+      required(:address).schema do
+        required(:city).not_nil
+        required(:street).not_nil
 
-        key(:loc).schema do
-          key(:lat).required(:float?)
-          key(:lng).required(:float?)
+        required(:loc).schema do
+          required(:lat).not_nil(:float?)
+          required(:lng).not_nil(:float?)
         end
       end
 
@@ -121,9 +121,9 @@ RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
   describe 'with nested schema in a high-level rule' do
     subject(:schema) do
       Dry::Validation.Form do
-        key(:address).maybe(:hash?)
+        required(:address).maybe(:hash?)
 
-        key(:delivery).required(:bool?)
+        required(:delivery).not_nil(:bool?)
 
         rule(address: [:delivery, :address]) do |delivery, address|
           delivery.true?.then(address.schema(AddressSchema))
@@ -133,8 +133,8 @@ RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
 
     before do
       AddressSchema = Dry::Validation.Form do
-        key(:city).required
-        key(:zipcode).required(:int?)
+        required(:city).not_nil
+        required(:zipcode).not_nil(:int?)
       end
     end
 

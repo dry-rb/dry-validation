@@ -2,7 +2,7 @@ RSpec.describe 'Macros #required' do
   describe 'with no args' do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:email).required
+        required(:email).not_nil
       end
     end
 
@@ -16,7 +16,7 @@ RSpec.describe 'Macros #required' do
   describe 'with a type specification' do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:age).required(:int?)
+        required(:age).not_nil(:int?)
       end
     end
 
@@ -31,7 +31,7 @@ RSpec.describe 'Macros #required' do
     context 'with a flat arg' do
       subject(:schema) do
         Dry::Validation.Schema do
-          key(:age).required(:int?, gt?: 18)
+          required(:age).not_nil(:int?, gt?: 18)
         end
       end
 
@@ -45,7 +45,7 @@ RSpec.describe 'Macros #required' do
     context 'with a range arg' do
       subject(:schema) do
         Dry::Validation.Schema do
-          key(:age).required(:int?, size?: 18..24)
+          required(:age).not_nil(:int?, size?: 18..24)
         end
       end
 
