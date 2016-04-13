@@ -27,6 +27,8 @@ module Dry
       def visit_type(type, *args)
         if type.is_a?(Types::Constructor)
           [:constructor, [type.primitive, type.fn]]
+        elsif type.respond_to?(:rule)
+          visit(type.rule.to_ast, *args)
         else
           DEFAULT_TYPE_NODE.first
         end
