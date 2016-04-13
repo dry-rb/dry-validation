@@ -28,7 +28,7 @@ module Dry
         if type.is_a?(Types::Constructor)
           [:constructor, [type.primitive, type.fn]]
         else
-          DEFAULT_TYPE_NODE
+          DEFAULT_TYPE_NODE.first
         end
       end
 
