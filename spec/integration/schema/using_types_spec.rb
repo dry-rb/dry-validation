@@ -90,4 +90,20 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
       expect(result.to_h).to eql(email: 'jane@doe.org')
     end
   end
+
+  context 'custom types' do
+    subject(:schema) do
+      Dry::Validation.Form do
+        key(:quantity).required(Dry::Types['strict.int'].constrained(gt: 1))
+        key(:percentage).required(Dry::Types['strict.decimal'].constrained(gt: 0, lt: 1))
+      end
+    end
+
+    it 'applies custom types to input prior validation' do
+      result = schema.(quantity: 2, percentage: BigDecimal('0.5'))
+
+      expect(result).to be_success
+      expect(result.to_h).to eql(quantity: 2, percentage: BigDecimal('0.5'))
+    end
+  end
 end
