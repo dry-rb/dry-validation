@@ -30,7 +30,7 @@ RSpec.describe Dry::Validation do
           config.predicates = Test::Predicates
         end
 
-        key(:email) { filled? & email? }
+        required(:email) { filled? & email? }
       end
     end
 
@@ -58,7 +58,7 @@ RSpec.describe Dry::Validation do
           end
         end
 
-        key(:email) { filled? & email? }
+        required(:email) { filled? & email? }
       end
     end
 
@@ -68,7 +68,7 @@ RSpec.describe Dry::Validation do
   describe 'custom predicate which requires an arbitrary dependency' do
     subject(:schema) do
       Dry::Validation.Schema(base_class) do
-        key(:email).required(:email?)
+        required(:email).required(:email?)
 
         configure do
           option :email_check
@@ -97,7 +97,7 @@ RSpec.describe Dry::Validation do
         end
       end
 
-      key(:email).required(:email?)
+      required(:email).required(:email?)
     end
 
     expect { schema.(email: 'foo').messages }.to raise_error(

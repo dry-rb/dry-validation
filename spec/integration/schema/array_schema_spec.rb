@@ -2,8 +2,8 @@ RSpec.describe Dry::Validation::Schema, 'for an array' do
   subject(:schema) do
     Dry::Validation.Schema do
       each do
-        key(:prefix).required
-        key(:value).required
+        required(:prefix).required
+        required(:value).required
       end
     end
   end

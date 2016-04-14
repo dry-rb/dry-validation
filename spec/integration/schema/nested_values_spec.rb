@@ -1,14 +1,14 @@
 RSpec.describe Schema, 'using nested values' do
   let(:schema) do
     Dry::Validation.Schema do
-      key(:email).maybe
+      required(:email).maybe
 
-      key(:settings) do
+      required(:settings) do
         optional(:offers).required(:bool?).when(:true?) do
           value([:settings, :newsletter]).false?
         end
 
-        key(:newsletter).required(:bool?).when(:true?) do
+        required(:newsletter).required(:bool?).when(:true?) do
           value(:email).filled?
         end
       end

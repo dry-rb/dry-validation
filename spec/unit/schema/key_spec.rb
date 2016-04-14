@@ -10,7 +10,7 @@ RSpec.describe Schema::Key do
 
     it 'returns a key rule & disjunction rule created within the block' do
       user.hash? do
-        key(:email) { none? | filled? }
+        required(:email) { none? | filled? }
       end
 
       expect(user.to_ast).to eql([

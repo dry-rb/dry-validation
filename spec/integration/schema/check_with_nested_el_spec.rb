@@ -1,9 +1,9 @@
 RSpec.describe 'Check depending on a nested value from a hash' do
   subject(:schema) do
     Dry::Validation.Schema do
-      key(:tag).schema do
-        key(:color).schema do
-          key(:value).required(:str?)
+      required(:tag).schema do
+        required(:color).schema do
+          required(:value).required(:str?)
         end
       end
 

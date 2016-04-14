@@ -1,9 +1,9 @@
 RSpec.describe 'Schema with each and set rules' do
   subject(:schema) do
     Dry::Validation.Schema do
-      key(:payments).each do
-        key(:method).required(:str?)
-        key(:amount).required(:float?)
+      required(:payments).each do
+        required(:method).required(:str?)
+        required(:amount).required(:float?)
       end
     end
   end
