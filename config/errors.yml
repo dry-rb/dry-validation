@@ -8,6 +8,8 @@ en:
 
     eql?: "must be equal to %{eql_value}"
 
+    not_eql?: "must not be equal to %{eql_value}"
+
     filled?: "must be filled"
 
     format?: "is in invalid format"
