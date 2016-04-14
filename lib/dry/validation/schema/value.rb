@@ -4,7 +4,7 @@ module Dry
   module Validation
     class Schema
       class Value < DSL
-        attr_reader :type, :schema_class
+        attr_reader :type, :schema_class, :schema
 
         def initialize(options = {})
           super
@@ -22,13 +22,17 @@ module Dry
           name.nil?
         end
 
+        def schema?
+          ! @schema.nil?
+        end
+
         def class
           Value
         end
 
         def schema(other = nil, &block)
-          schema = Schema.create_class(self, other, &block)
-          hash?.and(schema)
+          @schema = Schema.create_class(self, other, &block)
+          hash?.and(@schema)
         end
 
         def each(*predicates, &block)
@@ -43,7 +47,7 @@ module Dry
             else
               val = Value[name].instance_eval(&block)
 
-              create_rule([:each, [:set, val.rule_ast]])
+              create_rule([:each, val.schema? ? val.to_ast : [:set, val.rule_ast]])
             end
 
           rule = left.and(right)

@@ -15,7 +15,7 @@ module Dry
         node.map { |el| visit(el) }
       end
 
-      def visit_set(node)
+      def visit_set(node, *)
         result = node.map do |input|
           visit(input)
         end
@@ -24,8 +24,8 @@ module Dry
 
       def visit_el(node)
         idx, el = node
-        name = [*Array(name), idx]
-        visit(el, name)
+        path = [*Array(name), idx]
+        input_visitor(path, input[idx]).visit(el)
       end
 
       def visit_check(node)

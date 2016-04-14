@@ -27,13 +27,15 @@ module Dry
       def visit_type(type, *args)
         if type.is_a?(Types::Constructor)
           [:constructor, [type.primitive, type.fn]]
+        elsif type.respond_to?(:rule)
+          visit(type.rule.to_ast, *args)
         else
-          DEFAULT_TYPE_NODE
+          DEFAULT_TYPE_NODE.first
         end
       end
 
-      def visit_schema(node, *args)
-        hash_node(node.input_processor_ast(identifier))
+      def visit_schema(schema, *args)
+        hash_node(schema.input_processor_ast(identifier))
       end
 
       def visit_or(node, *args)
@@ -44,7 +46,12 @@ module Dry
       def visit_and(node, first = true)
         if first
           name, type = node.map { |n| visit(n, false) }.uniq
-          [:key, [name, type]]
+
+          if name.is_a?(Array)
+            type
+          else
+            [:key, [name, type]]
+          end
         else
           result = node.map { |n| visit(n, first) }.uniq
 

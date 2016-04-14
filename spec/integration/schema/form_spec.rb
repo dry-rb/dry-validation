@@ -118,6 +118,28 @@ RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
     end
   end
 
+  describe 'with an each and nested schema' do
+    subject(:schema) do
+      Dry::Validation.Form do
+        key(:items).each do
+          schema do
+            key(:title).required(:str?)
+          end
+        end
+      end
+    end
+
+    it 'passes when each element passes schema check' do
+      expect(schema.(items: [{ title: 'Foo' }])).to be_success
+    end
+
+    it 'fails when one or more elements did not pass schema check' do
+      expect(schema.(items: [{ title: 'Foo' }, { title: :Foo }]).messages).to eql(
+        items: { 1 => { title: ['must be a string'] } }
+      )
+    end
+  end
+
   describe 'with nested schema in a high-level rule' do
     subject(:schema) do
       Dry::Validation.Form do

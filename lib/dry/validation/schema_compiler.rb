@@ -18,8 +18,12 @@ module Dry
 
       def deps_valid?(results)
         deps.all? do |path|
-          result = Array(path).reduce(results) { |a, e| a[e] }
-          result.success? if result
+          result = nil
+          Array(path).each do |name|
+            curr = results[name]
+            result = curr.success? if curr.respond_to?(:success)
+          end
+          result
         end
       end
     end
