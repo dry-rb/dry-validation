@@ -31,10 +31,6 @@ module Dry
           define(name, Key, :then, &block)
         end
 
-        def attr(name, &block)
-          define(name, Attr, &block)
-        end
-
         def not
           negated = create_rule([:not, to_ast])
           @rules = [negated]
