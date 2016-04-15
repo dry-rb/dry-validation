@@ -1,7 +1,7 @@
 RSpec.describe Dry::Validation::Schema do
   subject(:schema) do
     Dry::Validation.Schema do
-      key(:age).required(:number?, :int?)
+      required(:age).filled(:number?, :int?)
     end
   end
 

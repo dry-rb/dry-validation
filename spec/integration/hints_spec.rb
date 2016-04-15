@@ -18,7 +18,7 @@ RSpec.describe 'Validation hints' do
   context 'with yaml messages' do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:age) do |age|
+        required(:age) do |age|
           age.none? | (age.int? & age.gt?(18))
         end
       end
@@ -32,7 +32,7 @@ RSpec.describe 'Validation hints' do
       Dry::Validation.Schema do
         configure { configure { |c| c.messages = :i18n } }
 
-        key(:age) do |age|
+        required(:age) do |age|
           age.none? | (age.int? & age.gt?(18))
         end
       end
@@ -44,8 +44,8 @@ RSpec.describe 'Validation hints' do
   context 'when type expectation is specified' do
     subject(:schema)  do
       Dry::Validation.Schema do
-        key(:email).required
-        key(:name).required(:str?, size?: 5..25)
+        required(:email).filled
+        required(:name).filled(:str?, size?: 5..25)
       end
     end
 

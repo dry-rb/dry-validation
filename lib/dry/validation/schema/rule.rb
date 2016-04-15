@@ -29,7 +29,21 @@ module Dry
         end
 
         def required(*predicates)
+          ::Kernel.warn 'required is deprecated - use filled instead.'
+
+          filled(*predicates)
+        end
+
+        def filled(*predicates)
           rule = ([key(:filled?)] + infer_predicates(predicates)).reduce(:and)
+
+          add_rule(__send__(type, rule))
+        end
+
+        def value(*predicates)
+          ::Kernel.raise ::ArgumentError, "wrong number of arguments (given 0, expected at least 1)" if predicates.empty?
+
+          rule = infer_predicates(predicates).reduce(:and)
 
           add_rule(__send__(type, rule))
         end

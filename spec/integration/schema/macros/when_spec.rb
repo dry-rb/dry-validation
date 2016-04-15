@@ -2,9 +2,9 @@ RSpec.describe 'Macros #when' do
   context 'with a result rule returned from the block' do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:email).maybe
+        required(:email).maybe
 
-        key(:login).required.when(:true?) do
+        required(:login).filled.when(:true?) do
           value(:email).filled?
         end
       end
@@ -22,10 +22,10 @@ RSpec.describe 'Macros #when' do
   describe 'with a result rule depending on another result' do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:left).maybe(:int?)
-        key(:right).maybe(:int?)
+        required(:left).maybe(:int?)
+        required(:right).maybe(:int?)
 
-        key(:compare).maybe(:bool?).when(:true?) do
+        required(:compare).maybe(:bool?).when(:true?) do
           value(:left).gt?(value(:right))
         end
       end
@@ -43,10 +43,10 @@ RSpec.describe 'Macros #when' do
   describe 'with multiple result rules' do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:email).maybe
-        key(:password).maybe
+        required(:email).maybe
+        required(:password).maybe
 
-        key(:login).maybe(:bool?).when(:true?) do
+        required(:login).maybe(:bool?).when(:true?) do
           value(:email).filled?
           value(:password).filled?
         end

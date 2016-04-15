@@ -1,7 +1,7 @@
 RSpec.describe 'Check depending on nth element in an array' do
   subject(:schema) do
     Dry::Validation.Schema do
-      key(:tags).each(:str?)
+      required(:tags).each(:str?)
 
       rule(red: [[:tags, 0]]) do |value|
         value.eql?('red')
