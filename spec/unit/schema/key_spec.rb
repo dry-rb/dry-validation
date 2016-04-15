@@ -17,14 +17,14 @@ RSpec.describe Schema::Key do
         :key, [:user, [
           :and, [
             [:val, [:predicate, [:hash?, []]]],
-            [:key, [:user, [:set, [
-              [:and, [
-                [:val, [:predicate, [:key?, [:email]]]],
-                [:or, [
-                  [:key, [:email, [:predicate, [:none?, []]]]],
-                  [:key, [:email, [:predicate, [:filled?, []]]]]]
-                ]]
-            ]]]]]
+            [:key, [:user, [:and, [
+              [:val, [:predicate, [:key?, [:email]]]],
+              [:or, [
+                [:key, [:email, [:predicate, [:none?, []]]]],
+                [:key, [:email, [:predicate, [:filled?, []]]]]]
+              ]]
+            ]]
+            ]
           ]
         ]]
       ])

@@ -33,7 +33,7 @@ RSpec.describe Schema::Value do
       expect(rule.to_ast).to eql(
         [:and, [
           [:val, [:predicate, [:array?, []]]],
-          [:each, [:set, [[:val, [:predicate, [:key?, [:method]]]]]]]
+          [:each, [:val, [:predicate, [:key?, [:method]]]]]
         ]]
       )
     end

@@ -39,7 +39,7 @@ module Dry
             else
               val = Value[name].instance_eval(&block)
 
-              create_rule([:each, val.schema? ? val.to_ast : [:set, val.rule_ast]])
+              create_rule([:each, val.to_ast])
             end
 
           rule = left.and(right)
@@ -55,7 +55,7 @@ module Dry
 
           right = Value.new(type: type)
           right.instance_eval(&block)
- 
+
           add_check(left.then(create_rule(right.to_ast)))
 
           self
