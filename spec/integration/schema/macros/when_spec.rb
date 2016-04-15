@@ -4,7 +4,7 @@ RSpec.describe 'Macros #when' do
       Dry::Validation.Schema do
         required(:email).maybe
 
-        required(:login).required.when(:true?) do
+        required(:login).filled.when(:true?) do
           value(:email).filled?
         end
       end

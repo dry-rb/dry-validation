@@ -4,11 +4,11 @@ RSpec.describe Schema, 'using nested values' do
       required(:email).maybe
 
       required(:settings) do
-        optional(:offers).required(:bool?).when(:true?) do
+        optional(:offers).filled(:bool?).when(:true?) do
           value([:settings, :newsletter]).false?
         end
 
-        required(:newsletter).required(:bool?).when(:true?) do
+        required(:newsletter).filled(:bool?).when(:true?) do
           value(:email).filled?
         end
       end

@@ -18,7 +18,7 @@ RSpec.describe Schema::Value do
     end
 
     it 'creates a rule for a specified key using a macro' do
-      rule = value.required(:address).required
+      rule = value.required(:address).filled
 
       expect(rule.to_ast).to eql(expected_ast)
     end
@@ -63,8 +63,8 @@ RSpec.describe Schema::Value do
     it 'creates a rule for specified keys using macros' do
       rule = value.required(:address) do
         required(:location) do
-          required(:lat).required
-          required(:lng).required
+          required(:lat).filled
+          required(:lng).filled
         end
       end
 
@@ -102,8 +102,8 @@ RSpec.describe Schema::Value do
 
     it 'creates a rule for specified keys using macros' do
       rule = value.required(:address) do
-        required(:city).required
-        required(:zipcode).required
+        required(:city).filled
+        required(:zipcode).filled
       end
 
       expect(rule.to_ast).to eql(expected_ast)
@@ -153,7 +153,7 @@ RSpec.describe Schema::Value do
     subject(:user) { Schema::Value.new }
 
     it 'builds hash? & rule created within the block' do
-      rule = user.hash? { required(:email).required }
+      rule = user.hash? { required(:email).filled }
 
       expect(rule.to_ast).to eql([
         :and, [
@@ -170,8 +170,8 @@ RSpec.describe Schema::Value do
       rule = user.hash? do
         required(:address) do
           hash? do
-            required(:city).required
-            required(:zipcode).required
+            required(:city).filled
+            required(:zipcode).filled
           end
         end
       end

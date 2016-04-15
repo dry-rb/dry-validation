@@ -2,7 +2,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
   describe 'with a flat structure' do
     subject(:schema) do
       Dry::Validation.Schema do
-        required(:email).required
+        required(:email).filled
         required(:age) { none? | (int? & gt?(18)) }
       end
     end
@@ -30,18 +30,18 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
   describe 'with nested structures' do
     subject(:schema) do
       Dry::Validation.Schema do
-        required(:email).required
+        required(:email).filled
 
         required(:age).maybe(:int?, gt?: 18)
 
         required(:address).schema do
-          required(:city).required(min_size?: 3)
+          required(:city).filled(min_size?: 3)
 
-          required(:street).required
+          required(:street).filled
 
           required(:country).schema do
-            required(:name).required
-            required(:code).required
+            required(:name).filled
+            required(:code).filled
           end
         end
 

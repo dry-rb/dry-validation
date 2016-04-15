@@ -4,7 +4,7 @@ RSpec.describe 'Macros #each' do
       subject(:schema) do
         Dry::Validation.Schema do
           required(:songs).each do
-            required(:title).required
+            required(:title).filled
           end
         end
       end
@@ -36,8 +36,8 @@ RSpec.describe 'Macros #each' do
         Dry::Validation.Schema do
           required(:songs).each do
             schema do
-              required(:title).required
-              required(:author).required
+              required(:title).filled
+              required(:author).filled
             end
           end
         end

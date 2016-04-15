@@ -44,8 +44,8 @@ RSpec.describe 'Validation hints' do
   context 'when type expectation is specified' do
     subject(:schema)  do
       Dry::Validation.Schema do
-        required(:email).required
-        required(:name).required(:str?, size?: 5..25)
+        required(:email).filled
+        required(:name).filled(:str?, size?: 5..25)
       end
     end
 

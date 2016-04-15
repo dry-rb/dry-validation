@@ -2,13 +2,13 @@ require 'dry-validation'
 
 schema = Dry::Validation.Schema do
   required(:address).schema do
-    required(:city).required(min_size?: 3)
+    required(:city).filled(min_size?: 3)
 
-    required(:street).required
+    required(:street).filled
 
     required(:country).schema do
-      required(:name).required
-      required(:code).required
+      required(:name).filled
+      required(:code).filled
     end
   end
 end

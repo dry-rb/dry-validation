@@ -1,17 +1,17 @@
 RSpec.describe Dry::Validation::Schema::JSON, 'defining a schema' do
   subject(:schema) do
     Dry::Validation.JSON do
-      required(:email).required
+      required(:email).filled
 
       required(:age).maybe(:int?, gt?: 18)
 
       required(:address).schema do
-        required(:city).required
-        required(:street).required
+        required(:city).filled
+        required(:street).filled
 
         required(:loc).schema do
-          required(:lat).required(:float?)
-          required(:lng).required(:float?)
+          required(:lat).filled(:float?)
+          required(:lng).filled(:float?)
         end
       end
 
@@ -123,7 +123,7 @@ RSpec.describe Dry::Validation::Schema::JSON, 'defining a schema' do
       Dry::Validation.JSON do
         required(:address).maybe(:hash?)
 
-        required(:delivery).required(:bool?)
+        required(:delivery).filled(:bool?)
 
         rule(address: [:delivery, :address]) do |delivery, address|
           delivery.true?.then(address.schema(AddressSchema))
@@ -133,8 +133,8 @@ RSpec.describe Dry::Validation::Schema::JSON, 'defining a schema' do
 
     before do
       AddressSchema = Dry::Validation.JSON do
-        required(:city).required
-        required(:zipcode).required(:int?)
+        required(:city).filled
+        required(:zipcode).filled(:int?)
       end
     end
 
