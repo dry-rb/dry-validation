@@ -439,6 +439,18 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       end
     end
 
+    describe ':number?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit(
+          [:input, [:str, [
+            :result, ["not a number", [:val, [:predicate, [:number?, []]]]]]
+          ]]
+        )
+
+        expect(msg).to eql(str: ['must be a number'])
+      end
+    end
+
     describe ':odd?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
