@@ -4,7 +4,9 @@ en:
 
     empty?: "must be empty"
 
-    exclusion?: "must not be one of: %{list}"
+    excluded_from?: "must not be one of: %{list}"
+
+    excludes?: "must not include %{value}"
 
     eql?: "must be equal to %{eql_value}"
 
@@ -26,7 +28,9 @@ en:
 
     hash?: "must be a hash"
 
-    inclusion?: "must be one of: %{list}"
+    included_in?: "must be one of: %{list}"
+
+    includes?: "must include %{value}"
 
     bool?: "must be boolean"
 

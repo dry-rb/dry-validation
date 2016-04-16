@@ -133,11 +133,11 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       end
     end
 
-    describe ':exclusion?' do
+    describe ':excluded_from?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
           [:input, [:num, [
-            :result, [2, [:val, [:predicate, [:exclusion?, [[1, 2, 3]]]]]]]
+            :result, [2, [:val, [:predicate, [:excluded_from?, [[1, 2, 3]]]]]]]
           ]]
         )
 
@@ -145,15 +145,39 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       end
     end
 
-    describe ':inclusion?' do
+    describe ':excludes?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit(
+          [:input, [:array, [
+            :result, [[1, 2, 3], [:val, [:predicate, [:excludes?, [2]]]]]]
+          ]]
+        )
+
+        expect(msg).to eql(array: ['must not include 2'])
+      end
+    end
+
+    describe ':included_in?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
           [:input, [:num, [
-            :result, [2, [:val, [:predicate, [:inclusion?, [[1, 2, 3]]]]]]]
+            :result, [2, [:val, [:predicate, [:included_in?, [[1, 2, 3]]]]]]]
           ]]
         )
 
         expect(msg).to eql(num: ['must be one of: 1, 2, 3'])
+      end
+    end
+
+    describe ':includes?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit(
+          [:input, [:num, [
+            :result, [[1, 2, 3], [:val, [:predicate, [:includes?, [2]]]]]]
+          ]]
+        )
+
+        expect(msg).to eql(num: ['must include 2'])
       end
     end
 
@@ -415,6 +439,30 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       end
     end
 
+    describe ':odd?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit(
+          [:input, [:str, [
+            :result, [1, [:val, [:predicate, [:odd?, []]]]]]
+          ]]
+        )
+
+        expect(msg).to eql(str: ['must be odd'])
+      end
+    end
+
+    describe ':even?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit(
+          [:input, [:str, [
+            :result, [2, [:val, [:predicate, [:even?, []]]]]]
+          ]]
+        )
+
+        expect(msg).to eql(str: ['must be even'])
+      end
+    end
+
     describe ':eql?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
@@ -424,6 +472,18 @@ RSpec.describe Dry::Validation::ErrorCompiler do
         )
 
         expect(msg).to eql(str: ['must be equal to Bar'])
+      end
+    end
+
+    describe ':not_eql?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit(
+          [:input, [:str, [
+            :result, ['Foo', [:val, [:predicate, [:not_eql?, ['Foo']]]]]]
+          ]]
+        )
+
+        expect(msg).to eql(str: ['must not be equal to Foo'])
       end
     end
 

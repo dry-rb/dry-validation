@@ -78,12 +78,20 @@ module Dry
         { name: args[0][0] }
       end
 
-      def options_for_exclusion?(*args)
+      def options_for_excluded_from?(*args)
         { list: args[0][0].join(', ') }
       end
 
-      def options_for_inclusion?(*args)
+      def options_for_excludes?(*args)
+        { value: args[0][0] }
+      end
+
+      def options_for_included_in?(*args)
         { list: args[0][0].join(', ') }
+      end
+
+      def options_for_includes?(*args)
+        { value: args[0][0] }
       end
 
       def options_for_gt?(*args)
@@ -115,6 +123,10 @@ module Dry
       end
 
       def options_for_eql?(*args)
+        { eql_value: args[0][0], value: input }
+      end
+
+      def options_for_not_eql?(*args)
         { eql_value: args[0][0], value: input }
       end
 
