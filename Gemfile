@@ -19,3 +19,6 @@ group :benchmarks do
   gem 'benchmark-ips'
   gem 'virtus'
 end
+
+gem "dry-logic", git: 'https://github.com/dry-rb/dry-logic.git', branch: "master"
+gem "dry-types", git: 'https://github.com/dry-rb/dry-types.git', branch: "dry_logic_predicate_change"
