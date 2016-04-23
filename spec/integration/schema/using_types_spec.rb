@@ -1,9 +1,9 @@
 RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
   subject(:schema) do
     Dry::Validation.Schema do
-      key(:email).required(Email)
-      key(:age).maybe(Age)
-      key(:country).required(Country)
+      required(:email).filled(Email)
+      required(:age).maybe(Age)
+      required(:country).filled(Country)
       optional(:admin).maybe(AdminBit)
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
   context "structs" do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:person).required(Person)
+        required(:person).filled(Person)
       end
     end
 
@@ -79,7 +79,7 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
       Dry::Validation.Schema do
         configure { config.input_processor = :sanitizer }
 
-        key(:email).required(Dry::Types['strict.string'].constructor(&:strip))
+        required(:email).filled(Dry::Types['strict.string'].constructor(&:strip))
       end
     end
 
@@ -94,9 +94,9 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
   context 'custom types' do
     subject(:schema) do
       Dry::Validation.Form do
-        key(:quantity).required(Dry::Types['strict.int'].constrained(gt: 1))
-        key(:percentage).required(Dry::Types['strict.decimal'].constrained(gt: 0, lt: 1))
-        key(:switch).required(Dry::Types['strict.bool'])
+        required(:quantity).filled(Dry::Types['strict.int'].constrained(gt: 1))
+        required(:percentage).filled(Dry::Types['strict.decimal'].constrained(gt: 0, lt: 1))
+        required(:switch).filled(Dry::Types['strict.bool'])
       end
     end
 

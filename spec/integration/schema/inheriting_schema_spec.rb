@@ -1,16 +1,16 @@
 RSpec.describe 'Inheriting schema' do
   subject(:schema) do
     Dry::Validation.Schema(base_schema) do
-      key(:location).schema do
-        key(:lat).required(:float?)
-        key(:lng).required(:float?)
+      required(:location).schema do
+        required(:lat).filled(:float?)
+        required(:lng).filled(:float?)
       end
     end
   end
 
   let(:base_schema) do
     Dry::Validation.Schema do
-      key(:city).required
+      required(:city).filled
     end
   end
 

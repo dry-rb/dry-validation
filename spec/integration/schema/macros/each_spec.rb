@@ -3,8 +3,8 @@ RSpec.describe 'Macros #each' do
     context 'with a nested key' do
       subject(:schema) do
         Dry::Validation.Schema do
-          key(:songs).each do
-            key(:title).required
+          required(:songs).each do
+            required(:title).filled
           end
         end
       end
@@ -34,10 +34,10 @@ RSpec.describe 'Macros #each' do
     context 'with a nested schema' do
       subject(:schema) do
         Dry::Validation.Schema do
-          key(:songs).each do
+          required(:songs).each do
             schema do
-              key(:title).required
-              key(:author).required
+              required(:title).filled
+              required(:author).filled
             end
           end
         end
@@ -78,7 +78,7 @@ RSpec.describe 'Macros #each' do
   context 'with inferred predicates and a form schema' do
     subject(:schema) do
       Dry::Validation.Form do
-        key(:songs).each(:str?)
+        required(:songs).each(:str?)
       end
     end
 

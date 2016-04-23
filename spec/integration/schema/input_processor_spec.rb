@@ -5,18 +5,18 @@ RSpec.describe Dry::Validation::Schema, 'setting input processor in schema' do
         config.input_processor = :sanitizer
       end
 
-      key(:email).required
+      required(:email).filled
 
-      key(:age).maybe(:int?, gt?: 18)
+      required(:age).maybe(:int?, gt?: 18)
 
-      key(:address).schema do
-        key(:city).required
-        key(:street).required
+      required(:address).schema do
+        required(:city).filled
+        required(:street).filled
       end
 
-      key(:phone_numbers).each do
-        key(:prefix).required
-        key(:value).required
+      required(:phone_numbers).each do
+        required(:prefix).filled
+        required(:value).filled
       end
     end
   end

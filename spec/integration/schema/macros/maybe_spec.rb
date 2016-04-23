@@ -2,7 +2,7 @@ RSpec.describe 'Macros #maybe' do
   describe 'with no args' do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:email).maybe
+        required(:email).maybe
       end
     end
 
@@ -15,7 +15,7 @@ RSpec.describe 'Macros #maybe' do
   describe 'with a predicate with args' do
     subject(:schema) do
       Dry::Validation.Schema do
-        key(:name).maybe(min_size?: 3)
+        required(:name).maybe(min_size?: 3)
       end
     end
 

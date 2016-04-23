@@ -4,9 +4,9 @@ RSpec.describe Dry::Validation::Schema do
       Dry::Validation.Schema do
         optional(:email) { |email| email.filled? }
 
-        key(:address) do
-          key(:city, &:filled?)
-          key(:street, &:filled?)
+        required(:address) do
+          required(:city, &:filled?)
+          required(:street, &:filled?)
 
           optional(:phone_number) do
             none? | str?
