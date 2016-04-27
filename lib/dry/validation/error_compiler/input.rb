@@ -132,6 +132,9 @@ module Dry
         meth = :"options_for_#{predicate}"
 
         defaults = { name: rule, rule: rule, value: input }
+        args.each_with_index do |arg, index|
+          defaults["arg#{index}".to_sym] = arg
+        end
 
         if respond_to?(meth)
           defaults.merge!(__send__(meth, args))
