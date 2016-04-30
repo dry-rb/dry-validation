@@ -50,7 +50,7 @@ en:
 
     attr?: "is missing"
 
-    lt?: "must be less than %{num} (%{value} was given)"
+    lt?: "must be less than %{num}"
 
     lteq?: "must be less than or equal to %{num}"
 

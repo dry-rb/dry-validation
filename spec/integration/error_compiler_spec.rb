@@ -189,7 +189,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
           ]]
         )
 
-        expect(msg).to eql(num: ['must be less than 3 (2 was given)'])
+        expect(msg).to eql(num: ['must be less than 3'])
       end
     end
 
