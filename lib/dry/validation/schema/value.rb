@@ -71,13 +71,25 @@ module Dry
 
         def rule(id = nil, **options, &block)
           if id
-            val = Value[id]
-            res = val.instance_exec(&block)
+            deps = []
           else
             id, deps = options.to_a.first
-            val = Value[id]
-            res = val.instance_exec(*deps.map { |name| val.value(name) }, &block)
           end
+
+          val = Value[id]
+          dep_values = *deps.map { |name| val.value(name) }
+
+          if block.arity.zero? && deps.any?
+            val_singleton_class = (class << val; self; end)
+
+            deps.zip(dep_values).each do |name, value|
+              val_singleton_class.send(:define_method, name) { value }
+            end
+
+            dep_values = []
+          end
+
+          res = val.instance_exec(*dep_values, &block)
 
           add_check(val.with(rules: [res.with(deps: deps || [])]))
         end

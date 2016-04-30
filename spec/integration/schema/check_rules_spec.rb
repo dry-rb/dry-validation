@@ -34,6 +34,41 @@ RSpec.describe Schema, 'using high-level rules' do
     end
   end
 
+  context 'composing rules without block parameters' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          def self.messages
+            Messages.default.merge(
+              en: { errors: { destiny: 'you must select either red or blue' } }
+            )
+          end
+        end
+
+        optional(:red).maybe
+        optional(:blue).maybe
+
+        rule(destiny: [:red, :blue]) do
+          red.filled? | blue.filled?
+        end
+      end
+    end
+
+    it 'passes when only red is filled' do
+      expect(schema.(red: '1')).to be_success
+    end
+
+    it 'fails when keys are missing' do
+      expect(schema.({})).to be_failure
+    end
+
+    it 'fails when red and blue are not filled ' do
+      expect(schema.(red: nil, blue: nil).messages[:destiny]).to eql(
+        ['you must select either red or blue']
+      )
+    end
+  end
+
   context 'composing specific predicates' do
     let(:schema) do
       Dry::Validation.Schema do
