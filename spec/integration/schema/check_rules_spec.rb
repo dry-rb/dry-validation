@@ -83,7 +83,7 @@ RSpec.describe Schema, 'using high-level rules' do
   describe 'with nested schemas' do
     subject(:schema) do
       Dry::Validation.Schema do
-        required(:command).filled(:str?, inclusion?: %w(First Second))
+        required(:command).filled(:str?, included_in?: %w(First Second))
 
         required(:args).filled(:hash?)
 
