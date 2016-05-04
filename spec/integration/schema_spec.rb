@@ -29,6 +29,15 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
 
   describe 'with nested structures' do
     subject(:schema) do
+      class CountrySchema
+        def self.schema
+          Dry::Validation.Schema do
+            required(:name).filled
+            required(:code).filled
+          end
+        end
+      end
+
       Dry::Validation.Schema do
         required(:email).filled
 
@@ -39,10 +48,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
 
           required(:street).filled
 
-          required(:country).schema do
-            required(:name).filled
-            required(:code).filled
-          end
+          required(:country).schema(CountrySchema)
         end
 
         required(:phone_numbers).each(:str?)
