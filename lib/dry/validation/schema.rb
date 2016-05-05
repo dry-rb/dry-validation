@@ -27,6 +27,7 @@ module Dry
       setting :namespace
       setting :rules, []
       setting :checks, []
+      setting :options, {}
 
       setting :input_processor, :noop
 
@@ -38,7 +39,7 @@ module Dry
 
       def self.inherited(klass)
         super
-        klass.setting :options, {}
+        klass.config.options = klass.config.options.dup
       end
 
       def self.new(rules = config.rules, **options)
