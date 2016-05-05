@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'dry-logic', require: false, github: 'dry-rb/dry-logic'
+
 group :test do
   gem 'i18n'
   gem 'codeclimate-test-reporter', platform: :rbx

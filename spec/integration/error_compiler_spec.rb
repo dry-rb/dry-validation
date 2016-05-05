@@ -145,11 +145,35 @@ RSpec.describe Dry::Validation::ErrorCompiler do
       end
     end
 
+    describe ':excluded_from?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit(
+          [:input, [:num, [
+            :result, [2, [:val, [:predicate, [:excluded_from?, [[1, 2, 3]]]]]]]
+          ]]
+        )
+
+        expect(msg).to eql(num: ['must not be one of: 1, 2, 3'])
+      end
+    end
+
     describe ':inclusion?' do
       it 'returns valid message' do
         msg = error_compiler.visit(
           [:input, [:num, [
             :result, [2, [:val, [:predicate, [:inclusion?, [[1, 2, 3]]]]]]]
+          ]]
+        )
+
+        expect(msg).to eql(num: ['must be one of: 1, 2, 3'])
+      end
+    end
+
+    describe ':included_in?' do
+      it 'returns valid message' do
+        msg = error_compiler.visit(
+          [:input, [:num, [
+            :result, [2, [:val, [:predicate, [:included_in?, [[1, 2, 3]]]]]]]
           ]]
         )
 

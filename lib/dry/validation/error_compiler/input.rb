@@ -82,7 +82,15 @@ module Dry
         { list: args[0][0].join(', ') }
       end
 
+      def options_for_excluded_from?(*args)
+        { list: args[0][0].join(', ') }
+      end
+
       def options_for_inclusion?(*args)
+        { list: args[0][0].join(', ') }
+      end
+
+      def options_for_included_in?(*args)
         { list: args[0][0].join(', ') }
       end
 
