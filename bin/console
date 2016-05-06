@@ -1,11 +1,13 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "dry/validation"
+require 'optparse'
+require 'bundler/setup'
+require 'dry-validation'
 
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
-
-require "pry"
-
-binding.pry
+if ARGV.include?('--pry')
+  require 'pry'
+  Pry.start
+else
+  require 'irb'
+  IRB.start
+end
