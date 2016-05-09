@@ -28,4 +28,6 @@ RSpec.configure do |config|
       I18n.backend.reload!
     end
   end
+
+  config.include PredicatesIntegration
 end
