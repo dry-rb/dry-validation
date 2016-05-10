@@ -2,6 +2,9 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'dry-logic', require: false, github: 'dry-rb/dry-logic'
+gem 'dry-types', require: false, github: 'dry-rb/dry-types'
+
 group :test do
   gem 'i18n'
   gem 'codeclimate-test-reporter', platform: :rbx
@@ -19,6 +22,3 @@ group :benchmarks do
   gem 'benchmark-ips'
   gem 'virtus'
 end
-
-gem "dry-logic", git: 'https://github.com/dry-rb/dry-logic.git', branch: "master"
-gem "dry-types", git: 'https://github.com/dry-rb/dry-types.git', branch: "dry_logic_predicate_change"

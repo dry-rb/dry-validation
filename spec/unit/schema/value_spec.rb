@@ -24,92 +24,6 @@ RSpec.describe Schema::Value do
     end
   end
 
-  describe '#required deeply nested' do
-    subject(:value) { Schema::Value.new }
-
-    let(:expected_ast) do
-      [:and, [
-        [:val, [:predicate, [:key?, [:address]]]],
-        [:key, [:address,
-          [:and, [
-            [:val, [:predicate, [:key?, [:location]]]],
-            [:key, [:location,
-              [:set, [
-                [:and, [
-                  [:val, [:predicate, [:key?, [:lat]]]],
-                  [:key, [:lat, [:predicate, [:filled?, []]]]]]
-                ],
-                [:and, [
-                  [:val, [:predicate, [:key?, [:lng]]]],
-                  [:key, [:lng, [:predicate, [:filled?, []]]]]
-                ]]
-              ]]
-            ]]]
-        ]]]
-      ]]
-    end
-
-    it 'creates a rule for specified keys using blocks' do
-      rule = value.required(:address) do
-        required(:location) do
-          required(:lat) { filled? }
-          required(:lng) { filled? }
-        end
-      end
-
-      expect(rule.to_ast).to eql(expected_ast)
-    end
-
-    it 'creates a rule for specified keys using macros' do
-      rule = value.required(:address) do
-        required(:location) do
-          required(:lat).filled
-          required(:lng).filled
-        end
-      end
-
-      expect(rule.to_ast).to eql(expected_ast)
-    end
-  end
-
-  describe '#required with multiple inner-keys' do
-    subject(:value) { Schema::Value.new }
-
-    let(:expected_ast) do
-      [:and, [
-        [:val, [:predicate, [:key?, [:address]]]],
-        [:key, [:address, [:set, [
-          [:and, [
-            [:val, [:predicate, [:key?, [:city]]]],
-            [:key, [:city, [:predicate, [:filled?, []]]]]]
-          ],
-          [:and, [
-            [:val, [:predicate, [:key?, [:zipcode]]]],
-            [:key, [:zipcode, [:predicate, [:filled?, []]]]]
-          ]]
-        ]]]]
-      ]]
-    end
-
-    it 'creates a rule for specified keys using blocks' do
-      rule = value.required(:address) do
-        required(:city) { filled? }
-        required(:zipcode) { filled? }
-      end
-
-      expect(rule.to_ast).to eql(expected_ast)
-    end
-
-    it 'creates a rule for specified keys using macros' do
-      rule = value.required(:address) do
-        required(:city).filled
-        required(:zipcode).filled
-      end
-
-      expect(rule.to_ast).to eql(expected_ast)
-    end
-  end
-
   describe '#each' do
     subject(:value) { Schema::Value.new }
 
@@ -119,7 +33,7 @@ RSpec.describe Schema::Value do
       expect(rule.to_ast).to eql(
         [:and, [
           [:val, [:predicate, [:array?, []]]],
-          [:each, [:set, [[:val, [:predicate, [:key?, [:method]]]]]]]
+          [:each, [:val, [:predicate, [:key?, [:method]]]]]
         ]]
       )
     end

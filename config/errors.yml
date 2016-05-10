@@ -8,6 +8,8 @@ en:
 
     excludes?: "must not include %{value}"
 
+    excluded_from?: "must not be one of: %{list}"
+
     eql?: "must be equal to %{eql_value}"
 
     not_eql?: "must not be equal to %{eql_value}"
@@ -32,6 +34,8 @@ en:
 
     includes?: "must include %{value}"
 
+    included_in?: "must be one of: %{list}"
+
     bool?: "must be boolean"
 
     true?: "must be true"
@@ -54,7 +58,7 @@ en:
 
     attr?: "is missing"
 
-    lt?: "must be less than %{num} (%{value} was given)"
+    lt?: "must be less than %{num}"
 
     lteq?: "must be less than or equal to %{num}"
 

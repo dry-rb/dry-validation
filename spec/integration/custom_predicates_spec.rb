@@ -24,16 +24,6 @@ RSpec.describe Dry::Validation do
   end
 
   describe 'defining schema with custom predicates container' do
-    subject(:schema) do
-      Dry::Validation.Schema(base_class) do
-        configure do
-          config.predicates = Test::Predicates
-        end
-
-        required(:email) { filled? & email? }
-      end
-    end
-
     before do
       module Test
         module Predicates
@@ -46,7 +36,42 @@ RSpec.describe Dry::Validation do
       end
     end
 
-    include_context 'uses custom predicates'
+    context 'when configured globally' do
+      before do
+        Dry::Validation::Schema.configure do |config|
+          config.predicates = Test::Predicates
+        end
+      end
+
+      subject!(:schema) do
+        Dry::Validation.Schema(base_class) do
+          required(:email) { filled? & email? }
+        end
+      end
+
+      after do
+        # HACK: reset global predicates configuration
+        Dry::Validation::Schema.configure do |config|
+          config.predicates = Dry::Types::Predicates
+        end
+      end
+
+      include_context 'uses custom predicates'
+    end
+
+    context 'when configured locally' do
+      subject(:schema) do
+        Dry::Validation.Schema(base_class) do
+          configure do
+            config.predicates = Test::Predicates
+          end
+
+          required(:email) { filled? & email? }
+        end
+      end
+
+      include_context 'uses custom predicates'
+    end
   end
 
   describe 'defining schema with custom predicate methods' do

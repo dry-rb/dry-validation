@@ -23,16 +23,6 @@ module Dry
         end
         alias_method :to_s, :inspect
 
-        def key(name, &block)
-          ::Kernel.warn 'key is deprecated - use required instead.'
-
-          required(name, &block)
-        end
-
-        def required(name, &block)
-          define(name, Key, &block)
-        end
-
         def optional(name, &block)
           define(name, Key, :then, &block)
         end

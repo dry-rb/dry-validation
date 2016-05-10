@@ -55,4 +55,17 @@ RSpec.describe 'Validation hints' do
       )
     end
   end
+
+  context 'when predicate failed and there is a corresponding hint generated' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:age).value(lt?: 23)
+      end
+    end
+
+    it 'provides only failure error message' do
+      result = schema.call(age: 23)
+      expect(result.messages).to eql(age: ['must be less than 23'])
+    end
+  end
 end

@@ -4,7 +4,7 @@ RSpec.describe Dry::Validation::Schema do
       Dry::Validation.Schema do
         optional(:email) { |email| email.filled? }
 
-        required(:address) do
+        required(:address).schema do
           required(:city, &:filled?)
           required(:street, &:filled?)
 

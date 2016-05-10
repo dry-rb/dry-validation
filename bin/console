@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'bundler/setup'
+require 'dry-validation'
+
+if ARGV.include?('--pry')
+  require 'pry'
+  Pry.start
+else
+  require 'irb'
+  IRB.start
+end

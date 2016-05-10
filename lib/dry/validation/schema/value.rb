@@ -12,22 +12,14 @@ module Dry
           @schema_class = options.fetch(:schema_class, ::Class.new(Schema))
         end
 
-        def configure(&block)
-          klass = ::Class.new(schema_class, &block)
-          @schema_class = klass
-          self
+        def key(name, &block)
+          ::Kernel.warn 'key is deprecated - use required instead.'
+
+          required(name, &block)
         end
 
-        def root?
-          name.nil?
-        end
-
-        def schema?
-          ! @schema.nil?
-        end
-
-        def class
-          Value
+        def required(name, &block)
+          define(name, Key, &block)
         end
 
         def schema(other = nil, &block)
@@ -47,7 +39,7 @@ module Dry
             else
               val = Value[name].instance_eval(&block)
 
-              create_rule([:each, val.schema? ? val.to_ast : [:set, val.rule_ast]])
+              create_rule([:each, val.to_ast])
             end
 
           rule = left.and(right)
@@ -96,6 +88,24 @@ module Dry
 
         def check(name, options = {})
           Check[name, options.merge(type: type)]
+        end
+
+        def configure(&block)
+          klass = ::Class.new(schema_class, &block)
+          @schema_class = klass
+          self
+        end
+
+        def root?
+          name.nil?
+        end
+
+        def schema?
+          ! @schema.nil?
+        end
+
+        def class
+          Value
         end
 
         private
