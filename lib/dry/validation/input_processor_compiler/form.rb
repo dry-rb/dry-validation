@@ -5,6 +5,8 @@ module Dry
         default: 'string',
         none?: 'form.nil',
         bool?: 'form.bool',
+        true?: 'form.true',
+        false?: 'form.false',
         str?: 'string',
         int?: 'form.int',
         float?: 'form.float',
