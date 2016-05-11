@@ -2,9 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'dry-logic', require: false, github: 'dry-rb/dry-logic'
-gem 'dry-types', require: false, github: 'dry-rb/dry-types'
-
 group :test do
   gem 'i18n'
   gem 'codeclimate-test-reporter', platform: :rbx
