@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'dry-logic', require: false, github: 'dry-rb/dry-logic'
+#gem 'dry-logic', require: false, github: 'dry-rb/dry-logic'
+gem 'dry-logic', require: false, github: 'dry-rb/dry-logic', branch: "handle-includes-errors"
 gem 'dry-types', require: false, github: 'dry-rb/dry-types'
 
 group :test do
