@@ -33,8 +33,8 @@ RSpec.describe 'Predicates: Array' do
     context 'with blank input' do
       let(:input) { { 'foo' => '' } }
 
-      it 'is not successful' do
-        expect(result).to be_failing ['must be an array']
+      it 'is successful' do
+        expect(result).to be_successful
       end
     end
 
@@ -154,8 +154,8 @@ RSpec.describe 'Predicates: Array' do
       context 'with blank input' do
         let(:input) { { 'foo' => '' } }
 
-        it 'is not successful' do
-          expect(result).to be_failing ['must be an array']
+        it 'is successful' do
+          expect(result).to be_successful
         end
       end
 
@@ -202,8 +202,8 @@ RSpec.describe 'Predicates: Array' do
       context 'with blank input' do
         let(:input) { { 'foo' => '' } }
 
-        it 'is not successful' do
-          expect(result).to be_failing ['must be an array']
+        it 'is successful' do
+          expect(result).to be_successful
         end
       end
 
