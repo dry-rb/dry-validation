@@ -45,4 +45,26 @@ RSpec.describe Dry::Validation do
       include_context 'schema with customized messages'
     end
   end
+
+  describe 'custom predicate error messages' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          config.messages_file = SPEC_ROOT.join('fixtures/locales/en.yml')
+
+          def custom_limit(limit, input)
+            input.length <= limit
+          end
+        end
+
+        required(:text) { custom_limit(5) }
+      end
+    end
+
+    it 'returns compiled error messages with custom predicate args available as keys' do
+      expect(schema.(text: 'This is just dummy text').messages).to eql(
+        text: ['Custom limit of 5 exceeded']
+      )
+    end
+  end
 end
