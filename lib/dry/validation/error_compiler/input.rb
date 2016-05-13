@@ -78,20 +78,30 @@ module Dry
         { name: args[0][0] }
       end
 
+      def options_for_inclusion?(*args)
+        ::Kernel.warn 'inclusion is deprecated - use included_in instead.'
+        options_for_included_in?(args)
+      end
+
       def options_for_exclusion?(*args)
-        { list: args[0][0].join(', ') }
+        ::Kernel.warn 'exclusion is deprecated - use excluded_from instead.'
+        options_for_excluded_from?(args)
       end
 
       def options_for_excluded_from?(*args)
         { list: args[0][0].join(', ') }
       end
 
-      def options_for_inclusion?(*args)
-        { list: args[0][0].join(', ') }
+      def options_for_excludes?(*args)
+        { value: args[0][0] }
       end
 
       def options_for_included_in?(*args)
         { list: args[0][0].join(', ') }
+      end
+
+      def options_for_includes?(*args)
+        { value: args[0][0] }
       end
 
       def options_for_gt?(*args)
@@ -123,6 +133,10 @@ module Dry
       end
 
       def options_for_eql?(*args)
+        { eql_value: args[0][0], value: input }
+      end
+
+      def options_for_not_eql?(*args)
         { eql_value: args[0][0], value: input }
       end
 
