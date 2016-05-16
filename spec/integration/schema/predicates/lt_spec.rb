@@ -15,11 +15,10 @@ RSpec.describe 'Predicates: Lt' do
     end
 
 
-    #https://github.com/dry-rb/dry-validation/issues/159
     context 'with missing input' do
       let(:input) { {} }
 
-      xit 'is not successful' do
+      it 'is not successful' do
         expect(result).to be_failing ['is missing', 'must be less than 23']
       end
     end
@@ -149,8 +148,7 @@ RSpec.describe 'Predicates: Lt' do
         context 'with missing input' do
           let(:input) { {} }
 
-          #see https://github.com/dry-rb/dry-validation/issues/159
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['is missing', 'must be less than 23']
           end
         end
