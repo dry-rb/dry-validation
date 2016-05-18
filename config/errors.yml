@@ -34,8 +34,6 @@ en:
 
     includes?: "must include %{value}"
 
-    included_in?: "must be one of: %{list}"
-
     bool?: "must be boolean"
 
     true?: "must be true"
