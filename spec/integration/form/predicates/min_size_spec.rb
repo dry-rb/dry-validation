@@ -203,7 +203,7 @@ RSpec.describe 'Predicates: Min Size' do
         context 'with valid input' do
           let(:input) { { 'foo' => %w(1 2 3) } }
 
-          xit 'is successful' do
+          it 'is successful' do
             expect(result).to be_successful
           end
         end
@@ -235,7 +235,7 @@ RSpec.describe 'Predicates: Min Size' do
         context 'with invalid input' do
           let(:input) { { 'foo' => { 'a' => '1', 'b' => '2' } } }
 
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['size cannot be less than 3']
           end
         end
@@ -381,10 +381,9 @@ RSpec.describe 'Predicates: Min Size' do
         context 'with invalid input' do
           let(:input) { { 'foo' => { 'a' => '1', 'b' => '2' } } }
 
-          it 'is not successful'
-          # it 'is not successful' do
-          #   expect(result).to be_failing ['size cannot be less than 3']
-          # end
+          it 'is not successful' do
+            expect(result).to be_failing ['size cannot be less than 3']
+          end
         end
       end
     end

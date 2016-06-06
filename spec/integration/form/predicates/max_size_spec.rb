@@ -203,8 +203,7 @@ RSpec.describe 'Predicates: Max Size' do
         context 'with valid input' do
           let(:input) { { 'foo' => %w(1 2 3) } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/133
-          xit 'is successful' do
+          it 'is successful' do
             expect(result).to be_successful
           end
         end
@@ -236,8 +235,7 @@ RSpec.describe 'Predicates: Max Size' do
         context 'with invalid input' do
           let(:input) { { 'foo' => { 'a' => '1', 'b' => '2', 'c' => '3', 'd' => '4' } } }
 
-          # See https://github.com/dry-rb/dry-validation/issues/133#issuecomment-216556509
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['size cannot be greater than 3']
           end
         end
@@ -383,11 +381,9 @@ RSpec.describe 'Predicates: Max Size' do
         context 'with invalid input' do
           let(:input) { { 'foo' => { 'a' => '1', 'b' => '2', 'c' => '3', 'd' => '4' } } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/133#issuecomment-216555937
-          it 'is not successful'
-          # it 'is not successful' do
-          #   expect(result).to be_failing ['size cannot be greater than 3']
-          # end
+          it 'is not successful' do
+            expect(result).to be_failing ['size cannot be greater than 3']
+          end
         end
       end
     end

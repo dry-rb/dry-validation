@@ -2,7 +2,7 @@ RSpec.describe 'Predicates: Format' do
   context 'with required' do
     subject(:schema) do
       Dry::Validation.Form do
-        required(:foo) { format?(/bar/) }
+        required(:foo) { str? & format?(/bar/) }
       end
     end
 
@@ -26,7 +26,7 @@ RSpec.describe 'Predicates: Format' do
       let(:input) { { 'foo' => nil } }
 
       it 'is not successful' do
-        expect(result).to be_failing ['is in invalid format']
+        expect(result).to be_failing ['must be a string', 'is in invalid format']
       end
     end
 
@@ -42,7 +42,7 @@ RSpec.describe 'Predicates: Format' do
       let(:input) { { 'foo' => { 'a' => '1' } } }
 
       it 'raises error' do
-        expect { result }.to raise_error TypeError
+        expect(result).to be_failing ['must be a string', 'is in invalid format']
       end
     end
 
@@ -58,7 +58,7 @@ RSpec.describe 'Predicates: Format' do
   context 'with optional' do
     subject(:schema) do
       Dry::Validation.Form do
-        optional(:foo) { format?(/bar/) }
+        optional(:foo) { str? & format?(/bar/) }
       end
     end
 
@@ -82,7 +82,7 @@ RSpec.describe 'Predicates: Format' do
       let(:input) { { 'foo' => nil } }
 
       it 'is not successful' do
-        expect(result).to be_failing ['is in invalid format']
+        expect(result).to be_failing ["must be a string", "is in invalid format"]
       end
     end
 
@@ -98,7 +98,7 @@ RSpec.describe 'Predicates: Format' do
       let(:input) { { 'foo' => { 'a' => '1' } } }
 
       it 'raises error' do
-        expect { result }.to raise_error TypeError
+        expect(result).to be_failing ['must be a string', 'is in invalid format']
       end
     end
 
@@ -116,7 +116,7 @@ RSpec.describe 'Predicates: Format' do
       context 'with value' do
         subject(:schema) do
           Dry::Validation.Form do
-            required(:foo).value(format?: /bar/)
+            required(:foo).value(:str?, format?: /bar/)
           end
         end
 
@@ -140,7 +140,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => nil } }
 
           it 'is not successful' do
-            expect(result).to be_failing ['is in invalid format']
+            expect(result).to be_failing ['must be a string', 'is in invalid format']
           end
         end
 
@@ -156,7 +156,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
           it 'raises error' do
-            expect { result }.to raise_error TypeError
+            expect(result).to be_failing ['must be a string', 'is in invalid format']
           end
         end
 
@@ -172,7 +172,7 @@ RSpec.describe 'Predicates: Format' do
       context 'with filled' do
         subject(:schema) do
           Dry::Validation.Form do
-            required(:foo).filled(format?: /bar/)
+            required(:foo).filled(:str?, format?: /bar/)
           end
         end
 
@@ -212,7 +212,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
           it 'raises error' do
-            expect { result }.to raise_error TypeError
+            expect(result).to be_failing ["must be a string", "is in invalid format"]
           end
         end
 
@@ -228,7 +228,7 @@ RSpec.describe 'Predicates: Format' do
       context 'with maybe' do
         subject(:schema) do
           Dry::Validation.Form do
-            required(:foo).maybe(format?: /bar/)
+            required(:foo).maybe(:str?, format?: /bar/)
           end
         end
 
@@ -258,17 +258,16 @@ RSpec.describe 'Predicates: Format' do
 
         context 'with blank input' do
           let(:input) { { 'foo' => '' } }
-
-          xit 'is not successful' do
-            expect(result).to be_failing ['is in invalid format']
+          it 'is not successful' do
+            expect(result).to be_success
           end
         end
 
         context 'with invalid type' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
-          xit 'is not successful' do
-            expect(result).to be_failing ['is in invalid format']
+          it 'is not successful' do
+            expect(result).to be_failing ['must be a string', 'is in invalid format']
           end
         end
 
@@ -286,7 +285,7 @@ RSpec.describe 'Predicates: Format' do
       context 'with value' do
         subject(:schema) do
           Dry::Validation.Form do
-            optional(:foo).value(format?: /bar/)
+            optional(:foo).value(:str?, format?: /bar/)
           end
         end
 
@@ -310,7 +309,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => nil } }
 
           it 'is not successful' do
-            expect(result).to be_failing ['is in invalid format']
+            expect(result).to be_failing ['must be a string', 'is in invalid format']
           end
         end
 
@@ -326,7 +325,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
           it 'raises error' do
-            expect { result }.to raise_error TypeError
+            expect(result).to be_failing ['must be a string', 'is in invalid format']
           end
         end
 
@@ -342,7 +341,7 @@ RSpec.describe 'Predicates: Format' do
       context 'with filled' do
         subject(:schema) do
           Dry::Validation.Form do
-            optional(:foo).filled(format?: /bar/)
+            optional(:foo).filled(:str?, format?: /bar/)
           end
         end
 
@@ -382,7 +381,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
           it 'raises error' do
-            expect { result }.to raise_error TypeError
+            expect(result).to be_failing ['must be a string', 'is in invalid format']
           end
         end
 
@@ -398,7 +397,7 @@ RSpec.describe 'Predicates: Format' do
       context 'with maybe' do
         subject(:schema) do
           Dry::Validation.Form do
-            optional(:foo).maybe(format?: /bar/)
+            optional(:foo).maybe(:str?, format?: /bar/)
           end
         end
 
@@ -429,16 +428,16 @@ RSpec.describe 'Predicates: Format' do
         context 'with blank input' do
           let(:input) { { 'foo' => '' } }
 
-          xit 'is not successful' do
-            expect(result).to be_failing ['is in invalid format']
+          it 'is successful' do
+            expect(result).to be_successful
           end
         end
 
         context 'with invalid type' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
-          xit 'raises error' do
-            expect { result }.to raise_error TypeError
+          it 'raises error' do
+            expect(result).to be_failing ['must be a string', 'is in invalid format']
           end
         end
 

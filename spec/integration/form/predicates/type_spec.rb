@@ -235,7 +235,7 @@ RSpec.describe 'Predicates: Type' do
         context 'with invalid type' do
           let(:input) { { 'foo' => ['x'] } }
 
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must be Integer']
           end
         end
@@ -381,7 +381,7 @@ RSpec.describe 'Predicates: Type' do
         context 'with invalid type' do
           let(:input) { { 'foo' => ['x'] } }
 
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must be Integer']
           end
         end

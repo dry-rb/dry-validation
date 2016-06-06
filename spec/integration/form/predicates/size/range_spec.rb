@@ -34,9 +34,9 @@ RSpec.describe 'Predicates: Size' do
       context 'with blank input' do
         let(:input) { { 'foo' => '' } }
 
-        # FIXME: open dry-v ticket: double validation message
-        it 'is not successful' do
-          expect(result).to be_failing ['length must be within 2 - 3', 'size must be within 2 - 3']
+        #see: https://github.com/dry-rb/dry-validation/issues/121
+        xit 'is not successful' do
+          expect(result).to be_failing ['length must be within 2 - 3']
         end
       end
 
@@ -83,8 +83,9 @@ RSpec.describe 'Predicates: Size' do
       context 'with blank input' do
         let(:input) { { 'foo' => '' } }
 
-        it 'is not successful' do
-          expect(result).to be_failing ['length must be within 2 - 3', 'size must be within 2 - 3']
+        #see: https://github.com/dry-rb/dry-validation/issues/121
+        xit 'is not successful' do
+          expect(result).to be_failing ['length must be within 2 - 3']
         end
       end
 
@@ -133,8 +134,9 @@ RSpec.describe 'Predicates: Size' do
           context 'with blank input' do
             let(:input) { { 'foo' => '' } }
 
-            it 'is not successful' do
-              expect(result).to be_failing ['length must be within 2 - 3', 'size must be within 2 - 3']
+            #see: https://github.com/dry-rb/dry-validation/issues/121
+            xit 'is not successful' do
+              expect(result).to be_failing ['length must be within 2 - 3']
             end
           end
 
@@ -181,8 +183,9 @@ RSpec.describe 'Predicates: Size' do
           context 'with blank input' do
             let(:input) { { 'foo' => '' } }
 
-            it 'is not successful' do
-              expect(result).to be_failing ['must be filled', 'size must be within 2 - 3']
+            #see: https://github.com/dry-rb/dry-validation/issues/121
+            xit 'is not successful' do
+              expect(result).to be_failing ['must be filled', 'length must be within 2 - 3']
             end
           end
 
@@ -205,7 +208,7 @@ RSpec.describe 'Predicates: Size' do
           context 'with valid input' do
             let(:input) { { 'foo' => %w(1 2 3) } }
 
-            xit 'is successful' do
+            it 'is successful' do
               expect(result).to be_successful
             end
           end
@@ -237,8 +240,7 @@ RSpec.describe 'Predicates: Size' do
           context 'with invalid input' do
             let(:input) { { 'foo' => { 'a' => '1', 'b' => '2', 'c' => '3', 'd' => '4' } } }
 
-            # See: https://github.com/dry-rb/dry-validation/issues/133#issuecomment-216559127
-            xit 'is not successful' do
+            it 'is not successful' do
               expect(result).to be_failing ['size must be within 2 - 3']
             end
           end
@@ -280,8 +282,9 @@ RSpec.describe 'Predicates: Size' do
           context 'with blank input' do
             let(:input) { { 'foo' => '' } }
 
-            it 'is not successful' do
-              expect(result).to be_failing ['length must be within 2 - 3', 'size must be within 2 - 3']
+            #see: https://github.com/dry-rb/dry-validation/issues/121
+            xit 'is not successful' do
+              expect(result).to be_failing ['length must be within 2 - 3']
             end
           end
 
@@ -328,8 +331,9 @@ RSpec.describe 'Predicates: Size' do
           context 'with blank input' do
             let(:input) { { 'foo' => '' } }
 
-            it 'is not successful' do
-              expect(result).to be_failing ['must be filled', 'size must be within 2 - 3']
+            #see: https://github.com/dry-rb/dry-validation/issues/121
+            xit 'is not successful' do
+              expect(result).to be_failing ['must be filled', 'length must be within 2 - 3']
             end
           end
 
@@ -384,8 +388,7 @@ RSpec.describe 'Predicates: Size' do
           context 'with invalid input' do
             let(:input) { { 'foo' => { 'a' => '1', 'b' => '2', 'c' => '3', 'd' => '4' } } }
 
-            # See: https://github.com/dry-rb/dry-validation/issues/133#issuecomment-216559127
-            xit 'is not successful' do
+            it 'is not successful' do
               expect(result).to be_failing ['size must be within 2 - 3']
             end
           end

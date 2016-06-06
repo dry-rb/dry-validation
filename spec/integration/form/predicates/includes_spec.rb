@@ -25,8 +25,8 @@ RSpec.describe 'Predicates: Includes' do
     context 'with nil input' do
       let(:input) { { 'foo' => nil } }
 
-      xit 'is not successful' do
-        expect(result).to be_failing ['must include 1']
+      it 'is not successful' do
+        expect(result).to be_failing ["must be an array", "must include 1"]
       end
     end
 
@@ -73,8 +73,8 @@ RSpec.describe 'Predicates: Includes' do
     context 'with nil input' do
       let(:input) { { 'foo' => nil } }
 
-      xit 'is not successful' do
-        expect(result).to be_failing ['must include 1']
+      it 'is not successful' do
+        expect(result).to be_failing ["must be an array", "must include 1"]
       end
     end
 
@@ -123,7 +123,7 @@ RSpec.describe 'Predicates: Includes' do
         context 'with nil input' do
           let(:input) { { 'foo' => nil } }
 
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must include Hello']
           end
         end
@@ -203,7 +203,7 @@ RSpec.describe 'Predicates: Includes' do
         context 'with valid input' do
           let(:input) { { 'foo' => 'Hello World' } }
 
-          xit 'is successful' do
+          it 'is successful' do
             expect(result).to be_successful
           end
         end
@@ -219,23 +219,23 @@ RSpec.describe 'Predicates: Includes' do
         context 'with nil input' do
           let(:input) { { 'foo' => nil } }
 
-          xit 'is not successful' do
-            expect(result).to be_failing ['must include Hello']
+          it 'is successful' do
+            expect(result).to be_success
           end
         end
 
         context 'with blank input' do
           let(:input) { { 'foo' => '' } }
 
-          xit 'is successful' do
-            expect(result).to be_failing ['must include Hello']
+          it 'is successful' do
+            expect(result).to be_success
           end
         end
 
         context 'with invalid input' do
           let(:input) { { 'foo' => 'bar' } }
 
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must include Hello']
           end
         end
@@ -269,7 +269,7 @@ RSpec.describe 'Predicates: Includes' do
         context 'with nil input' do
           let(:input) { { 'foo' => nil } }
 
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must include Hello']
           end
         end
@@ -381,7 +381,7 @@ RSpec.describe 'Predicates: Includes' do
         context 'with invalid input' do
           let(:input) { { 'foo' => 'bar' } }
 
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must include Hello']
           end
         end
