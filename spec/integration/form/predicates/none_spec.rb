@@ -161,43 +161,12 @@ RSpec.describe 'Predicates: None' do
         end
       end
 
+      #makes no sense see: #134
       context 'with maybe' do
-        subject(:schema) do
-          Dry::Validation.Form do
+        it "should raise error" do
+          expect { Dry::Validation.Form do
             required(:foo).maybe(:none?)
-          end
-        end
-
-        context 'with missing input' do
-          let(:input) { {} }
-
-          it 'is not successful' do
-            expect(result).to be_failing ['is missing']
-          end
-        end
-
-        context 'with nil input' do
-          let(:input) { { 'foo' => nil } }
-
-          it 'is successful' do
-            expect(result).to be_successful
-          end
-        end
-
-        context 'with blank input' do
-          let(:input) { { 'foo' => '' } }
-
-          it 'is successful' do
-            expect(result).to be_successful
-          end
-        end
-
-        context 'with other input' do
-          let(:input) { { 'foo' => '23' } }
-
-          it 'is not successful' do
-            expect(result).to be_failing ['cannot be defined']
-          end
+          end }.to raise_error InvalidSchemaError
         end
       end
     end
@@ -283,43 +252,12 @@ RSpec.describe 'Predicates: None' do
         end
       end
 
+      #makes no sense see: #134
       context 'with maybe' do
-        subject(:schema) do
-          Dry::Validation.Form do
+        it "should raise error" do
+          expect { Dry::Validation.Form do
             optional(:foo).maybe(:none?)
-          end
-        end
-
-        context 'with missing input' do
-          let(:input) { {} }
-
-          it 'is successful' do
-            expect(result).to be_successful
-          end
-        end
-
-        context 'with nil input' do
-          let(:input) { { 'foo' => nil } }
-
-          it 'is successful' do
-            expect(result).to be_successful
-          end
-        end
-
-        context 'with blank input' do
-          let(:input) { { 'foo' => '' } }
-
-          it 'is successful' do
-            expect(result).to be_successful
-          end
-        end
-
-        context 'with other input' do
-          let(:input) { { 'foo' => '23' } }
-
-          it 'is not successful' do
-            expect(result).to be_failing ['cannot be defined']
-          end
+          end }.to raise_error InvalidSchemaError
         end
       end
     end

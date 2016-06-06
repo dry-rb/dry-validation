@@ -170,6 +170,12 @@ RSpec.describe 'Predicates: Filled' do
       end
 
       context 'with filled' do
+        it "should raise error" do
+          expect { Dry::Validation.Form do
+            required(:foo).filled(:filled?)
+          end }.to raise_error InvalidSchemaError
+        end
+
         subject(:schema) do
           Dry::Validation.Form do
             required(:foo).filled
@@ -340,6 +346,12 @@ RSpec.describe 'Predicates: Filled' do
       end
 
       context 'with filled' do
+        it "should raise error" do
+          expect { Dry::Validation.Form do
+            optional(:foo).filled(:filled?)
+          end }.to raise_error InvalidSchemaError
+        end
+
         subject(:schema) do
           Dry::Validation.Form do
             optional(:foo).filled

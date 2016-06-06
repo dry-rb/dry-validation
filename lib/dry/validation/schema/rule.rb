@@ -2,6 +2,12 @@ module Dry
   module Validation
     class Schema
       class Rule < BasicObject
+        INVALID_PREDICATES = {
+          value: [],
+          maybe: [:none?],
+          filled: [:filled?],
+        }.freeze
+
         attr_reader :name, :node, :type, :target, :deps, :options
 
         def initialize(node, options = {})
@@ -35,7 +41,7 @@ module Dry
         end
 
         def filled(*predicates)
-          rule = ([key(:filled?)] + infer_predicates(predicates)).reduce(:and)
+          rule = ([key(:filled?)] + infer_predicates(predicates, :filled)).reduce(:and)
 
           add_rule(__send__(type, rule))
         end
@@ -43,7 +49,7 @@ module Dry
         def value(*predicates)
           ::Kernel.raise ::ArgumentError, "wrong number of arguments (given 0, expected at least 1)" if predicates.empty?
 
-          rule = infer_predicates(predicates).reduce(:and)
+          rule = infer_predicates(predicates, :value).reduce(:and)
 
           add_rule(__send__(type, rule))
         end
@@ -51,7 +57,7 @@ module Dry
         def maybe(*predicates)
           rule =
             if predicates.size > 0
-              key(:none?).or(infer_predicates(predicates).reduce(:and))
+              key(:none?).or(infer_predicates(predicates, :maybe).reduce(:and))
             else
               key(:none?).or(key(:filled?))
             end
@@ -116,10 +122,15 @@ module Dry
         end
         alias_method :>, :then
 
-        def infer_predicates(predicates)
+        def infer_predicates(predicates, macro = nil)
           predicates.map do |predicate|
             name, *args = ::Kernel.Array(predicate).first
-            key(name, args)
+
+            if macro && INVALID_PREDICATES[macro].include?(name)
+              ::Kernel.raise InvalidSchemaError, "you can't use #{name} predicate with #{macro} macro"
+            else
+              key(name, args)
+            end
           end
         end
 

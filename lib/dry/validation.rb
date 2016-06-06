@@ -9,6 +9,7 @@ require 'dry/validation/schema/json'
 module Dry
   module Validation
     MissingMessageError = Class.new(StandardError)
+    InvalidSchemaError = Class.new(StandardError)
 
     def self.messages_paths
       Messages::Abstract.config.paths
