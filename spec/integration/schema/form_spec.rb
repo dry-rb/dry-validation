@@ -140,6 +140,56 @@ RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
     end
   end
 
+  describe 'symbolizing keys when coercion fails' do
+    subject(:schema) do
+      Dry::Validation.Form do
+        required(:email).value(size?: 8..60)
+        required(:birthdate).value(:date?)
+        required(:age).value(:int?, gt?: 23)
+        required(:tags).maybe(max_size?: 3)
+      end
+    end
+
+    let(:tags) { %(al b c) }
+
+    it 'symbolizes keys and coerces values' do
+      result = schema.(
+        'email' => 'jane@doe.org',
+        'birthdate' => '2001-02-03',
+        'age' => '24',
+        'tags' => tags
+      ).to_h
+
+      expect(result.to_h).to eql(
+        email: 'jane@doe.org',
+        birthdate: Date.new(2001, 2, 3),
+        age: 24,
+        tags: tags
+      )
+    end
+
+    it 'symbolizes keys even when coercion fails' do
+      result = schema.(
+        'email' => 'jane@doe.org',
+        'birthdate' => '2001-sutin-03',
+        'age' => ['oops'],
+        'tags' => nil
+      )
+
+      expect(result.to_h).to eql(
+        email: 'jane@doe.org',
+        birthdate: '2001-sutin-03',
+        age: ['oops'],
+        tags: nil
+      )
+      
+      expect(result.messages).to eql(
+        birthdate: ['must be a date'],
+        age: ['must be an integer', 'must be greater than 23']
+      )
+    end
+  end
+
   describe 'with nested schema in a high-level rule' do
     subject(:schema) do
       Dry::Validation.Form do

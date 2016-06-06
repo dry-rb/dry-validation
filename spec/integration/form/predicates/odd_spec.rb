@@ -268,7 +268,7 @@ RSpec.describe 'Predicates: Odd' do
           let(:input) { { 'foo' => [] } }
 
           it 'is not successful' do
-            expect(result).to be_failing ['is missing', 'must be odd']
+            expect(result).to be_failing ['must be an integer', 'must be odd']
           end
         end
 
