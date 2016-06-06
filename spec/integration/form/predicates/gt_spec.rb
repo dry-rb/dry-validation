@@ -493,8 +493,8 @@ RSpec.describe 'Predicates: Gt' do
         context 'with invalid input type' do
           let(:input) { { 'foo' => [] } }
 
-          xit 'is not successful' do
-            expect(result).to be_failing []
+          it 'is not successful' do
+            expect(result).to be_failing ["must be an integer", "must be greater than 23"]
           end
         end
 

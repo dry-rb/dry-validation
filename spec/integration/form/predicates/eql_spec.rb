@@ -195,9 +195,8 @@ RSpec.describe 'Predicates: Eql' do
         context 'with blank input' do
           let(:input) { { 'foo' => '' } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/128
-          xit 'is not successful' do
-            expect(result).to be_failing ['must be equal to 23']
+          it 'is successful' do
+            expect(result).to be_successful
           end
         end
       end
@@ -318,9 +317,8 @@ RSpec.describe 'Predicates: Eql' do
         context 'with blank input' do
           let(:input) { { 'foo' => '' } }
 
-          # See https://github.com/dry-rb/dry-validation/issues/128#issuecomment-216461705
-          xit 'is not successful' do
-            expect(result).to be_failing ['must be equal to 23']
+          it 'is successful' do
+            expect(result).to be_successful
           end
         end
       end

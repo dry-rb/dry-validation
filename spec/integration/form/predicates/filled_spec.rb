@@ -170,6 +170,12 @@ RSpec.describe 'Predicates: Filled' do
       end
 
       context 'with filled' do
+        it "should raise error" do
+          expect { Dry::Validation.Form do
+            required(:foo).filled(:filled?)
+          end }.to raise_error InvalidSchemaError
+        end
+
         subject(:schema) do
           Dry::Validation.Form do
             required(:foo).filled
@@ -235,8 +241,7 @@ RSpec.describe 'Predicates: Filled' do
         context 'with valid input (array)' do
           let(:input) { { 'foo' => ['23'] } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130
-          xit 'is successful' do
+          it 'is successful' do
             expect(result).to be_successful
           end
         end
@@ -244,8 +249,7 @@ RSpec.describe 'Predicates: Filled' do
         context 'with valid input (hash)' do
           let(:input) { { 'foo' => { 'bar' => '23' } } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130#issuecomment-216463196
-          xit 'is successful' do
+          it 'is successful' do
             expect(result).to be_successful
           end
         end
@@ -269,17 +273,15 @@ RSpec.describe 'Predicates: Filled' do
         context 'with blank input' do
           let(:input) { { 'foo' => '' } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130#issuecomment-216463576
-          xit 'is not successful' do
-            expect(result).to be_failing ['must be filled']
+          it 'is successful' do
+            expect(result).to be_successful
           end
         end
 
         context 'with invalid input' do
           let(:input) { { 'foo' => [] } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130#issuecomment-216463925
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must be filled']
           end
         end
@@ -344,6 +346,12 @@ RSpec.describe 'Predicates: Filled' do
       end
 
       context 'with filled' do
+        it "should raise error" do
+          expect { Dry::Validation.Form do
+            optional(:foo).filled(:filled?)
+          end }.to raise_error InvalidSchemaError
+        end
+
         subject(:schema) do
           Dry::Validation.Form do
             optional(:foo).filled
@@ -441,17 +449,15 @@ RSpec.describe 'Predicates: Filled' do
         context 'with blank input' do
           let(:input) { { 'foo' => '' } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130#issuecomment-216464277
-          xit 'is not successful' do
-            expect(result).to be_failing ['must be filled']
+          it 'is successful' do
+            expect(result).to be_successful
           end
         end
 
         context 'with invalid input' do
           let(:input) { { 'foo' => [] } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130#issuecomment-216464499
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must be filled']
           end
         end
