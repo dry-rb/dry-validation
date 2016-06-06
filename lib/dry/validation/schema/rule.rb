@@ -4,8 +4,8 @@ module Dry
       class Rule < BasicObject
         INVALID_PREDICATES = {
           value: [],
-          maybe: [:none?],
-          filled: [:filled?],
+          maybe: [:empty?, :none?],
+          filled: [:empty?, :filled?],
         }.freeze
 
         attr_reader :name, :node, :type, :target, :deps, :options
