@@ -203,7 +203,7 @@ RSpec.describe 'Predicates: Excludes' do
         context 'with valid input' do
           let(:input) { { 'foo' => "Hello World" } }
 
-          xit 'is successful' do
+          it 'is successful' do
             expect(result).to be_successful
           end
         end
@@ -227,7 +227,7 @@ RSpec.describe 'Predicates: Excludes' do
         context 'with blank input' do
           let(:input) { { 'foo' => '' } }
 
-          xit 'is successful' do
+          it 'is successful' do
             expect(result).to be_successful
           end
         end
@@ -235,7 +235,7 @@ RSpec.describe 'Predicates: Excludes' do
         context 'with invalid input' do
           let(:input) { { 'foo' => "foo bar" } }
 
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must not include foo']
           end
         end
@@ -381,7 +381,7 @@ RSpec.describe 'Predicates: Excludes' do
         context 'with invalid input' do
           let(:input) { { 'foo' => 'foo' } }
 
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must not include foo']
           end
         end

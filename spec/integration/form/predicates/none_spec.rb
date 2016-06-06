@@ -195,8 +195,7 @@ RSpec.describe 'Predicates: None' do
         context 'with other input' do
           let(:input) { { 'foo' => '23' } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/134#issuecomment-216562678
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['cannot be defined']
           end
         end
@@ -318,8 +317,7 @@ RSpec.describe 'Predicates: None' do
         context 'with other input' do
           let(:input) { { 'foo' => '23' } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/134
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['cannot be defined']
           end
         end

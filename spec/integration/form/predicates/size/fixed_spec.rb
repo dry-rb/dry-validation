@@ -205,7 +205,7 @@ RSpec.describe 'Predicates: Size' do
           context 'with valid input' do
             let(:input) { { 'foo' => %w(1 2 3) } }
 
-            xit 'is successful' do
+            it 'is successful' do
               expect(result).to be_successful
             end
           end
@@ -237,8 +237,7 @@ RSpec.describe 'Predicates: Size' do
           context 'with invalid input' do
             let(:input) { { 'foo' => { 'a' => '1', 'b' => '2', 'c' => '3', 'd' => '4' } } }
 
-            # See: https://github.com/dry-rb/dry-validation/issues/133#issuecomment-216559127
-            xit 'is not successful' do
+            it 'is not successful' do
               expect(result).to be_failing ['size must be 3']
             end
           end
@@ -384,8 +383,7 @@ RSpec.describe 'Predicates: Size' do
           context 'with invalid input' do
             let(:input) { { 'foo' => { 'a' => '1', 'b' => '2', 'c' => '3', 'd' => '4' } } }
 
-            # See: https://github.com/dry-rb/dry-validation/issues/133#issuecomment-216559127
-            xit 'is not successful' do
+            it 'is not successful' do
               expect(result).to be_failing ['size must be 3']
             end
           end

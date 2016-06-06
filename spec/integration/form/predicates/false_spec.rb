@@ -235,8 +235,7 @@ RSpec.describe 'Predicates: False' do
         context 'with valid input (1)' do
           let(:input) { { 'foo' => '0' } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130
-          xit 'is successful' do
+          it 'is successful' do
             expect(result).to be_successful
           end
         end
@@ -244,8 +243,7 @@ RSpec.describe 'Predicates: False' do
         context 'with valid input (false)' do
           let(:input) { { 'foo' => 'false' } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130#issuecomment-216463196
-          xit 'is successful' do
+          it 'is successful' do
             expect(result).to be_successful
           end
         end
@@ -269,17 +267,15 @@ RSpec.describe 'Predicates: False' do
         context 'with blank input' do
           let(:input) { { 'foo' => '' } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130#issuecomment-216463576
-          xit 'is not successful' do
-            expect(result).to be_failing ['must be false']
+          it 'is not successful' do
+            expect(result).to be_success
           end
         end
 
         context 'with invalid input' do
           let(:input) { { 'foo' => [] } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130#issuecomment-216463925
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must be false']
           end
         end
@@ -441,17 +437,15 @@ RSpec.describe 'Predicates: False' do
         context 'with blank input' do
           let(:input) { { 'foo' => '' } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130#issuecomment-216464277
-          xit 'is not successful' do
-            expect(result).to be_failing ['must be false']
+          it 'is successful' do
+            expect(result).to be_success
           end
         end
 
         context 'with invalid input' do
           let(:input) { { 'foo' => [] } }
 
-          # See: https://github.com/dry-rb/dry-validation/issues/130#issuecomment-216464499
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must be false']
           end
         end

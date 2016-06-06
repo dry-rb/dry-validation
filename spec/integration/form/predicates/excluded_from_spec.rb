@@ -267,8 +267,8 @@ RSpec.describe 'Predicates: Excluded From' do
         context 'with invalid type' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
-          xit 'is not successful' do
-            expect(result).to be_failing ['must not be one of: 1, 3, 5']
+          it 'is successful' do
+            expect(result).to be_successful
           end
         end
 

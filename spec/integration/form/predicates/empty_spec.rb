@@ -187,8 +187,7 @@ RSpec.describe 'Predicates: Empty' do
         context 'with valid input (array)' do
           let(:input) { { 'foo' => [] } }
 
-          # See https://github.com/dry-rb/dry-validation/issues/125
-          xit 'is successful' do
+          it 'is successful' do
             expect(result).to be_successful
           end
         end
@@ -196,8 +195,7 @@ RSpec.describe 'Predicates: Empty' do
         context 'with valid input (hash)' do
           let(:input) { { 'foo' => {} } }
 
-          # See https://github.com/dry-rb/dry-validation/issues/125
-          xit 'is successful' do
+          it 'is successful' do
             expect(result).to be_successful
           end
         end
@@ -229,8 +227,7 @@ RSpec.describe 'Predicates: Empty' do
         context 'with invalid input' do
           let(:input) { { 'foo' => ['23'] } }
 
-          # See https://github.com/dry-rb/dry-validation/issues/125#issuecomment-216240035
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must be empty']
           end
         end
@@ -352,8 +349,7 @@ RSpec.describe 'Predicates: Empty' do
         context 'with invalid input' do
           let(:input) { { 'foo' => ['23'] } }
 
-          # See https://github.com/dry-rb/dry-validation/issues/126
-          xit 'is not successful' do
+          it 'is not successful' do
             expect(result).to be_failing ['must be empty']
           end
         end
