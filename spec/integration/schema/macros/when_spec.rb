@@ -62,4 +62,24 @@ RSpec.describe 'Macros #when' do
       )
     end
   end
+
+  context "predicate with options" do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:bar).maybe
+
+        required(:foo).filled.when(size?: 3) do
+          value(:bar).filled?
+        end
+      end
+    end
+
+    it 'generates check rule' do
+      expect(schema.(foo: [1,2,3], bar: nil).messages).to eql(
+        bar: ['must be filled']
+      )
+
+      expect(schema.(foo: [1,2], bar: nil).messages).to be_empty
+    end
+  end
 end

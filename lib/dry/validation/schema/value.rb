@@ -32,10 +32,7 @@ module Dry
 
           right =
             if predicates.size > 0
-              inferred = predicates
-                .reduce(Value.new) { |a, e| a.__send__(*::Kernel.Array(e)) }
-
-              create_rule([:each, inferred.to_ast])
+              create_rule([:each, infer_predicates(predicates, Value.new).to_ast])
             else
               val = Value[name].instance_eval(&block)
 
@@ -50,9 +47,7 @@ module Dry
         end
 
         def when(*predicates, &block)
-          left = predicates
-            .reduce(Check[path, type: type]) { |a, e| a.__send__(*::Kernel.Array(e)) }
-
+          left = infer_predicates(predicates, Check[path, type: type])
           right = Value.new(type: type)
           right.instance_eval(&block)
 
@@ -109,6 +104,12 @@ module Dry
         end
 
         private
+        def infer_predicates(predicates, infer_on)
+          predicates.reduce(infer_on) { |a, e|
+            args = e.is_a?(::Hash) ? e.first : ::Kernel.Array(e)
+            a.__send__(*args)
+          }
+        end
 
         def method_missing(meth, *args, &block)
           val_rule = create_rule([:val, [:predicate, [meth, args]]])
