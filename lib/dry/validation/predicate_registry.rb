@@ -60,7 +60,7 @@ module Dry
         if key?(name)
           predicate = self[name]
 
-          if predicate.arity != args.size + 1
+          if ![0, args.size + 1].include?(predicate.arity)
             raise_invalid_arity_error(name)
           end
         else

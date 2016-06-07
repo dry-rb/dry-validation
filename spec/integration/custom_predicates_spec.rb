@@ -127,4 +127,28 @@ RSpec.describe Dry::Validation do
       Dry::Validation::MissingMessageError, /email/
     )
   end
+
+
+  it 'should work when no predicate args' do
+    schema = Dry::Validation.Schema do
+      configure do
+        def self.messages
+          Dry::Validation::Messages.default.merge(
+            en: { errors: { with_no_args?: 'is always false' } }
+          )
+        end
+
+        def with_no_args?
+          false
+        end
+      end
+
+      required(:email).filled(:with_no_args?)
+    end
+
+    expect(schema.(email: 'foo').messages).to eql(
+      email: ['is always false']
+    )
+
+  end
 end
