@@ -76,31 +76,65 @@ RSpec.describe 'Macros #each' do
   end
 
   context 'with inferred predicates and a form schema' do
-    subject(:schema) do
-      Dry::Validation.Form do
-        required(:songs).each(:str?)
+    context "predicate w/o options" do
+      subject(:schema) do
+        Dry::Validation.Form do
+          required(:songs).each(:str?)
+        end
+      end
+
+      it 'passes when all elements are valid' do
+        songs = %w(hello world)
+
+        expect(schema.(songs: songs)).to be_success
+      end
+
+      it 'fails when value is not an array' do
+        expect(schema.(songs: 'oops').messages).to eql(songs: ['must be an array'])
+      end
+
+      it 'fails when not all elements are valid' do
+        songs = ['hello', nil, 2]
+
+        expect(schema.(songs: songs).messages).to eql(
+          songs: {
+            1 => ['must be a string'],
+            2 => ['must be a string']
+          }
+        )
       end
     end
 
-    it 'passes when all elements are valid' do
-      songs = %w(hello world)
+    context "predicate with options" do
+      subject(:schema) do
+        Dry::Validation.Schema do
+          required(:foo).each(size?: 3)
+        end
+      end
 
-      expect(schema.(songs: songs)).to be_success
-    end
+      context 'with valid input' do
+        let(:input) { { foo: [[1,2,3], "foo"] } }
 
-    it 'fails when value is not an array' do
-      expect(schema.(songs: 'oops').messages).to eql(songs: ['must be an array'])
-    end
+        it 'is successful' do
+          expect(result).to be_successful
+        end
+      end
 
-    it 'fails when not all elements are valid' do
-      songs = ['hello', nil, 2]
+      context 'with invalid input' do
+        let(:input) { { foo: [[1,2], "foo"] } }
 
-      expect(schema.(songs: songs).messages).to eql(
-        songs: {
-          1 => ['must be a string'],
-          2 => ['must be a string']
-        }
-      )
+        it 'is not successful' do
+          expect(result).to be_failing({0=>["size must be 3"]})
+        end
+      end
+
+      context 'with invalid input type' do
+        let(:input) { { foo: nil } }
+
+        it 'is not successful' do
+          expect(result).to be_failing ["must be an array", "size must be 3"]
+        end
+      end
     end
   end
 end
