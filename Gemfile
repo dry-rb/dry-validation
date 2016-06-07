@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'dry-types', github: 'dry-rb/dry-types', branch: 'master'
+gem "dry-logic", github: 'dry-rb/dry-logic', branch: 'predicate_params_airity'
 
 group :test do
   gem 'i18n'

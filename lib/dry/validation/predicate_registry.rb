@@ -1,13 +1,4 @@
 module Dry
-  module Logic
-    # FIXME: move dis to dry-logic
-    class Predicate
-      def arity
-        fn.arity
-      end
-    end
-  end
-
   module Validation
     class PredicateRegistry
       attr_reader :predicates
