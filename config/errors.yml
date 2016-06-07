@@ -4,8 +4,6 @@ en:
 
     empty?: "must be empty"
 
-    excluded_from?: "must not be one of: %{list}"
-
     excludes?: "must not include %{value}"
 
     excluded_from?: "must not be one of: %{list}"
