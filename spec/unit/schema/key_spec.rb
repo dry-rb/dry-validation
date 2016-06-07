@@ -1,6 +1,8 @@
 RSpec.describe Schema::Key do
+  let(:registry) { double(PredicateRegistry, ensure_valid_predicate: true) }
+
   describe '#key?' do
-    subject(:user) { Schema::Key[:user] }
+    subject(:user) { Schema::Key[:user, registry: registry] }
 
     it 'returns a key rule' do
       rule = user.key?(:address)

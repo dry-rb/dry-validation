@@ -4,7 +4,7 @@ module Dry
   module Validation
     class Schema
       class DSL < BasicObject
-        attr_reader :name, :rules, :checks, :parent, :options
+        attr_reader :name, :registry, :rules, :checks, :parent, :options
 
         def self.[](name, options = {})
           new(options.merge(name: name))
@@ -13,6 +13,7 @@ module Dry
         def initialize(options = {})
           @name = options[:name]
           @parent = options[:parent]
+          @registry = options.fetch(:registry)
           @rules = options.fetch(:rules, [])
           @checks = options.fetch(:checks, [])
           @options = options
@@ -71,11 +72,12 @@ module Dry
           type = key_class.type
 
           val = Value[
-            name, type: type, parent: self, rules: rules, checks: checks
+            name, registry: registry, type: type, parent: self,
+            rules: rules, checks: checks
           ].__send__(:"#{type}?", name)
 
           if block
-            key = key_class[name]
+            key = key_class[name, registry: registry]
             res = key.instance_eval(&block)
 
             if res.class == Value

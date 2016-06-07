@@ -1,8 +1,10 @@
 RSpec.describe Schema::Value do
   include_context 'rule compiler'
 
+  let(:registry) { double(PredicateRegistry, ensure_valid_predicate: true) }
+
   describe '#required' do
-    subject(:value) { Schema::Value.new }
+    subject(:value) { Schema::Value.new(registry: registry) }
 
     let(:expected_ast) do
       [:and, [
@@ -25,7 +27,7 @@ RSpec.describe Schema::Value do
   end
 
   describe '#each' do
-    subject(:value) { Schema::Value.new }
+    subject(:value) { Schema::Value.new(registry: registry) }
 
     it 'creates an each rule with another rule returned from the block' do
       rule = value.each { key?(:method) }
@@ -64,7 +66,7 @@ RSpec.describe Schema::Value do
   end
 
   describe '#hash? with block' do
-    subject(:user) { Schema::Value.new }
+    subject(:user) { Schema::Value.new(registry: registry) }
 
     it 'builds hash? & rule created within the block' do
       rule = user.hash? { required(:email).filled }
@@ -115,7 +117,7 @@ RSpec.describe Schema::Value do
   end
 
   describe '#not' do
-    subject(:user) { Schema::Value.new }
+    subject(:user) { Schema::Value.new(registry: registry) }
 
     it 'builds a negated rule' do
       not_email = user.required(:email) { str?.not }

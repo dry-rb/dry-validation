@@ -1,4 +1,13 @@
 module Dry
+  module Logic
+    # FIXME: move dis to dry-logic
+    class Predicate
+      def arity
+        fn.arity
+      end
+    end
+  end
+
   module Validation
     class PredicateRegistry
       attr_reader :predicates
@@ -47,9 +56,35 @@ module Dry
           if external.key?(name)
             external[name]
           else
-            raise ArgumentError, "+#{name}+ is not a valid predicate name"
+            raise_unknown_predicate_error(name)
           end
         end
+      end
+
+      def key?(name)
+        predicates.key?(name) || external.key?(name)
+      end
+
+      def ensure_valid_predicate(name, args)
+        if key?(name)
+          predicate = self[name]
+
+          if predicate.arity != args.size + 1
+            raise_invalid_arity_error(name)
+          end
+        else
+          raise_unknown_predicate_error(name)
+        end
+      end
+
+      private
+
+      def raise_unknown_predicate_error(name)
+        raise ArgumentError, "+#{name}+ is not a valid predicate name"
+      end
+
+      def raise_invalid_arity_error(name)
+        raise ArgumentError, "#{name} predicate arity is invalid"
       end
     end
   end

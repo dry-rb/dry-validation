@@ -143,6 +143,7 @@ module Dry
         def key(predicate, args = [])
           node =
             if predicate.is_a?(::Symbol)
+              target.registry.ensure_valid_predicate(predicate, args)
               [target.type, [name, [:predicate, [predicate, args]]]]
             elsif predicate.respond_to?(:rule)
               [target.type, [name, [:type, predicate]]]
