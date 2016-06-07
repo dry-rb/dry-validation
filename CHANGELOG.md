@@ -1,3 +1,39 @@
+# Master
+
+### Added
+
+* Support new dry-logic predicates: `:excluded_from?`, `:excludes?`, `:included_in?`, `:includes?`, `:not_eql?`, `:odd?`, `:even?` (jodosha, fran-worley)
+* Infer coercion from constrained types  (solnic)
+* Add value macro (coop)
+* Enable .schema to accept objects that respond to #schema (ttdonovan)
+
+### Fixed
+
+* Support for jRuby  9.1.1.0 (flash-gordon)
+* Fix bug when using predicates with options in each and when (fran-worley)
+* Fix bug when validating custom types (coop)
+* Fix depending on deeply nested values in high-lvl rules (solnic)
+* Fix duplicated error message for lt? when hint was used (solnic)
+
+### Changed
+
+* Now relies on dry-logic v0.2.3 and dry-types v0.7.2 (fran-worley)
+* Tring to use illogical predicates with maybe and filled macros now raise InvalidSchemaError (fran-worley)
+* enable coercion on form.true and form.false (fran-worley)
+* Remove attr (will be extracted to a separate gem) (coop)
+* Deprecate required in favour of filled (coop)
+* Deprecate key in favor of required (coop)
+* Remove nested key syntax (solnic)
+
+### Internal
+
+* Integration specs covering predicates with Form and Schema (jodosha)
+* Use latest ruby versions on travis (flash-gordon)
+* Make pry console optional with IRB as a default (flash-gordon)
+* Remove wrapping rules in :set nodes (solnic)
+
+[Compare v0.7.4...master](https://github.com/dryrb/dry-validation/compare/v0.7.4...master)
+
 # v0.7.4 2016-04-06
 
 ### Added
