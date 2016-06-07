@@ -38,9 +38,7 @@ RSpec.describe Dry::Validation do
 
     context 'when configured globally' do
       before do
-        Dry::Validation::Schema.configure do |config|
-          config.predicates = Test::Predicates
-        end
+        Dry::Validation::Schema.predicates(Test::Predicates)
       end
 
       subject!(:schema) do
@@ -63,7 +61,7 @@ RSpec.describe Dry::Validation do
       subject(:schema) do
         Dry::Validation.Schema(base_class) do
           configure do
-            config.predicates = Test::Predicates
+            predicates(Test::Predicates)
           end
 
           required(:email) { filled? & email? }
