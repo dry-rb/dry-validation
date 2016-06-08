@@ -119,8 +119,9 @@ module Dry
 
         def method_missing(meth, *args, &block)
           registry.ensure_valid_predicate(meth, args)
+          predicate = registry[meth].curry(*args)
 
-          val_rule = create_rule([:val, [:predicate, [meth, args]]])
+          val_rule = create_rule([:val, predicate.to_ast])
 
           if block
             val = new.instance_eval(&block)
