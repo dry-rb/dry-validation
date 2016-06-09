@@ -30,13 +30,13 @@ RSpec.describe Messages::I18n do
       it 'returns a message for a specific val type' do
         message = messages[:size?, rule: :pages, val_type: String]
 
-        expect(message).to eql("length must be %{num}")
+        expect(message).to eql("length must be %{size}")
       end
 
       it 'returns a message for a specific rule and its default arg type' do
         message = messages[:size?, rule: :pages]
 
-        expect(message).to eql("size must be %{num}")
+        expect(message).to eql("size must be %{size}")
       end
 
       it 'returns a message for a specific rule and its arg type' do
@@ -62,7 +62,7 @@ RSpec.describe Messages::I18n do
       it 'returns a message for a specific rule and its default arg type' do
         message = messages[:size?, rule: :pages, locale: :pl]
 
-        expect(message).to eql("wielkość musi być równa %{num}")
+        expect(message).to eql("wielkość musi być równa %{size}")
       end
 
       it 'returns a message for a specific rule and its arg type' do

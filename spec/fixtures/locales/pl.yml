@@ -3,7 +3,7 @@ pl:
     filled?: "nie może być pusty"
     size?:
       arg:
-        default: "wielkość musi być równa %{num}"
+        default: "wielkość musi być równa %{size}"
         range: "wielkość musi być między %{left} a %{right}"
     rules:
       email:

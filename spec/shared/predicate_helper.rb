@@ -7,8 +7,8 @@ shared_context 'predicate helper' do
     Module.new {
       include Dry::Logic::Predicates
 
-      predicate(:email?) { |_| true }
-      predicate(:type?) { |_| true }
+      predicate(:email?) { |value| true }
+      predicate(:type?) { |type| true }
     }
   end
 end
