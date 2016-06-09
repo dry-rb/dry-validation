@@ -1,6 +1,12 @@
 RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
   subject(:schema) do
     Dry::Validation.Form do
+      configure do
+        def email?(value)
+          true
+        end
+      end
+
       required(:email).filled
 
       required(:age).maybe(:int?, gt?: 18)
@@ -20,12 +26,6 @@ RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
       optional(:phone_number).maybe(:int?, gt?: 0)
 
       rule(:email_valid) { value(:email).email? }
-
-      configure do
-        def email?(value)
-          true
-        end
-      end
     end
   end
 
@@ -182,7 +182,7 @@ RSpec.describe Dry::Validation::Schema::Form, 'defining a schema' do
         age: ['oops'],
         tags: nil
       )
-      
+
       expect(result.messages).to eql(
         birthdate: ['must be a date'],
         age: ['must be an integer', 'must be greater than 23']

@@ -1,6 +1,8 @@
 RSpec.describe Schema::Rule do
-  let(:filled) { [:val, [:email, [:predicate, [:filled?, []]]]] }
-  let(:format) { [:val, [:email, [:predicate, [:format?, [/regex/]]]]] }
+  include_context 'predicate helper'
+
+  let(:filled) { [:val, [:email, p(:filled?)]] }
+  let(:format) { [:val, [:email, p(:format?, /regex/)]] }
 
   let(:left) { Schema::Rule.new(filled, name: :email, target: target) }
   let(:right) { Schema::Rule.new(format, name: :email, target: target) }

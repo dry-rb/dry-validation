@@ -37,7 +37,7 @@ module Dry
         predicate, args = node
 
         lookup_options = options.merge(
-          rule: rule, val_type: val_type, arg_type: args[0].class
+          rule: rule, val_type: val_type, arg_type: args.size > 0 && args[0][1].class
         )
 
         tokens = options_for(predicate, args)
@@ -66,97 +66,42 @@ module Dry
         path.reduce { |a, e| { e => a } }
       end
 
-      def options_for_type?(*args)
-        { type: args[0][0] }
-      end
-
-      def options_for_key?(*args)
-        { name: args[0][0] }
-      end
-
-      def options_for_attr?(*args)
-        { name: args[0][0] }
-      end
-
-      def options_for_inclusion?(*args)
+      def options_for_inclusion?(args)
         ::Kernel.warn 'inclusion is deprecated - use included_in instead.'
         options_for_included_in?(args)
       end
 
-      def options_for_exclusion?(*args)
+      def options_for_exclusion?(args)
         ::Kernel.warn 'exclusion is deprecated - use excluded_from instead.'
         options_for_excluded_from?(args)
       end
 
-      def options_for_excluded_from?(*args)
-        { list: args[0][0].join(', ') }
+      def options_for_excluded_from?(args)
+        { list: args[:list].join(', ') }
       end
 
-      def options_for_excludes?(*args)
-        { value: args[0][0] }
+      def options_for_included_in?(args)
+        { list: args[:list].join(', ') }
       end
 
-      def options_for_included_in?(*args)
-        { list: args[0][0].join(', ') }
-      end
+      def options_for_size?(args)
+        size = args[:size]
 
-      def options_for_includes?(*args)
-        { value: args[0][0] }
-      end
-
-      def options_for_gt?(*args)
-        { num: args[0][0], value: input }
-      end
-
-      def options_for_gteq?(*args)
-        { num: args[0][0], value: input }
-      end
-
-      def options_for_lt?(*args)
-        { num: args[0][0], value: input }
-      end
-
-      def options_for_lteq?(*args)
-        { num: args[0][0], value: input }
-      end
-
-      def options_for_int?(*args)
-        { num: args[0][0], value: input }
-      end
-
-      def options_for_max_size?(*args)
-        { num: args[0][0], value: input }
-      end
-
-      def options_for_min_size?(*args)
-        { num: args[0][0], value: input }
-      end
-
-      def options_for_eql?(*args)
-        { eql_value: args[0][0], value: input }
-      end
-
-      def options_for_not_eql?(*args)
-        { eql_value: args[0][0], value: input }
-      end
-
-      def options_for_size?(*args)
-        num = args[0][0]
-
-        if num.is_a?(Range)
-          { left: num.first, right: num.last, value: input }
+        if size.is_a?(Range)
+          { left: size.first, right: size.last }
         else
-          { num: args[0][0], value: input }
+          args
         end
       end
 
       def options_for(predicate, args)
         meth = :"options_for_#{predicate}"
 
-        defaults = { name: rule, rule: rule, value: input }
+        args_map = Hash[args]
+        defaults = { name: rule, rule: rule, value: input }.update(args_map)
 
         if respond_to?(meth)
-          defaults.merge!(__send__(meth, args))
+          defaults.merge!(__send__(meth, args_map))
         end
 
         defaults

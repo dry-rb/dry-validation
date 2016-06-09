@@ -32,10 +32,9 @@ module Dry
 
           right =
             if predicates.size > 0
-              create_rule([:each, infer_predicates(predicates, Value.new).to_ast])
+              create_rule([:each, infer_predicates(predicates, new).to_ast])
             else
-              val = Value[name].instance_eval(&block)
-
+              val = Value[name, registry: registry].instance_eval(&block)
               create_rule([:each, val.to_ast])
             end
 
@@ -47,8 +46,9 @@ module Dry
         end
 
         def when(*predicates, &block)
-          left = infer_predicates(predicates, Check[path, type: type])
-          right = Value.new(type: type)
+          left = infer_predicates(predicates, Check[path, type: type, registry: registry])
+
+          right = Value.new(type: type, registry: registry)
           right.instance_eval(&block)
 
           add_check(left.then(create_rule(right.to_ast)))
@@ -58,11 +58,11 @@ module Dry
 
         def rule(id = nil, **options, &block)
           if id
-            val = Value[id]
+            val = Value[id, registry: registry]
             res = val.instance_exec(&block)
           else
             id, deps = options.to_a.first
-            val = Value[id]
+            val = Value[id, registry: registry]
             res = val.instance_exec(*deps.map { |name| val.value(name) }, &block)
           end
 
@@ -78,7 +78,7 @@ module Dry
         end
 
         def value(name)
-          check(name, rules: rules)
+          check(name, registry: registry, rules: rules)
         end
 
         def check(name, options = {})
@@ -88,6 +88,7 @@ module Dry
         def configure(&block)
           klass = ::Class.new(schema_class, &block)
           @schema_class = klass
+          @registry = klass.registry
           self
         end
 
@@ -103,7 +104,12 @@ module Dry
           Value
         end
 
+        def new
+          self.class.new(registry: registry)
+        end
+
         private
+
         def infer_predicates(predicates, infer_on)
           predicates.reduce(infer_on) { |a, e|
             args = e.is_a?(::Hash) ? e.first : ::Kernel.Array(e)
@@ -112,10 +118,13 @@ module Dry
         end
 
         def method_missing(meth, *args, &block)
-          val_rule = create_rule([:val, [:predicate, [meth, args]]])
+          registry.ensure_valid_predicate(meth, args)
+          predicate = registry[meth].curry(*args)
+
+          val_rule = create_rule([:val, predicate.to_ast])
 
           if block
-            val = Value.new.instance_eval(&block)
+            val = new.instance_eval(&block)
             new_rule = create_rule([:and, [val_rule.to_ast, val.to_ast]])
 
             add_rule(new_rule)

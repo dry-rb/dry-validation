@@ -1,13 +1,16 @@
 RSpec.describe Schema::Value do
   include_context 'rule compiler'
+  include_context 'predicate helper'
+
+  let(:registry) { PredicateRegistry.new(predicates) }
 
   describe '#required' do
-    subject(:value) { Schema::Value.new }
+    subject(:value) { Schema::Value.new(registry: registry) }
 
     let(:expected_ast) do
       [:and, [
-        [:val, [:predicate, [:key?, [:address]]]],
-        [:key, [:address, [:predicate, [:filled?, []]]]]
+        [:val, p(:key?, :address)],
+        [:key, [:address, p(:filled?)]]
       ]]
     end
 
@@ -25,15 +28,15 @@ RSpec.describe Schema::Value do
   end
 
   describe '#each' do
-    subject(:value) { Schema::Value.new }
+    subject(:value) { Schema::Value.new(registry: registry) }
 
     it 'creates an each rule with another rule returned from the block' do
       rule = value.each { key?(:method) }
 
       expect(rule.to_ast).to eql(
         [:and, [
-          [:val, [:predicate, [:array?, []]]],
-          [:each, [:val, [:predicate, [:key?, [:method]]]]]
+          [:val, p(:array?)],
+          [:each, [:val, p(:key?, :method)]]
         ]]
       )
     end
@@ -46,16 +49,16 @@ RSpec.describe Schema::Value do
 
       expect(rule.to_ast).to eql(
         [:and, [
-          [:val, [:predicate, [:array?, []]]],
+          [:val, p(:array?)],
           [:each,
             [:set, [
               [:and, [
-                [:val, [:predicate, [:key?, [:method]]]],
-                [:key, [:method, [:predicate, [:str?, []]]]]
+                [:val, p(:key?, :method)],
+                [:key, [:method, p(:str?)]]
               ]],
               [:and, [
-                [:val, [:predicate, [:key?, [:amount]]]],
-                [:key, [:amount, [:predicate, [:float?, []]]]]
+                [:val, p(:key?, :amount)],
+                [:key, [:amount, p(:float?)]]
               ]]
             ]]]
         ]]
@@ -64,17 +67,17 @@ RSpec.describe Schema::Value do
   end
 
   describe '#hash? with block' do
-    subject(:user) { Schema::Value.new }
+    subject(:user) { Schema::Value.new(registry: registry) }
 
     it 'builds hash? & rule created within the block' do
       rule = user.hash? { required(:email).filled }
 
       expect(rule.to_ast).to eql([
         :and, [
-          [:val, [:predicate, [:hash?, []]]],
+          [:val, p(:hash?)],
           [:and, [
-            [:val, [:predicate, [:key?, [:email]]]],
-            [:key, [:email, [:predicate, [:filled?, []]]]]
+            [:val, p(:key?, :email)],
+            [:key, [:email, p(:filled?)]]
           ]]
         ]
       ])
@@ -92,19 +95,19 @@ RSpec.describe Schema::Value do
 
       expect(rule.to_ast).to eql(
         [:and, [
-          [:val, [:predicate, [:hash?, []]]],
+          [:val, p(:hash?)],
           [:and, [
-            [:val, [:predicate, [:key?, [:address]]]],
+            [:val, p(:key?, :address)],
             [:and, [
-              [:val, [:predicate, [:hash?, []]]],
+              [:val, p(:hash?)],
               [:key, [
                 :address, [:set, [
                   [:and, [
-                    [:val, [:predicate, [:key?, [:city]]]],
-                    [:key, [:city, [:predicate, [:filled?, []]]]]]],
+                    [:val, p(:key?, :city)],
+                    [:key, [:city, p(:filled?)]]]],
                   [:and, [
-                    [:val, [:predicate, [:key?, [:zipcode]]]],
-                    [:key, [:zipcode, [:predicate, [:filled?, []]]]]]]
+                    [:val, p(:key?, :zipcode)],
+                    [:key, [:zipcode, p(:filled?)]]]]
                 ]]
               ]]
             ]]
@@ -115,15 +118,15 @@ RSpec.describe Schema::Value do
   end
 
   describe '#not' do
-    subject(:user) { Schema::Value.new }
+    subject(:user) { Schema::Value.new(registry: registry) }
 
     it 'builds a negated rule' do
       not_email = user.required(:email) { str?.not }
 
       expect(not_email.to_ast).to eql([
         :and, [
-          [:val, [:predicate, [:key?, [:email]]]],
-          [:not, [:key, [:email, [:predicate, [:str?, []]]]]]
+          [:val, p(:key?, :email)],
+          [:not, [:key, [:email, p(:str?)]]]
         ]
       ])
     end

@@ -8,9 +8,9 @@ en:
 
     excluded_from?: "must not be one of: %{list}"
 
-    eql?: "must be equal to %{eql_value}"
+    eql?: "must be equal to %{left}"
 
-    not_eql?: "must not be equal to %{eql_value}"
+    not_eql?: "must not be equal to %{left}"
 
     filled?: "must be filled"
 
@@ -70,11 +70,11 @@ en:
 
     size?:
       arg:
-        default: "size must be %{num}"
+        default: "size must be %{size}"
         range: "size must be within %{left} - %{right}"
 
       value:
         string:
           arg:
-            default: "length must be %{num}"
+            default: "length must be %{size}"
             range: "length must be within %{left} - %{right}"

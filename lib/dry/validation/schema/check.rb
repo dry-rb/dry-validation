@@ -22,9 +22,11 @@ module Dry
           vals, args = meth_args.partition { |arg| arg.class < DSL }
 
           keys = [name, *vals.map(&:name)]
-          predicate = [:predicate, [meth, args]]
 
-          rule = create_rule([:check, [name, predicate, keys]])
+          registry.ensure_valid_predicate(meth, args.size + keys.size)
+          predicate = registry[meth].curry(*args)
+
+          rule = create_rule([:check, [name, predicate.to_ast, keys]])
           add_rule(rule)
           rule
         end

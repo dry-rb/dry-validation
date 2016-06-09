@@ -1,6 +1,12 @@
 RSpec.describe Dry::Validation::Schema::JSON, 'defining a schema' do
   subject(:schema) do
     Dry::Validation.JSON do
+      configure do
+        def email?(value)
+          true
+        end
+      end
+
       required(:email).filled
 
       required(:age).maybe(:int?, gt?: 18)
@@ -20,12 +26,6 @@ RSpec.describe Dry::Validation::Schema::JSON, 'defining a schema' do
       optional(:phone_number).maybe(:int?, gt?: 0)
 
       rule(:email_valid) { value(:email).email? }
-
-      configure do
-        def email?(value)
-          true
-        end
-      end
     end
   end
 

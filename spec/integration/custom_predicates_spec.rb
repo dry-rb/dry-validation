@@ -38,9 +38,7 @@ RSpec.describe Dry::Validation do
 
     context 'when configured globally' do
       before do
-        Dry::Validation::Schema.configure do |config|
-          config.predicates = Test::Predicates
-        end
+        Dry::Validation::Schema.predicates(Test::Predicates)
       end
 
       subject!(:schema) do
@@ -63,7 +61,7 @@ RSpec.describe Dry::Validation do
       subject(:schema) do
         Dry::Validation.Schema(base_class) do
           configure do
-            config.predicates = Test::Predicates
+            predicates(Test::Predicates)
           end
 
           required(:email) { filled? & email? }
@@ -93,8 +91,6 @@ RSpec.describe Dry::Validation do
   describe 'custom predicate which requires an arbitrary dependency' do
     subject(:schema) do
       Dry::Validation.Schema(base_class) do
-        required(:email).filled(:email?)
-
         configure do
           option :email_check
 
@@ -102,6 +98,8 @@ RSpec.describe Dry::Validation do
             email_check.(value)
           end
         end
+
+        required(:email).filled(:email?)
       end
     end
 
@@ -128,5 +126,29 @@ RSpec.describe Dry::Validation do
     expect { schema.(email: 'foo').messages }.to raise_error(
       Dry::Validation::MissingMessageError, /email/
     )
+  end
+
+
+  it 'should work when no predicate args' do
+    schema = Dry::Validation.Schema do
+      configure do
+        def self.messages
+          Dry::Validation::Messages.default.merge(
+            en: { errors: { with_no_args?: 'is always false' } }
+          )
+        end
+
+        def with_no_args?
+          false
+        end
+      end
+
+      required(:email).filled(:with_no_args?)
+    end
+
+    expect(schema.(email: 'foo').messages).to eql(
+      email: ['is always false']
+    )
+
   end
 end

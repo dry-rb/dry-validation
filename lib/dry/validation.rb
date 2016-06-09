@@ -16,8 +16,11 @@ module Dry
     end
 
     def self.Schema(base = Schema, **options, &block)
+      schema_class = Class.new(base.is_a?(Schema) ? base.class : base)
+
       dsl_opts = {
-        schema_class: Class.new(base.is_a?(Schema) ? base.class : base),
+        schema_class: schema_class,
+        registry: schema_class.registry,
         parent: options[:parent]
       }
 

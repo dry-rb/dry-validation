@@ -1,5 +1,6 @@
 require 'dry/types/constraints'
 
+require 'dry/validation/predicate_registry'
 require 'dry/validation/schema_compiler'
 require 'dry/validation/schema/key'
 require 'dry/validation/schema/value'
@@ -22,6 +23,7 @@ module Dry
 
       setting :path
       setting :predicates, Types::Predicates
+      setting :registry
       setting :messages, :yaml
       setting :messages_file
       setting :namespace
@@ -40,6 +42,20 @@ module Dry
       def self.inherited(klass)
         super
         klass.config.options = klass.config.options.dup
+        klass.set_registry!
+      end
+
+      def self.set_registry!
+        config.registry = PredicateRegistry[self, config.predicates]
+      end
+
+      def self.predicates(predicate_set = nil)
+        if predicate_set
+          config.predicates = predicate_set
+          set_registry!
+        else
+          config.predicates
+        end
       end
 
       def self.new(rules = config.rules, **options)
@@ -77,10 +93,6 @@ module Dry
 
       def self.rules
         config.rules
-      end
-
-      def self.predicates
-        config.predicates
       end
 
       def self.options
@@ -141,8 +153,12 @@ module Dry
         @rule_ast ||= config.rules.flat_map(&:rules).map(&:to_ast)
       end
 
+      def self.registry
+        config.registry
+      end
+
       def self.default_options
-        { predicates: predicates,
+        { predicate_registry: registry,
           error_compiler: error_compiler,
           hint_compiler: hint_compiler,
           input_processor: input_processor,
@@ -166,10 +182,10 @@ module Dry
       attr_reader :options
 
       def initialize(rules, options)
-        @rule_compiler = SchemaCompiler.new(self)
+        @predicates = options.fetch(:predicate_registry).bind(self)
+        @rule_compiler = SchemaCompiler.new(predicates)
         @error_compiler = options.fetch(:error_compiler)
         @hint_compiler = options.fetch(:hint_compiler)
-        @predicates = options.fetch(:predicates)
         @input_processor = options.fetch(:input_processor, NOOP_INPUT_PROCESSOR)
 
         initialize_options(options)
@@ -186,16 +202,6 @@ module Dry
       def call(input)
         processed_input = input_processor[input]
         Result.new(processed_input, apply(processed_input), error_compiler, hint_compiler)
-      end
-
-      def [](name)
-        if predicates.key?(name)
-          predicates[name]
-        elsif respond_to?(name)
-          Logic::Predicate.new(name, &method(name))
-        else
-          raise ArgumentError, "+#{name}+ is not a valid predicate name"
-        end
       end
 
       def curry(*args)
