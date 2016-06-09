@@ -1,13 +1,15 @@
 RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
   subject(:compiler) { Dry::Validation::InputProcessorCompiler::JSON.new }
 
+  include_context 'predicate helper'
+
   it 'supports arbitrary types via type?(const) => "json.const"' do
     rule_ast = [
       [
         :and,
         [
-          [:val, [:predicate, [:key?, [:age]]]],
-          [:key, [:age, [:predicate, [:type?, [Fixnum]]]]]
+          [:val, p(:key?, :age)],
+          [:key, [:age, p(:type?, Fixnum)]]
         ]
       ]
     ]
@@ -22,8 +24,8 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
       [
         :and,
         [
-          [:val, [:predicate, [:key?, [:admin]]]],
-          [:key, [:admin, [:predicate, [:type?, ['Bool']]]]]
+          [:val, p(:key?, :admin)],
+          [:key, [:admin, p(:type?, 'Bool')]]
         ]
       ]
     ]
@@ -38,11 +40,11 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
       [
         :and,
         [
-          [:val, [:predicate, [:key?, [:email]]]],
+          [:val, p(:key?, :email)],
           [
             :and, [
-              [:key, [:email, [:predicate, [:str?, []]]]],
-              [:key, [:email, [:predicate, [:filled?, []]]]]
+              [:key, [:email, p(:str?, [])]],
+              [:key, [:email, p(:filled?, [])]]
             ]
           ]
         ]
@@ -59,8 +61,8 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
       [
         :and,
         [
-          [:val, [:predicate, [:key?, [:age]]]],
-          [:key, [:age, [:predicate, [:int?, []]]]],
+          [:val, p(:key?, :age)],
+          [:key, [:age, p(:int?, [])]],
         ]
       ]
     ]
@@ -75,8 +77,8 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
       [
         :and,
         [
-          [:val, [:predicate, [:key?, [:admin]]]],
-          [:key, [:admin, [:predicate, [:bool?, []]]]],
+          [:val, p(:key?, :admin)],
+          [:key, [:admin, p(:bool?, [])]],
         ]
       ]
     ]
@@ -92,11 +94,11 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
       [
         :and,
         [
-          [:val, [:predicate, [:key?, [:age]]]],
+          [:val, p(:key?, :age)],
           [
             :or, [
-              [:key, [:age, [:predicate, [:none?, []]]]],
-              [:key, [:age, [:predicate, [:int?, []]]]],
+              [:key, [:age, p(:none?, [])]],
+              [:key, [:age, p(:int?, [])]],
             ]
           ]
         ]
@@ -114,8 +116,8 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
       [
         :and,
         [
-          [:val, [:predicate, [:key?, [:lat]]]],
-          [:key, [:lat, [:predicate, [:float?, []]]]],
+          [:val, p(:key?, :lat)],
+          [:key, [:lat, p(:float?, [])]],
         ]
       ]
     ]
@@ -130,8 +132,8 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
       [
         :and,
         [
-          [:val, [:predicate, [:key?, [:lat]]]],
-          [:key, [:lat, [:predicate, [:decimal?, []]]]],
+          [:val, p(:key?, :lat)],
+          [:key, [:lat, p(:decimal?, [])]],
         ]
       ]
     ]
@@ -146,8 +148,8 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
       [
         :and,
         [
-          [:val, [:predicate, [:key?, [:bday]]]],
-          [:key, [:bday, [:predicate, [:date?, []]]]],
+          [:val, p(:key?, :bday)],
+          [:key, [:bday, p(:date?, [])]],
         ]
       ]
     ]
@@ -162,8 +164,8 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
       [
         :and,
         [
-          [:val, [:predicate, [:key?, [:bday]]]],
-          [:key, [:bday, [:predicate, [:date_time?, []]]]],
+          [:val, p(:key?, :bday)],
+          [:key, [:bday, p(:date_time?, [])]],
         ]
       ]
     ]
@@ -178,8 +180,8 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
       [
         :and,
         [
-          [:val, [:predicate, [:key?, [:bday]]]],
-          [:key, [:bday, [:predicate, [:time?, []]]]],
+          [:val, p(:key?, :bday)],
+          [:key, [:bday, p(:time?, [])]],
         ]
       ]
     ]
@@ -193,17 +195,17 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
     rule_ast = [
       [
         :and, [
-          [:val, [:predicate, [:key?, [:author]]]],
+          [:val, p(:key?, :author)],
           [:set, [
             [:and, [
-              [:val, [:predicate, [:key?, [:books]]]],
+              [:val, p(:key?, :books)],
               [
                 :each, [
                   :set, [
                     [
                       :and, [
-                        [:val, [:predicate, [:key?, [:published]]]],
-                        [:key, [:published, [:predicate, [:bool?, []]]]]
+                        [:val, p(:key?, :published)],
+                        [:key, [:published, p(:bool?, [])]]
                       ]
                     ]
                   ]
@@ -230,10 +232,10 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
     rule_ast = [
       [
         :and, [
-          [:val, [:predicate, [:key?, [:ids]]]],
+          [:val, p(:key?, :ids)],
           [:and, [
-            [:key, [:ids, [:predicate, [:array?, []]]]],
-            [:each, [:val, [:predicate, [:int?, []]]]]
+            [:key, [:ids, p(:array?, [])]],
+            [:each, [:val, p(:int?, [])]]
           ]]
         ]
       ]
@@ -250,16 +252,16 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
     rule_ast = [
       [
         :and, [
-          [:val, [:predicate, [:key?, [:address]]]],
+          [:val, p(:key?, :address)],
           [
             :and, [
-              [:key, [:address, [:predicate, [:hash?, []]]]],
+              [:key, [:address, p(:hash?, [])]],
               [
                 :set, [
                   [
                     :and, [
-                      [:val, [:predicate, [:key?, [:street]]]],
-                      [:key, [:street, [:predicate, [:filled?, []]]]]
+                      [:val, p(:key?, :street)],
+                      [:key, [:street, p(:filled?, [])]]
                     ]
                   ]
                 ]

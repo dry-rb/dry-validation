@@ -35,8 +35,9 @@ module Dry
 
       def visit_predicate(node)
         predicate, args = node
+
         lookup_options = options.merge(
-          rule: rule, val_type: val_type, arg_type: args[0][1].class
+          rule: rule, val_type: val_type, arg_type: args.size > 0 && args[0][1].class
         )
 
         tokens = options_for(predicate, args)

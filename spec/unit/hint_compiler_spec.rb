@@ -3,18 +3,20 @@ require 'dry/validation/hint_compiler'
 RSpec.describe HintCompiler, '#call' do
   subject(:compiler) { HintCompiler.new(Messages.default, rules: rules) }
 
+  include_context 'predicate helper'
+
   let(:rules) do
     [
       [
         :and, [
-          [:val, [:predicate, [:key?, [:age]]]],
+          [:val, p(:key?, :age)],
           [
             :or, [
-              [:key, [:age, [:predicate, [:none?, []]]]],
+              [:key, [:age, p(:none?)]],
               [
                 :and, [
-                  [:key, [:age, [:predicate, [:int?, []]]]],
-                  [:key, [:age, [:predicate, [:gt?, [18]]]]]
+                  [:key, [:age, p(:int?)]],
+                  [:key, [:age, p(:gt?, 18)]]
                 ]
               ]
             ]
@@ -23,14 +25,14 @@ RSpec.describe HintCompiler, '#call' do
       ],
       [
         :and, [
-          [:val, [:predicate, [:key?, [:height]]]],
+          [:val, p(:key?, :height)],
           [
             :or, [
-              [:attr, [:height, [:predicate, [:none?, []]]]],
+              [:attr, [:height, p(:none?)]],
               [
                 :and, [
-                  [:key, [:height, [:predicate, [:int?, []]]]],
-                  [:key, [:height, [:predicate, [:gt?, [180]]]]]
+                  [:key, [:height, p(:int?)]],
+                  [:key, [:height, p(:gt?, 180)]]
                 ]
               ]
             ]

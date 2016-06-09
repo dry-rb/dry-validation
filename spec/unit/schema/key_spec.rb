@@ -1,5 +1,7 @@
 RSpec.describe Schema::Key do
-  let(:registry) { double(PredicateRegistry, ensure_valid_predicate: true) }
+  include_context 'predicate helper'
+
+  let(:registry) { PredicateRegistry.new(predicates) }
 
   describe '#key?' do
     subject(:user) { Schema::Key[:user, registry: registry] }
@@ -7,7 +9,7 @@ RSpec.describe Schema::Key do
     it 'returns a key rule' do
       rule = user.key?(:address)
 
-      expect(rule.to_ast).to eql([:key, [:user, [:predicate, [:key?, [:address]]]]])
+      expect(rule.to_ast).to eql([:key, [:user, p(:key?, :address)]])
     end
 
     it 'returns a key rule & disjunction rule created within the block' do
@@ -18,15 +20,11 @@ RSpec.describe Schema::Key do
       expect(user.to_ast).to eql([
         :key, [:user, [
           :and, [
-            [:val, [:predicate, [:hash?, []]]],
+            [:val, p(:hash?)],
             [:key, [:user, [:and, [
-              [:val, [:predicate, [:key?, [:email]]]],
-              [:or, [
-                [:key, [:email, [:predicate, [:none?, []]]]],
-                [:key, [:email, [:predicate, [:filled?, []]]]]]
-              ]]
-            ]]
-            ]
+              [:val, p(:key?, :email)],
+              [:or, [[:key, [:email, p(:none?)]], [:key, [:email, p(:filled?)]]]
+            ]]]]]
           ]
         ]]
       ])

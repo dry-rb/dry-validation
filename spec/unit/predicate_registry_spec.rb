@@ -12,7 +12,7 @@ RSpec.describe PredicateRegistry do
 
   describe '.[]' do
     it 'returns a registry which collects predicate methods' do
-      expect(predicate_registry[:dis_ok?]).to be_instance_of(UnboundMethod)
+      expect(predicate_registry[:dis_ok?]).to be_instance_of(Dry::Logic::Predicate)
     end
   end
 

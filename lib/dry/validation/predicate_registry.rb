@@ -60,12 +60,15 @@ module Dry
         predicates.key?(name) || external.key?(name)
       end
 
-      def ensure_valid_predicate(name, args)
+      def ensure_valid_predicate(name, args_or_arity)
         if key?(name)
-          predicate = self[name]
+          arity = self[name].arity
 
-          if ![0, args.size + 1].include?(predicate.arity)
-            raise_invalid_arity_error(name)
+          case args_or_arity
+          when Array
+            raise_invalid_arity_error(name) if ![0, args_or_arity.size + 1].include?(arity)
+          when Fixnum
+            raise_invalid_arity_error(name) if args_or_arity != arity
           end
         else
           raise_unknown_predicate_error(name)

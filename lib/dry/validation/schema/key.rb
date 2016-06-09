@@ -26,7 +26,9 @@ module Dry
           val = Value[name, registry: registry]
           val.instance_eval(&block)
 
-          rule = create_rule([:val, [:predicate, [:hash?, [[:input, nil]]]]])
+          predicate = registry[:hash?]
+
+          rule = create_rule([:val, predicate.to_ast])
             .and(create_rule([type, [name, val.to_ast]]))
 
           add_rule(rule)
