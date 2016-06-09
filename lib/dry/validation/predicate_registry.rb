@@ -14,13 +14,17 @@ module Dry
       class Unbound < PredicateRegistry
         def bind(schema)
           bound_predicates = predicates.each_with_object({}) do |(n, p), res|
-            res[n] = Dry::Logic::Predicate.new(n, &p.bind(schema))
+            res[n] = p.bind(schema)
           end
           Bound.new(external, bound_predicates)
         end
 
         def update(other)
-          predicates.update(other)
+          unbound_predicates = other.each_with_object({}) { |(n, p), res|
+            res[n] = Logic::Predicate.new(n, fn: p)
+          }
+
+          predicates.update(unbound_predicates)
         end
       end
 

@@ -89,9 +89,9 @@ module Dry
         id, args = node
 
         if id == :key?
-          args[0]
+          args[0][1]
         else
-          type(id, args)
+          type(id, args.map(&:last))
         end
       end
 
