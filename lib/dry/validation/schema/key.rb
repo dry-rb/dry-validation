@@ -23,17 +23,20 @@ module Dry
         end
 
         def hash?(&block)
-          val = Value[name, registry: registry]
-          val.instance_eval(&block)
-
           predicate = registry[:hash?]
 
-          rule = create_rule([:val, predicate.to_ast])
-            .and(create_rule([type, [name, val.to_ast]]))
+          if block
+            val = Value[name, registry: registry]
+            val.instance_eval(&block)
 
-          add_rule(rule)
+            rule = create_rule([:val, predicate.to_ast])
+              .and(create_rule([type, [name, val.to_ast]]))
 
-          rule
+            add_rule(rule)
+            rule
+          else
+            add_rule(create_rule([:val, predicate.to_ast]))
+          end
         end
 
         private
