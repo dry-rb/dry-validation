@@ -1,5 +1,19 @@
 #see: https://github.com/dry-rb/dry-validation/issues/127
 RSpec.describe 'Predicates: Key' do
+  context 'inferred from required/optional macros' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:foo).value(:str?)
+        optional(:bar).value(:int?)
+      end
+    end
+
+    it 'uses key? predicate for required' do
+      expect(schema.({}).messages(full: true)).to eql(foo: ['foo is missing'])
+      expect(schema.({}).messages).to eql(foo: ['is missing'])
+    end
+  end
+
   context 'with required' do
     xit "should raise error" do
       expect { Dry::Validation.Schema do

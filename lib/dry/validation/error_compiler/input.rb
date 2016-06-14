@@ -56,7 +56,7 @@ module Dry
 
         message =
           if full?
-            "#{rule_name} #{template % tokens}"
+            "#{rule_name || tokens[:name]} #{template % tokens}"
           else
             template % tokens
           end
