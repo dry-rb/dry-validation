@@ -37,7 +37,7 @@ module Dry
       end
 
       def hash_node(schema)
-        [:type, ['hash', [:schema, schema]]]
+        [:type, ['hash', [:weak, schema]]]
       end
 
       def array_node(members)
