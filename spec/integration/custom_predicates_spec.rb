@@ -128,6 +128,28 @@ RSpec.describe Dry::Validation do
     )
   end
 
+  it 'should work with custom predicate args' do
+    schema = Dry::Validation.Schema do
+      configure do
+        def self.messages
+          Dry::Validation::Messages.default.merge(
+            en: { errors: { fav_number?: 'must be %{expected}' } }
+          )
+        end
+        def fav_number?(expected, current)
+          current == expected
+        end
+      end
+
+      required(:foo) { fav_number?(23) }
+    end
+
+    expect(schema.(foo: 20).messages).to eql(
+      foo: ['must be 23']
+    )
+
+  end
+
 
   it 'should work when no predicate args' do
     schema = Dry::Validation.Schema do
