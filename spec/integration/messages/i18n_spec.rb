@@ -42,7 +42,7 @@ RSpec.describe Messages::I18n do
       it 'returns a message for a specific rule and its arg type' do
         message = messages[:size?, rule: :pages, arg_type: Range]
 
-        expect(message).to eql("size must be within %{left} - %{right}")
+        expect(message).to eql("size must be within %{size_left} - %{size_right}")
       end
     end
 
@@ -68,7 +68,7 @@ RSpec.describe Messages::I18n do
       it 'returns a message for a specific rule and its arg type' do
         message = messages[:size?, rule: :pages, arg_type: Range, locale: :pl]
 
-        expect(message).to eql("wielkość musi być między %{left} a %{right}")
+        expect(message).to eql("wielkość musi być między %{size_left} a %{size_right}")
       end
     end
   end
