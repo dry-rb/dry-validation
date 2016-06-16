@@ -114,6 +114,18 @@ module Dry
           registry[name].curry(*args)
         end
 
+        def node(input, *args)
+          if input.is_a?(::Symbol)
+            [type, [name, predicate(input, *args).to_ast]]
+          elsif input.respond_to?(:rule)
+            [type, [name, [:type, input]]]
+          elsif input.is_a?(::Class) && input < ::Dry::Types::Struct
+            [type, [name, [:schema, Schema.create_class(self, input)]]]
+          else
+            [type, [name, input.to_ast]]
+          end
+        end
+
         private
 
         def infer_predicates(predicates, infer_on)
