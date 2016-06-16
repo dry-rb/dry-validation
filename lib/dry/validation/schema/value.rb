@@ -4,12 +4,13 @@ module Dry
   module Validation
     class Schema
       class Value < DSL
-        attr_reader :type, :schema_class, :schema
+        attr_reader :type, :schema_class, :schema, :type_map
 
         def initialize(options = {})
           super
           @type = options.fetch(:type, :key)
           @schema_class = options.fetch(:schema_class, ::Class.new(Schema))
+          @type_map = {}
         end
 
         def key(name, &block)
@@ -108,6 +109,11 @@ module Dry
           self.class.new(registry: registry)
         end
 
+        def predicate(name, *args)
+          registry.ensure_valid_predicate(name, args)
+          registry[name].curry(*args)
+        end
+
         private
 
         def infer_predicates(predicates, infer_on)
@@ -118,10 +124,7 @@ module Dry
         end
 
         def method_missing(meth, *args, &block)
-          registry.ensure_valid_predicate(meth, args)
-          predicate = registry[meth].curry(*args)
-
-          val_rule = create_rule([:val, predicate.to_ast])
+          val_rule = create_rule([:val, predicate(meth, *args).to_ast])
 
           if block
             val = new.instance_eval(&block)
