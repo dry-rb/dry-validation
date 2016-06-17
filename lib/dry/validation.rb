@@ -33,7 +33,7 @@ module Dry
         config.rules = config.rules + (options.fetch(:rules, []) + dsl.rules)
         config.checks = config.checks + dsl.checks
         config.path = dsl.path
-        config.type_map = klass.build_type_map(dsl.type_map) if klass.config.type_specs
+        config.type_map = klass.build_type_map(dsl.type_map) if config.type_specs
       end
 
       if options[:build] == false
