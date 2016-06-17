@@ -57,7 +57,7 @@ module Dry
     def self.type_map(type_map, input_processor)
       type_map.each_with_object({}) do |(name, spec), result|
         result[name] = Array(spec)
-          .map { |id| Types["#{input_processor}.#{id}"] }
+          .map { |id| id.is_a?(Symbol) ? Types["#{input_processor}.#{id}"] : id }
           .reduce(:|)
       end
     end

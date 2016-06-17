@@ -139,7 +139,7 @@ module Dry
         @input_processor ||=
           begin
             if type_map.size > 0
-              Types["#{config.input_processor}.hash"].weak(type_map)
+              Types["#{config.input_processor}.hash"].symbolized(type_map)
             elsif input_processor_compiler
               input_processor_compiler.(rule_ast)
             else

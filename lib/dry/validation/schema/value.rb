@@ -21,9 +21,11 @@ module Dry
 
         def required(name, type_spec = nil, &block)
           rule = define(name, Key, &block)
+
           if type_spec
             type_map[name] = type_spec
           end
+
           rule
         end
 
