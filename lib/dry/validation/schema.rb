@@ -72,8 +72,11 @@ module Dry
               lookup_type("hash", category).public_send(hash_type, spec)
             when Array
               if spec.size == 1 && spec[0].is_a?(Hash)
-                member = lookup_type("hash", category).public_send(hash_type, (build_type_map(spec[0], category)))
-                lookup_type("array", category).member(member)
+                member_schema = build_type_map(spec[0], category)
+                member_type = lookup_type("hash", category)
+                  .public_send(hash_type, member_schema)
+
+                lookup_type("array", category).member(member_type)
               else
                 spec
                   .map { |id| id.is_a?(Symbol) ? lookup_type(id, category) : id }
