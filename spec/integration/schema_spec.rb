@@ -34,7 +34,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
     describe '#type_map' do
       it 'returns key=>type map' do
         expect(schema.type_map).to eql(
-          email: Types::Form::String, age: Types::Form::Nil | Types::Form::Int
+          email: Types::String, age: Types::Form::Nil | Types::Form::Int
         )
       end
 

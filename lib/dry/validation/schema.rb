@@ -31,6 +31,7 @@ module Dry
       setting :checks, []
       setting :options, {}
       setting :type_map, {}
+      setting :hash_type, :weak
 
       setting :input_processor, :noop
       setting :input_processor_map, {
@@ -62,27 +63,35 @@ module Dry
       end
 
       def self.build_type_map(type_specs, category = config.input_processor)
+        hash_type = config.hash_type
+
         type_specs.each_with_object({}) do |(name, spec), result|
           result[name] =
             case spec
             when Hash
-              Types["#{category}.hash"].symbolized(spec)
+              lookup_type("hash", category).public_send(hash_type, spec)
             when Array
               if spec.size == 1 && spec[0].is_a?(Hash)
-                member = Types["#{category}.hash"].symbolized(build_type_map(spec[0], category))
-                Types["#{category}.array"].member(member)
+                member = lookup_type("hash", category).public_send(hash_type, (build_type_map(spec[0], category)))
+                lookup_type("array", category).member(member)
               else
                 spec
-                  .map { |id| id.is_a?(Symbol) ? Types["#{category}.#{id}"] : id }
+                  .map { |id| id.is_a?(Symbol) ? lookup_type(id, category) : id }
                   .reduce(:|)
               end
             when Symbol
-              Types["#{category}.#{spec}"]
+              lookup_type(spec, category)
             else
               spec
             end
         end
       end
+
+      def self.lookup_type(name, category)
+        id = "#{category}.#{name}"
+        Types.type_keys.include?(id) ? Types[id] : Types[name.to_s]
+      end
+
 
       def self.type_map
         config.type_map

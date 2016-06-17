@@ -7,8 +7,6 @@ require 'dry/validation/schema/form'
 require 'dry/validation/schema/json'
 
 module Dry
-  Types.register('form.string', Dry::Types['string'])
-
   module Validation
     MissingMessageError = Class.new(StandardError)
     InvalidSchemaError = Class.new(StandardError)
