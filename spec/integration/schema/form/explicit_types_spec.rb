@@ -138,6 +138,18 @@ RSpec.describe Dry::Validation::Schema::Form, 'explicit types' do
       end
     end
 
+    it 'fails to coerce gracefuly' do
+      result = schema.(song: nil)
+
+      expect(result.messages).to eql(song: ['must be a hash'])
+      expect(result.to_h).to eql(song: nil)
+
+      result = schema.(song: { tags: nil })
+
+      expect(result.messages).to eql(song: { tags: ['must be an array'] })
+      expect(result.to_h).to eql(song: { tags: nil })
+    end
+
     it 'uses form coercion for nested input' do
       input = {
         'song' => {
