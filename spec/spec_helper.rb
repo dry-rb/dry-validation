@@ -19,6 +19,13 @@ Dir[SPEC_ROOT.join('support/**/*.rb')].each(&method(:require))
 
 include Dry::Validation
 
+module Types
+  # FIXME: we should add this to dry-types
+  Dry::Types.register('form.string', Dry::Types['string'])
+
+  include Dry::Types.module
+end
+
 RSpec.configure do |config|
   config.disable_monkey_patching!
 

@@ -33,6 +33,10 @@ module Dry
         config.rules = config.rules + (options.fetch(:rules, []) + dsl.rules)
         config.checks = config.checks + dsl.checks
         config.path = dsl.path
+
+        if dsl.type_map.size > 0
+          config.type_map = type_map(dsl.type_map, config.input_processor)
+        end
       end
 
       if options[:build] == false
@@ -48,6 +52,14 @@ module Dry
 
     def self.JSON(options = {}, &block)
       Validation.Schema(Schema::JSON, options, &block)
+    end
+
+    def self.type_map(type_map, input_processor)
+      type_map.each_with_object({}) do |(name, spec), result|
+        result[name] = Array(spec)
+          .map { |id| Types["#{input_processor}.#{id}"] }
+          .reduce(:|)
+      end
     end
   end
 end

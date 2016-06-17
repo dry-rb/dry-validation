@@ -2,8 +2,13 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
   describe 'with a flat structure' do
     subject(:schema) do
       Dry::Validation.Schema do
-        required(:email).filled
-        required(:age) { none? | (int? & gt?(18)) }
+        configure do
+          config.input_processor = :form
+          config.input_processor_map = {} # enforces usage of type_map
+        end
+
+        required(:email, :string).filled
+        required(:age, [:nil, :int]) { none? | (int? & gt?(18)) }
       end
     end
 
@@ -24,6 +29,20 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
       expect(Hash[result]).to eql(input)
 
       expect(result.to_a).to eql([[:email, 'jane@doe'], [:age, 19]])
+    end
+
+    describe '#type_map' do
+      it 'returns key=>type map' do
+        expect(schema.type_map).to eql(
+          email: Types::Form::String, age: Types::Form::Nil | Types::Form::Int
+        )
+      end
+
+      it 'uses type_map for input processor when it is not empty' do
+        expect(schema.(email: 'jane@doe.org', age: '18').to_h).to eql(
+          email: 'jane@doe.org', age: 18
+        )
+      end
     end
   end
 

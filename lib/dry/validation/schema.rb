@@ -30,6 +30,7 @@ module Dry
       setting :rules, []
       setting :checks, []
       setting :options, {}
+      setting :type_map, {}
 
       setting :input_processor, :noop
 
@@ -91,6 +92,10 @@ module Dry
         [:schema, self]
       end
 
+      def self.type_map
+        config.type_map
+      end
+
       def self.rules
         config.rules
       end
@@ -133,7 +138,9 @@ module Dry
       def self.input_processor
         @input_processor ||=
           begin
-            if input_processor_compiler
+            if type_map.size > 0
+              Types["#{config.input_processor}.hash"].weak(type_map)
+            elsif input_processor_compiler
               input_processor_compiler.(rule_ast)
             else
               NOOP_INPUT_PROCESSOR
@@ -181,7 +188,10 @@ module Dry
 
       attr_reader :options
 
+      attr_reader :type_map
+
       def initialize(rules, options)
+        @type_map = self.class.type_map
         @predicates = options.fetch(:predicate_registry).bind(self)
         @rule_compiler = SchemaCompiler.new(predicates)
         @error_compiler = options.fetch(:error_compiler)
