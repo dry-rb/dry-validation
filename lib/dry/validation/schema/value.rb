@@ -11,7 +11,7 @@ module Dry
           @type = options.fetch(:type, :key)
           @schema_class = options.fetch(:schema_class, ::Class.new(Schema))
           @options = options.merge(type: @type, schema_class: @schema_class)
-          @type_map = parent ? parent.type_map : {}
+          @type_map = parent && parent.root? ? parent.type_map : {}
         end
 
         def key(name, &block)
@@ -32,6 +32,7 @@ module Dry
 
         def schema(other = nil, &block)
           @schema = Schema.create_class(self, other, &block)
+          type_map.update(@schema.type_map)
           hash?.and(@schema)
         end
 

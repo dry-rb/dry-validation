@@ -128,7 +128,7 @@ module Dry
           end
 
         klass.config.path = target.path if other
-        klass.config.input_processor = :noop unless klass.config.type_specs
+        klass.config.input_processor = :noop
 
         klass
       end
