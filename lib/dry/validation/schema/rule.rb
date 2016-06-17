@@ -39,6 +39,14 @@ module Dry
           target.schema?
         end
 
+        def type_map
+          target.type_map
+        end
+
+        def type_map?
+          target.type_map?
+        end
+
         def required(*predicates)
           ::Kernel.warn 'required is deprecated - use filled instead.'
 

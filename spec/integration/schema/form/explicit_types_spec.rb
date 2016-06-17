@@ -120,4 +120,38 @@ RSpec.describe Dry::Validation::Schema::Form, 'explicit types' do
       )
     end
   end
+
+  context 'nested schema with arrays' do
+    subject(:schema) do
+      Dry::Validation.Form do
+        configure { config.type_specs = true }
+
+        required(:song).schema do
+          required(:title, :string)
+
+          required(:tags).each do
+            schema do
+              required(:name, :string)
+            end
+          end
+        end
+      end
+    end
+
+    it 'uses form coercion for nested input' do
+      input = {
+        'song' => {
+          'title' => 'dry-rb is awesome lala',
+          'tags' => [{ 'name' => 'red' }, { 'name' => 'blue' }]
+        }
+      }
+
+      expect(schema.(input).to_h).to eql(
+        song: {
+          title: 'dry-rb is awesome lala',
+          tags: [{ name: 'red' }, { name: 'blue' }]
+        }
+      )
+    end
+  end
 end

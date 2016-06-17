@@ -42,7 +42,12 @@ module Dry
             if predicates.size > 0
               create_rule([:each, infer_predicates(predicates, new).to_ast])
             else
-              val = Value[name, registry: registry].instance_eval(&block)
+              val = Value[
+                name, registry: registry, schema_class: schema_class.clone
+              ].instance_eval(&block)
+
+              type_map[name] = [val.type_map] if val.schema? && val.type_map?
+
               create_rule([:each, val.to_ast])
             end
 

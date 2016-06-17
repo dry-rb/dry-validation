@@ -54,16 +54,25 @@ module Dry
       Validation.Schema(Schema::JSON, options, &block)
     end
 
-    def self.type_map(type_map, input_processor)
+    def self.type_map(type_map, category)
       type_map.each_with_object({}) do |(name, spec), result|
         result[name] =
           case spec
           when Hash
-            Types["#{input_processor}.hash"].symbolized(spec)
+            Types["#{category}.hash"].symbolized(spec)
+          when Array
+            if spec.size == 1 && spec[0].is_a?(Hash)
+              member = Types["#{category}.hash"].symbolized(type_map(spec[0], category))
+              Types["#{category}.array"].member(member)
+            else
+              spec
+                .map { |id| id.is_a?(Symbol) ? Types["#{category}.#{id}"] : id }
+                .reduce(:|)
+            end
+          when Symbol
+            Types["#{category}.#{spec}"]
           else
-            Array(spec)
-              .map { |id| id.is_a?(Symbol) ? Types["#{input_processor}.#{id}"] : id }
-              .reduce(:|)
+            spec
           end
       end
     end
