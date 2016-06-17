@@ -34,7 +34,7 @@ module Dry
         config.checks = config.checks + dsl.checks
         config.path = dsl.path
 
-        if dsl.type_map.size > 0
+        if config.type_specs
           config.type_map = type_map(dsl.type_map, config.input_processor)
         end
       end
@@ -56,9 +56,15 @@ module Dry
 
     def self.type_map(type_map, input_processor)
       type_map.each_with_object({}) do |(name, spec), result|
-        result[name] = Array(spec)
-          .map { |id| id.is_a?(Symbol) ? Types["#{input_processor}.#{id}"] : id }
-          .reduce(:|)
+        result[name] =
+          case spec
+          when Hash
+            Types["#{input_processor}.hash"].symbolized(spec)
+          else
+            Array(spec)
+              .map { |id| id.is_a?(Symbol) ? Types["#{input_processor}.#{id}"] : id }
+              .reduce(:|)
+          end
       end
     end
   end

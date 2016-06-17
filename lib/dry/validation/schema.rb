@@ -40,10 +40,18 @@ module Dry
         form: InputProcessorCompiler::Form.new,
       }.freeze
 
+      setting :type_specs, false
+
       def self.inherited(klass)
         super
         klass.config.options = klass.config.options.dup
         klass.set_registry!
+      end
+
+      def self.clone
+        klass = Class.new(self)
+        klass.config.rules = []
+        klass
       end
 
       def self.set_registry!
@@ -78,7 +86,7 @@ module Dry
           end
 
         klass.config.path = target.path if other
-        klass.config.input_processor = :noop
+        klass.config.input_processor = :noop unless klass.config.type_specs
 
         klass
       end

@@ -4,7 +4,7 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
       Dry::Validation.Schema do
         configure do
           config.input_processor = :form
-          config.input_processor_map = {} # enforces usage of type_map
+          config.type_specs = true
         end
 
         required(:email, :string).filled

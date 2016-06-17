@@ -10,7 +10,8 @@ module Dry
           super
           @type = options.fetch(:type, :key)
           @schema_class = options.fetch(:schema_class, ::Class.new(Schema))
-          @type_map = {}
+          @options = options.merge(type: @type, schema_class: @schema_class)
+          @type_map = parent ? parent.type_map : {}
         end
 
         def key(name, &block)
@@ -101,6 +102,10 @@ module Dry
 
         def root?
           name.nil?
+        end
+
+        def type_map?
+          ! type_map.empty?
         end
 
         def schema?
