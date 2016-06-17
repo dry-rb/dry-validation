@@ -7,6 +7,8 @@ require 'dry/validation/schema/form'
 require 'dry/validation/schema/json'
 
 module Dry
+  Types.register('form.string', Dry::Types['string'])
+
   module Validation
     MissingMessageError = Class.new(StandardError)
     InvalidSchemaError = Class.new(StandardError)
@@ -33,10 +35,7 @@ module Dry
         config.rules = config.rules + (options.fetch(:rules, []) + dsl.rules)
         config.checks = config.checks + dsl.checks
         config.path = dsl.path
-
-        if config.type_specs
-          config.type_map = type_map(dsl.type_map, config.input_processor)
-        end
+        config.type_map = klass.build_type_map(dsl.type_map) if klass.config.type_specs
       end
 
       if options[:build] == false
@@ -52,29 +51,6 @@ module Dry
 
     def self.JSON(options = {}, &block)
       Validation.Schema(Schema::JSON, options, &block)
-    end
-
-    def self.type_map(type_map, category)
-      type_map.each_with_object({}) do |(name, spec), result|
-        result[name] =
-          case spec
-          when Hash
-            Types["#{category}.hash"].symbolized(spec)
-          when Array
-            if spec.size == 1 && spec[0].is_a?(Hash)
-              member = Types["#{category}.hash"].symbolized(type_map(spec[0], category))
-              Types["#{category}.array"].member(member)
-            else
-              spec
-                .map { |id| id.is_a?(Symbol) ? Types["#{category}.#{id}"] : id }
-                .reduce(:|)
-            end
-          when Symbol
-            Types["#{category}.#{spec}"]
-          else
-            spec
-          end
-      end
     end
   end
 end

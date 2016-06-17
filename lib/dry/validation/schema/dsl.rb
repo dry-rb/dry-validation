@@ -24,8 +24,14 @@ module Dry
         end
         alias_method :to_s, :inspect
 
-        def optional(name, &block)
-          define(name, Key, :then, &block)
+        def optional(name, type_spec = nil, &block)
+          rule = define(name, Key, :then, &block)
+
+          if type_spec
+            type_map[name] = type_spec
+          end
+
+          rule
         end
 
         def not
