@@ -17,6 +17,8 @@ module Dry
         setting :lookup_paths, %w(
           %{root}.rules.%{rule}.%{predicate}.arg.%{arg_type}
           %{root}.rules.%{rule}.%{predicate}
+          %{root}.%{predicate}.value.%{rule}.arg.%{arg_type}
+          %{root}.%{predicate}.value.%{rule}
           %{root}.%{predicate}.value.%{val_type}.arg.%{arg_type}
           %{root}.%{predicate}.value.%{val_type}
           %{root}.%{predicate}.arg.%{arg_type}

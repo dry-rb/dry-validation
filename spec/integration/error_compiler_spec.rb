@@ -10,7 +10,14 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     Messages.default.merge(
       en: {
         errors: {
-          key?: '+%{name}+ key is missing in the hash',
+          key?: {
+            arg: {
+              default: '+%{name}+ key is missing in the hash',
+            },
+            value: {
+              gender: 'Please provide your gender'
+            }
+          },
           rules: {
             address: {
               filled?: 'Please provide your address'
@@ -33,6 +40,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     let(:ast) do
       [
         [:error, [:name, [:input, [:name, [:result, [nil, [:val, p(:key?, :name)]]]]]]],
+        [:error, [:gender, [:input, [:gender, [:result, [nil, [:val, p(:key?, :gender)]]]]]]],
         [:error, [:age, [:input, [:age, [:result, [18, [:val, p(:gt?, 18)]]]]]]],
         [:error, [:email, [:input, [:email, [:result, ["", [:val, p(:filled?)]]]]]]],
         [:error, [:address, [:input, [:address, [:result, ["", [:val, p(:filled?)]]]]]]]
@@ -42,6 +50,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     it 'converts error ast into another format' do
       expect(error_compiler.(ast)).to eql(
         name: ["+name+ key is missing in the hash"],
+        gender: ["Please provide your gender"],
         age: ["must be greater than 18"],
         email: ["must be filled"],
         address: ["Please provide your address"]
