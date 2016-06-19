@@ -131,7 +131,7 @@ module Dry
         end
 
         def new
-          self.class.new(registry: registry)
+          self.class.new(registry: registry, schema_class: schema_class.clone)
         end
 
         def key?(name)
@@ -169,6 +169,9 @@ module Dry
 
           if block
             val = new.instance_eval(&block)
+
+            type_map.update(val.type_map) if val.type_map?
+
             new_rule = create_rule([:and, [val_rule.to_ast, val.to_ast]])
 
             add_rule(new_rule)
