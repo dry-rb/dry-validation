@@ -49,5 +49,33 @@ RSpec.describe 'Macros #value' do
         )
       end
     end
+
+    context 'with a block' do
+      subject(:schema) do
+        Dry::Validation.Schema do
+          required(:age).value { int? & size?(18..24) }
+        end
+      end
+
+      it 'generates int? & gt? rule' do
+        expect(schema.(age: nil).messages).to eql(
+          age: ['must be an integer', 'size must be within 18 - 24']
+        )
+      end
+    end
+
+    context 'with a predicate and a block' do
+      subject(:schema) do
+        Dry::Validation.Schema do
+          required(:age).value(:int?) { size?(18..24) }
+        end
+      end
+
+      it 'generates int? & gt? rule' do
+        expect(schema.(age: nil).messages).to eql(
+          age: ['must be an integer', 'size must be within 18 - 24']
+        )
+      end
+    end
   end
 end

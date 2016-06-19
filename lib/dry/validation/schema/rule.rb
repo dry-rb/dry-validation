@@ -43,6 +43,10 @@ module Dry
           target.schema?
         end
 
+        def registry
+          target.registry
+        end
+
         def type_map
           target.type_map
         end
@@ -57,27 +61,41 @@ module Dry
           filled(*predicates)
         end
 
-        def filled(*predicates)
-          rule = ([key(:filled?)] + infer_predicates(predicates, :filled)).reduce(:and)
+        def filled(*predicates, &block)
+          left = ([key(:filled?)] + infer_predicates(predicates, :filled)).reduce(:and)
 
-          add_rule(__send__(type, rule))
-        end
-
-        def value(*predicates)
-          ::Kernel.raise ::ArgumentError, "wrong number of arguments (given 0, expected at least 1)" if predicates.empty?
-
-          rule = infer_predicates(predicates, :value).reduce(:and)
-
-          add_rule(__send__(type, rule))
-        end
-
-        def maybe(*predicates)
           rule =
-            if predicates.size > 0
-              key(:none?).or(infer_predicates(predicates, :maybe).reduce(:and))
+            if block
+              left.and(Key[name, registry: registry].instance_eval(&block))
             else
-              key(:none?).or(key(:filled?))
+              left
             end
+
+          add_rule(__send__(type, rule))
+        end
+
+        def value(*predicates, &block)
+          if predicates.empty? && !block
+            ::Kernel.raise ::ArgumentError, "wrong number of arguments (given 0, expected at least 1)"
+          end
+
+          from_predicates = infer_predicates(predicates, :value).reduce(:and)
+          from_block = block ? Key[name, registry: registry].instance_eval(&block) : nil
+
+          rule = [*from_predicates, *from_block].compact.reduce(:and)
+
+          add_rule(__send__(type, rule))
+        end
+
+        def maybe(*predicates, &block)
+          left = key(:none?)
+
+          from_predicates = infer_predicates(predicates, :maybe).reduce(:and)
+          from_block = block ? Key[name, registry: registry].instance_eval(&block) : nil
+
+          right = [*from_predicates, *from_block].compact.reduce(:and) || key(:filled?)
+
+          rule = left.or(right || key(:filled?))
 
           add_rule(__send__(type, rule))
         end

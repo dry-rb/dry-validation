@@ -49,7 +49,35 @@ RSpec.describe 'Macros #filled' do
         end
       end
 
-      it 'generates filled? & int? & gt? rule' do
+      it 'generates filled? & int? & size? rule' do
+        expect(schema.(age: nil).messages).to eql(
+          age: ['must be filled', 'size must be within 18 - 24']
+        )
+      end
+    end
+
+    context 'with a block' do
+      subject(:schema) do
+        Dry::Validation.Schema do
+          required(:age).filled { int? & size?(18..24) }
+        end
+      end
+
+      it 'generates filled? & int? & size? rule' do
+        expect(schema.(age: nil).messages).to eql(
+          age: ['must be filled', 'size must be within 18 - 24']
+        )
+      end
+    end
+
+    context 'with a predicate and a block' do
+      subject(:schema) do
+        Dry::Validation.Schema do
+          required(:age).filled(:int?) { size?(18..24) }
+        end
+      end
+
+      it 'generates filled? & int? & size? rule' do
         expect(schema.(age: nil).messages).to eql(
           age: ['must be filled', 'size must be within 18 - 24']
         )
