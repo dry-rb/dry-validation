@@ -15,7 +15,7 @@ module Dry
         end
 
         def key(name, &block)
-          ::Kernel.warn 'key is deprecated - use required instead.'
+          warn 'key is deprecated - use required instead.'
 
           required(name, &block)
         end
@@ -25,6 +25,8 @@ module Dry
 
           if type_spec
             type_map[name] = type_spec
+          else
+            warn "Missing type spec for #{name.inspect} #{type}"
           end
 
           rule

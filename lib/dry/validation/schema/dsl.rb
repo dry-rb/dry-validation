@@ -1,9 +1,12 @@
 require 'dry/validation/schema/rule'
+require 'dry/validation/deprecations'
 
 module Dry
   module Validation
     class Schema
       class DSL < BasicObject
+        include ::Dry::Validation::Deprecations
+
         attr_reader :name, :registry, :rules, :checks, :parent, :options
 
         def self.[](name, options = {})

@@ -23,6 +23,10 @@ module Types
   include Dry::Types.module
 end
 
+Dry::Validation::Deprecations.configure do |config|
+  config.logger = Logger.new(SPEC_ROOT.join('../log/deprecations.log'))
+end
+
 RSpec.configure do |config|
   config.disable_monkey_patching!
 

@@ -1,6 +1,10 @@
+require 'dry/validation/deprecations'
+
 module Dry
   module Validation
     class ErrorCompiler::Input < ErrorCompiler
+      extend Deprecations
+
       attr_reader :name, :input, :rule, :val_type
 
       def initialize(messages, options)
@@ -67,12 +71,12 @@ module Dry
       end
 
       def options_for_inclusion?(args)
-        ::Kernel.warn 'inclusion is deprecated - use included_in instead.'
+        warn 'inclusion is deprecated - use included_in instead.'
         options_for_included_in?(args)
       end
 
       def options_for_exclusion?(args)
-        ::Kernel.warn 'exclusion is deprecated - use excluded_from instead.'
+        warn 'exclusion is deprecated - use excluded_from instead.'
         options_for_excluded_from?(args)
       end
 

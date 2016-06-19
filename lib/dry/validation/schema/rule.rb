@@ -1,7 +1,11 @@
+require 'dry/validation/deprecations'
+
 module Dry
   module Validation
     class Schema
       class Rule < BasicObject
+        extend ::Dry::Validation::Deprecations
+
         INVALID_PREDICATES = {
           value: [],
           maybe: [:empty?, :none?],
@@ -48,7 +52,7 @@ module Dry
         end
 
         def required(*predicates)
-          ::Kernel.warn 'required is deprecated - use filled instead.'
+          warn 'required is deprecated - use filled instead.'
 
           filled(*predicates)
         end
