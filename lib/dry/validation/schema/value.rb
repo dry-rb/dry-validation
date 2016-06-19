@@ -49,7 +49,13 @@ module Dry
                 name, registry: registry, schema_class: schema_class.clone
               ].instance_eval(&block)
 
-              type_map[name] = [val.type_map] if val.schema? && val.type_map?
+              if val.type_map?
+                if root?
+                  @type_map = [val.type_map]
+                else
+                  type_map[name] = [val.type_map]
+                end
+              end
 
               create_rule([:each, val.to_ast])
             end

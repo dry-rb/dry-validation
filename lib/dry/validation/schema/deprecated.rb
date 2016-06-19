@@ -6,7 +6,9 @@ module Dry
       def self.input_processor
         @input_processor ||=
           begin
-            if type_map.size > 0 && config.input_processor != :noop
+            if type_map.is_a?(Dry::Types::Safe) && config.input_processor != :noop
+              type_map
+            elsif type_map.size > 0 && config.input_processor != :noop
               lookup_type("hash", config.input_processor)
                 .public_send(config.hash_type, type_map)
             elsif input_processor_compiler
