@@ -26,12 +26,25 @@ module Dry
 
         def schema(other = nil, &block)
           schema = Schema.create_class(target, other, &block)
+
+          if schema.config.type_specs
+            target.type_map[name] = schema.type_map
+          end
+
           rule = __send__(type, key(:hash?).and(key(schema)))
           add_rule(rule)
         end
 
         def schema?
           target.schema?
+        end
+
+        def type_map
+          target.type_map
+        end
+
+        def type_map?
+          target.type_map?
         end
 
         def required(*predicates)

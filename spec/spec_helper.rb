@@ -19,6 +19,10 @@ Dir[SPEC_ROOT.join('support/**/*.rb')].each(&method(:require))
 
 include Dry::Validation
 
+module Types
+  include Dry::Types.module
+end
+
 RSpec.configure do |config|
   config.disable_monkey_patching!
 

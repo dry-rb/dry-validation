@@ -5,6 +5,7 @@ module Dry
     class Schema::JSON < Schema
       configure do |config|
         config.input_processor = :json
+        config.hash_type = :symbolized
       end
     end
   end

@@ -10,7 +10,8 @@ module Dry
           super
           @type = options.fetch(:type, :key)
           @schema_class = options.fetch(:schema_class, ::Class.new(Schema))
-          @type_map = {}
+          @options = options.merge(type: @type, schema_class: @schema_class)
+          @type_map = parent && parent.root? ? parent.type_map : {}
         end
 
         def key(name, &block)
@@ -19,12 +20,19 @@ module Dry
           required(name, &block)
         end
 
-        def required(name, &block)
-          define(name, Key, &block)
+        def required(name, type_spec = nil, &block)
+          rule = define(name, Key, &block)
+
+          if type_spec
+            type_map[name] = type_spec
+          end
+
+          rule
         end
 
         def schema(other = nil, &block)
           @schema = Schema.create_class(self, other, &block)
+          type_map.update(@schema.type_map)
           hash?.and(@schema)
         end
 
@@ -35,7 +43,12 @@ module Dry
             if predicates.size > 0
               create_rule([:each, infer_predicates(predicates, new).to_ast])
             else
-              val = Value[name, registry: registry].instance_eval(&block)
+              val = Value[
+                name, registry: registry, schema_class: schema_class.clone
+              ].instance_eval(&block)
+
+              type_map[name] = [val.type_map] if val.schema? && val.type_map?
+
               create_rule([:each, val.to_ast])
             end
 
@@ -95,6 +108,10 @@ module Dry
 
         def root?
           name.nil?
+        end
+
+        def type_map?
+          ! type_map.empty?
         end
 
         def schema?

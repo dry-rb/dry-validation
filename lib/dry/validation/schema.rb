@@ -12,7 +12,7 @@ require 'dry/validation/messages'
 require 'dry/validation/error_compiler'
 require 'dry/validation/hint_compiler'
 
-require 'dry/validation/input_processor_compiler'
+require 'dry/validation/schema/deprecated'
 
 module Dry
   module Validation
@@ -30,14 +30,17 @@ module Dry
       setting :rules, []
       setting :checks, []
       setting :options, {}
+      setting :type_map, {}
+      setting :hash_type, :weak
 
       setting :input_processor, :noop
-
       setting :input_processor_map, {
         sanitizer: InputProcessorCompiler::Sanitizer.new,
         json: InputProcessorCompiler::JSON.new,
         form: InputProcessorCompiler::Form.new,
       }.freeze
+
+      setting :type_specs, false
 
       def self.inherited(klass)
         super
@@ -45,8 +48,56 @@ module Dry
         klass.set_registry!
       end
 
+      def self.clone
+        klass = Class.new(self)
+        klass.config.rules = []
+        klass
+      end
+
       def self.set_registry!
         config.registry = PredicateRegistry[self, config.predicates]
+      end
+
+      def self.registry
+        config.registry
+      end
+
+      def self.build_type_map(type_specs, category = config.input_processor)
+        hash_type = config.hash_type
+
+        type_specs.each_with_object({}) do |(name, spec), result|
+          result[name] =
+            case spec
+            when Hash
+              lookup_type("hash", category).public_send(hash_type, spec)
+            when Array
+              if spec.size == 1 && spec[0].is_a?(Hash)
+                member_schema = build_type_map(spec[0], category)
+                member_type = lookup_type("hash", category)
+                  .public_send(hash_type, member_schema)
+
+                lookup_type("array", category).member(member_type)
+              else
+                spec
+                  .map { |id| id.is_a?(Symbol) ? lookup_type(id, category) : id }
+                  .reduce(:|)
+              end
+            when Symbol
+              lookup_type(spec, category)
+            else
+              spec
+            end
+        end
+      end
+
+      def self.lookup_type(name, category)
+        id = "#{category}.#{name}"
+        Types.type_keys.include?(id) ? Types[id] : Types[name.to_s]
+      end
+
+
+      def self.type_map
+        config.type_map
       end
 
       def self.predicates(predicate_set = nil)
@@ -130,31 +181,8 @@ module Dry
         @hint_compiler ||= HintCompiler.new(messages, rules: rule_ast)
       end
 
-      def self.input_processor
-        @input_processor ||=
-          begin
-            if input_processor_compiler
-              input_processor_compiler.(rule_ast)
-            else
-              NOOP_INPUT_PROCESSOR
-            end
-          end
-      end
-
-      def self.input_processor_ast(type)
-        config.input_processor_map.fetch(type).schema_ast(rule_ast)
-      end
-
-      def self.input_processor_compiler
-        @input_processor_comp ||= config.input_processor_map[config.input_processor]
-      end
-
       def self.rule_ast
         @rule_ast ||= config.rules.flat_map(&:rules).map(&:to_ast)
-      end
-
-      def self.registry
-        config.registry
       end
 
       def self.default_options
@@ -181,7 +209,10 @@ module Dry
 
       attr_reader :options
 
+      attr_reader :type_map
+
       def initialize(rules, options)
+        @type_map = self.class.type_map
         @predicates = options.fetch(:predicate_registry).bind(self)
         @rule_compiler = SchemaCompiler.new(predicates)
         @error_compiler = options.fetch(:error_compiler)
