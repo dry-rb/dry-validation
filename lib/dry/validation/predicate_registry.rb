@@ -61,6 +61,10 @@ module Dry
       end
 
       def ensure_valid_predicate(name, args_or_arity)
+        if name == :key?
+          raise InvalidSchemaError, "#{name} is a reserved predicate name"
+        end
+
         if key?(name)
           arity = self[name].arity
 

@@ -128,6 +128,10 @@ module Dry
           self.class.new(registry: registry)
         end
 
+        def key?(name)
+          create_rule([:val, registry[:key?].curry(name).to_ast])
+        end
+
         def predicate(name, *args)
           registry.ensure_valid_predicate(name, args)
           registry[name].curry(*args)

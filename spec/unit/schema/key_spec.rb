@@ -3,13 +3,11 @@ RSpec.describe Schema::Key do
 
   let(:registry) { PredicateRegistry.new(predicates) }
 
-  describe '#key?' do
+  describe '#str?' do
     subject(:user) { Schema::Key[:user, registry: registry] }
 
     it 'returns a key rule' do
-      rule = user.key?(:address)
-
-      expect(rule.to_ast).to eql([:key, [:user, p(:key?, :address)]])
+      expect(user.str?.to_ast).to eql([:key, [:user, p(:str?)]])
     end
 
     it 'returns a key rule & disjunction rule created within the block' do
