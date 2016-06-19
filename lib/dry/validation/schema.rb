@@ -46,7 +46,7 @@ module Dry
         super
         klass.config.options = klass.config.options.dup
 
-        if registry
+        if registry && self != Schema
           klass.config.registry = registry.new(self)
         else
           klass.set_registry!
