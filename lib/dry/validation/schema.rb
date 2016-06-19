@@ -45,12 +45,18 @@ module Dry
       def self.inherited(klass)
         super
         klass.config.options = klass.config.options.dup
-        klass.set_registry!
+
+        if registry
+          klass.config.registry = registry.new(self)
+        else
+          klass.set_registry!
+        end
       end
 
       def self.clone
         klass = Class.new(self)
         klass.config.rules = []
+        klass.config.registry = registry
         klass
       end
 

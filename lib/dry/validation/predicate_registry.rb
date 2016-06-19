@@ -23,8 +23,8 @@ module Dry
           unbound_predicates = other.each_with_object({}) { |(n, p), res|
             res[n] = Logic::Predicate.new(n, fn: p)
           }
-
           predicates.update(unbound_predicates)
+          self
         end
       end
 
@@ -44,6 +44,14 @@ module Dry
       def initialize(external, predicates = {})
         @external = external
         @predicates = predicates
+      end
+
+      def new(klass)
+        new_predicates = predicates
+          .keys
+          .each_with_object({}) { |key, res| res[key] = klass.instance_method(key) }
+
+        self.class.new(external).update(new_predicates)
       end
 
       def [](name)

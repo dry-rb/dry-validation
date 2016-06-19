@@ -150,8 +150,7 @@ RSpec.describe Dry::Validation do
 
   end
 
-
-  it 'should work when no predicate args' do
+  it 'works when no predicate args' do
     schema = Dry::Validation.Schema do
       configure do
         def self.messages
@@ -171,6 +170,21 @@ RSpec.describe Dry::Validation do
     expect(schema.(email: 'foo').messages).to eql(
       email: ['is always false']
     )
+  end
 
+  it 'works with nested schemas' do
+    schema = Dry::Validation.Schema do
+      configure do
+        def ok?(_value)
+          true
+        end
+      end
+
+      required(:foo).schema do
+        required(:bar).value(:ok?)
+      end
+    end
+
+    expect(schema.(foo: { bar: "1" })).to be_success
   end
 end
