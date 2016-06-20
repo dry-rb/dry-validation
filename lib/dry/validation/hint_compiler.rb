@@ -34,6 +34,10 @@ module Dry
         @val_type = options[:val_type]
       end
 
+      def hash
+        @hash ||= [messages, rules, options].hash
+      end
+
       def with(new_options)
         super(new_options.merge(rules: rules))
       end
