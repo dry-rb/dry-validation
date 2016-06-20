@@ -25,8 +25,6 @@ module Dry
 
           if type_spec
             type_map[name] = type_spec
-          else
-            warn "Missing type spec for #{name.inspect} #{type}"
           end
 
           rule
