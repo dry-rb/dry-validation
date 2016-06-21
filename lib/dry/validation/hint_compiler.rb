@@ -23,12 +23,14 @@ module Dry
 
       EXCLUDED = [:none?, :filled?, :key?].freeze
 
+      DEFAULT_OPTIONS = { name: nil, input: nil, message_type: :hint }.freeze
+
       def self.cache
         @cache ||= Concurrent::Map.new
       end
 
       def initialize(messages, options = {})
-        super(messages, { name: nil, input: nil }.merge(options))
+        super(messages, DEFAULT_OPTIONS.merge(options))
         @rules = @options.delete(:rules)
         @excluded = @options.fetch(:excluded, EXCLUDED)
         @val_type = options[:val_type]

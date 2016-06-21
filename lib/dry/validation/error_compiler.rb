@@ -47,11 +47,13 @@ module Dry
         else
           result = schema ? visit(other, name) : visit(other)
 
-          if result.is_a?(Array)
+          msg_hash = if result.is_a?(Array)
             merge(result)
           else
             merge_hints(result)
           end
+
+          dump_messages(msg_hash)
         end
       end
 
@@ -92,7 +94,7 @@ module Dry
             res[name] = merge_hints(msgs)
           else
             all_msgs = msgs + (hints[name] || EMPTY_HINTS)
-            all_msgs.uniq!
+            all_msgs.uniq!(&:signature)
 
             res[name] = all_msgs
           end
@@ -101,6 +103,16 @@ module Dry
 
       def normalize_name(name)
         Array(name).join('.').to_sym
+      end
+
+      def dump_messages(hash)
+        hash.each_with_object({}) do |(key, val), res|
+          res[key] =
+            case val
+            when Hash then dump_messages(val)
+            when Array then val.map(&:to_s)
+            end
+        end
       end
 
       def merge(result)
