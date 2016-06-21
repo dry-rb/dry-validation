@@ -25,6 +25,8 @@ module Dry
 
       DEFAULT_OPTIONS = { name: nil, input: nil, message_type: :hint }.freeze
 
+      EMPTY_MESSAGES = {}.freeze
+
       def self.cache
         @cache ||= Concurrent::Map.new
       end
@@ -55,7 +57,7 @@ module Dry
         val_type = TYPES[predicate]
 
         return with(val_type: val_type) if val_type
-        return {} if excluded.include?(predicate)
+        return EMPTY_MESSAGES if excluded.include?(predicate)
 
         super
       end
