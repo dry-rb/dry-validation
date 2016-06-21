@@ -68,4 +68,43 @@ RSpec.describe 'Validation hints' do
       expect(result.messages).to eql(age: ['must be less than 23'])
     end
   end
+
+  context 'when the message uses input value' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          def self.messages
+            Messages.default.merge(
+              en: {
+                errors: {
+                  blue?: {
+                    failure: '%{value} is not equal to blue',
+                    hint: 'must be equal to blue'
+                  }
+                }
+              }
+            )
+          end
+
+          def blue?(value)
+            value == 'blue'
+          end
+        end
+
+        required(:pill).filled(:blue?)
+      end
+    end
+
+    it 'provides a correct failure message' do
+      expect(schema.(pill: 'red').messages).to eql(
+        pill: ['red is not equal to blue']
+      )
+    end
+
+    it 'provides a correct hint' do
+      expect(schema.(pill: nil).messages).to eql(
+        pill: ['must be filled', 'must be equal to blue']
+      )
+    end
+  end
 end

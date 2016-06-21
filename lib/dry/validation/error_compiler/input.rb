@@ -2,6 +2,20 @@ require 'dry/validation/deprecations'
 
 module Dry
   module Validation
+    Message = Struct.new(:rule, :predicate, :text) do
+      def to_s
+        text
+      end
+
+      def signature
+        @signature ||= [rule, predicate].hash
+      end
+
+      def eql?(other)
+        other.is_a?(String) ? text == other : super
+      end
+    end
+
     class ErrorCompiler::Input < ErrorCompiler
       extend Deprecations
 
@@ -58,13 +72,15 @@ module Dry
             rule
           end
 
-        message =
+        text =
           if full?
             "#{rule_name || tokens[:name]} #{template % tokens}"
           else
             template % tokens
           end
 
+        *arg_vals, _ = args.map(&:last)
+        message = Message.new(rule, [predicate, arg_vals], text)
         path = [[message], *[tokens[:name], *Array(name).reverse].uniq]
 
         path.reduce { |a, e| { e => a } }

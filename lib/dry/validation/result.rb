@@ -45,7 +45,8 @@ module Dry
             hints = hint_compiler.with(options).call
             comp = error_compiler.with(options.merge(hints: hints))
 
-            comp.(error_ast)
+            messages = comp.(error_ast)
+            comp.dump_messages(messages)
           end
       end
 

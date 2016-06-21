@@ -194,7 +194,7 @@ module Dry
       end
 
       def self.rule_ast
-        @rule_ast ||= config.rules.flat_map(&:rules).map(&:to_ast)
+        @rule_ast ||= config.rules.map(&:to_ast)
       end
 
       def self.default_options

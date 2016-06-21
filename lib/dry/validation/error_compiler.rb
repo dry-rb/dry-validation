@@ -10,7 +10,7 @@ module Dry
       def initialize(messages, options = {})
         @messages = messages
         @options = Hash[options]
-        @hints = @options.fetch(:hints, {})
+        @hints = @options.fetch(:hints, DEFAULT_RESULT)
         @full = options.fetch(:full, false)
       end
 
@@ -84,18 +84,28 @@ module Dry
         visit(node)
       end
 
+      def dump_messages(hash)
+        hash.each_with_object({}) do |(key, val), res|
+          res[key] =
+            case val
+            when Hash then dump_messages(val)
+            when Array then val.map(&:to_s)
+            end
+        end
+      end
+
       private
 
       def merge_hints(messages)
         messages.each_with_object({}) do |(name, msgs), res|
-          if msgs.is_a?(Hash)
-            res[name] = merge_hints(msgs)
-          else
-            all_msgs = msgs + (hints[name] || EMPTY_HINTS)
-            all_msgs.uniq!
-
-            res[name] = all_msgs
-          end
+          res[name] =
+            if msgs.is_a?(Hash)
+              res[name] = merge_hints(msgs)
+            else
+              all_msgs = msgs + (hints[name] || EMPTY_HINTS)
+              all_msgs.uniq!(&:signature)
+              all_msgs
+            end
         end
       end
 

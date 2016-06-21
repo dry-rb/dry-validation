@@ -17,6 +17,7 @@ module Dry
         setting :lookup_paths, %w(
           %{root}.rules.%{rule}.%{predicate}.arg.%{arg_type}
           %{root}.rules.%{rule}.%{predicate}
+          %{root}.%{predicate}.%{message_type}
           %{root}.%{predicate}.value.%{rule}.arg.%{arg_type}
           %{root}.%{predicate}.value.%{rule}
           %{root}.%{predicate}.value.%{val_type}.arg.%{arg_type}
@@ -69,7 +70,8 @@ module Dry
             root: root,
             predicate: predicate,
             arg_type: config.arg_types[options[:arg_type]],
-            val_type: config.val_types[options[:val_type]]
+            val_type: config.val_types[options[:val_type]],
+            message_type: options[:message_type] || :failure
           )
 
           tokens[:rule] = predicate unless tokens.key?(:rule)
