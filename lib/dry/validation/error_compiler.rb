@@ -49,8 +49,12 @@ module Dry
 
           if result.is_a?(Array)
             merge(result)
-          else
+          elsif !schema
             merge_hints(result)
+          elsif schema
+            merge_hints(result, hints[schema] || DEFAULT_RESULT)
+          else
+            result
           end
         end
       end
@@ -96,15 +100,21 @@ module Dry
 
       private
 
-      def merge_hints(messages)
+      def merge_hints(messages, hints = self.hints)
         messages.each_with_object({}) do |(name, msgs), res|
           res[name] =
             if msgs.is_a?(Hash)
-              res[name] = merge_hints(msgs)
+              res[name] = merge_hints(msgs, hints)
             else
-              all_msgs = msgs + (hints[name] || EMPTY_HINTS)
-              all_msgs.uniq!(&:signature)
-              all_msgs
+              all_hints = (hints[name] || EMPTY_HINTS)
+
+              if all_hints.is_a?(Array)
+                all_msgs = msgs + all_hints
+                all_msgs.uniq!(&:signature)
+                all_msgs
+              else
+                msgs
+              end
             end
         end
       end

@@ -106,7 +106,7 @@ module Dry
       end
 
       def visit_schema(node)
-        DEFAULT_RESULT
+        merge(node.rule_ast.map(&method(:visit)))
       end
 
       def visit_check(node)

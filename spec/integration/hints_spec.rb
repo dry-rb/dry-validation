@@ -69,6 +69,40 @@ RSpec.describe 'Validation hints' do
     end
   end
 
+  context 'with a nested schema with same rule names' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:code).filled(:str?, eql?: 'foo')
+
+        required(:nested).schema do
+          required(:code).filled(:str?, eql?: 'bar')
+        end
+      end
+    end
+
+    it 'provides error messages' do
+      result = schema.call(code: 'x', nested: { code: 'y' })
+
+      expect(result.messages).to eql(
+        code: ['must be equal to foo'],
+        nested: {
+          code: ['must be equal to bar']
+        }
+      )
+    end
+
+    it 'provides hints' do
+      result = schema.call(code: '', nested: { code: '' })
+
+      expect(result.messages).to eql(
+        code: ['must be filled', 'must be equal to foo'],
+        nested: {
+          code: ['must be filled', 'must be equal to bar']
+        }
+      )
+    end
+  end
+
   context 'when the message uses input value' do
     subject(:schema) do
       Dry::Validation.Schema do
