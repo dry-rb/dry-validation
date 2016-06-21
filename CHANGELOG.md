@@ -2,10 +2,17 @@
 
 ### Added
 
+* Explicit interface for type specs used to set up coercions, ie `required(:age, :int)` (solnic)
 * Support new dry-logic predicates: `:excluded_from?`, `:excludes?`, `:included_in?`, `:includes?`, `:not_eql?`, `:odd?`, `:even?` (jodosha, fran-worley)
+* Support for blocks in `value`, `filled` and `maybe` macros (solnic)
+* Support for dedicated hint messages via `en.errors.#{predicate}.(hint|failure)` look-up paths (solnic)
 * Infer coercion from constrained types  (solnic)
 * Add value macro (coop)
 * Enable .schema to accept objects that respond to #schema (ttdonovan)
+* Support for schema predicates which don't need any arguments (fran-worley)
+* Error and hint messages have access to all predicate arguments by default (fran-worley+solnic)
+* Invalid predicate name in DSL will raise an error (solnic)
+* Predicate with invalid arity in DSL will raise an error (solnic)
 
 ### Fixed
 
@@ -14,12 +21,20 @@
 * Fix bug when validating custom types (coop)
 * Fix depending on deeply nested values in high-lvl rules (solnic)
 * Fix duplicated error message for lt? when hint was used (solnic)
+* Fix hints for nested schemas (solnic)
+* Fix an issue where rules with same names inside nested schemas have incorrect hints (solnic)
+* Fix a bug where hints were being generated 4 times (solnic)
+* Fix duplicated error messages when message is different than a hint (solnic)
 
 ### Changed
 
+* Uses new `:weak` hash constructor from dry-types 0.8.0 which can partially coerce invalid hash (solnic)
+* Coercion inference from predicates is deprecated, use explicit type specs instead (solnic)
+* `key` has been deprecated in favor of `required` (coop)
+* `required` has been deprecated in favor of `filled` (coop)
 * Now relies on dry-logic v0.2.3 and dry-types v0.7.2 (fran-worley)
 * Tring to use illogical predicates with maybe and filled macros now raise InvalidSchemaError (fran-worley)
-* enable coercion on form.true and form.false (fran-worley)
+* Enable coercion on form.true and form.false (fran-worley)
 * Remove attr (will be extracted to a separate gem) (coop)
 * Deprecate required in favour of filled (coop)
 * Deprecate key in favor of required (coop)
@@ -27,6 +42,8 @@
 
 ### Internal
 
+* ~15% performance boost via various optimizations (solnic)
+* When using explicit type specs building a schema is ~80-85x faster (solnic)
 * Integration specs covering predicates with Form and Schema (jodosha)
 * Use latest ruby versions on travis (flash-gordon)
 * Make pry console optional with IRB as a default (flash-gordon)
