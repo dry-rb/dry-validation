@@ -10,7 +10,7 @@ module Dry
       def initialize(messages, options = {})
         @messages = messages
         @options = Hash[options]
-        @hints = @options.fetch(:hints, {})
+        @hints = @options.fetch(:hints, DEFAULT_RESULT)
         @full = options.fetch(:full, false)
       end
 
