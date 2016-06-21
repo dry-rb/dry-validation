@@ -44,6 +44,7 @@ module Dry
       end
 
       def with(new_options)
+        return self if new_options.empty?
         super(new_options.merge(rules: rules))
       end
 
