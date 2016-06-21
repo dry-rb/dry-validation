@@ -47,13 +47,11 @@ module Dry
         else
           result = schema ? visit(other, name) : visit(other)
 
-          msg_hash = if result.is_a?(Array)
+          if result.is_a?(Array)
             merge(result)
           else
             merge_hints(result)
           end
-
-          dump_messages(msg_hash)
         end
       end
 
@@ -86,25 +84,6 @@ module Dry
         visit(node)
       end
 
-      private
-
-      def merge_hints(messages)
-        messages.each_with_object({}) do |(name, msgs), res|
-          if msgs.is_a?(Hash)
-            res[name] = merge_hints(msgs)
-          else
-            all_msgs = msgs + (hints[name] || EMPTY_HINTS)
-            all_msgs.uniq!(&:signature)
-
-            res[name] = all_msgs
-          end
-        end
-      end
-
-      def normalize_name(name)
-        Array(name).join('.').to_sym
-      end
-
       def dump_messages(hash)
         hash.each_with_object({}) do |(key, val), res|
           res[key] =
@@ -113,6 +92,25 @@ module Dry
             when Array then val.map(&:to_s)
             end
         end
+      end
+
+      private
+
+      def merge_hints(messages)
+        messages.each_with_object({}) do |(name, msgs), res|
+          res[name] =
+            if msgs.is_a?(Hash)
+              res[name] = merge_hints(msgs)
+            else
+              all_msgs = msgs + (hints[name] || EMPTY_HINTS)
+              all_msgs.uniq!(&:signature)
+              all_msgs
+            end
+        end
+      end
+
+      def normalize_name(name)
+        Array(name).join('.').to_sym
       end
 
       def merge(result)
