@@ -5,7 +5,7 @@ module Dry
     class HintCompiler < ErrorCompiler::Input
       include Dry::Equalizer(:messages, :rules, :options)
 
-      attr_reader :rules, :excluded
+      attr_reader :rules, :excluded, :cache
 
       TYPES = {
         none?: NilClass,
@@ -32,6 +32,7 @@ module Dry
         @rules = @options.delete(:rules)
         @excluded = @options.fetch(:excluded, EXCLUDED)
         @val_type = options[:val_type]
+        @cache = self.class.cache
       end
 
       def hash
@@ -43,9 +44,7 @@ module Dry
       end
 
       def call
-        self.class.cache.fetch_or_store(hash) do
-          super(rules)
-        end
+        cache.fetch_or_store(hash) { super(rules) }
       end
 
       def visit_predicate(node)
