@@ -17,8 +17,8 @@ end
 
 group :benchmarks do
   gem 'hotch'
-  gem 'activemodel', '5.0.0.beta3'
-  gem 'actionpack', '5.0.0.beta3'
+  gem 'activemodel', '~> 5.0.0.rc'
+  gem 'actionpack', '~> 5.0.0.rc'
   gem 'benchmark-ips'
   gem 'virtus'
 end
