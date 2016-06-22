@@ -22,11 +22,10 @@ end
 schema = Dry::Validation.Schema do
   configure do
     config.messages = :i18n
-    config.type_specs = true
   end
 
-  required(:email, :string).filled
-  required(:age, :int).filled(:int?, gt?: 18)
+  required(:email).filled
+  required(:age).filled(:int?, gt?: 18)
 end
 
 form = Dry::Validation.Form do
@@ -39,7 +38,12 @@ form = Dry::Validation.Form do
   required(:age, :int).filled(:int?, gt?: 18)
 end
 
-params = { 'email' => '', 'age' => '18' }
+params = { 'email' => 'foo@bar.baz', 'age' => '19' }
+coerced = { email: 'foo@bar.baz', age: 19 }
+
+puts schema.(coerced).inspect
+puts form.(params).inspect
+puts User.new(params).validate
 
 Benchmark.ips do |x|
   x.report('ActiveModel::Validations') do
@@ -49,7 +53,7 @@ Benchmark.ips do |x|
   end
 
   x.report('dry-validation / schema') do
-    schema.(params).messages
+    schema.(coerced).messages
   end
 
   x.report('dry-validation / form') do
