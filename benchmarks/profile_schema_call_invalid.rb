@@ -9,10 +9,12 @@ schema = Dry::Validation.Schema do
   required(:address).filled(:hash?)
 end
 
-puts schema.(email: '', age: 18, address: {}).inspect
+input = { email: '', age: 18, address: {} }
+
+puts schema.(input).inspect
 
 Hotch() do
-  1000.times do
-    schema.(email: '', age: 18, address: {})
+  10_000.times do
+    schema.(input)
   end
 end
