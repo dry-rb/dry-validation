@@ -252,7 +252,11 @@ module Dry
       end
 
       def to_proc
-        -> input { self.call(input) }
+        -> input { call(input) }
+      end
+
+      def arity
+        1
       end
 
       private
