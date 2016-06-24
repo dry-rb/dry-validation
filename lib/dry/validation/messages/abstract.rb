@@ -42,10 +42,11 @@ module Dry
           @cache ||= Concurrent::Map.new { |h, k| h[k] = Concurrent::Map.new }
         end
 
-        attr_reader :config
+        attr_reader :config, :cache
 
         def initialize
           @config = self.class.config
+          @cache = self.class.cache[self]
         end
 
         def hash
@@ -95,10 +96,6 @@ module Dry
 
         def root
           config.root
-        end
-
-        def cache
-          self.class.cache[self]
         end
       end
     end
