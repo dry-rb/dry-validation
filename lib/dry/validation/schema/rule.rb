@@ -4,7 +4,7 @@ module Dry
   module Validation
     class Schema
       class Rule < BasicObject
-        extend ::Dry::Validation::Deprecations
+        include ::Dry::Validation::Deprecations
 
         INVALID_PREDICATES = {
           value: [],

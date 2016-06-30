@@ -17,7 +17,7 @@ module Dry
     end
 
     class ErrorCompiler::Input < ErrorCompiler
-      extend Deprecations
+      include Deprecations
 
       attr_reader :name, :input, :rule, :val_type
 
