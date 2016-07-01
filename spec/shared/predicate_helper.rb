@@ -8,7 +8,6 @@ shared_context 'predicate helper' do
       include Dry::Logic::Predicates
 
       predicate(:email?) { |value| true }
-      predicate(:type?) { |type| true }
     }
   end
 end

@@ -1,3 +1,4 @@
+require 'dry/logic/predicates'
 require 'dry/types/constraints'
 
 require 'dry/validation/predicate_registry'
@@ -22,7 +23,7 @@ module Dry
       NOOP_INPUT_PROCESSOR = -> input { input }
 
       setting :path
-      setting :predicates, Types::Predicates
+      setting :predicates, Logic::Predicates
       setting :registry
       setting :messages, :yaml
       setting :messages_file

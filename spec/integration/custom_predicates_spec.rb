@@ -50,7 +50,7 @@ RSpec.describe Dry::Validation do
       after do
         # HACK: reset global predicates configuration
         Dry::Validation::Schema.configure do |config|
-          config.predicates = Dry::Types::Predicates
+          config.predicates = Dry::Logic::Predicates
         end
       end
 

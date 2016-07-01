@@ -14,6 +14,10 @@ module Dry
           @type_map = parent && parent.root? ? parent.type_map : {}
         end
 
+        def predicates(mod)
+          @registry = options[:registry] = schema_class.predicates(mod)
+        end
+
         def input(type)
           schema_class.config.input = type
           self

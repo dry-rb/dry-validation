@@ -25,7 +25,8 @@ module Dry
       }
 
       dsl = Schema::Value.new(dsl_opts)
-      dsl.instance_exec(&block)
+      dsl.predicates(options[:predicates]) if options.key?(:predicates)
+      dsl.instance_exec(&block) if block
 
       klass = dsl.schema_class
 
