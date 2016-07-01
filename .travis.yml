@@ -1,9 +1,9 @@
 language: ruby
 sudo: false
 cache: bundler
-bundler_args: --without console benchmarks
+bundler_args: --full-index --without console benchmarks
 script:
-  - bundle install dry-logic && bundle exec rake spec
+  - bundle exec rake spec
 rvm:
   - 2.0
   - 2.1.10
