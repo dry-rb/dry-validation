@@ -13,7 +13,7 @@ group :tools do
 end
 
 group :benchmarks do
-  gem 'hotch'
+  gem 'hotch', platform: :mri
   gem 'activemodel', '~> 5.0.0.rc'
   gem 'actionpack', '~> 5.0.0.rc'
   gem 'benchmark-ips'
