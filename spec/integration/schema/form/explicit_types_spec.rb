@@ -26,6 +26,19 @@ RSpec.describe Dry::Validation::Schema::Form, 'explicit types' do
     end
   end
 
+  context 'single type spec with an array' do
+    subject(:schema) do
+      Dry::Validation.Form do
+        configure { config.type_specs = true }
+        required(:nums, [:int])
+      end
+    end
+
+    it 'uses form coercion' do
+      expect(schema.(nums: %w(1 2 3)).to_h).to eql(nums: [1, 2, 3])
+    end
+  end
+
   context 'sum type spec without rules' do
     subject(:schema) do
       Dry::Validation.Form do

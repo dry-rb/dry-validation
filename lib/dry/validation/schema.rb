@@ -86,8 +86,12 @@ module Dry
               when Hash
                 lookup_type("hash", category).public_send(config.hash_type, spec)
               when Array
-                if spec.size == 1 && spec[0].is_a?(Hash)
-                  build_array_type(spec[0], category)
+                if spec.size == 1
+                  if spec[0].is_a?(Hash)
+                    build_array_type(spec[0], category)
+                  else
+                    lookup_type("array", category).member(lookup_type(spec[0], category))
+                  end
                 else
                   spec
                     .map { |id| id.is_a?(Symbol) ? lookup_type(id, category) : id }
