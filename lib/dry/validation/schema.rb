@@ -34,6 +34,7 @@ module Dry
       setting :type_map, {}
       setting :hash_type, :weak
       setting :input, nil
+      setting :dsl_extensions, nil
 
       setting :input_processor, :noop
       setting :input_processor_map, {

@@ -24,7 +24,10 @@ module Dry
         parent: options[:parent]
       }
 
+      dsl_ext = schema_class.config.dsl_extensions
+
       dsl = Schema::Value.new(dsl_opts)
+      dsl_ext.__send__(:extend_object, dsl) if dsl_ext
       dsl.predicates(options[:predicates]) if options.key?(:predicates)
       dsl.instance_exec(&block) if block
 
