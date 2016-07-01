@@ -156,10 +156,10 @@ module Dry
         private
 
         def infer_predicates(predicates, infer_on)
-          predicates.reduce(infer_on) { |a, e|
-            args = e.is_a?(::Hash) ? e.first : ::Kernel.Array(e)
-            a.__send__(*args)
-          }
+          predicates.map { |predicate|
+            name, *args = ::Kernel.Array(predicate).first
+            infer_on.__send__(name, *args)
+          }.reduce(:and)
         end
 
         def method_missing(meth, *args, &block)

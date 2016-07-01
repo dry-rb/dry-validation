@@ -75,6 +75,10 @@ module Dry
           self.class.new(options.merge(new_options))
         end
 
+        def predicate?(meth)
+          registry.key?(meth)
+        end
+
         private
 
         def define(name, key_class, op = :and, &block)

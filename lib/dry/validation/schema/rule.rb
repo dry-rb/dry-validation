@@ -82,7 +82,7 @@ module Dry
           from_predicates = infer_predicates(predicates, :value).reduce(:and)
           from_block = block ? Key[name, registry: registry].instance_eval(&block) : nil
 
-          rule = [*from_predicates, *from_block].compact.reduce(:and)
+          rule = [from_predicates, from_block].compact.reduce(:and)
 
           add_rule(__send__(type, rule))
         end
@@ -93,7 +93,7 @@ module Dry
           from_predicates = infer_predicates(predicates, :maybe).reduce(:and)
           from_block = block ? Key[name, registry: registry].instance_eval(&block) : nil
 
-          right = [*from_predicates, *from_block].compact.reduce(:and) || key(:filled?)
+          right = [from_predicates, from_block].compact.reduce(:and) || key(:filled?)
 
           rule = left.or(right || key(:filled?))
 
@@ -174,6 +174,14 @@ module Dry
         end
 
         private
+
+        def method_missing(meth, *args, &block)
+          if target.predicate?(meth)
+            target.__send__(meth, *args, &block)
+          else
+            super
+          end
+        end
 
         def key(predicate, args = [])
           new(target.node(predicate, *args))
