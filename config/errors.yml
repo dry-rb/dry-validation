@@ -29,6 +29,7 @@ en:
     hash?: "must be a hash"
 
     included_in?: "must be one of: %{list}"
+    inclusion?: "must be one of: %{list}"
 
     includes?: "must include %{value}"
 
