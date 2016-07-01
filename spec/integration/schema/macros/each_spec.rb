@@ -63,6 +63,38 @@ RSpec.describe 'Macros #each' do
     end
   end
 
+  context 'with filled macro' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:foo).filled(size?: 2) { each(:str?) }
+      end
+    end
+
+    context 'with valid input' do
+      let(:input) { { foo: %w(a b) } }
+
+      it 'is successful' do
+        expect(result).to be_successful
+      end
+    end
+
+    context 'when value is not valid' do
+      let(:input) { { foo: ["foo"] } }
+
+      it 'is not successful' do
+        expect(result).to be_failing(["size must be 2"])
+      end
+    end
+
+    context 'when value has invalid elements' do
+      let(:input) { { foo: [:foo, "foo"] } }
+
+      it 'is not successful' do
+        expect(result).to be_failing(0 => ["must be a string"])
+      end
+    end
+  end
+
   context 'with maybe macro' do
     subject(:schema) do
       Dry::Validation.Schema do
