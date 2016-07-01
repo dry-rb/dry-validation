@@ -259,6 +259,10 @@ module Dry
         1
       end
 
+      def to_ast
+        self.class.to_ast
+      end
+
       private
 
       def apply(input)

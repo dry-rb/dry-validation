@@ -158,7 +158,12 @@ module Dry
         def infer_predicates(predicates, infer_on)
           predicates.map { |predicate|
             name, *args = ::Kernel.Array(predicate).first
-            infer_on.__send__(name, *args)
+
+            if name.is_a?(Schema)
+              infer_on.schema(name)
+            else
+              infer_on.__send__(name, *args)
+            end
           }.reduce(:and)
         end
 

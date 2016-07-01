@@ -127,6 +127,41 @@ RSpec.describe 'Macros #each' do
     end
   end
 
+  context 'with external schema macro' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:foo).each(FooSchema)
+      end
+    end
+
+    before do
+      FooSchema = Dry::Validation.Schema do
+        required(:bar).filled(:str?)
+      end
+    end
+
+    after do
+      Object.send(:remove_const, :FooSchema)
+    end
+
+    context 'with valid input' do
+      let(:input) { { foo: [{ bar: "baz" }] } }
+
+      it 'is successful' do
+        expect(result).to be_successful
+      end
+    end
+
+    context 'when value is not valid' do
+      let(:input) { { foo: [{ bar: 1 }] } }
+
+      it 'is not successful' do
+        # FIXME: our be_failing didn't work with such nested wow hash
+        expect(result.messages).to eql(foo: { 0 => { bar: ["must be a string"] } })
+      end
+    end
+  end
+
   context 'with a block' do
     context 'with a nested schema' do
       subject(:schema) do
