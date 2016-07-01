@@ -3,7 +3,7 @@ sudo: false
 cache: bundler
 bundler_args: --without console benchmarks
 script:
-  - bundle exec rake spec
+  - bundle install dry-logic && bundle exec rake spec
 rvm:
   - 2.0
   - 2.1.10
