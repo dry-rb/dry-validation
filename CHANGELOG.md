@@ -1,11 +1,16 @@
-# v0.8.0 to-be-released
+# v0.8.0 2016-07-01
 
 ### Added
 
 * Explicit interface for type specs used to set up coercions, ie `required(:age, :int)` (solnic)
 * Support new dry-logic predicates: `:excluded_from?`, `:excludes?`, `:included_in?`, `:includes?`, `:not_eql?`, `:odd?`, `:even?` (jodosha, fran-worley)
 * Support for blocks in `value`, `filled` and `maybe` macros (solnic)
+* Support for passing a schema to `value|filled|maybe` macros ie `maybe(SomeSchema)` (solnic)
+* Support for `each(SomeSchema)` (solnic)
+* Support for `value|filled|maybe` macros + `each` inside a block ie: `maybe(:filled?) { each(:int?) }` (solnic)
 * Support for dedicated hint messages via `en.errors.#{predicate}.(hint|failure)` look-up paths (solnic)
+* Support for configuring custom DSL extensions via `dsl_extensions` setting on Schema class (solnic)
+* Support for preconfiguring a predicate for the input value ie `value :hash?` used for prerequisite-checks (solnic)
 * Infer coercion from constrained types  (solnic)
 * Add value macro (coop)
 * Enable .schema to accept objects that respond to #schema (ttdonovan)
@@ -44,6 +49,7 @@
 
 * ~15% performance boost via various optimizations (solnic)
 * When using explicit type specs building a schema is ~80-85x faster (solnic)
+* No longer uses `Dry::Types::Predicates` as `:type?` predicate was moved to dry-logic (solnic)
 * Integration specs covering predicates with Form and Schema (jodosha)
 * Use latest ruby versions on travis (flash-gordon)
 * Make pry console optional with IRB as a default (flash-gordon)
