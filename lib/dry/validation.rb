@@ -29,8 +29,18 @@ module Dry
 
       klass = dsl.schema_class
 
+      base_rules = klass.config.rules + (options.fetch(:rules, []) + dsl.rules)
+
+      rules =
+        if klass.config.input
+          input_rule = dsl.__send__(klass.config.input)
+          [input_rule.and(dsl.with(rules: base_rules))]
+        else
+          base_rules
+        end
+
       klass.configure do |config|
-        config.rules = config.rules + (options.fetch(:rules, []) + dsl.rules)
+        config.rules = rules
         config.checks = config.checks + dsl.checks
         config.path = dsl.path
         config.type_map = klass.build_type_map(dsl.type_map) if config.type_specs

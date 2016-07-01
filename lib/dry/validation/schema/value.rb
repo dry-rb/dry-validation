@@ -14,6 +14,11 @@ module Dry
           @type_map = parent && parent.root? ? parent.type_map : {}
         end
 
+        def input(type)
+          schema_class.config.input = type
+          self
+        end
+
         def key(name, &block)
           warn 'key is deprecated - use required instead.'
 
