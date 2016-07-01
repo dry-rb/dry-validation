@@ -148,6 +148,8 @@ module Dry
             [type, [name, [:type, input]]]
           elsif input.is_a?(::Class) && input < ::Dry::Types::Struct
             [type, [name, [:schema, Schema.create_class(self, input)]]]
+          elsif input.is_a?(Schema)
+            [type, [name, schema(input).to_ast]]
           else
             [type, [name, input.to_ast]]
           end

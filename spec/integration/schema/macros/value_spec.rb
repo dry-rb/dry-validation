@@ -77,5 +77,29 @@ RSpec.describe 'Macros #value' do
         )
       end
     end
+
+    context 'with a schema' do
+      subject(:schema) do
+        Dry::Validation.Schema do
+          required(:data).value(DataSchema)
+        end
+      end
+
+      before do
+        DataSchema = Dry::Validation.Schema do
+          required(:foo).filled(size?: 2..10)
+        end
+      end
+
+      after do
+        Object.send(:remove_const, :DataSchema)
+      end
+
+      it 'uses the schema' do
+        expect(schema.(data: { foo: '' }).messages).to eql(
+          data: { foo: ['must be filled', 'size must be within 2 - 10'] }
+        )
+      end
+    end
   end
 end
