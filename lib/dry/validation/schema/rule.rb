@@ -95,7 +95,7 @@ module Dry
 
           right = [from_predicates, from_block].compact.reduce(:and) || key(:filled?)
 
-          rule = left.or(right || key(:filled?))
+          rule = left.or(right)
 
           add_rule(__send__(type, rule))
         end
