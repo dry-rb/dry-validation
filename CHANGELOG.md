@@ -34,10 +34,9 @@
 ### Changed
 
 * Uses new `:weak` hash constructor from dry-types 0.8.0 which can partially coerce invalid hash (solnic)
-* Coercion inference from predicates is deprecated, use explicit type specs instead (solnic)
 * `key` has been deprecated in favor of `required` (coop)
 * `required` has been deprecated in favor of `filled` (coop)
-* Now relies on dry-logic v0.2.3 and dry-types v0.7.2 (fran-worley)
+* Now relies on dry-logic v0.3.0 and dry-types v0.8.0 (fran-worley)
 * Tring to use illogical predicates with maybe and filled macros now raise InvalidSchemaError (fran-worley)
 * Enable coercion on form.true and form.false (fran-worley)
 * Remove attr (will be extracted to a separate gem) (coop)
