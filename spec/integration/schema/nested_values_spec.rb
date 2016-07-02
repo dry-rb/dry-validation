@@ -37,7 +37,9 @@ RSpec.describe Schema, 'using nested values' do
   end
 
   it 'fails when offers is true and newsletter is true' do
-    expect(schema.(settings: { offers: true, newsletter: true }, email: 'jane@doe').messages).to eql(
+    input = { settings: { offers: true, newsletter: true }, email: 'jane@doe' }
+
+    expect(schema.(input).messages).to eql(
       settings: { newsletter: ['must be false'] }
     )
   end
