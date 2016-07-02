@@ -97,8 +97,16 @@ module Dry
       end
 
       def visit_key(node)
-        name, predicate = node
-        with(name: Array([*self.name, name])).visit(predicate)
+        key, predicate = node
+
+        path =
+          if name && (name.is_a?(Array) || name != key)
+            [*name, key].uniq
+          else
+            key
+          end
+
+        with(name: path).visit(predicate)
       end
       alias_method :visit_attr, :visit_key
 

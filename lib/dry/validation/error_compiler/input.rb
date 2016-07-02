@@ -80,10 +80,14 @@ module Dry
           end
 
         *arg_vals, _ = args.map(&:last)
-        message = Message.new(rule, [predicate, arg_vals], text)
-        path = [[message], *[tokens[:name], *Array(name).reverse].uniq]
 
-        path.reduce { |a, e| { e => a } }
+        path = name ? Array(name).reverse : Array(tokens[:name])
+        path.unshift(tokens[:name]) unless path.include?(tokens[:name])
+
+        message = Message.new(rule, [predicate, arg_vals], text)
+        msgpath = [[message], *path]
+
+        msgpath.reduce { |a, e| { e => a } }
       end
 
       def options_for_inclusion?(args)
