@@ -1,3 +1,5 @@
+require 'dry/validation/message'
+
 module Dry
   module Validation
     class ErrorCompiler
@@ -92,18 +94,6 @@ module Dry
         visit(node, opts)
       end
 
-      def dump_messages(hash)
-        hash.each_with_object({}) do |(key, val), res|
-          res[key] =
-            case val
-            when Hash then dump_messages(val)
-            when Array then val.map(&:to_s)
-            end
-        end
-      end
-
-      #### COPIED FROM ErrorCompiler::Input
-
       def visit_predicate(node, base_opts = {})
         predicate, args = node
 
@@ -181,6 +171,16 @@ module Dry
         visit(other, opts.merge(path: Array(path)))
       end
 
+      def dump_messages(hash)
+        hash.each_with_object({}) do |(key, val), res|
+          res[key] =
+            case val
+            when Hash then dump_messages(val)
+            when Array then val.map(&:to_s)
+            end
+        end
+      end
+
       def options_for(predicate, args)
         meth = :"options_for_#{predicate}"
 
@@ -220,8 +220,6 @@ module Dry
           args
         end
       end
-
-      #### / COPIED FROM ErrorCompiler::Input
 
       private
 
@@ -283,5 +281,3 @@ module Dry
     end
   end
 end
-
-require 'dry/validation/error_compiler/input'

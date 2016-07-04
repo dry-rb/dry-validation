@@ -1,5 +1,3 @@
-require 'dry/validation/error_compiler/input'
-
 module Dry
   module Validation
     class HintCompiler < ErrorCompiler
