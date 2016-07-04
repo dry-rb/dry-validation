@@ -98,7 +98,7 @@ module Dry
         end
 
         def cache
-          self.class.cache[self]
+          @cache ||= self.class.cache[self]
         end
       end
     end
