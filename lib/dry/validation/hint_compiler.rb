@@ -2,7 +2,7 @@ require 'dry/validation/error_compiler/input'
 
 module Dry
   module Validation
-    class HintCompiler < ErrorCompiler::Input
+    class HintCompiler < ErrorCompiler
       include Dry::Equalizer(:messages, :rules, :options)
 
       attr_reader :rules, :excluded, :cache
@@ -21,9 +21,7 @@ module Dry
         array?: Array
       }.freeze
 
-      EXCLUDED = [:none?, :filled?, :key?].freeze
-
-      DEFAULT_OPTIONS = { name: nil, input: nil, message_type: :hint }.freeze
+      EXCLUDED = (%i(key? none? filled?) + TYPES.keys).freeze
 
       EMPTY_MESSAGES = {}.freeze
 
@@ -32,11 +30,14 @@ module Dry
       end
 
       def initialize(messages, options = {})
-        super(messages, DEFAULT_OPTIONS.merge(options))
+        super(messages, Hash[options])
         @rules = @options.delete(:rules)
         @excluded = @options.fetch(:excluded, EXCLUDED)
-        @val_type = options[:val_type]
         @cache = self.class.cache
+      end
+
+      def message_type
+        :hint
       end
 
       def hash
@@ -52,70 +53,50 @@ module Dry
         cache.fetch_or_store(hash) { super(rules) }
       end
 
-      def visit_predicate(node)
+      def visit_predicate(node, opts = {})
         predicate, _ = node
-
-        val_type = TYPES[predicate]
-
-        return with(val_type: val_type) if val_type
         return EMPTY_MESSAGES if excluded.include?(predicate)
-
-        super
+        super(node, opts.update(hint: true, val_type: TYPES[predicate]))
       end
 
-      def visit_set(node)
+      def visit_set(node, *args)
         result = node.map do |el|
-          visit(el)
+          visit(el, *args)
         end
         merge(result)
       end
 
-      def visit_each(node)
-        visit(node)
+      def visit_each(node, opts = {})
+        visit(node, opts.update(each: true))
       end
 
-      def visit_or(node)
+      def visit_or(node, *args)
         left, right = node
-        merge([visit(left), visit(right)])
+        merge([visit(left, *args), visit(right, *args)])
       end
 
-      def visit_and(node)
-        left, right = node
-
-        result = visit(left)
-
-        if result.is_a?(self.class)
-          result.visit(right)
-        else
-          visit(right)
-        end
-      end
-
-      def visit_implication(node)
+      def visit_and(node, *args)
         _, right = node
-        visit(right)
+        visit(right, *args)
       end
 
-      def visit_key(node)
-        key, predicate = node
-
-        path =
-          if name && (name.is_a?(Array) || name != key)
-            [*name, key].uniq
-          else
-            key
-          end
-
-        with(name: path).visit(predicate)
-      end
-      alias_method :visit_attr, :visit_key
-
-      def visit_val(node)
-        visit(node)
+      def visit_implication(node, *args)
+        _, right = node
+        visit(right, *args)
       end
 
-      def visit_schema(node)
-        merge(node.rule_ast.map(&method(:visit)))
+      def visit_schema(node, opts = {})
+        path = node.config.path
+        rules = node.rule_ast
+        schema_opts = opts.merge(path: [path])
+
+        result = merge(rules.map { |rule| visit(rule, schema_opts) })
+
+        if result.size > 0
+          result
+        else
+          DEFAULT_RESULT
+        end
       end
 
       def visit_check(node)
@@ -130,14 +111,8 @@ module Dry
         DEFAULT_RESULT
       end
 
-      def visit_type(node)
-        visit(node.rule.to_ast)
-      end
-
-      private
-
-      def merge(result)
-        super(result.reject { |el| el.is_a?(self.class) })
+      def visit_type(node, *args)
+        visit(node.rule.to_ast, *args)
       end
     end
   end

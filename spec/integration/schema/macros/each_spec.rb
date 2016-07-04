@@ -58,7 +58,7 @@ RSpec.describe 'Macros #each' do
       let(:input) { { foo: nil } }
 
       it 'is not successful' do
-        expect(result).to be_failing ["must be an array", "size must be 3"]
+        expect(result).to be_failing ["must be an array"]
       end
     end
   end

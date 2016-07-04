@@ -46,12 +46,11 @@ module Dry
             comp = error_compiler.with(options.merge(hints: hints))
 
             messages = comp.(error_ast)
-            msg_hash = comp.dump_messages(messages)
 
-            if msg_hash.key?(nil)
-              msg_hash.values.flatten
+            if messages.is_a?(Hash)
+              comp.dump_messages(messages)
             else
-              msg_hash
+              messages.map(&:to_s)
             end
           end
       end

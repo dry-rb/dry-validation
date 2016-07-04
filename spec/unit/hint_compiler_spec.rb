@@ -28,7 +28,7 @@ RSpec.describe HintCompiler, '#call' do
           [:val, p(:key?, :height)],
           [
             :or, [
-              [:attr, [:height, p(:none?)]],
+              [:key, [:height, p(:none?)]],
               [
                 :and, [
                   [:key, [:height, p(:int?)]],

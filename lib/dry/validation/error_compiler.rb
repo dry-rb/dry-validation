@@ -1,7 +1,7 @@
 module Dry
   module Validation
     class ErrorCompiler
-      attr_reader :messages, :hints, :options
+      attr_reader :messages, :hints, :options, :locale
 
       DEFAULT_RESULT = {}.freeze
       EMPTY_HINTS = [].freeze
@@ -11,15 +11,20 @@ module Dry
         @messages = messages
         @options = Hash[options]
         @hints = @options.fetch(:hints, DEFAULT_RESULT)
-        @full = options.fetch(:full, false)
+        @full = @options.fetch(:full, false)
+        @locale = @options.fetch(:locale, :en)
+      end
+
+      def message_type
+        :failure
       end
 
       def full?
         @full
       end
 
-      def call(ast, *args)
-        merge(ast.map { |node| visit(node, *args) }) || DEFAULT_RESULT
+      def call(ast)
+        merge(ast.map { |node| visit(node) }) || DEFAULT_RESULT
       end
 
       def with(new_options)
@@ -30,62 +35,61 @@ module Dry
         __send__(:"visit_#{node[0]}", node[1], *args)
       end
 
-      def visit_schema(node, *args)
-        visit_error(node[1], true)
+      def visit_schema(node, opts = {})
+        visit(node)
       end
 
-      def visit_set(node, *args)
-        call(node, *args)
+      def visit_set(node)
+        call(node)
       end
 
-      def visit_error(error, schema = false)
-        name, other = error
-        message = messages[name]
+      def visit_error(node, opts = {})
+        base_path, error = node
+        node_path = Array(opts.fetch(:path, base_path))
 
-        if message
-          { name => [message] }
+        path = if base_path.is_a?(Array) && base_path.size > node_path.size
+                 base_path
+               else
+                 node_path
+               end
+
+        text = messages[base_path]
+
+        if text
+          Message.new(base_path, node, path, text)
         else
-          result = schema ? visit(other, name) : visit(other)
+          result = visit(error, opts.merge(path: path))
 
-          if result.is_a?(Array)
-            merge(result)
-          elsif !schema
-            merge_hints(result)
-          elsif schema
-            merge_hints(result, hints[schema] || DEFAULT_RESULT)
-          else
-            result
+          case result
+          when Hash then merge_hints(result)
+          when Message then result.root? ? result : merge_hints(result)
+          when Array then result
           end
         end
       end
 
-      def visit_input(node, path = nil)
-        name, result = node
-        visit(result, path || name)
+      def visit_input(node, opts = {})
+        rule, result = node
+        visit(result, opts.merge(rule: rule))
       end
 
-      def visit_result(node, name = nil)
-        value, other = node
-        input_visitor(name, value).visit(other)
+      def visit_result(node, opts = {})
+        input, other = node
+        visit(other, opts.merge(input: input))
       end
 
-      def visit_implication(node)
+      def visit_implication(node, *args)
         _, right = node
-        visit(right)
+        visit(right, *args)
       end
 
-      def visit_key(rule)
-        _, predicate = rule
-        visit(predicate)
+      def visit_key(node, opts = {})
+        name, predicate = node
+        visit(predicate, opts.merge(name: name))
       end
 
-      def visit_attr(rule)
-        _, predicate = rule
-        visit(predicate)
-      end
-
-      def visit_val(node)
-        visit(node)
+      def visit_val(node, opts = {})
+        visit(node, opts)
       end
 
       def dump_messages(hash)
@@ -98,15 +102,155 @@ module Dry
         end
       end
 
+      #### COPIED FROM ErrorCompiler::Input
+
+      def visit_predicate(node, base_opts = {})
+        predicate, args = node
+
+        input, rule, name, val_type = base_opts
+          .values_at(:input, :rule, :name, :val_type)
+
+        is_hint = base_opts[:hint] == true
+        is_each = base_opts[:each] == true
+
+        val_type ||= input.class if input
+
+        lookup_options = base_opts.merge(
+          val_type: val_type,
+          arg_type: args.size > 0 && args[0][1].class,
+          message_type: message_type,
+          locale: locale
+        )
+
+        tokens = options_for(predicate, args)
+        template = messages[predicate, lookup_options.merge(tokens)]
+
+        name ||= tokens[:name]
+        rule ||= (name || tokens[:name])
+
+        unless template
+          raise MissingMessageError.new("message for #{predicate} was not found")
+        end
+
+        rule_name =
+          if rule.is_a?(Symbol)
+            messages.rule(rule, lookup_options) || rule
+          else
+            rule
+          end
+
+        text =
+          if full?
+            "#{rule_name || tokens[:name]} #{template % tokens}"
+          else
+            template % tokens
+          end
+
+        *arg_vals, _ = args.map(&:last)
+
+        if name.is_a?(Array)
+          path = name
+        else
+          path = base_opts.fetch(:path, Array(name))
+          path = path + [name] unless path.last == name || name.nil?
+        end
+
+        msg = Message.new(rule, [predicate, arg_vals], path, text)
+        msg.hint!(is_each) if is_hint
+        msg
+      end
+
+      def visit_each(node, opts = {})
+        merge(node.map { |el| visit(el, opts) }.map(&:to_h))
+      end
+
+      def visit_set(node, opts = {})
+        result = node.map do |input|
+          visit(input, opts)
+        end
+        merge(result)
+      end
+
+      def visit_el(node, opts = {})
+        idx, el = node
+        visit(el, opts.merge(path: opts[:path] + [idx]))
+      end
+
+      def visit_check(node, opts = {})
+        path, other = node
+        visit(other, opts.merge(path: Array(path)))
+      end
+
+      def options_for(predicate, args)
+        meth = :"options_for_#{predicate}"
+
+        defaults = Hash[args]
+
+        if respond_to?(meth)
+          defaults.merge!(__send__(meth, defaults))
+        end
+
+        defaults
+      end
+
+      def options_for_inclusion?(args)
+        warn 'inclusion is deprecated - use included_in instead.'
+        options_for_included_in?(args)
+      end
+
+      def options_for_exclusion?(args)
+        warn 'exclusion is deprecated - use excluded_from instead.'
+        options_for_excluded_from?(args)
+      end
+
+      def options_for_excluded_from?(args)
+        { list: args[:list].join(', ') }
+      end
+
+      def options_for_included_in?(args)
+        { list: args[:list].join(', ') }
+      end
+
+      def options_for_size?(args)
+        size = args[:size]
+
+        if size.is_a?(Range)
+          { left: size.first, right: size.last }
+        else
+          args
+        end
+      end
+
+      #### / COPIED FROM ErrorCompiler::Input
+
       private
 
       def merge_hints(messages, hints = self.hints)
-        messages.each_with_object({}) do |(name, msgs), res|
+        merge(Array[messages].flatten.map(&:to_h)).each_with_object({}) do |(name, msgs), res|
           res[name] =
             if msgs.is_a?(Hash)
-              res[name] = merge_hints(msgs, hints)
+              res[name] =
+                if hints
+                  merge_hints(msgs, hints[name])
+                else
+                  msgs
+                end
             else
-              all_hints = (hints[name] || EMPTY_HINTS)
+              candidates =
+                if hints.is_a?(Array)
+                  hints
+                elsif hints.is_a?(Hash)
+                  hints[name] || EMPTY_HINTS
+                else
+                  EMPTY_HINTS
+                end
+
+              all_hints =
+                if name.is_a?(Symbol) && candidates.is_a?(Array)
+                  candidates.reject(&:each?)
+                else
+                  candidates
+                end
 
               if all_hints.is_a?(Array)
                 all_msgs = msgs + all_hints
@@ -119,12 +263,12 @@ module Dry
         end
       end
 
-      def normalize_name(name)
-        Array(name).join('.').to_sym
-      end
-
       def merge(result)
-        result.reduce { |a, e| deep_merge(a, e) } || DEFAULT_RESULT
+        result
+          .flatten
+          .reject(&:empty?)
+          .map(&:to_h)
+          .reduce { |a, e| deep_merge(a, e) } || DEFAULT_RESULT
       end
 
       def deep_merge(left, right)
@@ -135,10 +279,6 @@ module Dry
             a + e
           end
         end
-      end
-
-      def input_visitor(name, input)
-        Input.new(messages, options.merge(name: name, input: input))
       end
     end
   end
