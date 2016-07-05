@@ -49,11 +49,11 @@ module Dry
         tokens = options_for(predicate, args)
         template = messages[predicate, lookup_options.update(tokens)]
 
-        name ||= tokens[:name]
-        rule ||= (name || tokens[:name])
+        name ||= base_opts[:name]
+        rule ||= name
 
         unless template
-          raise MissingMessageError.new("message for #{predicate} was not found")
+          raise MissingMessageError, "message for #{predicate} was not found"
         end
 
         text =
@@ -67,8 +67,11 @@ module Dry
         if name.is_a?(Array)
           path = name
         else
-          path = base_opts.fetch(:path, Array(name))
-          path = path + [name] unless path.last == name || name.nil?
+          path = base_opts[:path] || Array(name)
+
+          if name && path.last != name
+            path += [name]
+          end
         end
 
         is_each = base_opts[:each] == true
