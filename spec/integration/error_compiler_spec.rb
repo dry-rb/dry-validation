@@ -48,7 +48,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     end
 
     it 'converts error ast into another format' do
-      expect(error_compiler.(ast)).to eql(
+      expect(error_compiler.(ast).to_h).to eql(
         name: ["+name+ key is missing in the hash"],
         gender: ["Please provide your gender"],
         age: ["must be greater than 18"],
@@ -80,7 +80,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     end
 
     it 'converts error ast into another format' do
-      expect(error_compiler.(ast)).to eql(
+      expect(error_compiler.(ast).to_h).to eql(
         settings: { newsletter: ['must be false'] }
       )
     end
@@ -103,7 +103,7 @@ RSpec.describe Dry::Validation::ErrorCompiler do
     end
 
     it 'converts error ast into another format' do
-      expect(error_compiler.(ast)).to eql(
+      expect(error_compiler.(ast).to_h).to eql(
         payments: { 1 => { method: ['+method+ key is missing in the hash'] } }
       )
     end

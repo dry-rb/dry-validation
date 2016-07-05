@@ -21,8 +21,6 @@ module Dry
 
       EXCLUDED = (%i(key? none? filled?) + TYPES.keys).freeze
 
-      EMPTY_MESSAGES = {}.freeze
-
       def self.cache
         @cache ||= Concurrent::Map.new
       end
@@ -36,6 +34,10 @@ module Dry
 
       def message_type
         :hint
+      end
+
+      def message_class
+        Hint
       end
 
       def hash
@@ -53,24 +55,17 @@ module Dry
 
       def visit_predicate(node, opts = {})
         predicate, _ = node
-        return EMPTY_MESSAGES if excluded.include?(predicate)
-        super(node, opts.update(hint: true, val_type: TYPES[predicate]))
-      end
-
-      def visit_set(node, *args)
-        result = node.map do |el|
-          visit(el, *args)
-        end
-        merge(result)
+        return EMPTY_ARRAY if excluded.include?(predicate)
+        super(node, opts.merge(val_type: TYPES[predicate]))
       end
 
       def visit_each(node, opts = {})
-        visit(node, opts.update(each: true))
+        visit(node, opts.merge(each: true))
       end
 
       def visit_or(node, *args)
         left, right = node
-        merge([visit(left, *args), visit(right, *args)])
+        [Array[visit(left, *args)], Array[visit(right, *args)]].flatten
       end
 
       def visit_and(node, *args)
@@ -88,25 +83,19 @@ module Dry
         rules = node.rule_ast
         schema_opts = opts.merge(path: [path])
 
-        result = merge(rules.map { |rule| visit(rule, schema_opts) })
-
-        if result.size > 0
-          result
-        else
-          DEFAULT_RESULT
-        end
+        rules.map { |rule| visit(rule, schema_opts) }
       end
 
       def visit_check(node)
-        DEFAULT_RESULT
+        EMPTY_ARRAY
       end
 
       def visit_xor(node)
-        DEFAULT_RESULT
+        EMPTY_ARRAY
       end
 
       def visit_not(node)
-        DEFAULT_RESULT
+        EMPTY_ARRAY
       end
 
       def visit_type(node, *args)

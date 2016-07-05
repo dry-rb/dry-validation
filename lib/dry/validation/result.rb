@@ -41,17 +41,9 @@ module Dry
         @messages ||=
           begin
             return EMPTY_MESSAGES if success?
-
             hints = hint_compiler.with(options).call
-            comp = error_compiler.with(options.merge(hints: hints))
-
-            messages = comp.(error_ast)
-
-            if messages.is_a?(Hash)
-              comp.dump_messages(messages)
-            else
-              messages.map(&:to_s)
-            end
+            hash = error_compiler.with(options).(error_ast).with_hints!(hints).to_h
+            hash.key?(nil) ? hash.values.flatten : hash
           end
       end
 
