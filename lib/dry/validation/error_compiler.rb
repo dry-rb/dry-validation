@@ -21,6 +21,8 @@ module Dry
                  node_path
                end
 
+        path.compact!
+
         text = messages[rule]
 
         if text

@@ -42,11 +42,11 @@ RSpec.describe 'Macros #input' do
       expect(schema.(nil).messages).to eql(["must be a hash"])
     end
 
-    xit 'fails when 1-level key is missing' do
+    it 'fails when 1-level key is missing' do
       expect(schema.(foo: {}).messages).to eql(foo: { bar: ["is missing"] })
     end
 
-    xit 'fails when 2-level key has invalid value' do
+    it 'fails when 2-level key has invalid value' do
       expect(schema.(foo: { bar: { baz: '' }}).messages).to eql(
         foo: { bar: { baz: ['must be filled'] } }
       )
