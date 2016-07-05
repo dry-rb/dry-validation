@@ -1,3 +1,4 @@
+require 'dry/validation/constants'
 require 'dry/validation/message'
 require 'dry/validation/message_set'
 
@@ -5,8 +6,6 @@ module Dry
   module Validation
     class MessageCompiler
       attr_reader :messages, :options, :locale
-
-      EMPTY_ARRAY = [].freeze
 
       def initialize(messages, options = {})
         @messages = messages
