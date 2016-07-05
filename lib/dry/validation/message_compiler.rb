@@ -39,7 +39,7 @@ module Dry
 
         val_type ||= input.class if input
 
-        lookup_options = base_opts.merge(
+        lookup_options = base_opts.update(
           val_type: val_type,
           arg_type: args.size > 0 && args[0][1].class,
           message_type: message_type,
@@ -47,7 +47,7 @@ module Dry
         )
 
         tokens = options_for(predicate, args)
-        template = messages[predicate, lookup_options.merge(tokens)]
+        template = messages[predicate, lookup_options.update(tokens)]
 
         name ||= tokens[:name]
         rule ||= (name || tokens[:name])
