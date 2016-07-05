@@ -1,6 +1,8 @@
+require 'dry/validation/message_compiler'
+
 module Dry
   module Validation
-    class HintCompiler < ErrorCompiler
+    class HintCompiler < MessageCompiler
       include Dry::Equalizer(:messages, :rules, :options)
 
       attr_reader :rules, :excluded, :cache
@@ -26,9 +28,9 @@ module Dry
       end
 
       def initialize(messages, options = {})
-        super(messages, Hash[options])
-        @rules = @options.delete(:rules)
-        @excluded = @options.fetch(:excluded, EXCLUDED)
+        super(messages, options)
+        @rules = options.fetch(:rules, EMPTY_ARRAY)
+        @excluded = options.fetch(:excluded, EXCLUDED)
         @cache = self.class.cache
       end
 
@@ -42,11 +44,6 @@ module Dry
 
       def hash
         @hash ||= [messages, rules, options].hash
-      end
-
-      def with(new_options)
-        return self if new_options.empty?
-        super(new_options.merge(rules: rules))
       end
 
       def call
@@ -69,11 +66,6 @@ module Dry
       end
 
       def visit_and(node, *args)
-        _, right = node
-        visit(right, *args)
-      end
-
-      def visit_implication(node, *args)
         _, right = node
         visit(right, *args)
       end
