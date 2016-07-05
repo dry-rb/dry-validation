@@ -1,3 +1,5 @@
+require 'dry/validation/constants'
+
 module Dry
   module Validation
     class MessageSet
@@ -11,7 +13,7 @@ module Dry
 
       def initialize(messages)
         @messages = messages
-        @hints = []
+        @hints = Hash.new { |h, k| h[k] = EMPTY_ARRAY }
       end
 
       def empty?
@@ -24,7 +26,7 @@ module Dry
       end
 
       def with_hints!(hints)
-        @hints = flat_map { |msg| hints.select { |hint| hint.add?(msg) } }
+        @hints = Hash[map { |msg| [msg, hints.select { |hint| hint.add?(msg) }] }]
         freeze
       end
 
@@ -44,7 +46,7 @@ module Dry
           else
             node = msg.path.reduce(hash) { |a, e| a[e] }
             node << msg
-            node.concat(hints.select { |hint| hint.add?(msg) })
+            node.concat(hints[msg])
             node.uniq!(&:signature)
             node.map!(&:to_s)
           end
