@@ -56,16 +56,10 @@ module Dry
           raise MissingMessageError.new("message for #{predicate} was not found")
         end
 
-        rule_name =
-          if rule.is_a?(Symbol)
-            messages.rule(rule, lookup_options) || rule
-          else
-            rule
-          end
-
         text =
           if full?
-            "#{rule_name || tokens[:name]} #{template % tokens}"
+            rule_name = messages.rule(rule, lookup_options) || rule
+            "#{rule_name} #{template % tokens}"
           else
             template % tokens
           end
