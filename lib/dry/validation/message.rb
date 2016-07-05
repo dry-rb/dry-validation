@@ -12,8 +12,12 @@ module Dry
         @each = options[:each] || false
       end
 
+      def hint_path
+        @sig_path ||= each? ? path[0..path.size-2] : path
+      end
+
       def signature
-        @signature ||= [predicate, args, path].hash
+        @signature ||= [predicate, args, hint_path].hash
       end
 
       def hint?
@@ -51,7 +55,11 @@ module Dry
       end
 
       def add?(message)
-        !each? && path == message.path
+        if each? && message.each?
+          path == message.hint_path
+        else
+          !each? && path == message.path
+        end
       end
     end
   end

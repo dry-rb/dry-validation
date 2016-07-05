@@ -11,6 +11,7 @@ module Dry
 
       def initialize(messages)
         @messages = messages
+        @hints = []
       end
 
       def empty?
@@ -24,10 +25,6 @@ module Dry
 
       def with_hints!(hints)
         @hints = flat_map { |msg| hints.select { |hint| hint.add?(msg) } }
-
-        messages.concat(@hints)
-        messages.uniq!(&:signature)
-
         freeze
       end
 
@@ -46,7 +43,10 @@ module Dry
             (hash[nil] ||= []) << msg.to_s
           else
             node = msg.path.reduce(hash) { |a, e| a[e] }
-            node << msg.to_s
+            node << msg
+            node.concat(hints.select { |hint| hint.add?(msg) })
+            node.uniq!(&:signature)
+            node.map!(&:to_s)
           end
         end
 

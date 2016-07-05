@@ -40,6 +40,10 @@ module Dry
         visit(other, opts.merge(input: input))
       end
 
+      def visit_each(node, opts = {})
+        node.map { |el| visit(el, opts.merge(each: true)) }
+      end
+
       def visit_schema(node, opts = {})
         visit(node)
       end

@@ -97,10 +97,6 @@ module Dry
         node.map { |input| visit(input, opts) }
       end
 
-      def visit_each(node, opts = {})
-        node.map { |el| visit(el, opts) }
-      end
-
       def visit_el(node, opts = {})
         idx, el = node
         visit(el, opts.merge(path: opts[:path] + [idx]))
