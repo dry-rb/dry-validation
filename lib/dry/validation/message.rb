@@ -36,10 +36,6 @@ module Dry
         @each
       end
 
-      def hint(new_opts)
-        Hint.new(predicate, path, text, options.merge(new_opts))
-      end
-
       def eql?(other)
         other.is_a?(String) ? text == other : super
       end
