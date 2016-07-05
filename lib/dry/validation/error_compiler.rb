@@ -11,7 +11,7 @@ module Dry
         Message
       end
 
-      def visit_error(node, opts = {})
+      def visit_error(node, opts = EMPTY_HASH)
         rule, error = node
         node_path = Array(opts.fetch(:path, rule))
 
@@ -32,25 +32,25 @@ module Dry
         end
       end
 
-      def visit_input(node, opts = {})
+      def visit_input(node, opts = EMPTY_HASH)
         rule, result = node
         visit(result, opts.merge(rule: rule))
       end
 
-      def visit_result(node, opts = {})
+      def visit_result(node, opts = EMPTY_HASH)
         input, other = node
         visit(other, opts.merge(input: input))
       end
 
-      def visit_each(node, opts = {})
+      def visit_each(node, opts = EMPTY_HASH)
         node.map { |el| visit(el, opts.merge(each: true)) }
       end
 
-      def visit_schema(node, opts = {})
+      def visit_schema(node, opts = EMPTY_HASH)
         visit(node)
       end
 
-      def visit_check(node, opts = {})
+      def visit_check(node, opts = EMPTY_HASH)
         path, other = node
         visit(other, opts.merge(path: Array(path)))
       end

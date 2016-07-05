@@ -9,7 +9,7 @@ module Dry
 
       def initialize(messages, options = {})
         @messages = messages
-        @options = Hash[options]
+        @options = options
         @full = @options.fetch(:full, false)
         @locale = @options.fetch(:locale, :en)
       end
@@ -31,7 +31,7 @@ module Dry
         __send__(:"visit_#{node[0]}", node[1], *args)
       end
 
-      def visit_predicate(node, base_opts = {})
+      def visit_predicate(node, base_opts = EMPTY_HASH)
         predicate, args = node
 
         input, rule, name, val_type = base_opts
@@ -83,20 +83,20 @@ module Dry
         message_class.new(predicate, path, text, args: arg_vals, rule: rule, each: is_each)
       end
 
-      def visit_key(node, opts = {})
+      def visit_key(node, opts = EMPTY_HASH)
         name, predicate = node
         visit(predicate, opts.merge(name: name))
       end
 
-      def visit_val(node, opts = {})
+      def visit_val(node, opts = EMPTY_HASH)
         visit(node, opts)
       end
 
-      def visit_set(node, opts = {})
+      def visit_set(node, opts = EMPTY_HASH)
         node.map { |input| visit(input, opts) }
       end
 
-      def visit_el(node, opts = {})
+      def visit_el(node, opts = EMPTY_HASH)
         idx, el = node
         visit(el, opts.merge(path: opts[:path] + [idx]))
       end

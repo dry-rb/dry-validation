@@ -50,13 +50,13 @@ module Dry
         cache.fetch_or_store(hash) { super(rules) }
       end
 
-      def visit_predicate(node, opts = {})
+      def visit_predicate(node, opts = EMPTY_HASH)
         predicate, _ = node
         return EMPTY_ARRAY if excluded.include?(predicate)
         super(node, opts.merge(val_type: TYPES[predicate]))
       end
 
-      def visit_each(node, opts = {})
+      def visit_each(node, opts = EMPTY_HASH)
         visit(node, opts.merge(each: true))
       end
 
@@ -70,7 +70,7 @@ module Dry
         visit(right, *args)
       end
 
-      def visit_schema(node, opts = {})
+      def visit_schema(node, opts = EMPTY_HASH)
         path = node.config.path
         rules = node.rule_ast
         schema_opts = opts.merge(path: [path])
