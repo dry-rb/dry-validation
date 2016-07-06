@@ -1,3 +1,21 @@
+# v0.8.1 to-be-released
+
+### Fixed
+
+* Duped key names in nested schemas no longer result in invalid error messages structure (solnic)
+* Values from `option` are passed down to nested schemas when using `Schema#with` (solnic)
+* Hints now work with array elements too (solnic)
+* Hints for elements are no longer provided for an array when the value is not an array (solnic)
+
+### Internal
+
+* Compiling messages is now ~5% faster (solnic)
+* Refactored Error and Hint compilers (solnic)
+* Added `MessageSet` that result objects now use (in 0.9.0 it'll be exposed via public API) (solnic)
+* We can now distinguish error messages from validation hints via `Message` and `Hint` objects (solnic)
+
+[Compare v0.8.0...master](https://github.com/dryrb/dry-validation/compare/v0.8.0...master)
+
 # v0.8.0 2016-07-01
 
 ### Added
@@ -54,7 +72,7 @@
 * Make pry console optional with IRB as a default (flash-gordon)
 * Remove wrapping rules in :set nodes (solnic)
 
-[Compare v0.7.4...master](https://github.com/dryrb/dry-validation/compare/v0.7.4...master)
+[Compare v0.7.4...v0.8.0](https://github.com/dryrb/dry-validation/compare/v0.7.4...v0.8.0)
 
 # v0.7.4 2016-04-06
 
