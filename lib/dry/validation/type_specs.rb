@@ -1,6 +1,20 @@
 module Dry
   module Validation
     module TypeSpecs
+      def self.extended(klass)
+        super
+        klass.class_eval do
+          setting :input_processor, :noop
+          setting :hash_type, :weak
+          setting :type_map, {}
+        end
+      end
+
+      def build_hash_type(spec)
+        lookup_type("hash", config.input_processor)
+          .public_send(config.hash_type, type_map)
+      end
+
       def build_array_type(spec, category)
         member_schema = build_type_map(spec, category)
         member_type = lookup_type("hash", category)
