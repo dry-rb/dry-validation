@@ -56,6 +56,10 @@ module Dry
         path, other = node
         visit(other, opts.merge(path: Array(path)))
       end
+
+      def lookup_options(opts, arg_vals)
+        super.update(val_type: opts[:input].class)
+      end
     end
   end
 end

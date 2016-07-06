@@ -34,50 +34,27 @@ module Dry
       def visit_predicate(node, base_opts = EMPTY_HASH)
         predicate, args = node
 
-        input, rule, name, val_type = base_opts
-          .values_at(:input, :rule, :name, :val_type)
+        *arg_vals, _ = args.map(&:last)
 
-        val_type ||= input.class if input
+        tokens = message_tokens(predicate, args)
+        options = base_opts.update(lookup_options(base_opts, arg_vals))
 
-        lookup_options = base_opts.update(
-          val_type: val_type,
-          arg_type: args.size > 0 && args[0][1].class,
-          message_type: message_type,
-          locale: locale
-        )
-
-        tokens = options_for(predicate, args)
-        template = messages[predicate, lookup_options.update(tokens)]
-
-        name ||= base_opts[:name]
-        rule ||= name
+        template = messages[predicate, options.update(tokens)]
 
         unless template
           raise MissingMessageError, "message for #{predicate} was not found"
         end
 
-        text =
-          if full?
-            rule_name = messages.rule(rule, lookup_options) || rule
-            "#{rule_name} #{template % tokens}"
-          else
-            template % tokens
-          end
+        name = options[:name]
+        rule = options[:rule] || name
 
-        if name.is_a?(Array)
-          path = name
-        else
-          path = base_opts[:path] || Array(name)
+        text = message_text(rule, template, tokens, options)
+        path = message_path(base_opts, name)
 
-          if name && path.last != name
-            path += [name]
-          end
-        end
-
-        is_each = base_opts[:each] == true
-
-        *arg_vals, _ = args.map(&:last)
-        message_class.new(predicate, path, text, args: arg_vals, rule: rule, each: is_each)
+        message_class.new(
+          predicate, path, text,
+          args: arg_vals, rule: rule, each: base_opts[:each] == true
+        )
       end
 
       def visit_key(node, opts = EMPTY_HASH)
@@ -103,8 +80,40 @@ module Dry
         visit(right, *args)
       end
 
-      def options_for(predicate, args)
-        meth = :"options_for_#{predicate}"
+      def lookup_options(_opts, arg_vals)
+        { message_type: message_type,
+          locale: locale,
+          arg_type: arg_vals.size == 1 && arg_vals[0].class }
+      end
+
+      def message_text(rule, template, tokens, opts)
+        text = template % tokens
+
+        if full?
+          rule_name = messages.rule(rule, opts) || rule
+          "#{rule_name} #{text}"
+        else
+          text
+        end
+      end
+
+      def message_path(opts, name)
+        if name.is_a?(Array)
+          name
+        else
+          path = opts[:path] || Array(name)
+
+          if name && path.last != name
+            path += [name]
+          end
+
+          path
+        end
+      end
+
+
+      def message_tokens(predicate, args)
+        meth = :"message_tokens_#{predicate}"
 
         defaults = Hash[args]
 
@@ -115,25 +124,25 @@ module Dry
         defaults
       end
 
-      def options_for_inclusion?(args)
+      def message_tokens_inclusion?(args)
         warn 'inclusion is deprecated - use included_in instead.'
-        options_for_included_in?(args)
+        message_tokens_included_in?(args)
       end
 
-      def options_for_exclusion?(args)
+      def message_tokens_exclusion?(args)
         warn 'exclusion is deprecated - use excluded_from instead.'
-        options_for_excluded_from?(args)
+        message_tokens_excluded_from?(args)
       end
 
-      def options_for_excluded_from?(args)
+      def message_tokens_excluded_from?(args)
         { list: args[:list].join(', ') }
       end
 
-      def options_for_included_in?(args)
+      def message_tokens_included_in?(args)
         { list: args[:list].join(', ') }
       end
 
-      def options_for_size?(args)
+      def message_tokens_size?(args)
         size = args[:size]
 
         if size.is_a?(Range)
