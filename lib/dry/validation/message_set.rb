@@ -13,7 +13,7 @@ module Dry
 
       def initialize(messages)
         @messages = messages
-        @hints = []
+        @hints = {}
         @paths = map(&:path).uniq
         initialize_placeholders!
       end
@@ -28,7 +28,7 @@ module Dry
       end
 
       def with_hints!(hints)
-        @hints = hints
+        @hints = hints.group_by(&:index_path)
         freeze
       end
 
@@ -39,7 +39,7 @@ module Dry
           else
             node = msg.path.reduce(hash) { |a, e| a[e] }
             node << msg
-            node.concat(hints.select { |hint| hint.add?(msg) })
+            node.concat(Array(hints[msg.index_path]))
             node.uniq!(&:signature)
             node.map!(&:to_s)
           end

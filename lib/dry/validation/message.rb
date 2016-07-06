@@ -3,11 +3,18 @@ require 'dry/validation/constants'
 module Dry
   module Validation
     class Message < Struct.new(:predicate, :path, :text, :options)
+      Index = Class.new {
+        def inspect
+          "index"
+        end
+        alias_method :to_s, :inspect
+      }.new
+
       attr_reader :rule, :args
 
       class Each < Message
-        def hint_path
-          @hint_path ||= path[0..path.size-2]
+        def index_path
+          @index_path ||= [*path[0..path.size-2], Index]
         end
 
         def each?
@@ -27,14 +34,14 @@ module Dry
         @args = options[:args] || EMPTY_ARRAY
       end
 
-      alias_method :hint_path, :path
+      alias_method :index_path, :path
 
       def to_s
         text
       end
 
       def signature
-        @signature ||= [predicate, args, hint_path].hash
+        @signature ||= [predicate, args, index_path].hash
       end
 
       def each?
@@ -61,17 +68,13 @@ module Dry
       end
 
       class Each < Hint
-        def add?(message)
-          message.each? && path == message.hint_path
+        def index_path
+          @index_path ||= [*path, Index]
         end
       end
 
       def hint?
         true
-      end
-
-      def add?(message)
-        path == message.path
       end
     end
   end
