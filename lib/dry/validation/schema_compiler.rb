@@ -29,8 +29,22 @@ module Dry
     end
 
     class SchemaCompiler < Logic::RuleCompiler
+      attr_reader :options
+
+      def initialize(*args, options)
+        super(*args)
+        @options = options
+      end
+
       def visit_schema(klass)
-        klass.new
+        opt_keys = klass.config.options.keys
+        opt_vals = options.values_at(*opt_keys).compact
+
+        if opt_vals.empty?
+          klass.new
+        else
+          klass.new(klass.config.rules, Hash[opt_keys.zip(opt_vals)])
+        end
       end
 
       def visit_guard(node)

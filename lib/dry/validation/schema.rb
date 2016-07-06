@@ -233,7 +233,7 @@ module Dry
       def initialize(rules, options)
         @type_map = self.class.type_map
         @predicates = options.fetch(:predicate_registry).bind(self)
-        @rule_compiler = SchemaCompiler.new(predicates)
+        @rule_compiler = SchemaCompiler.new(predicates, options)
         @error_compiler = options.fetch(:error_compiler)
         @hint_compiler = options.fetch(:hint_compiler)
         @input_processor = options.fetch(:input_processor, NOOP_INPUT_PROCESSOR)
