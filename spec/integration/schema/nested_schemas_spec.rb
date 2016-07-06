@@ -71,4 +71,58 @@ RSpec.describe Schema, 'nested schemas' do
       )
     end
   end
+
+  context 'with `each` + schema inside another schema' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:meta).schema do
+          required(:data).each do
+            schema do
+              required(:info).schema do
+                required(:name).filled
+              end
+            end
+          end
+        end
+      end
+    end
+
+    it 'passes when data is valid' do
+      expect(schema.(meta: { data: [{ info: { name: 'oh hai' } }] })).to be_success
+    end
+
+    it 'fails when root key is missing' do
+      expect(schema.({}).messages).to eql(meta: ['is missing'])
+    end
+
+    it 'fails when root key value is invalid' do
+      expect(schema.(meta: '').messages).to eql(meta: ['must be a hash'])
+    end
+
+    it 'fails when 1-level key is missing' do
+      expect(schema.(meta: {}).messages).to eql(meta: { data: ['is missing'] })
+    end
+
+    it 'fails when 1-level key has invalid value' do
+      expect(schema.(meta: { data: '' }).messages).to eql(meta: { data: ['must be an array'] })
+    end
+
+    it 'fails when 1-level key has value with a missing key' do
+      expect(schema.(meta: { data: [{}] }).messages).to eql(
+        meta: { data: { 0 => { info: ['is missing'] } } }
+      )
+    end
+
+    it 'fails when 1-level key has value with an incorrect type' do
+      expect(schema.(meta: { data: [{ info: ''}] }).messages).to eql(
+        meta: { data: { 0 => { info: ['must be a hash'] } } }
+      )
+    end
+
+    it 'fails when 1-level key has value with a key with an invalid value' do
+      expect(schema.(meta: { data: [{ info: { name: '' } }] }).messages).to eql(
+        meta: { data: { 0 => { info: { name: ['must be filled'] } } } }
+      )
+    end
+  end
 end

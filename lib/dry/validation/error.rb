@@ -15,8 +15,11 @@ module Dry
       end
 
       def to_ast
-        node = [:error, [name, result.to_ast]]
-        schema? ? [:schema, node] : node
+        if schema?
+          [:schema, [name, result.response.to_ast]]
+        else
+          [:error, [name, result.to_ast]]
+        end
       end
     end
   end

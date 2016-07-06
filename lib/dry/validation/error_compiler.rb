@@ -47,7 +47,9 @@ module Dry
       end
 
       def visit_schema(node, opts = EMPTY_HASH)
-        visit(node)
+        path, other = node
+        opts[:path] << path.last if opts[:path]
+        visit(other, opts)
       end
 
       def visit_check(node, opts = EMPTY_HASH)
