@@ -1,7 +1,10 @@
+require 'dry/validation/type_specs'
+
 module Dry
   module Validation
     class Schema
       extend Dry::Configurable
+      extend TypeSpecs
 
       NOOP_INPUT_PROCESSOR = -> input { input }
 
@@ -30,6 +33,15 @@ module Dry
 
       def self.new(rules = config.rules, **options)
         super(rules, default_options.merge(options))
+      end
+
+      def self.predicates(predicate_set = nil)
+        if predicate_set
+          config.predicates = predicate_set
+          set_registry!
+        else
+          config.predicates
+        end
       end
 
       def self.option(name, default = nil)
@@ -64,84 +76,16 @@ module Dry
         klass
       end
 
-      def self.inherited(klass)
-        super
-        klass.config.options = klass.config.options.dup
-
-        if registry && self != Schema
-          klass.config.registry = registry.new(self)
-        else
-          klass.set_registry!
-        end
-      end
-
-      def self.set_registry!
-        config.registry = PredicateRegistry[self, config.predicates]
+      def self.to_ast
+        [:schema, self]
       end
 
       def self.registry
         config.registry
       end
 
-      def self.build_array_type(spec, category)
-        member_schema = build_type_map(spec, category)
-        member_type = lookup_type("hash", category)
-          .public_send(config.hash_type, member_schema)
-
-        lookup_type("array", category).member(member_type)
-      end
-
-      def self.build_type_map(type_specs, category = config.input_processor)
-        if type_specs.is_a?(Array)
-          build_array_type(type_specs[0], category)
-        else
-          type_specs.each_with_object({}) do |(name, spec), result|
-            result[name] =
-              case spec
-              when Hash
-                lookup_type("hash", category).public_send(config.hash_type, spec)
-              when Array
-                if spec.size == 1
-                  if spec[0].is_a?(Hash)
-                    build_array_type(spec[0], category)
-                  else
-                    lookup_type("array", category).member(lookup_type(spec[0], category))
-                  end
-                else
-                  spec
-                    .map { |id| id.is_a?(Symbol) ? lookup_type(id, category) : id }
-                    .reduce(:|)
-                end
-              when Symbol
-                lookup_type(spec, category)
-              else
-                spec
-              end
-          end
-        end
-      end
-
-      def self.lookup_type(name, category)
-        id = "#{category}.#{name}"
-        Types.type_keys.include?(id) ? Types[id] : Types[name.to_s]
-      end
-
-
       def self.type_map
         config.type_map
-      end
-
-      def self.predicates(predicate_set = nil)
-        if predicate_set
-          config.predicates = predicate_set
-          set_registry!
-        else
-          config.predicates
-        end
-      end
-
-      def self.to_ast
-        [:schema, self]
       end
 
       def self.rules
@@ -188,11 +132,26 @@ module Dry
       end
 
       def self.default_options
-        { predicate_registry: registry,
+        @default_options ||= { predicate_registry: registry,
           error_compiler: error_compiler,
           hint_compiler: hint_compiler,
           input_processor: input_processor,
           checks: config.checks }
+      end
+
+      def self.inherited(klass)
+        super
+        klass.config.options = klass.config.options.dup
+
+        if registry && self != Schema
+          klass.config.registry = registry.new(self)
+        else
+          klass.set_registry!
+        end
+      end
+
+      def self.set_registry!
+        config.registry = PredicateRegistry[self, config.predicates]
       end
     end
   end
