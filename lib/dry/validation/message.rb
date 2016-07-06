@@ -1,61 +1,77 @@
+require 'dry/validation/constants'
+
 module Dry
   module Validation
-    Message = Struct.new(:predicate, :path, :text, :options) do
+    class Message < Struct.new(:predicate, :path, :text, :options)
       attr_reader :rule, :args
 
-      EMPTY_ARGS = [].freeze
+      class Each < Message
+        def hint_path
+          @hint_path ||= path[0..path.size-2]
+        end
+
+        def each?
+          true
+        end
+      end
+
+      def self.[](predicate, path, text, options)
+        klass = options[:each] ? Message::Each : Message
+        klass.new(predicate, path, text, options)
+      end
 
       def initialize(*args)
         super
         @rule = options[:rule]
-        @args = options[:args] || EMPTY_ARGS
         @each = options[:each] || false
+        @args = options[:args] || EMPTY_ARRAY
       end
 
-      def hint_path
-        @sig_path ||= each? ? path[0..path.size-2] : path
+      alias_method :hint_path, :path
+
+      def to_s
+        text
       end
 
       def signature
         @signature ||= [predicate, args, hint_path].hash
       end
 
-      def hint?
-        false
+      def each?
+        @each
       end
 
-      def to_s
-        text
+      def hint?
+        false
       end
 
       def root?
         path.empty?
       end
 
-      def each?
-        @each
-      end
-
       def eql?(other)
         other.is_a?(String) ? text == other : super
-      end
-
-      def empty?
-        false
       end
     end
 
     class Hint < Message
+      def self.[](predicate, path, text, options)
+        klass = options[:each] ? Hint::Each : Hint
+        klass.new(predicate, path, text, options)
+      end
+
+      class Each < Hint
+        def add?(message)
+          message.each? && path == message.hint_path
+        end
+      end
+
       def hint?
         true
       end
 
       def add?(message)
-        if each? && message.each?
-          path == message.hint_path
-        else
-          !each? && path == message.path
-        end
+        path == message.path
       end
     end
   end

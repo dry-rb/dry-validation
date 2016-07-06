@@ -26,7 +26,7 @@ module Dry
         text = messages[rule]
 
         if text
-          Message.new(node, path, text, rule: rule)
+          Message[node, path, text, rule: rule]
         else
           visit(error, opts.merge(path: path))
         end

@@ -51,10 +51,10 @@ module Dry
         text = message_text(rule, template, tokens, options)
         path = message_path(base_opts, name)
 
-        message_class.new(
+        message_class[
           predicate, path, text,
           args: arg_vals, rule: rule, each: base_opts[:each] == true
-        )
+        ]
       end
 
       def visit_key(node, opts = EMPTY_HASH)
