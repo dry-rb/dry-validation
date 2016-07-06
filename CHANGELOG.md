@@ -9,7 +9,7 @@
 
 ### Internal
 
-* Compiling messages is now ~5% faster (solnic)
+* Compiling messages is now ~5% faster (solnic + splattael)
 * Refactored Error and Hint compilers (solnic)
 * Added `MessageSet` that result objects now use (in 0.9.0 it'll be exposed via public API) (solnic)
 * We can now distinguish error messages from validation hints via `Message` and `Hint` objects (solnic)
