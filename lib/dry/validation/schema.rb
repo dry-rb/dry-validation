@@ -254,8 +254,8 @@ module Dry
         Result.new(processed_input, apply(processed_input), error_compiler, hint_compiler)
       end
 
-      def curry(*args)
-        to_proc.curry.(*args)
+      def curry(*curry_args)
+        -> *args { call(*(curry_args + args)) }
       end
 
       def to_proc
