@@ -10,19 +10,6 @@ module Dry
         end
       end
 
-      def build_hash_type(spec)
-        lookup_type("hash", config.input_processor)
-          .public_send(config.hash_type, type_map)
-      end
-
-      def build_array_type(spec, category)
-        member_schema = build_type_map(spec, category)
-        member_type = lookup_type("hash", category)
-          .public_send(config.hash_type, member_schema)
-
-        lookup_type("array", category).member(member_type)
-      end
-
       def build_type_map(type_specs, category = config.input_processor)
         if type_specs.is_a?(Array)
           build_array_type(type_specs[0], category)
@@ -40,9 +27,7 @@ module Dry
                     lookup_type("array", category).member(lookup_type(spec[0], category))
                   end
                 else
-                  spec
-                    .map { |id| id.is_a?(Symbol) ? lookup_type(id, category) : id }
-                    .reduce(:|)
+                  build_sum_type(spec, category)
                 end
               when Symbol
                 lookup_type(spec, category)
@@ -51,6 +36,25 @@ module Dry
               end
           end
         end
+      end
+
+      def build_hash_type(spec)
+        lookup_type("hash", config.input_processor)
+          .public_send(config.hash_type, type_map)
+      end
+
+      def build_array_type(spec, category)
+        member_schema = build_type_map(spec, category)
+        member_type = lookup_type("hash", category)
+          .public_send(config.hash_type, member_schema)
+
+        lookup_type("array", category).member(member_type)
+      end
+
+      def build_sum_type(spec, category)
+        spec
+          .map { |id| id.is_a?(Symbol) ? lookup_type(id, category) : id }
+          .reduce(:|)
       end
 
       def lookup_type(name, category)
