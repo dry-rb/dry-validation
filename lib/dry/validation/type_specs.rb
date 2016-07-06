@@ -14,33 +14,15 @@ module Dry
         if type_specs.is_a?(Array)
           build_array_type(type_specs[0], category)
         else
-          type_specs.each_with_object({}) do |(name, spec), result|
-            result[name] =
-              case spec
-              when Hash
-                lookup_type("hash", category).public_send(config.hash_type, spec)
-              when Array
-                if spec.size == 1
-                  if spec[0].is_a?(Hash)
-                    build_array_type(spec[0], category)
-                  else
-                    lookup_type("array", category).member(lookup_type(spec[0], category))
-                  end
-                else
-                  build_sum_type(spec, category)
-                end
-              when Symbol
-                lookup_type(spec, category)
-              else
-                spec
-              end
-          end
+          type_specs.reduce({}) { |res, (name, spec)|
+            res.update(name => resolve_spec(spec, category))
+          }
         end
       end
 
-      def build_hash_type(spec)
+      def build_hash_type(spec = type_map)
         lookup_type("hash", config.input_processor)
-          .public_send(config.hash_type, type_map)
+          .public_send(config.hash_type, spec)
       end
 
       def build_array_type(spec, category)
@@ -55,6 +37,28 @@ module Dry
         spec
           .map { |id| id.is_a?(Symbol) ? lookup_type(id, category) : id }
           .reduce(:|)
+      end
+
+      def resolve_spec(spec, category)
+        case spec
+        when Symbol
+          lookup_type(spec, category)
+        when Hash
+          build_hash_type(spec)
+        when Array
+          if spec.size == 1
+            if spec[0].is_a?(Hash)
+              build_array_type(spec[0], category)
+            else
+              array_member = lookup_type(spec[0], category)
+              lookup_type("array", category).member(array_member)
+            end
+          else
+            build_sum_type(spec, category)
+          end
+        else
+          spec
+        end
       end
 
       def lookup_type(name, category)
