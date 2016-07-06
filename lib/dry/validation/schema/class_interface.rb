@@ -28,6 +28,42 @@ module Dry
 
       setting :type_specs, false
 
+      def self.new(rules = config.rules, **options)
+        super(rules, default_options.merge(options))
+      end
+
+      def self.option(name, default = nil)
+        attr_reader(*name)
+        options.update(name => default)
+      end
+
+      def self.create_class(target, other = nil, &block)
+        klass =
+          if other.is_a?(self)
+            Class.new(other.class)
+          elsif other.is_a?(Class) && other < Types::Struct
+            Validation.Schema(parent: target, build: false) do
+              other.schema.each { |attr, type| required(attr).filled(type) }
+            end
+          elsif other.respond_to?(:schema) && other.schema.is_a?(self)
+            Class.new(other.schema.class)
+          else
+            Validation.Schema(target.schema_class, parent: target, build: false, &block)
+          end
+
+        klass.config.path = target.path if other
+        klass.config.input_processor = :noop
+
+        klass
+      end
+
+      def self.clone
+        klass = Class.new(self)
+        klass.config.rules = []
+        klass.config.registry = registry
+        klass
+      end
+
       def self.inherited(klass)
         super
         klass.config.options = klass.config.options.dup
@@ -37,13 +73,6 @@ module Dry
         else
           klass.set_registry!
         end
-      end
-
-      def self.clone
-        klass = Class.new(self)
-        klass.config.rules = []
-        klass.config.registry = registry
-        klass
       end
 
       def self.set_registry!
@@ -109,35 +138,6 @@ module Dry
         else
           config.predicates
         end
-      end
-
-      def self.new(rules = config.rules, **options)
-        super(rules, default_options.merge(options))
-      end
-
-      def self.create_class(target, other = nil, &block)
-        klass =
-          if other.is_a?(self)
-            Class.new(other.class)
-          elsif other.is_a?(Class) && other < Types::Struct
-            Validation.Schema(parent: target, build: false) do
-              other.schema.each { |attr, type| required(attr).filled(type) }
-            end
-          elsif other.respond_to?(:schema) && other.schema.is_a?(self)
-            Class.new(other.schema.class)
-          else
-            Validation.Schema(target.schema_class, parent: target, build: false, &block)
-          end
-
-        klass.config.path = target.path if other
-        klass.config.input_processor = :noop
-
-        klass
-      end
-
-      def self.option(name, default = nil)
-        attr_reader(*name)
-        options.update(name => default)
       end
 
       def self.to_ast
