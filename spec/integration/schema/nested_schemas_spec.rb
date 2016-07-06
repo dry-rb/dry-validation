@@ -72,6 +72,48 @@ RSpec.describe Schema, 'nested schemas' do
     end
   end
 
+  context 'when duplicated key names are used in 2 subsequent levels as schemas' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:meta).schema do
+          required(:meta).schema do
+            required(:data).filled
+          end
+        end
+      end
+    end
+
+    it 'passes when input is valid' do
+      expect(schema.(meta: { meta: { data: 'this is fine' } })).to be_success
+    end
+
+    it 'fails when root key is missing' do
+      expect(schema.({}).messages).to eql(meta: ['is missing'])
+    end
+
+    it 'fails when 1-level key is missing' do
+      expect(schema.(meta: {}).messages).to eql(meta: { meta: ['is missing'] })
+    end
+
+    it 'fails when 1-level key value is invalid' do
+      expect(schema.(meta: { meta: '' }).messages).to eql(
+        meta: { meta: ['must be a hash'] }
+      )
+    end
+
+    it 'fails when 2-level key is missing' do
+      expect(schema.(meta: { meta: {} }).messages).to eql(
+        meta: { meta: { data: ['is missing'] } }
+      )
+    end
+
+    it 'fails when 2-level key value is invalid' do
+      expect(schema.(meta: { meta: { data: '' } }).messages).to eql(
+        meta: { meta: { data: ['must be filled'] } }
+      )
+    end
+  end
+
   context 'with `each` + schema inside another schema' do
     subject(:schema) do
       Dry::Validation.Schema do

@@ -48,8 +48,13 @@ module Dry
 
       def visit_schema(node, opts = EMPTY_HASH)
         path, other = node
-        opts[:path] << path.last if opts[:path]
-        visit(other, opts)
+
+        if opts[:path]
+          opts[:path] << path.last
+          visit(other, opts)
+        else
+          visit(other, opts.merge(path: [path]))
+        end
       end
 
       def visit_check(node, opts = EMPTY_HASH)
