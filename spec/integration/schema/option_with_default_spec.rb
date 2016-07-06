@@ -9,7 +9,7 @@ RSpec.describe Dry::Validation::Schema, 'defining an option with default value' 
         end
       end
 
-      required(:email) { filled? & unique?(:email) }
+      required(:email).filled(unique?: :email)
     end
   end
 
