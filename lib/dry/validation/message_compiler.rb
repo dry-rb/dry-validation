@@ -111,7 +111,6 @@ module Dry
         end
       end
 
-
       def message_tokens(predicate, args)
         meth = :"message_tokens_#{predicate}"
 
