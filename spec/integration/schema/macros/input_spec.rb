@@ -42,13 +42,54 @@ RSpec.describe 'Macros #input' do
       expect(schema.(nil).messages).to eql(["must be a hash"])
     end
 
-    xit 'fails when 1-level key is missing' do
+    it 'fails when 1-level key is missing' do
       expect(schema.(foo: {}).messages).to eql(foo: { bar: ["is missing"] })
     end
 
-    xit 'fails when 2-level key has invalid value' do
+    it 'fails when 2-level key has invalid value' do
       expect(schema.(foo: { bar: { baz: '' }}).messages).to eql(
         foo: { bar: { baz: ['must be filled'] } }
+      )
+    end
+  end
+
+  context 'when 2 nested schemas are under the same key' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        input :hash?
+
+        required(:meta).schema do
+          required(:meta).schema do
+            required(:data).filled
+          end
+        end
+      end
+    end
+
+    it 'passes when input is valid' do
+      expect(schema.(meta: { meta: { data: 'sutin' } })).to be_success
+    end
+
+    it 'fails when root key is missing' do
+      expect(schema.({}).messages).to eql(meta: ['is missing'])
+    end
+
+    it 'fails when 1-level key is missing' do
+      pending
+      expect(schema.(meta: {}).messages).to eql(meta: { meta: ['is missing'] })
+    end
+
+    it 'fails when 1-level key value is invalid' do
+      pending
+      expect(schema.(meta: { meta: '' }).messages).to eql(
+        meta: { meta: ['must be a hash'] }
+      )
+    end
+
+    it 'fails when 2-level key value is invalid' do
+      pending
+      expect(schema.(meta: { meta: { data: '' } }).messages).to eql(
+        meta: { meta: { data: ['must be filled'] } }
       )
     end
   end

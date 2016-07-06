@@ -1,147 +1,65 @@
+require 'dry/validation/message_compiler'
+
 module Dry
   module Validation
-    class ErrorCompiler
-      attr_reader :messages, :hints, :options
-
-      DEFAULT_RESULT = {}.freeze
-      EMPTY_HINTS = [].freeze
-      KEY_SEPARATOR = '.'.freeze
-
-      def initialize(messages, options = {})
-        @messages = messages
-        @options = Hash[options]
-        @hints = @options.fetch(:hints, DEFAULT_RESULT)
-        @full = options.fetch(:full, false)
+    class ErrorCompiler < MessageCompiler
+      def message_type
+        :failure
       end
 
-      def full?
-        @full
+      def message_class
+        Message
       end
 
-      def call(ast, *args)
-        merge(ast.map { |node| visit(node, *args) }) || DEFAULT_RESULT
-      end
+      def visit_error(node, opts = EMPTY_HASH)
+        rule, error = node
+        node_path = Array(opts.fetch(:path, rule))
 
-      def with(new_options)
-        self.class.new(messages, options.merge(new_options))
-      end
+        path = if rule.is_a?(Array) && rule.size > node_path.size
+                 rule
+               else
+                 node_path
+               end
 
-      def visit(node, *args)
-        __send__(:"visit_#{node[0]}", node[1], *args)
-      end
+        path.compact!
 
-      def visit_schema(node, *args)
-        visit_error(node[1], true)
-      end
+        text = messages[rule]
 
-      def visit_set(node, *args)
-        call(node, *args)
-      end
-
-      def visit_error(error, schema = false)
-        name, other = error
-        message = messages[name]
-
-        if message
-          { name => [message] }
+        if text
+          Message.new(node, path, text, rule: rule)
         else
-          result = schema ? visit(other, name) : visit(other)
-
-          if result.is_a?(Array)
-            merge(result)
-          elsif !schema
-            merge_hints(result)
-          elsif schema
-            merge_hints(result, hints[schema] || DEFAULT_RESULT)
-          else
-            result
-          end
+          visit(error, opts.merge(path: path))
         end
       end
 
-      def visit_input(node, path = nil)
-        name, result = node
-        visit(result, path || name)
+      def visit_input(node, opts = EMPTY_HASH)
+        rule, result = node
+        visit(result, opts.merge(rule: rule))
       end
 
-      def visit_result(node, name = nil)
-        value, other = node
-        input_visitor(name, value).visit(other)
+      def visit_result(node, opts = EMPTY_HASH)
+        input, other = node
+        visit(other, opts.merge(input: input))
       end
 
-      def visit_implication(node)
-        _, right = node
-        visit(right)
+      def visit_each(node, opts = EMPTY_HASH)
+        node.map { |el| visit(el, opts.merge(each: true)) }
       end
 
-      def visit_key(rule)
-        _, predicate = rule
-        visit(predicate)
+      def visit_schema(node, opts = EMPTY_HASH)
+        path, other = node
+        opts[:path] << path.last if opts[:path]
+        visit(other, opts)
       end
 
-      def visit_attr(rule)
-        _, predicate = rule
-        visit(predicate)
+      def visit_check(node, opts = EMPTY_HASH)
+        path, other = node
+        visit(other, opts.merge(path: Array(path)))
       end
 
-      def visit_val(node)
-        visit(node)
-      end
-
-      def dump_messages(hash)
-        hash.each_with_object({}) do |(key, val), res|
-          res[key] =
-            case val
-            when Hash then dump_messages(val)
-            when Array then val.map(&:to_s)
-            end
-        end
-      end
-
-      private
-
-      def merge_hints(messages, hints = self.hints)
-        messages.each_with_object({}) do |(name, msgs), res|
-          res[name] =
-            if msgs.is_a?(Hash)
-              res[name] = merge_hints(msgs, hints)
-            else
-              all_hints = (hints[name] || EMPTY_HINTS)
-
-              if all_hints.is_a?(Array)
-                all_msgs = msgs + all_hints
-                all_msgs.uniq!(&:signature)
-                all_msgs
-              else
-                msgs
-              end
-            end
-        end
-      end
-
-      def normalize_name(name)
-        Array(name).join('.').to_sym
-      end
-
-      def merge(result)
-        result.reduce { |a, e| deep_merge(a, e) } || DEFAULT_RESULT
-      end
-
-      def deep_merge(left, right)
-        left.merge(right) do |_, a, e|
-          if a.is_a?(Hash)
-            deep_merge(a, e)
-          else
-            a + e
-          end
-        end
-      end
-
-      def input_visitor(name, input)
-        Input.new(messages, options.merge(name: name, input: input))
+      def lookup_options(opts, arg_vals)
+        super.update(val_type: opts[:input].class)
       end
     end
   end
 end
-
-require 'dry/validation/error_compiler/input'

@@ -103,6 +103,23 @@ RSpec.describe 'Validation hints' do
     end
   end
 
+  context 'with an each rule' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:nums).each(:int?, gt?: 0)
+      end
+    end
+
+    it 'provides hints for each element' do
+      expect(schema.(nums: [1, 'foo', 0]).messages).to eql(
+        nums: {
+          1 => ['must be an integer', 'must be greater than 0'],
+          2 => ['must be greater than 0']
+        }
+      )
+    end
+  end
+
   context 'when the message uses input value' do
     subject(:schema) do
       Dry::Validation.Schema do

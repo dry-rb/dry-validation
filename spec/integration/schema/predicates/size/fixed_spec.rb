@@ -35,7 +35,7 @@ RSpec.describe 'Predicates: Size' do
         let(:input) { { foo: '' } }
 
         #see: https://github.com/dry-rb/dry-validation/issues/121
-        xit 'is not successful' do
+        it 'is not successful' do
           expect(result).to be_failing ['length must be 3']
         end
       end
@@ -84,7 +84,7 @@ RSpec.describe 'Predicates: Size' do
         let(:input) { { foo: '' } }
 
         #see: https://github.com/dry-rb/dry-validation/issues/121
-        xit 'is not successful' do
+        it 'is not successful' do
           expect(result).to be_failing ['length must be 3']
         end
       end
@@ -135,7 +135,7 @@ RSpec.describe 'Predicates: Size' do
             let(:input) { { foo: '' } }
 
             #see: https://github.com/dry-rb/dry-validation/issues/121
-            xit 'is not successful' do
+            it 'is not successful' do
               expect(result).to be_failing ['length must be 3']
             end
           end
@@ -183,8 +183,8 @@ RSpec.describe 'Predicates: Size' do
           context 'with blank input' do
             let(:input) { { foo: '' } }
 
-            #see: https://github.com/dry-rb/dry-validation/issues/121
-            xit 'is not successful' do
+            it 'is not successful' do
+              pending
               expect(result).to be_failing ['must be filled', 'length must be 3']
             end
           end
@@ -233,7 +233,7 @@ RSpec.describe 'Predicates: Size' do
             let(:input) { { foo: '' } }
 
             #see: https://github.com/dry-rb/dry-validation/issues/121
-            xit 'is not successful' do
+            it 'is not successful' do
               expect(result).to be_failing ['length must be 3']
             end
           end
@@ -284,7 +284,7 @@ RSpec.describe 'Predicates: Size' do
             let(:input) { { foo: '' } }
 
             #see: https://github.com/dry-rb/dry-validation/issues/121
-            xit 'is not successful' do
+            it 'is not successful' do
               expect(result).to be_failing ['length must be 3']
             end
           end
@@ -332,8 +332,8 @@ RSpec.describe 'Predicates: Size' do
           context 'with blank input' do
             let(:input) { { foo: '' } }
 
-            #see: https://github.com/dry-rb/dry-validation/issues/121
-            xit 'is not successful' do
+            it 'is not successful' do
+              pending
               expect(result).to be_failing ['must be filled', 'length must be 3']
             end
           end
@@ -382,7 +382,7 @@ RSpec.describe 'Predicates: Size' do
             let(:input) { { foo: '' } }
 
             #see: https://github.com/dry-rb/dry-validation/issues/121
-            xit 'is not successful' do
+            it 'is not successful' do
               expect(result).to be_failing ['length must be 3']
             end
           end
