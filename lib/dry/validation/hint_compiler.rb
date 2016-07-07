@@ -51,8 +51,8 @@ module Dry
       end
 
       def visit_predicate(node, opts = EMPTY_HASH)
-        predicate, _ = node
-        return EMPTY_ARRAY if excluded.include?(predicate)
+        predicate, args = node
+        return EMPTY_ARRAY if excluded.include?(predicate) || dyn_args?(args)
         super(node, opts.merge(val_type: TYPES[predicate]))
       end
 
@@ -92,6 +92,12 @@ module Dry
 
       def visit_type(node, *args)
         visit(node.rule.to_ast, *args)
+      end
+
+      private
+
+      def dyn_args?(args)
+        args.map(&:last).any? { |a| a.is_a?(UnboundMethod) }
       end
     end
   end

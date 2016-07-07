@@ -213,8 +213,8 @@ RSpec.describe Dry::Validation do
         end
       end
 
-      required(:category).filled(valid_category?: %w(foo bar))
-    end
+      required(:category).filled(valid_category?: categories)
+    end.with(categories: %w(foo bar))
 
     expect(schema.(category: 'baz').messages).to eql(
       category: ['must be one of the categories: ["foo", "bar"]']

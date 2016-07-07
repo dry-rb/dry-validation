@@ -23,7 +23,7 @@ module Dry
 
           keys = [name, *vals.map(&:name)]
 
-          registry.ensure_valid_predicate(meth, args.size + keys.size)
+          registry.ensure_valid_predicate(meth, args.size + keys.size, schema_class)
           predicate = registry[meth].curry(*args)
 
           rule = create_rule([:check, [name, predicate.to_ast, keys]])

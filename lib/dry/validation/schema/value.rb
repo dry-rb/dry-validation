@@ -146,7 +146,7 @@ module Dry
         end
 
         def predicate(name, *args)
-          registry.ensure_valid_predicate(name, args)
+          registry.ensure_valid_predicate(name, args, schema_class)
           registry[name].curry(*args)
         end
 
@@ -164,6 +164,10 @@ module Dry
           end
         end
 
+        def dyn_arg?(name)
+          schema_class.instance_methods.include?(name)
+        end
+
         private
 
         def infer_predicates(predicates, infer_on)
@@ -179,6 +183,8 @@ module Dry
         end
 
         def method_missing(meth, *args, &block)
+          return schema_class.instance_method(meth) if dyn_arg?(meth)
+
           val_rule = create_rule([:val, predicate(meth, *args).to_ast])
 
           if block

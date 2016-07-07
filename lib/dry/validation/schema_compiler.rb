@@ -29,11 +29,16 @@ module Dry
     end
 
     class SchemaCompiler < Logic::RuleCompiler
-      attr_reader :options
+      attr_reader :schema, :options
 
       def initialize(*args, options)
         super(*args)
         @options = options
+        @schema = predicates.schema
+      end
+
+      def visit_predicate(node)
+        super.evaluate_args!(schema)
       end
 
       def visit_schema(klass)

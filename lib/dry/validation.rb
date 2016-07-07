@@ -7,6 +7,25 @@ require 'dry/validation/schema/form'
 require 'dry/validation/schema/json'
 
 module Dry
+  # FIXME: move this to dry-logic if it works lol
+  require 'dry/logic/predicate'
+  module Logic
+    class Predicate
+      class Curried < Predicate
+        def evaluate_args!(schema)
+          @args = args.map { |arg|
+            arg.is_a?(UnboundMethod) ? arg.bind(schema).() : arg
+          }
+          self
+        end
+      end
+
+      def evaluate_args!(*)
+        self
+      end
+    end
+  end
+
   module Validation
     MissingMessageError = Class.new(StandardError)
     InvalidSchemaError = Class.new(StandardError)

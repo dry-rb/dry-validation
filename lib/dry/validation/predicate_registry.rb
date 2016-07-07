@@ -5,8 +5,11 @@ module Dry
       attr_reader :external
 
       class Bound < PredicateRegistry
+        attr_reader :schema
+
         def initialize(*args)
-          super
+          super(*args[0..1])
+          @schema = args.last
           freeze
         end
       end
@@ -16,7 +19,7 @@ module Dry
           bound_predicates = predicates.each_with_object({}) do |(n, p), res|
             res[n] = p.bind(schema)
           end
-          Bound.new(external, bound_predicates)
+          Bound.new(external, bound_predicates, schema)
         end
 
         def update(other)
@@ -68,7 +71,9 @@ module Dry
         predicates.key?(name) || external.key?(name)
       end
 
-      def ensure_valid_predicate(name, args_or_arity)
+      def ensure_valid_predicate(name, args_or_arity, schema = nil)
+        return if schema && schema.instance_methods.include?(name)
+
         if name == :key?
           raise InvalidSchemaError, "#{name} is a reserved predicate name"
         end
