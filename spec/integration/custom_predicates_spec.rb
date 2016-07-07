@@ -199,6 +199,11 @@ RSpec.describe Dry::Validation do
               errors: {
                 valid_category?: 'must be one of the categories: %{categories}'
               }
+            },
+            pl: {
+              errors: {
+                valid_category?: 'musi być jedną z: %{categories}'
+              }
             }
           )
         end
@@ -213,6 +218,10 @@ RSpec.describe Dry::Validation do
 
     expect(schema.(category: 'baz').messages).to eql(
       category: ['must be one of the categories: ["foo", "bar"]']
+    )
+
+    expect(schema.(category: 'baz').messages(locale: :pl)).to eql(
+      category: ['musi być jedną z: ["foo", "bar"]']
     )
   end
 end

@@ -23,12 +23,19 @@ module Dry
 
         path.compact!
 
-        visit(error, opts.merge(rule: rule, path: path))
+        template = messages[rule, default_lookup_options]
+
+        if template
+          predicate, args, tokens = visit(error, opts.merge(path: path, message: false))
+          message_class[predicate, path, template % tokens, rule: rule, args: args]
+        else
+          visit(error, opts.merge(rule: rule, path: path))
+        end
       end
 
       def visit_input(node, opts = EMPTY_HASH)
         rule, result = node
-        visit(result, { rule: rule }.merge(opts))
+        visit(result, opts.merge(rule: rule))
       end
 
       def visit_result(node, opts = EMPTY_HASH)
@@ -56,7 +63,7 @@ module Dry
         visit(other, opts.merge(path: Array(path)))
       end
 
-      def lookup_options(opts, arg_vals)
+      def lookup_options(opts, arg_vals = [])
         super.update(val_type: opts[:input].class)
       end
     end

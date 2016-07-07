@@ -5,13 +5,14 @@ require 'dry/validation/message_set'
 module Dry
   module Validation
     class MessageCompiler
-      attr_reader :messages, :options, :locale
+      attr_reader :messages, :options, :locale, :default_lookup_options
 
       def initialize(messages, options = {})
         @messages = messages
         @options = options
         @full = @options.fetch(:full, false)
         @locale = @options.fetch(:locale, :en)
+        @default_lookup_options = { message_type: message_type, locale: locale }
       end
 
       def call(ast)
@@ -37,23 +38,25 @@ module Dry
         *arg_vals, _ = args.map(&:last)
 
         tokens = message_tokens(predicate, args)
-        options = base_opts.update(lookup_options(base_opts, arg_vals))
 
+        if base_opts[:message] == false
+          return [predicate, arg_vals, tokens]
+        end
+
+        options = base_opts.update(lookup_options(base_opts, arg_vals))
         msg_opts = options.update(tokens)
 
         name = msg_opts[:name]
         rule = msg_opts[:rule] || name
 
-        if template = messages[rule, msg_opts]
-          custom = true
-        elsif template = messages[predicate, msg_opts]
-          custom = false
-        else
-          raise MissingMessageError, "message for #{rule}/#{predicate} was not found"
+        template = messages[predicate, msg_opts]
+
+        unless template
+          raise MissingMessageError, "message for #{predicate} was not found"
         end
 
         text = message_text(rule, template, tokens, options)
-        path = message_path(base_opts, rule, name, custom)
+        path = message_path(msg_opts, name)
 
         message_class[
           predicate, path, text,
@@ -89,10 +92,10 @@ module Dry
         visit(right, *args)
       end
 
-      def lookup_options(_opts, arg_vals)
-        { message_type: message_type,
-          locale: locale,
-          arg_type: arg_vals.size == 1 && arg_vals[0].class }
+      def lookup_options(_opts, arg_vals = [])
+        default_lookup_options.merge(
+          arg_type: arg_vals.size == 1 && arg_vals[0].class
+        )
       end
 
       def message_text(rule, template, tokens, opts)
@@ -106,9 +109,7 @@ module Dry
         end
       end
 
-      def message_path(opts, rule, name, custom = false)
-        return [rule] if custom
-
+      def message_path(opts, name)
         if name.is_a?(Array)
           name
         else
