@@ -1,5 +1,9 @@
 # v0.8.1 to-be-released
 
+### Added
+
+* Support for interpolation of custom failure messages for custom rules (solnic)
+
 ### Fixed
 
 * Duped key names in nested schemas no longer result in invalid error messages structure (solnic)
