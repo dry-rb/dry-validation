@@ -23,18 +23,12 @@ module Dry
 
         path.compact!
 
-        text = messages[rule]
-
-        if text
-          Message[node, path, text, rule: rule]
-        else
-          visit(error, opts.merge(path: path))
-        end
+        visit(error, opts.merge(rule: rule, path: path))
       end
 
       def visit_input(node, opts = EMPTY_HASH)
         rule, result = node
-        visit(result, opts.merge(rule: rule))
+        visit(result, { rule: rule }.merge(opts))
       end
 
       def visit_result(node, opts = EMPTY_HASH)

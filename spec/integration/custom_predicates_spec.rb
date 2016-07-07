@@ -187,4 +187,32 @@ RSpec.describe Dry::Validation do
 
     expect(schema.(foo: { bar: "1" })).to be_success
   end
+
+  it 'works with interpolation of messages' do
+    schema = Dry::Validation.Schema do
+      configure do
+        option :categories, []
+
+        def self.messages
+          Dry::Validation::Messages.default.merge(
+            en: {
+              errors: {
+                valid_category?: 'must be one of the categories: %{categories}'
+              }
+            }
+          )
+        end
+
+        def valid_category?(categories, value)
+          categories.include?(value)
+        end
+      end
+
+      required(:category).filled(valid_category?: %w(foo bar))
+    end
+
+    expect(schema.(category: 'baz').messages).to eql(
+      category: ['must be one of the categories: ["foo", "bar"]']
+    )
+  end
 end

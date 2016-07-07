@@ -39,17 +39,21 @@ module Dry
         tokens = message_tokens(predicate, args)
         options = base_opts.update(lookup_options(base_opts, arg_vals))
 
-        template = messages[predicate, options.update(tokens)]
+        msg_opts = options.update(tokens)
 
-        unless template
-          raise MissingMessageError, "message for #{predicate} was not found"
+        name = msg_opts[:name]
+        rule = msg_opts[:rule] || name
+
+        if template = messages[rule, msg_opts]
+          custom = true
+        elsif template = messages[predicate, msg_opts]
+          custom = false
+        else
+          raise MissingMessageError, "message for #{rule}/#{predicate} was not found"
         end
 
-        name = options[:name]
-        rule = options[:rule] || name
-
         text = message_text(rule, template, tokens, options)
-        path = message_path(base_opts, name)
+        path = message_path(base_opts, rule, name, custom)
 
         message_class[
           predicate, path, text,
@@ -80,6 +84,11 @@ module Dry
         visit(right, *args)
       end
 
+      def visit_xor(node, *args)
+        _, right = node
+        visit(right, *args)
+      end
+
       def lookup_options(_opts, arg_vals)
         { message_type: message_type,
           locale: locale,
@@ -97,7 +106,9 @@ module Dry
         end
       end
 
-      def message_path(opts, name)
+      def message_path(opts, rule, name, custom = false)
+        return [rule] if custom
+
         if name.is_a?(Array)
           name
         else

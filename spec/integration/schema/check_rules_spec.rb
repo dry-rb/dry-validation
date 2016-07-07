@@ -28,8 +28,8 @@ RSpec.describe Schema, 'using high-level rules' do
     end
 
     it 'fails when red and blue are not filled ' do
-      expect(schema.(red: nil, blue: nil).messages[:destiny]).to eql(
-        ['you must select either red or blue']
+      expect(schema.(red: nil, blue: nil).messages).to eql(
+        destiny: ['you must select either red or blue']
       )
     end
   end
