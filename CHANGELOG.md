@@ -2,6 +2,7 @@
 
 ### Added
 
+* Support for defining maybe-schemas via `maybe { schema { .. } }` (solnic)
 * Support for interpolation of custom failure messages for custom rules (solnic)
 * [experimental] Ability to compose predicates that accept dynamic args provided by the schema (solnic)
 
