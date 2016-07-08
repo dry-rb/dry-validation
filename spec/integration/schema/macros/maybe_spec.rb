@@ -48,6 +48,36 @@ RSpec.describe 'Macros #maybe' do
     end
   end
 
+  describe 'with an optional key and a block with schema' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        optional(:employee).maybe do
+          schema do
+            required(:id).filled(:str?)
+          end
+        end
+      end
+    end
+
+    it 'passes when input is valid' do
+      expect(schema.(employee: { id: '1' })).to be_success
+    end
+
+    it 'passes when key is missing' do
+      expect(schema.({})).to be_success
+    end
+
+    it 'passes when value is nil' do
+      expect(schema.(employee: nil)).to be_success
+    end
+
+    it 'fails when value for nested schema is invalid' do
+      expect(schema.(employee: { id: 1 }).messages).to eql(
+        employee: { id: ['must be a string'] }
+      )
+    end
+  end
+
   describe 'with a predicate and a block' do
     subject(:schema) do
       Dry::Validation.Schema do

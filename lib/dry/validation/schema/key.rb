@@ -26,6 +26,10 @@ module Dry
           create_rule([type, [name, value.each(*predicates, &block).to_ast]])
         end
 
+        def schema(other = nil, &block)
+          create_rule([type, [name, value.schema(other, &block).to_ast]])
+        end
+
         def hash?(&block)
           predicate = registry[:hash?]
 
