@@ -73,7 +73,7 @@ module Dry
       end
 
       def call(input)
-        output, result = executor.(input, {})
+        output, result = executor.(input)
         Result.new(output, result, error_compiler, hint_compiler)
       end
 
