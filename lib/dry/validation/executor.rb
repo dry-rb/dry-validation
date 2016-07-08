@@ -7,8 +7,8 @@ module Dry
         @processor = processor
       end
 
-      def call(input, result)
-        [processor.(input), result]
+      def call(input, *)
+        processor.(input)
       end
     end
 
@@ -22,7 +22,7 @@ module Dry
       def call(input, result)
         rule_res = rule.(input)
         result.update(nil => rule_res) unless rule_res.success?
-        [input, result]
+        input
       end
     end
 
@@ -37,7 +37,7 @@ module Dry
         rules.each_with_object(result) do |(name, rule), hash|
           hash[name] = rule.(input)
         end
-        [input, result]
+        input
       end
     end
 
@@ -47,7 +47,7 @@ module Dry
           check_res = check.is_a?(Guard) ? check.(input, result) : check.(input)
           hash[name] = check_res if check_res
         end
-        [input, result]
+        input
       end
     end
 
@@ -58,11 +58,10 @@ module Dry
         @path = Array[*path]
       end
 
-      def call(input, result)
-        errors = result
+      def call(result)
+        result
           .select { |_, r| r.failure? }
           .map { |name, r| Error.new(error_path(name), r) }
-        [input, errors]
       end
 
       def error_path(name)
@@ -87,12 +86,12 @@ module Dry
         @final = final
       end
 
-      def call(*args)
-        output, response = steps.reduce(args) do |(input, result), s|
-          return final.(input, result) if result.key?(nil)
-          s.call(input, result)
+      def call(input, result = {})
+        output = steps.reduce(input) do |a, e|
+          return [a, final.(result)] if result.key?(nil)
+          e.call(a, result)
         end
-        final.(output, response)
+        [output, final.(result)]
       end
     end
   end
