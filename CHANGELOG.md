@@ -23,7 +23,6 @@
 * Hints now work with array elements too (solnic)
 * Hints for elements are no longer provided for an array when the value is not an array (solnic)
 * `input` macro no longer messes up error messages for nested structures (solnic)
-* `messages` and `error_compiler` are now properly inherited from base schema class (solnic)
 
 ### Internal
 
