@@ -2,7 +2,9 @@ require 'dry/validation/constants'
 
 module Dry
   module Validation
-    class Message < Struct.new(:predicate, :path, :text, :options)
+    class Message
+      include Dry::Equalizer(:predicate, :path, :text, :options)
+
       Index = Class.new {
         def inspect
           "index"
@@ -10,7 +12,7 @@ module Dry
         alias_method :to_s, :inspect
       }.new
 
-      attr_reader :rule, :args
+      attr_reader :predicate, :path, :text, :rule, :args
 
       class Each < Message
         def index_path
@@ -27,8 +29,11 @@ module Dry
         klass.new(predicate, path, text, options)
       end
 
-      def initialize(*args)
-        super
+      def initialize(predicate, path, text, options)
+        @predicate = predicate
+        @path = path
+        @text = text
+        @options = options
         @rule = options[:rule]
         @each = options[:each] || false
         @args = options[:args] || EMPTY_ARRAY
