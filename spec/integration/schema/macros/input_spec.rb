@@ -75,19 +75,16 @@ RSpec.describe 'Macros #input' do
     end
 
     it 'fails when 1-level key is missing' do
-      pending
       expect(schema.(meta: {}).messages).to eql(meta: { meta: ['is missing'] })
     end
 
     it 'fails when 1-level key value is invalid' do
-      pending
       expect(schema.(meta: { meta: '' }).messages).to eql(
         meta: { meta: ['must be a hash'] }
       )
     end
 
     it 'fails when 2-level key value is invalid' do
-      pending
       expect(schema.(meta: { meta: { data: '' } }).messages).to eql(
         meta: { meta: { data: ['must be filled'] } }
       )

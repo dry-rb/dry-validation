@@ -7,8 +7,22 @@ module Dry
         @processor = processor
       end
 
-      def call(input, *)
-        processor.(input)
+      def call(input, result)
+        [processor.(input), result]
+      end
+    end
+
+    class ApplyInputRule
+      attr_reader :rule
+
+      def initialize(rule)
+        @rule = rule
+      end
+
+      def call(input, result)
+        rule_res = rule.(input)
+        result.update(nil => rule_res) unless rule_res.success?
+        [input, result]
       end
     end
 
@@ -20,18 +34,20 @@ module Dry
       end
 
       def call(input, result)
-        result.update(rules.each_with_object({}) do |(name, rule), hash|
+        rules.each_with_object(result) do |(name, rule), hash|
           hash[name] = rule.(input)
-        end)
+        end
+        [input, result]
       end
     end
 
     class ApplyChecks < ApplyRules
       def call(input, result)
-        result.update(rules.each_with_object({}) do |(name, check), hash|
+        rules.each_with_object(result) do |(name, check), hash|
           check_res = check.is_a?(Guard) ? check.(input, result) : check.(input)
           hash[name] = check_res if check_res
-        end)
+        end
+        [input, result]
       end
     end
 
@@ -42,10 +58,10 @@ module Dry
         @path = Array[*path]
       end
 
-      def call(_input, results)
-        results
-          .select { |_, result| result.failure? }
-          .map { |name, result| Error.new(error_path(name), result) }
+      def call(_input, result)
+        result
+          .select { |_, r| r.failure? }
+          .map { |name, r| Error.new(error_path(name), r) }
       end
 
       def error_path(name)
@@ -69,8 +85,11 @@ module Dry
         @steps = []
       end
 
-      def call(input, results)
-        steps.reduce { |a, e| e.call(input, results) }
+      def call(*args)
+        steps.reduce(args) do |(input, result), s|
+          return steps.last.call(input, result) if result.key?(nil)
+          s.call(input, result)
+        end
       end
     end
   end

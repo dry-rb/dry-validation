@@ -20,6 +20,10 @@ require 'dry/validation/executor'
 module Dry
   module Validation
     class Schema
+      attr_reader :config
+
+      attr_reader :input_rule
+
       attr_reader :rules
 
       attr_reader :checks
@@ -42,11 +46,13 @@ module Dry
 
       def initialize(rules, options)
         @type_map = self.class.type_map
+        @config = self.class.config
         @predicates = options.fetch(:predicate_registry).bind(self)
         @rule_compiler = SchemaCompiler.new(predicates, options)
         @error_compiler = options.fetch(:error_compiler)
         @hint_compiler = options.fetch(:hint_compiler)
         @input_processor = options[:input_processor]
+        @input_rule = rule_compiler.visit(config.input_rule.to_ast) if config.input_rule
 
         initialize_options(options)
         initialize_rules(rules)
@@ -54,6 +60,7 @@ module Dry
 
         @executor = Executor.new do |steps|
           steps << ProcessInput.new(input_processor) if input_processor
+          steps << ApplyInputRule.new(input_rule) if input_rule
           steps << ApplyRules.new(@rules)
           steps << ApplyChecks.new(@checks) if @checks.any?
           steps << BuildErrors.new(self.class.config.path)

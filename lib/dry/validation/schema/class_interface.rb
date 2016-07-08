@@ -18,6 +18,7 @@ module Dry
       setting :checks, []
       setting :options, {}
       setting :input, nil
+      setting :input_rule, nil
       setting :dsl_extensions, nil
 
       setting :input_processor_map, {

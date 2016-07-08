@@ -33,15 +33,11 @@ module Dry
 
       klass = dsl.schema_class
 
-      base_rules = klass.config.rules + (options.fetch(:rules, []) + dsl.rules)
+      rules = klass.config.rules + (options.fetch(:rules, []) + dsl.rules)
 
-      rules =
-        if klass.config.input
-          input_rule = dsl.__send__(klass.config.input)
-          [input_rule.and(dsl.with(rules: base_rules))]
-        else
-          base_rules
-        end
+      if klass.config.input
+        klass.config.input_rule = dsl.__send__(klass.config.input)
+      end
 
       klass.configure do |config|
         config.rules = rules
