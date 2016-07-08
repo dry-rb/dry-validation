@@ -167,4 +167,34 @@ RSpec.describe Schema, 'nested schemas' do
       )
     end
   end
+
+  context 'with 2-level `each` + schema' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:data).each do
+          schema do
+            required(:tags).each do
+              required(:name).filled
+            end
+          end
+        end
+      end
+    end
+
+    it 'passes when input is valid' do
+      expect(schema.(data: [{ tags: [{ name: 'red' }, { name: 'blue' }] }])).to be_success
+    end
+
+    it 'fails when 1-level element is not valid' do
+      expect(schema.(data: [{}]).messages).to eql(
+        data: { 0 => { tags: ['is missing'] } }
+      )
+    end
+
+    it 'fails when 2-level element is not valid' do
+      expect(schema.(data: [{ tags: [{ name: 'red' }, { name: '' }] }]).messages).to eql(
+        data: { 0 => { tags: { 1 => { name: ['must be filled'] } } } }
+      )
+    end
+  end
 end

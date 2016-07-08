@@ -35,7 +35,13 @@ module Dry
 
       def visit_input(node, opts = EMPTY_HASH)
         rule, result = node
-        visit(result, opts.merge(rule: rule))
+        opt_rule = opts[:rule]
+
+        if opts[:each] && opt_rule.is_a?(Array)
+          visit(result, opts.merge(rule: rule, path: opts[:path] + [opt_rule.last]))
+        else
+          visit(result, opts.merge(rule: rule))
+        end
       end
 
       def visit_result(node, opts = EMPTY_HASH)
