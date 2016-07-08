@@ -42,8 +42,16 @@ module Dry
           begin
             return EMPTY_MESSAGES if success?
             hints = hint_compiler.with(options).call
-            hash = error_compiler.with(options).(error_ast).with_hints!(hints).to_h
-            hash.key?(nil) ? hash.values.flatten : hash
+            msg_set = error_compiler.with(options).(error_ast).with_hints!(hints)
+
+            as_hash = options.fetch(:as_hash, true)
+
+            if as_hash
+              hash = msg_set.to_h
+              hash.key?(nil) ? hash.values.flatten : hash
+            else
+              msg_set
+            end
           end
       end
 
