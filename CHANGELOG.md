@@ -3,6 +3,7 @@
 ### Added
 
 * Support for interpolation of custom failure messages for custom rules (solnic)
+* [experimental] Ability to compose predicates that accept dynamic args provided by the schema (solnic)
 
 ### Fixed
 
@@ -10,11 +11,14 @@
 * Values from `option` are passed down to nested schemas when using `Schema#with` (solnic)
 * Hints now work with array elements too (solnic)
 * Hints for elements are no longer provided for an array when the value is not an array (solnic)
+* `input` macro no longer messes up error messages for nested structures (solnic)
 
 ### Internal
 
 * Compiling messages is now ~5% faster (solnic + splattael)
 * Refactored Error and Hint compilers (solnic)
+* Refactored Schema to use an internal executor objects with steps (solnic)
+* Extracted root-rule into a separate validation step (solnic)
 * Added `MessageSet` that result objects now use (in 0.9.0 it'll be exposed via public API) (solnic)
 * We can now distinguish error messages from validation hints via `Message` and `Hint` objects (solnic)
 
