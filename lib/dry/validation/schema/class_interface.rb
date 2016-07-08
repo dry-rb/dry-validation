@@ -1,3 +1,6 @@
+require 'dry/validation/messages/yaml'
+require 'dry/validation/messages/i18n'
+
 require 'dry/validation/type_specs'
 
 module Dry
@@ -31,6 +34,39 @@ module Dry
 
       def self.new(rules = config.rules, **options)
         super(rules, default_options.merge(options))
+      end
+
+      def self.define(options = {}, &block)
+        source = options.fetch(:schema_class)
+        config = source.config
+
+        dsl_ext = config.dsl_extensions
+
+        dsl = Schema::Value.new(options.merge(registry: source.registry))
+        dsl_ext.__send__(:extend_object, dsl) if dsl_ext
+        dsl.predicates(options[:predicates]) if options.key?(:predicates)
+        dsl.instance_exec(&block) if block
+
+        target = dsl.schema_class
+
+        if config.input
+          config.input_rule = dsl.__send__(target.config.input)
+        end
+
+        rules = target.config.rules + (options.fetch(:rules, []) + dsl.rules)
+
+        target.configure do |cfg|
+          cfg.rules = rules
+          cfg.checks = cfg.checks + dsl.checks
+          cfg.path = dsl.path
+          cfg.type_map = target.build_type_map(dsl.type_map) if cfg.type_specs
+        end
+
+        target
+      end
+
+      def self.define!(options = {}, &block)
+        define(schema_class: self, &block)
       end
 
       def self.predicates(predicate_set = nil)

@@ -115,9 +115,8 @@ module Dry
         end
 
         def configure(&block)
-          klass = ::Class.new(schema_class, &block)
-          @schema_class = klass
-          @registry = klass.registry
+          schema_class.class_eval(&block)
+          @registry = schema_class.registry
           self
         end
 
