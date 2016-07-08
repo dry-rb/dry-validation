@@ -5,6 +5,7 @@
 * Support for defining maybe-schemas via `maybe { schema { .. } }` (solnic)
 * Support for interpolation of custom failure messages for custom rules (solnic)
 * Support for defining a base schema **class** with config and rules (solnic)
+* Support for more than 1 predicate in `input` macro (solnic)
 * Class-level `define!` API for defining rules on a class (solnic)
 * [experimental] Ability to compose predicates that accept dynamic args provided by the schema (solnic)
 
