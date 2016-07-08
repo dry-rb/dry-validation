@@ -37,7 +37,7 @@ module Dry
 
         *arg_vals, _ = args.map(&:last)
 
-        tokens = message_tokens(predicate, args)
+        tokens = message_tokens(args)
 
         if base_opts[:message] == false
           return [predicate, arg_vals, tokens]
@@ -123,44 +123,18 @@ module Dry
         end
       end
 
-      def message_tokens(predicate, args)
-        meth = :"message_tokens_#{predicate}"
-
-        defaults = Hash[args]
-
-        if respond_to?(meth)
-          defaults.merge!(__send__(meth, defaults))
-        end
-
-        defaults
-      end
-
-      def message_tokens_inclusion?(args)
-        warn 'inclusion is deprecated - use included_in instead.'
-        message_tokens_included_in?(args)
-      end
-
-      def message_tokens_exclusion?(args)
-        warn 'exclusion is deprecated - use excluded_from instead.'
-        message_tokens_excluded_from?(args)
-      end
-
-      def message_tokens_excluded_from?(args)
-        { list: args[:list].join(', ') }
-      end
-
-      def message_tokens_included_in?(args)
-        { list: args[:list].join(', ') }
-      end
-
-      def message_tokens_size?(args)
-        size = args[:size]
-
-        if size.is_a?(Range)
-          { left: size.first, right: size.last }
-        else
-          args
-        end
+      def message_tokens(args)
+        args.each_with_object({}) { |arg, hash|
+          case arg[1]
+          when Array
+            hash[arg[0]] = arg[1].join(', ')
+          when Range
+            hash["#{arg[0]}_left".to_sym] = arg[1].first
+            hash["#{arg[0]}_right".to_sym] = arg[1].last
+          else
+            hash[arg[0]] = arg[1]
+          end
+        }
       end
     end
   end

@@ -7,6 +7,7 @@ en:
     excludes?: "must not include %{value}"
 
     excluded_from?: "must not be one of: %{list}"
+    exclusion?: "must not be one of: %{list}"
 
     eql?: "must be equal to %{left}"
 
@@ -72,10 +73,10 @@ en:
     size?:
       arg:
         default: "size must be %{size}"
-        range: "size must be within %{left} - %{right}"
+        range: "size must be within %{size_left} - %{size_right}"
 
       value:
         string:
           arg:
             default: "length must be %{size}"
-            range: "length must be within %{left} - %{right}"
+            range: "length must be within %{size_left} - %{size_right}"

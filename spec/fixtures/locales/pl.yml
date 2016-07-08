@@ -4,7 +4,7 @@ pl:
     size?:
       arg:
         default: "wielkość musi być równa %{size}"
-        range: "wielkość musi być między %{left} a %{right}"
+        range: "wielkość musi być między %{size_left} a %{size_right}"
     rules:
       email:
         filled?: "Proszę podać adres email"
