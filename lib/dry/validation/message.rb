@@ -12,7 +12,7 @@ module Dry
         alias_method :to_s, :inspect
       }.new
 
-      attr_reader :predicate, :path, :text, :rule, :args
+      attr_reader :predicate, :path, :text, :rule, :args, :options
 
       class Each < Message
         def index_path
