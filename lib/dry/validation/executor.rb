@@ -58,10 +58,11 @@ module Dry
         @path = Array[*path]
       end
 
-      def call(_input, result)
-        result
+      def call(input, result)
+        errors = result
           .select { |_, r| r.failure? }
           .map { |name, r| Error.new(error_path(name), r) }
+        [input, errors]
       end
 
       def error_path(name)
@@ -72,24 +73,26 @@ module Dry
     end
 
     class Executor
-      attr_reader :steps
+      attr_reader :steps, :final
 
-      def self.new(&block)
-        super.tap do |executor|
+      def self.new(path, &block)
+        super(BuildErrors.new(path)).tap do |executor|
           yield(executor.steps)
           executor.freeze
         end
       end
 
-      def initialize
+      def initialize(final)
         @steps = []
+        @final = final
       end
 
       def call(*args)
-        steps.reduce(args) do |(input, result), s|
-          return steps.last.call(input, result) if result.key?(nil)
+        output, response = steps.reduce(args) do |(input, result), s|
+          return final.(input, result) if result.key?(nil)
           s.call(input, result)
         end
+        final.(output, response)
       end
     end
   end

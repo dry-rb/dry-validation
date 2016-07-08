@@ -58,12 +58,11 @@ module Dry
         initialize_rules(rules)
         initialize_checks(options.fetch(:checks, []))
 
-        @executor = Executor.new do |steps|
+        @executor = Executor.new(config.path) do |steps|
           steps << ProcessInput.new(input_processor) if input_processor
           steps << ApplyInputRule.new(input_rule) if input_rule
           steps << ApplyRules.new(@rules)
           steps << ApplyChecks.new(@checks) if @checks.any?
-          steps << BuildErrors.new(self.class.config.path)
         end
 
         freeze
@@ -74,14 +73,8 @@ module Dry
       end
 
       def call(input)
-        processed_input = input_processor[input]
-
-        Result.new(
-          processed_input,
-          executor.(processed_input, {}),
-          error_compiler,
-          hint_compiler
-        )
+        output, result = executor.(input, {})
+        Result.new(output, result, error_compiler, hint_compiler)
       end
 
       def curry(*curry_args)
