@@ -131,20 +131,17 @@ module Dry
       end
 
       def self.messages
-        @messages ||=
-          begin
-            default = default_messages
+        default = default_messages
 
-            if config.messages_file && config.namespace
-              default.merge(config.messages_file).namespaced(config.namespace)
-            elsif config.messages_file
-              default.merge(config.messages_file)
-            elsif config.namespace
-              default.namespaced(config.namespace)
-            else
-              default
-            end
-          end
+        if config.messages_file && config.namespace
+          default.merge(config.messages_file).namespaced(config.namespace)
+        elsif config.messages_file
+          default.merge(config.messages_file)
+        elsif config.namespace
+          default.namespaced(config.namespace)
+        else
+          default
+        end
       end
 
       def self.default_messages
@@ -185,11 +182,6 @@ module Dry
           klass.config.registry = registry.new(self)
         else
           klass.set_registry!
-        end
-
-        if self != Schema && self != Form && self != JSON
-          klass.instance_variable_set(:"@messages", messages)
-          klass.instance_variable_set(:"@error_compiler", error_compiler)
         end
       end
 
