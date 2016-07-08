@@ -4,6 +4,8 @@
 
 * Support for defining maybe-schemas via `maybe { schema { .. } }` (solnic)
 * Support for interpolation of custom failure messages for custom rules (solnic)
+* Support for defining a base schema **class** with config and rules (solnic)
+* Class-level `define!` API for defining rules on a class (solnic)
 * [experimental] Ability to compose predicates that accept dynamic args provided by the schema (solnic)
 
 ### Fixed
@@ -13,6 +15,7 @@
 * Hints now work with array elements too (solnic)
 * Hints for elements are no longer provided for an array when the value is not an array (solnic)
 * `input` macro no longer messes up error messages for nested structures (solnic)
+* `messages` and `error_compiler` are now properly inherited from base schema class (solnic)
 
 ### Internal
 
