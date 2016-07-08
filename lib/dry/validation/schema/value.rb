@@ -18,8 +18,8 @@ module Dry
           @registry = options[:registry] = schema_class.predicates(mod)
         end
 
-        def input(type)
-          schema_class.config.input = type
+        def input(*predicates)
+          schema_class.config.input = predicates
           self
         end
 
@@ -169,7 +169,7 @@ module Dry
 
         private
 
-        def infer_predicates(predicates, infer_on)
+        def infer_predicates(predicates, infer_on = self)
           predicates.map { |predicate|
             name, *args = ::Kernel.Array(predicate).first
 

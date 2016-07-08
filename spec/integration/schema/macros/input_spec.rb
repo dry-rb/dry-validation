@@ -90,4 +90,24 @@ RSpec.describe 'Macros #input' do
       )
     end
   end
+
+  context 'using more than one predicate' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        input :hash?, size?: 2
+
+        required(:foo).filled
+      end
+    end
+
+    it 'passes when input is valid' do
+      expect(schema.(foo: "bar", bar: "baz")).to be_successful
+    end
+
+    it 'fails when one of the root-rules fails' do
+      expect(schema.(foo: "bar", bar: "baz", oops: "heh").messages).to eql(
+        ['size must be 2']
+      )
+    end
+  end
 end
