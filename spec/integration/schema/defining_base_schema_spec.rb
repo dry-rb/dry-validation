@@ -34,4 +34,12 @@ RSpec.describe 'Defining base schema class' do
       name: ['must be filled'], email: ['is missing', 'must be an email']
     )
   end
+
+  it 'inherits messages' do
+    expect(schema.class.messages).to be(BaseSchema.messages)
+  end
+
+  it 'inherits error compiler' do
+    expect(schema.class.error_compiler).to be(BaseSchema.error_compiler)
+  end
 end
