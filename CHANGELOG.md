@@ -1,4 +1,4 @@
-# v0.8.1 2016-07-08
+# v0.9.0 2016-07-08
 
 ### Added
 
@@ -25,7 +25,7 @@
 * Refactored Error and Hint compilers (solnic)
 * Refactored Schema to use an internal executor objects with steps (solnic)
 * Extracted root-rule into a separate validation step (solnic)
-* Added `MessageSet` that result objects now use (in 0.9.0 it'll be exposed via public API) (solnic)
+* Added `MessageSet` that result objects now use (in 1.0.0 it'll be exposed via public API) (solnic)
 * We can now distinguish error messages from validation hints via `Message` and `Hint` objects (solnic)
 
 [Compare v0.8.0...master](https://github.com/dryrb/dry-validation/compare/v0.8.0...master)
