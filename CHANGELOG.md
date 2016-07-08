@@ -8,6 +8,7 @@
 * Support for more than 1 predicate in `input` macro (solnic)
 * Class-level `define!` API for defining rules on a class (solnic)
 * [experimental] Ability to compose predicates that accept dynamic args provided by the schema (solnic)
+* support for message token transformations in custom predicates (fran-worley)
 
 ### Fixed
 
