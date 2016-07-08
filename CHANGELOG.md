@@ -8,11 +8,16 @@
 * Support for more than 1 predicate in `input` macro (solnic)
 * Class-level `define!` API for defining rules on a class (solnic)
 * [experimental] Ability to compose predicates that accept dynamic args provided by the schema (solnic)
-* support for message token transformations in custom predicates (fran-worley)
+* Support for message token transformations in custom predicates (fran-worley)
+
+### Changed
+
+* Tokens for `size?` were renamed `left` => `size_left` and `right` => `size_right` (fran-worley)
 
 ### Fixed
 
 * Duped key names in nested schemas no longer result in invalid error messages structure (solnic)
+* Error message structure for deeply nested each/schema rules (solnic)
 * Values from `option` are passed down to nested schemas when using `Schema#with` (solnic)
 * Hints now work with array elements too (solnic)
 * Hints for elements are no longer provided for an array when the value is not an array (solnic)
