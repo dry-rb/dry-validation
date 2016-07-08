@@ -1,4 +1,4 @@
-# v0.9.0 to-be-released
+# v0.9.0 2016-07-08
 
 ### Added
 
@@ -7,8 +7,9 @@
 * Support for defining a base schema **class** with config and rules (solnic)
 * Support for more than 1 predicate in `input` macro (solnic)
 * Class-level `define!` API for defining rules on a class (solnic)
-* [experimental] Ability to compose predicates that accept dynamic args provided by the schema (solnic)
+* `:i18n` messages support merging from other paths via `messages_file` setting (solnic)
 * Support for message token transformations in custom predicates (fran-worley)
+* [EXPERIMENTAL] Ability to compose predicates that accept dynamic args provided by the schema (solnic)
 
 ### Changed
 
