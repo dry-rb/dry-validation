@@ -34,7 +34,7 @@
 * Added `MessageSet` that result objects now use (in 1.0.0 it'll be exposed via public API) (solnic)
 * We can now distinguish error messages from validation hints via `Message` and `Hint` objects (solnic)
 
-[Compare v0.8.0...master](https://github.com/dryrb/dry-validation/compare/v0.8.0...master)
+[Compare v0.8.0...v0.9.0](https://github.com/dryrb/dry-validation/compare/v0.8.0...v0.9.0)
 
 # v0.8.0 2016-07-01
 
