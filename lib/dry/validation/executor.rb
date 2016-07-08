@@ -54,8 +54,24 @@ module Dry
     class BuildErrors
       attr_reader :path
 
-      def initialize(path)
-        @path = Array[*path]
+      def self.[](path)
+        path.nil? || path.empty? ? Flat.new : Nested.new(path)
+      end
+
+      class Flat < BuildErrors
+        def error_path(name)
+          name
+        end
+      end
+
+      class Nested < BuildErrors
+        def initialize(path)
+          @path = path
+        end
+
+        def error_path(name)
+          [*path, name]
+        end
       end
 
       def call(result)
@@ -63,22 +79,13 @@ module Dry
           .select { |_, r| r.failure? }
           .map { |name, r| Error.new(error_path(name), r) }
       end
-
-      def error_path(name)
-        full_path = path.dup
-        full_path << name
-        full_path.size > 1 ? full_path : full_path[0]
-      end
     end
 
     class Executor
       attr_reader :steps, :final
 
       def self.new(path, &block)
-        super(BuildErrors.new(path)).tap do |executor|
-          yield(executor.steps)
-          executor.freeze
-        end
+        super(BuildErrors[path]).tap { |executor| yield(executor.steps) }.freeze
       end
 
       def initialize(final)
