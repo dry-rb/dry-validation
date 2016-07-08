@@ -15,6 +15,7 @@ require 'dry/validation/hint_compiler'
 
 require 'dry/validation/schema/deprecated'
 require 'dry/validation/schema/class_interface'
+require 'dry/validation/executor'
 
 module Dry
   module Validation
@@ -37,17 +38,26 @@ module Dry
 
       attr_reader :type_map
 
+      attr_reader :executor
+
       def initialize(rules, options)
         @type_map = self.class.type_map
         @predicates = options.fetch(:predicate_registry).bind(self)
         @rule_compiler = SchemaCompiler.new(predicates, options)
         @error_compiler = options.fetch(:error_compiler)
         @hint_compiler = options.fetch(:hint_compiler)
-        @input_processor = options.fetch(:input_processor, NOOP_INPUT_PROCESSOR)
+        @input_processor = options[:input_processor]
 
         initialize_options(options)
         initialize_rules(rules)
         initialize_checks(options.fetch(:checks, []))
+
+        @executor = Executor.new do |steps|
+          steps << ProcessInput.new(input_processor) if input_processor
+          steps << ApplyRules.new(@rules)
+          steps << ApplyChecks.new(@checks) if @checks.any?
+          steps << BuildErrors.new(self.class.config.path)
+        end
 
         freeze
       end
@@ -58,7 +68,13 @@ module Dry
 
       def call(input)
         processed_input = input_processor[input]
-        Result.new(processed_input, apply(processed_input), error_compiler, hint_compiler)
+
+        Result.new(
+          processed_input,
+          executor.(processed_input, {}),
+          error_compiler,
+          hint_compiler
+        )
       end
 
       def curry(*curry_args)
@@ -78,35 +94,6 @@ module Dry
       end
 
       private
-
-      def apply(input)
-        results = rule_results(input)
-
-        results.merge!(check_results(input, results)) unless checks.empty?
-
-        results
-          .select { |_, result| result.failure? }
-          .map { |name, result| Error.new(error_path(name), result) }
-      end
-
-      def error_path(name)
-        full_path = Array[*self.class.config.path]
-        full_path << name
-        full_path.size > 1 ? full_path : full_path[0]
-      end
-
-      def rule_results(input)
-        rules.each_with_object({}) do |(name, rule), hash|
-          hash[name] = rule.(input)
-        end
-      end
-
-      def check_results(input, result)
-        checks.each_with_object({}) do |(name, check), hash|
-          check_res = check.is_a?(Guard) ? check.(input, result) : check.(input)
-          hash[name] = check_res if check_res
-        end
-      end
 
       def initialize_options(options)
         @options = options
