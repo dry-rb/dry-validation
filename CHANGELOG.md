@@ -1,3 +1,11 @@
+# v0.9.1 2016-07-11
+
+### Fixed
+
+* `I18n` backend is no longer required and set by default (solnic)
+
+[Compare v0.9.0...v0.9.1](https://github.com/dryrb/dry-validation/compare/v0.9.0...v0.9.1)
+
 # v0.9.0 2016-07-08
 
 ### Added
