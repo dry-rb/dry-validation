@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-  gem 'i18n'
+  gem 'i18n', require: false
   gem 'codeclimate-test-reporter', platform: :rbx
 end
 

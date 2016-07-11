@@ -1,6 +1,4 @@
-require 'dry/validation/messages/yaml'
-require 'dry/validation/messages/i18n'
-
+require 'dry/validation/messages'
 require 'dry/validation/type_specs'
 
 module Dry
