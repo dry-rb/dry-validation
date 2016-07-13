@@ -1,3 +1,12 @@
+# v0.9.2 2016-07-13
+
+### Fixed
+
+* Constrained types now work with `each` macro (solnic)
+* Array coercion without member type works now ie `required(:arr).maybe(:array?)` (solnic)
+
+[Compare v0.9.1...v0.9.2](https://github.com/dryrb/dry-validation/compare/v0.9.1...v0.9.2)
+
 # v0.9.1 2016-07-11
 
 ### Fixed
