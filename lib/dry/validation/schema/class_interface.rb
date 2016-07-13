@@ -48,7 +48,7 @@ module Dry
         target = dsl.schema_class
 
         if config.input
-          config.input_rule = dsl.__send__(:infer_predicates, Array(target.config.input))
+          config.input_rule = dsl.infer_predicates(Array(target.config.input))
         end
 
         rules = target.config.rules + (options.fetch(:rules, []) + dsl.rules)

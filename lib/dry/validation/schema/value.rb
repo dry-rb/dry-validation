@@ -171,8 +171,6 @@ module Dry
           self.class.public_methods.include?(name)
         end
 
-        private
-
         def infer_predicates(predicates, infer_on = self)
           predicates.map { |predicate|
             name, *args = ::Kernel.Array(predicate).first
@@ -186,6 +184,8 @@ module Dry
             end
           }.reduce(:and)
         end
+
+        private
 
         def method_missing(meth, *args, &block)
           return schema_class.instance_method(meth) if dyn_arg?(meth)
