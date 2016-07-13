@@ -240,4 +240,48 @@ RSpec.describe 'Predicates: Array' do
       end
     end
   end
+
+  context 'with maybe macro' do
+    subject(:schema) { Dry::Validation.Form { required(:foo).maybe(:array?) } }
+
+    context 'with empty string' do
+      let(:input) { { 'foo' => '' } }
+
+      it 'is successful' do
+        expect(result).to be_successful
+      end
+    end
+
+    context 'with nil' do
+      let(:input) { { 'foo' => nil } }
+
+      it 'is successful' do
+        expect(result).to be_successful
+      end
+    end
+
+    context 'with empty array' do
+      let(:input) { { 'foo' => [] } }
+
+      it 'is successful' do
+        expect(result).to be_successful
+      end
+    end
+
+    context 'with filled array' do
+      let(:input) { { 'foo' => [1, 2, 3] } }
+
+      it 'is successful' do
+        expect(result).to be_successful
+      end
+    end
+
+    context 'with invalid value' do
+      let(:input) { { 'foo' => 'oops' } }
+
+      it 'is not successful' do
+        expect(result).to be_failing(['must be an array'])
+      end
+    end
+  end
 end
