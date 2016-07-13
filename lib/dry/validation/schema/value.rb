@@ -167,6 +167,10 @@ module Dry
           schema_class.instance_methods.include?(name)
         end
 
+        def respond_to?(name)
+          self.class.public_methods.include?(name)
+        end
+
         private
 
         def infer_predicates(predicates, infer_on = self)
@@ -175,6 +179,8 @@ module Dry
 
             if name.is_a?(Schema)
               infer_on.schema(name)
+            elsif name.respond_to?(:rule)
+              create_rule(name.rule.to_ast)
             else
               infer_on.__send__(name, *args)
             end

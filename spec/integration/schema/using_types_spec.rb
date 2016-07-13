@@ -108,4 +108,19 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
       expect(result.to_h).to eql(quantity: 2, percentage: BigDecimal('0.5'), switch: false)
     end
   end
+
+  context 'with each' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:countries).each(Country)
+      end
+    end
+
+    it 'applies type constraint checks to each element' do
+      result = schema.(countries: ['Poland', 'Australia'])
+
+      expect(result).to be_success
+      expect(result.to_h).to eql(countries: %w(Poland Australia))
+    end
+  end
 end
