@@ -23,7 +23,7 @@ module Dry
 
         path.compact!
 
-        template = messages[rule, default_lookup_options]
+        template = messages[rule.is_a?(Array) ? rule.last : rule, default_lookup_options]
 
         if template
           predicate, args, tokens = visit(error, opts.merge(path: path, message: false))
@@ -60,13 +60,18 @@ module Dry
           opts[:path] << path.last
           visit(other, opts)
         else
-          visit(other, opts.merge(path: [path]))
+          visit(other, opts.merge(path: [path], schema: true))
         end
       end
 
       def visit_check(node, opts = EMPTY_HASH)
-        path, other = node
-        visit(other, opts.merge(path: Array(path)))
+        name, other = node
+
+        if opts[:schema]
+          visit(other, opts)
+        else
+          visit(other, opts.merge(path: Array(name)))
+        end
       end
 
       def lookup_options(opts, arg_vals = [])
