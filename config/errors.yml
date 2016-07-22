@@ -6,7 +6,10 @@ en:
 
     excludes?: "must not include %{value}"
 
-    excluded_from?: "must not be one of: %{list}"
+    excluded_from?:
+      arg:
+        default: "must not be one of: %{list}"
+        range: "must not be one of: %{list_left} - %{list_right}"
     exclusion?: "must not be one of: %{list}"
 
     eql?: "must be equal to %{left}"
@@ -29,7 +32,10 @@ en:
 
     hash?: "must be a hash"
 
-    included_in?: "must be one of: %{list}"
+    included_in?:
+      arg:
+        default: "must be one of: %{list}"
+        range: "must be one of: %{list_left} - %{list_right}"
     inclusion?: "must be one of: %{list}"
 
     includes?: "must include %{value}"
