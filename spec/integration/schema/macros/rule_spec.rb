@@ -45,4 +45,30 @@ RSpec.describe 'Macros / rule' do
 
     include_context 'password confirmation high-level rule'
   end
+
+  context 'with two rules relying on the same value' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:x).filled(:int?)
+
+        rule(a: [:x]) do |x|
+          x.gt?(3)
+        end
+
+        rule(b: [:x]) do |x|
+          x.gt?(5)
+        end
+      end
+    end
+
+    it 'passes when input is valid' do
+      expect(schema.(x: 6)).to be_successful
+    end
+
+    it 'fails when rules failed' do
+      expect(schema.(x: 2).messages).to eql(
+        x: ['must be greater than 3', 'must be greater than 5']
+      )
+    end
+  end
 end

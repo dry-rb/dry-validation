@@ -36,7 +36,7 @@ module Dry
       end
 
       def with_hints!(hints)
-        @hints = hints.group_by(&:index_path)
+        @hints.update(hints.group_by(&:index_path))
         self
       end
 
@@ -44,12 +44,21 @@ module Dry
         if root?
           { nil => map(&:to_s) }
         else
-          reduce(placeholders) do |hash, msg|
-            node = msg.path.reduce(hash) { |a, e| a[e] }
-            node << msg
-            node.concat(Array(hints[msg.index_path]))
-            node.uniq!(&:signature)
+          group_by(&:path).reduce(placeholders) do |hash, (path, msgs)|
+            node = path.reduce(hash) { |a, e| a[e] }
+
+            msgs.each do |msg|
+              node << msg
+              msg_hints = hints[msg.index_path]
+
+              if msg_hints
+                node.concat(msg_hints)
+                node.uniq!(&:signature)
+              end
+            end
+
             node.map!(&:to_s)
+
             hash
           end
         end
