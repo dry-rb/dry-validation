@@ -1,3 +1,15 @@
+# v0.9.3 2016-07-22
+
+### Added
+
+* `Result#message_set` returns raw message set object (solnic)
+
+### Changed
+
+* `#messages` is no longer memoized (solnic)
+
+[Compare v0.9.2...v0.9.3](https://github.com/dryrb/dry-validation/compare/v0.9.2...v0.9.3)
+
 # v0.9.2 2016-07-13
 
 ### Fixed
