@@ -1,3 +1,5 @@
+require 'dry/validation/constants'
+
 module Dry
   module Validation
     class Result
@@ -11,8 +13,6 @@ module Dry
 
       alias_method :to_hash, :output
       alias_method :to_h, :output # for MRI 2.0, remove it when drop support
-
-      EMPTY_MESSAGES = {}.freeze
 
       def initialize(output, errors, error_compiler, hint_compiler)
         @output = output
@@ -37,22 +37,19 @@ module Dry
         !success?
       end
 
-      def messages(options = {})
+      def messages(options = EMPTY_HASH)
         @messages ||=
           begin
-            return EMPTY_MESSAGES if success?
-            hints = hint_compiler.with(options).call
-            msg_set = error_compiler.with(options).(error_ast).with_hints!(hints)
-
-            as_hash = options.fetch(:as_hash, true)
-
-            if as_hash
-              hash = msg_set.to_h
-              hash.key?(nil) ? hash.values.flatten : hash
-            else
-              msg_set
-            end
+            return EMPTY_HASH if success?
+            hash = message_set(options).to_h
+            hash.key?(nil) ? hash.values.flatten : hash
           end
+      end
+
+      def message_set(options = EMPTY_HASH)
+        error_compiler
+          .with(options).(error_ast)
+          .with_hints!(hint_compiler.with(options).())
       end
 
       def to_ast
@@ -62,7 +59,7 @@ module Dry
       private
 
       def error_ast
-        errors.map { |error| error.to_ast }
+        @error_ast ||= errors.map { |error| error.to_ast }
       end
     end
   end
