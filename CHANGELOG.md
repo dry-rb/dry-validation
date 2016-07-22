@@ -2,7 +2,13 @@
 
 ### Added
 
+* Support for range arg in error messages for `excluded_from?` and `included_in?` (mrbongiolo)
 * `Result#message_set` returns raw message set object (solnic)
+
+### Fixed
+
+* Error messages for high-level rules in nested schemas are nested correctly (solnic)
+* Dumping error messages works with high-level rules relying on the same value (solnic)
 
 ### Changed
 
