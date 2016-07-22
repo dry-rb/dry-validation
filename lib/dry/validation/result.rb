@@ -19,6 +19,7 @@ module Dry
         @errors = errors
         @error_compiler = error_compiler
         @hint_compiler = hint_compiler
+        @messages = EMPTY_HASH if success?
       end
 
       def each(&block)
@@ -38,12 +39,7 @@ module Dry
       end
 
       def messages(options = EMPTY_HASH)
-        @messages ||=
-          begin
-            return EMPTY_HASH if success?
-            hash = message_set(options).to_h
-            hash.key?(nil) ? hash.values.flatten : hash
-          end
+        message_set(options).dump
       end
 
       def message_set(options = EMPTY_HASH)

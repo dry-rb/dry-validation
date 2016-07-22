@@ -22,10 +22,6 @@ RSpec.describe Dry::Validation::Result do
       it 'returns an empty hash' do
         expect(result.messages).to be_empty
       end
-
-      it 'returns same hash all the time' do
-        expect(result.messages).to be(result.messages)
-      end
     end
   end
 
@@ -47,10 +43,6 @@ RSpec.describe Dry::Validation::Result do
     describe '#messages' do
       it 'returns a hash with error messages' do
         expect(result.messages).to eql(name: ['must be filled'])
-      end
-
-      it 'returns same hash all the time' do
-        expect(result.messages).to be(result.messages)
       end
 
       it 'with full: true returns full messages' do

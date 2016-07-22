@@ -18,8 +18,16 @@ module Dry
         initialize_placeholders!
       end
 
+      def dump
+        root? ? to_a : to_h
+      end
+
       def empty?
         messages.empty?
+      end
+
+      def root?
+        !empty? && messages.all?(&:root?)
       end
 
       def each(&block)
@@ -29,24 +37,28 @@ module Dry
 
       def with_hints!(hints)
         @hints = hints.group_by(&:index_path)
-        freeze
+        self
       end
 
       def to_h
-        reduce(placeholders) do |hash, msg|
-          if msg.root?
-            (hash[nil] ||= []) << msg.to_s
-          else
+        if root?
+          { nil => map(&:to_s) }
+        else
+          reduce(placeholders) do |hash, msg|
             node = msg.path.reduce(hash) { |a, e| a[e] }
             node << msg
             node.concat(Array(hints[msg.index_path]))
             node.uniq!(&:signature)
             node.map!(&:to_s)
+            hash
           end
-          hash
         end
       end
       alias_method :to_hash, :to_h
+
+      def to_a
+        to_h.values.flatten
+      end
 
       private
 
