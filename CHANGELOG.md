@@ -1,3 +1,11 @@
+# v0.9.4 2016-08-11
+
+### Fixed
+
+* Error messages for sibling deeply nested schemas are nested correctly (timriley)
+
+[Compare v0.9.3...v0.9.4](https://github.com/dryrb/dry-validation/compare/v0.9.3...v0.9.4)
+
 # v0.9.3 2016-07-22
 
 ### Added
