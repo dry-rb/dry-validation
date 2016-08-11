@@ -1,4 +1,40 @@
 RSpec.describe Schema, 'nested schemas' do
+  context 'with multiple nested schemas' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:content).schema do
+          required(:meta).schema do
+            required(:version).filled
+          end
+
+          required(:data).schema do
+            required(:city).filled
+          end
+        end
+      end
+    end
+
+    it 'passes when input is valid' do
+      input = {content: {meta: {version: "1.0"}, data: {city: "Canberra"}}}
+      expect(schema.(input)).to be_success
+    end
+
+    it 'fails when one sub-key is missing' do
+      input = {content: {data: {city: "Canberra"}}}
+      expect(schema.(input).messages).to eql(content: {meta: ['is missing']})
+    end
+
+    it 'fails when both sub-keys are missing' do
+      input = {content: {}}
+      expect(schema.(input).messages).to eql(content: {meta: ['is missing'], data: ['is missing']})
+    end
+
+    it 'fails when the deeply nested keys are invalid' do
+      input = {content: {meta: {version: ""}, data: {city: ""}}}
+      expect(schema.(input).messages).to eql(content: {meta: {version: ["must be filled"]}, data: {city: ["must be filled"]}})
+    end
+  end
+
   context 'with a 2-level deep schema' do
     subject(:schema) do
       Dry::Validation.Schema do

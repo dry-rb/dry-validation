@@ -57,8 +57,7 @@ module Dry
         path, other = node
 
         if opts[:path]
-          opts[:path] << path.last
-          visit(other, opts)
+          visit(other, opts.merge(path: opts[:path] + [path.last]))
         else
           visit(other, opts.merge(path: [path], schema: true))
         end
