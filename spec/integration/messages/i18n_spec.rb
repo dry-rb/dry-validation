@@ -72,6 +72,20 @@ RSpec.describe Messages::I18n do
         expect(message).to eql("size must be within %{size_left} - %{size_right}")
       end
     end
+
+    context 'fallbacking to I18n.default_locale with fallback backend config' do
+      before do
+        require "i18n/backend/fallbacks"
+        I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
+      end
+
+      it 'returns a message for a predicate in the default_locale' do
+        message = messages[:even?, rule: :some_number]
+
+        expect(I18n.locale).to eql(:pl)
+        expect(message).to eql("must be even")
+      end
+    end
   end
 
   after(:all) do
