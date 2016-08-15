@@ -11,7 +11,7 @@ module Dry
         @messages = messages
         @options = options
         @full = @options.fetch(:full, false)
-        @locale = @options.fetch(:locale, :en)
+        @locale = @options.fetch(:locale, messages.default_locale)
         @default_lookup_options = { message_type: message_type, locale: locale }
       end
 

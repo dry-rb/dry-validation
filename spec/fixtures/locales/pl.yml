@@ -5,6 +5,10 @@ pl:
       arg:
         default: "wielkość musi być równa %{size}"
         range: "wielkość musi być między %{size_left} a %{size_right}"
+      value:
+        string:
+          arg:
+            default: "wielkość musi być równa %{size}"
     rules:
       email:
         filled?: "Proszę podać adres email"

@@ -18,12 +18,16 @@ module Dry
       end
 
       def key?(key, options)
-        ::I18n.exists?(key, options.fetch(:locale, I18n.default_locale))
+        ::I18n.exists?(key, options.fetch(:locale, default_locale))
       end
 
       def merge(path)
         ::I18n.load_path << path
         self
+      end
+
+      def default_locale
+        I18n.locale || I18n.default_locale || super
       end
     end
   end
