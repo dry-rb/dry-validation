@@ -1,8 +1,9 @@
-# v0.9.5 2016-08-15
+# v0.9.5 2016-08-16
 
 ### Fixed
 
 * Infering multiple predicates with options works as expected ie `value(:str?, min_size?: 3, max_size?: 6)` (solnic)
+* Default `locale` configured in `I18n` is now respected by the messages compiler (agustin + cavi21)
 
 [Compare v0.9.4...v0.9.5](https://github.com/dryrb/dry-validation/compare/v0.9.4...v0.9.5)
 
