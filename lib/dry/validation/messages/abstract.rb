@@ -100,6 +100,10 @@ module Dry
         def cache
           @cache ||= self.class.cache[self]
         end
+
+        def default_locale
+          :en
+        end
       end
     end
   end

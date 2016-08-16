@@ -34,11 +34,11 @@ module Dry
       end
 
       def get(key, options = {})
-        data[key % { locale: options.fetch(:locale, :en) }]
+        data[key % { locale: options.fetch(:locale, default_locale) }]
       end
 
       def key?(key, options = {})
-        data.key?(key % { locale: options.fetch(:locale, :en) })
+        data.key?(key % { locale: options.fetch(:locale, default_locale) })
       end
 
       def merge(overrides)
