@@ -172,8 +172,8 @@ module Dry
         end
 
         def infer_predicates(predicates, infer_on = self)
-          predicates.map { |predicate|
-            name, *args = ::Kernel.Array(predicate).first
+          predicates.flat_map(&::Kernel.method(:Array)).map { |predicate|
+            name, *args = ::Kernel.Array(predicate)
 
             if name.is_a?(Schema)
               infer_on.schema(name)

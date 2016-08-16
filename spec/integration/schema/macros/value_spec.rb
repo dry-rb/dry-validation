@@ -36,6 +36,20 @@ RSpec.describe 'Macros #value' do
       end
     end
 
+    context 'with a second predicate with args' do
+      subject(:schema) do
+        Dry::Validation.Schema do
+          required(:name).value(:str?, min_size?: 3, max_size?: 6)
+        end
+      end
+
+      it 'generates str? & min_size? & max_size?' do
+        expect(schema.(name: 'fo').messages).to eql(
+          name: ['size cannot be less than 3', 'size cannot be greater than 6']
+        )
+      end
+    end
+
     context 'with a range arg' do
       subject(:schema) do
         Dry::Validation.Schema do

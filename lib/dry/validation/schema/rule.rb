@@ -158,8 +158,8 @@ module Dry
         alias_method :>, :then
 
         def infer_predicates(predicates, macro = nil)
-          predicates.map do |predicate|
-            name, *args = ::Kernel.Array(predicate).first
+          predicates.flat_map(&::Kernel.method(:Array)).map do |predicate|
+            name, *args = ::Kernel.Array(predicate)
 
             if macro && INVALID_PREDICATES[macro].include?(name)
               ::Kernel.raise InvalidSchemaError, "you can't use #{name} predicate with #{macro} macro"
