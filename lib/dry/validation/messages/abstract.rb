@@ -42,6 +42,10 @@ module Dry
           @cache ||= Concurrent::Map.new { |h, k| h[k] = Concurrent::Map.new }
         end
 
+        def self.clear_cache!
+          @cache = nil
+        end
+
         attr_reader :config
 
         def initialize
