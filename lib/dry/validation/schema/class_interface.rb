@@ -155,6 +155,13 @@ module Dry
         @error_compiler ||= ErrorCompiler.new(messages)
       end
 
+      def self.clear_message_cache!
+        @error_compiler = nil
+        Messages::Abstract.clear_cache!
+        Messages::I18n.clear_cache!
+        Messages::Namespaced.clear_cache!
+      end
+
       def self.hint_compiler
         @hint_compiler ||= HintCompiler.new(messages, rules: rule_ast)
       end
