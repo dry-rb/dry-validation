@@ -23,6 +23,15 @@ RSpec.describe Dry::Validation::Result do
         expect(result.messages).to be_empty
       end
     end
+
+    describe '#to_either' do
+      it 'returns a Right instance' do
+        either = result.to_either
+
+        expect(either).to be_right
+        expect(either.value).to eql(name: 'Jane')
+      end
+    end
   end
 
   context 'with invalid input' do
@@ -75,6 +84,22 @@ RSpec.describe Dry::Validation::Result do
         expect(result.message_set.to_h).to eql(
           name: ['must be filled', 'length must be within 2 - 4']
         )
+      end
+    end
+
+    describe '#to_either' do
+      it 'returns a Left instance' do
+        either = result.to_either
+
+        expect(either).to be_left
+        expect(either.value).to eql(name: ['must be filled', 'length must be within 2 - 4'])
+      end
+
+      it 'returns full messages' do
+        either = result.to_either(full: true)
+
+        expect(either).to be_left
+        expect(either.value).to eql(name: ['name must be filled', 'name length must be within 2 - 4'])
       end
     end
   end
