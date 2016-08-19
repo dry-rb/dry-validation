@@ -37,6 +37,10 @@ module Dry
         @rule = options[:rule]
         @each = options[:each] || false
         @args = options[:args] || EMPTY_ARRAY
+
+        if predicate == :key?
+          @path << rule
+        end
       end
 
       alias_method :index_path, :path

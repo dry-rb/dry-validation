@@ -7,7 +7,7 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::Form, '#call' do
     [
       [
         :and, [
-          [:val, p(:key?, :email)],
+          p(:key?, :email),
           [
             :and, [
               [:key, [:email, p(:str?)]],
@@ -18,7 +18,7 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::Form, '#call' do
       ],
       [
         :and, [
-          [:val, p(:key?, :age)],
+          p(:key?, :age),
           [
             :or, [
               [:key, [:age, p(:none?)]],
@@ -34,7 +34,7 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::Form, '#call' do
       ],
       [
         :and, [
-          [:val, p(:key?, :address)],
+          p(:key?, :address),
           [:key, [:address, p(:str?)]]
         ]
       ]

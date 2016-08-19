@@ -49,7 +49,7 @@ module Dry
         end
 
         def add_check(check)
-          checks << check
+          checks << check.to_rule
           self
         end
 
@@ -73,6 +73,10 @@ module Dry
 
         def with(new_options)
           self.class.new(options.merge(new_options))
+        end
+
+        def predicate(name, args = EMPTY_ARRAY)
+          [:predicate, [name, registry.arg_list(name, *args)]]
         end
 
         def predicate?(meth)
@@ -104,7 +108,7 @@ module Dry
           end
         end
 
-        def create_rule(node)
+        def create_rule(node, name = self.name)
           Schema::Rule.new(node, name: name, target: self)
         end
       end

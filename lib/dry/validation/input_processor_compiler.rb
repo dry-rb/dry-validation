@@ -24,6 +24,11 @@ module Dry
         send(:"visit_#{node[0]}", node[1], *args)
       end
 
+      def visit_rule(node, *args)
+        _, rule = node
+        visit(rule, *args)
+      end
+
       def visit_type(type, *args)
         if type.is_a?(Types::Constructor)
           [:constructor, [type.primitive, type.fn]]

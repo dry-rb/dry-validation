@@ -31,18 +31,18 @@ module Dry
         end
 
         def hash?(&block)
-          predicate = registry[:hash?]
+          predicate = predicate(:hash?)
 
           if block
             val = value.instance_eval(&block)
 
-            rule = create_rule([:val, predicate.to_ast])
+            rule = create_rule(predicate)
               .and(create_rule([type, [name, val.to_ast]]))
 
             add_rule(rule)
             rule
           else
-            add_rule(create_rule([:val, predicate.to_ast]))
+            add_rule(create_rule(predicate))
           end
         end
 
@@ -54,13 +54,13 @@ module Dry
 
         def method_missing(meth, *args, &block)
           registry.ensure_valid_predicate(meth, args)
-          predicate = registry[meth].curry(*args)
+          predicate = predicate(meth, args)
 
           if block
             val = value.instance_eval(&block)
-            add_rule(create_rule([:and, [[:val, predicate.to_ast], val.to_ast]]))
+            add_rule(create_rule([:and, [predicate, val.to_ast]]))
           else
-            rule = create_rule([type, [name, predicate.to_ast]])
+            rule = create_rule([type, [name, predicate]])
             add_rule(rule)
             rule
           end

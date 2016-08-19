@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 RSpec.describe Dry::Validation do
   shared_context 'uses custom predicates' do
     it 'uses provided custom predicates' do
@@ -29,7 +30,7 @@ RSpec.describe Dry::Validation do
         module Predicates
           include Dry::Logic::Predicates
 
-          predicate(:email?) do |input|
+          def self.email?(input)
             input.include?('@') # for the lols
           end
         end
@@ -37,14 +38,14 @@ RSpec.describe Dry::Validation do
     end
 
     context 'when configured globally' do
-      before do
-        Dry::Validation::Schema.predicates(Test::Predicates)
-      end
-
-      subject!(:schema) do
+      subject(:schema) do
         Dry::Validation.Schema(base_class) do
           required(:email) { filled? & email? }
         end
+      end
+
+      before do
+        Dry::Validation::Schema.predicates(Test::Predicates)
       end
 
       after do

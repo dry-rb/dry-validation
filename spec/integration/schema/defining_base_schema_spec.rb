@@ -1,3 +1,6 @@
+require 'dry/validation/messages/i18n'
+require 'i18n'
+
 RSpec.describe 'Defining base schema class' do
   subject(:schema) do
     Dry::Validation.Schema(BaseSchema) do

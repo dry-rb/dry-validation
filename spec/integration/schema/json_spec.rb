@@ -154,6 +154,7 @@ RSpec.describe Dry::Validation::Schema::JSON, 'defining a schema' do
 
     it 'fails when nested schema fails' do
       result = schema.(delivery: true, address: { city: 'NYC', zipcode: 'foo' })
+
       expect(result.messages).to eql(
         address: { zipcode: ['must be an integer'] }
       )

@@ -1,3 +1,4 @@
+require 'dry/struct'
 require 'dry/validation/schema/dsl'
 
 module Dry
@@ -141,20 +142,16 @@ module Dry
         end
 
         def key?(name)
-          create_rule([:val, registry[:key?].curry(name).to_ast])
-        end
-
-        def predicate(name, *args)
-          registry.ensure_valid_predicate(name, args, schema_class)
-          registry[name].curry(*args)
+          create_rule(predicate(:key?, name))
         end
 
         def node(input, *args)
           if input.is_a?(::Symbol)
-            [type, [name, predicate(input, *args).to_ast]]
+            registry.ensure_valid_predicate(input, args, schema_class)
+            [type, [name, predicate(input, args)]]
           elsif input.respond_to?(:rule)
             [type, [name, [:type, input]]]
-          elsif input.is_a?(::Class) && input < ::Dry::Types::Struct
+          elsif input.is_a?(::Class) && input < ::Dry::Struct
             [type, [name, [:schema, Schema.create_class(self, input)]]]
           elsif input.is_a?(Schema)
             [type, [name, schema(input).to_ast]]
@@ -190,7 +187,7 @@ module Dry
         def method_missing(meth, *args, &block)
           return schema_class.instance_method(meth) if dyn_arg?(meth)
 
-          val_rule = create_rule([:val, predicate(meth, *args).to_ast])
+          val_rule = create_rule(predicate(meth, args))
 
           if block
             val = new.instance_eval(&block)

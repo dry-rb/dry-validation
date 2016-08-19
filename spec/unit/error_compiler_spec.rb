@@ -1,7 +1,0 @@
-RSpec.describe ErrorCompiler, '#call' do
-  subject(:error_compiler) { ErrorCompiler.new( Messages.default ) }
-
-  it 'returns an empty hash when there are no errors' do
-    expect(error_compiler.([])).to be_empty
-  end
-end
