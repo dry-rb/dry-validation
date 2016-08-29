@@ -1,4 +1,5 @@
 require 'dry/validation/schema/dsl'
+require 'dry/struct'
 
 module Dry
   module Validation
@@ -154,7 +155,7 @@ module Dry
             [type, [name, predicate(input, *args).to_ast]]
           elsif input.respond_to?(:rule)
             [type, [name, [:type, input]]]
-          elsif input.is_a?(::Class) && input < ::Dry::Types::Struct
+          elsif input.is_a?(::Class) && input < ::Dry::Struct::Value
             [type, [name, [:schema, Schema.create_class(self, input)]]]
           elsif input.is_a?(Schema)
             [type, [name, schema(input).to_ast]]

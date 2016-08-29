@@ -55,12 +55,12 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
       end
     end
 
-    class Name < Dry::Types::Value
+    class Name < ::Dry::Struct::Value
       attribute :given_name, Dry::Types['strict.string']
       attribute :family_name, Dry::Types['strict.string']
     end
 
-    class Person < Dry::Types::Value
+    class Person < ::Dry::Struct::Value
       attribute :name, Name
     end
 
