@@ -13,6 +13,7 @@ module Dry
       setting :predicates, Logic::Predicates
       setting :registry
       setting :messages, :yaml
+      setting :custom_messages, nil
       setting :messages_file
       setting :namespace
       setting :rules, []
@@ -144,8 +145,11 @@ module Dry
 
       def self.default_messages
         case config.messages
-        when :yaml then Messages.default
-        when :i18n then Messages::I18n.new
+        when :yaml   then Messages.default
+        when :i18n   then Messages::I18n.new
+        when :custom then
+          raise "+custom+ messages identifier requires to provide also +custom_messages+" if config.custom_messages.nil?
+          config.custom_messages
         else
           raise "+#{config.messages}+ is not a valid messages identifier"
         end

@@ -79,7 +79,7 @@ module Dry
           opts = options.reject { |k, _| config.lookup_options.include?(k) }
 
           path = lookup_paths(tokens).detect do |key|
-            key?(key, opts) && get(key, opts).is_a?(String)
+            key?(key, opts) && valid_message?(get(key, opts))
           end
 
           [path, opts]
@@ -103,6 +103,12 @@ module Dry
 
         def default_locale
           :en
+        end
+
+        protected
+
+        def valid_message?(message)
+          message.is_a?(String)
         end
       end
     end
