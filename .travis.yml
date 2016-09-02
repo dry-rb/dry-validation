@@ -5,24 +5,17 @@ bundler_args: --without console benchmarks
 script:
   - bundle exec rake spec
 rvm:
-  - 2.0
   - 2.1.10
   - 2.2.5
   - 2.3.1
   - rbx-2
   - jruby-9.1.1.0
-  - ruby-head
 env:
   global:
     - JRUBY_OPTS='--dev -J-Xmx1024M'
 matrix:
   allow_failures:
     - rvm: rbx-2
-    - rvm: ruby-head
-    - rvm: jruby-head
-  include:
-    - rvm: jruby-head
-      before_install: gem install bundler --no-ri --no-rdoc
 
 notifications:
   email: false
