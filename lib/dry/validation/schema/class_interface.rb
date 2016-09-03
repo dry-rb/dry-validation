@@ -85,7 +85,7 @@ module Dry
         klass =
           if other.is_a?(self)
             Class.new(other.class)
-          elsif other.is_a?(Class) && other < Types::Struct
+          elsif other.is_a?(Class) && other < Dry::Struct
             Validation.Schema(parent: target, build: false) do
               other.schema.each { |attr, type| required(attr).filled(type) }
             end
