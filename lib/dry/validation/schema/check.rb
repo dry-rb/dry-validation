@@ -13,7 +13,7 @@ module Dry
             schema.config.input_processor = other.class.config.input_processor
           end
 
-          hash?.and(create_rule([:check, [name, [path], schema.to_ast]]))
+          hash?.and(create_rule([:check, [[path], schema.to_ast]]))
         end
 
         private
@@ -21,12 +21,12 @@ module Dry
         def method_missing(meth, *meth_args)
           vals, args = meth_args.partition { |arg| arg.class < DSL }
 
-          keys = [name, *vals.map(&:name)]
+          keys = [path, vals.map(&:path)].reject(&:empty?)
 
           registry.ensure_valid_predicate(meth, args.size + keys.size, schema_class)
           predicate = predicate(meth, args)
 
-          rule = create_rule([:check, [name, keys, predicate]])
+          rule = create_rule([:check, [keys, predicate]])
           add_rule(rule)
           rule
         end

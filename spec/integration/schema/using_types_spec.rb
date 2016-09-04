@@ -42,10 +42,9 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
   end
 
   it 'fails when sum-type rule did not pass' do
-    pending
     result = schema.call(email: 'jane@doe', age: 19, country: 'Australia', admin: 'foo')
     expect(result.messages).to eql(
-      admin: ['must be FalseClass', 'must be TrueClass']
+      admin: ['must be TrueClass or must be FalseClass']
     )
   end
 

@@ -15,6 +15,7 @@ module Dry
 
         def initialize(options = {})
           @name = options[:name]
+          @path = options.fetch(:path, name)
           @parent = options[:parent]
           @registry = options.fetch(:registry)
           @rules = options.fetch(:rules, [])
@@ -67,7 +68,7 @@ module Dry
         end
 
         def path
-          items = [parent && parent.path, name].flatten.compact.uniq
+          items = [parent && parent.path, *@path].flatten.compact.uniq
           items.size == 1 ? items[0] : items
         end
 

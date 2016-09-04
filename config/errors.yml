@@ -1,5 +1,6 @@
 en:
   errors:
+    or: "or"
     array?: "must be an array"
 
     empty?: "must be empty"

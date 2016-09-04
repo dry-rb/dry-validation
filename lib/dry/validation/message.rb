@@ -14,6 +14,39 @@ module Dry
 
       attr_reader :predicate, :path, :text, :rule, :args, :options
 
+      class Or
+        attr_reader :left
+
+        attr_reader :right
+
+        attr_reader :path
+
+        attr_reader :messages
+
+        def initialize(left, right, messages)
+          @left = left
+          @right = right
+          @messages = messages
+          @path = left.path
+        end
+
+        def hint?
+          false
+        end
+
+        def root?
+          path.empty?
+        end
+
+        def index_path
+          left.index_path
+        end
+
+        def to_s
+          "#{left} #{messages[:or]} #{right}"
+        end
+      end
+
       class Each < Message
         def index_path
           @index_path ||= [*path[0..path.size-2], Index]
