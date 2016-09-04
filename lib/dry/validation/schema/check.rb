@@ -13,7 +13,7 @@ module Dry
             schema.config.input_processor = other.class.config.input_processor
           end
 
-          hash?.and(create_rule([:check, [name, schema.to_ast], [path]]))
+          hash?.and(create_rule([:check, [name, [path], schema.to_ast]]))
         end
 
         private
@@ -24,9 +24,9 @@ module Dry
           keys = [name, *vals.map(&:name)]
 
           registry.ensure_valid_predicate(meth, args.size + keys.size, schema_class)
-          predicate = registry[meth].curry(*args)
+          predicate = predicate(meth, args)
 
-          rule = create_rule([:check, [name, predicate.to_ast, keys]])
+          rule = create_rule([:check, [name, keys, predicate]])
           add_rule(rule)
           rule
         end

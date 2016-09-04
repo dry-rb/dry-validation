@@ -181,7 +181,6 @@ RSpec.describe 'Predicates: Size' do
             let(:input) { { 'foo' => '' } }
 
             it 'is not successful' do
-              pending
               expect(result).to be_failing ['must be filled', 'length must be 3']
             end
           end
@@ -328,7 +327,6 @@ RSpec.describe 'Predicates: Size' do
             let(:input) { { 'foo' => '' } }
 
             it 'is not successful' do
-              pending
               expect(result).to be_failing ['must be filled', 'length must be 3']
             end
           end

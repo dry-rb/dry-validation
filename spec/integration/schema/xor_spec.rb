@@ -13,21 +13,21 @@ RSpec.describe 'Schema with xor rules' do
 
       required(:have_cake).filled
 
-      rule(:be_reasonable) do
-        value(:eat_cake).eql?('yes!') ^ value(:have_cake).eql?('yes!')
+      rule(be_reasonable: %i[eat_cake have_cake]) do |ec, hc|
+        ec.eql?('yes!') ^ hc.eql?('yes!')
       end
     end
   end
 
   describe '#messages' do
     it 'passes when only one option is selected' do
-      messages = schema.(eat_cake: 'yes!', have_cake: 'no!').messages[:be_reasonable]
+      messages = schema.(eat_cake: 'yes!', have_cake: 'no!').messages[:eat_cake]
 
       expect(messages).to be(nil)
     end
 
     it 'fails when both options are selected' do
-      messages = schema.(eat_cake: 'yes!', have_cake: 'yes!').messages[:be_reasonable]
+      messages = schema.(eat_cake: 'yes!', have_cake: 'yes!').messages[:have_cake]
 
       expect(messages).to eql(['you cannot eat cake and have cake!'])
     end

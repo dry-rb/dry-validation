@@ -7,11 +7,9 @@ require 'dry/validation/schema/key'
 require 'dry/validation/schema/value'
 require 'dry/validation/schema/check'
 
-require 'dry/validation/error'
 require 'dry/validation/result'
 require 'dry/validation/messages'
-require 'dry/validation/error_compiler'
-require 'dry/validation/hint_compiler'
+require 'dry/validation/message_compiler'
 
 require 'dry/validation/schema/deprecated'
 require 'dry/validation/schema/class_interface'
@@ -34,9 +32,7 @@ module Dry
 
       attr_reader :rule_compiler
 
-      attr_reader :error_compiler
-
-      attr_reader :hint_compiler
+      attr_reader :message_compiler
 
       attr_reader :options
 
@@ -49,8 +45,7 @@ module Dry
         @config = self.class.config
         @predicates = options.fetch(:predicate_registry).bind(self)
         @rule_compiler = SchemaCompiler.new(predicates, options)
-        @error_compiler = options.fetch(:error_compiler)
-        @hint_compiler = options.fetch(:hint_compiler)
+        @message_compiler = options.fetch(:message_compiler)
         @input_processor = options[:input_processor]
         @input_rule = rule_compiler.visit(config.input_rule.to_ast) if config.input_rule
 
@@ -58,7 +53,7 @@ module Dry
         initialize_rules(rules)
         initialize_checks(options.fetch(:checks, []))
 
-        @executor = Executor.new(config.path) do |steps|
+        @executor = Executor.new do |steps|
           steps << ProcessInput.new(input_processor) if input_processor
           steps << ApplyInputRule.new(input_rule) if input_rule
           steps << ApplyRules.new(@rules)
@@ -74,7 +69,7 @@ module Dry
 
       def call(input)
         output, result = executor.(input)
-        Result.new(output, result, error_compiler, hint_compiler)
+        Result.new(output, result, message_compiler, config.path)
       end
 
       def curry(*curry_args)
@@ -89,9 +84,10 @@ module Dry
         1
       end
 
-      def to_ast
+      def ast(*)
         self.class.to_ast
       end
+      alias_method :to_ast, :ast
 
       private
 

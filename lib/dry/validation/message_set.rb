@@ -5,7 +5,9 @@ module Dry
     class MessageSet
       include Enumerable
 
-      attr_reader :messages, :hints, :paths, :placeholders
+      HINT_EXCLUSION = %i(key? filled? none? bool? str? int? float? decimal? date? date_time? time? hash? array?).freeze
+
+      attr_reader :messages, :failures, :hints, :paths, :placeholders
 
       def self.[](messages)
         new(messages.flatten)
@@ -13,8 +15,10 @@ module Dry
 
       def initialize(messages)
         @messages = messages
-        @hints = {}
-        @paths = map(&:path).uniq
+        @hints = messages.select(&:hint?)
+        @failures = messages - hints
+        @paths = failures.map(&:path).uniq
+        hints.reject! { |hint| HINT_EXCLUSION.include?(hint.predicate) }
         initialize_placeholders!
       end
 
@@ -27,7 +31,7 @@ module Dry
       end
 
       def root?
-        !empty? && messages.all?(&:root?)
+        !empty? && failures.all?(&:root?)
       end
 
       def each(&block)
@@ -35,26 +39,22 @@ module Dry
         messages.each(&block)
       end
 
-      def with_hints!(hints)
-        @hints.update(hints.group_by(&:index_path))
-        self
+      def hint_map
+        @hint_map ||= hints.group_by(&:path)
       end
 
       def to_h
         if root?
-          { nil => map(&:to_s) }
+          { nil => failures.map(&:to_s) }
         else
-          group_by(&:path).reduce(placeholders) do |hash, (path, msgs)|
+          failures.group_by(&:path).reduce(placeholders) do |hash, (path, msgs)|
             node = path.reduce(hash) { |a, e| a[e] }
 
             msgs.each do |msg|
               node << msg
-              msg_hints = hints[msg.index_path]
 
-              if msg_hints
-                node.concat(msg_hints)
-                node.uniq!(&:signature)
-              end
+              msg_hints = hint_map[msg.index_path]
+              node.concat(msg_hints) if msg_hints
             end
 
             node.map!(&:to_s)

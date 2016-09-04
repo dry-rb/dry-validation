@@ -122,10 +122,12 @@ module Dry
         end
 
         def to_ast
+          rule_node = name ? [:rule, [name, node]] : node
+
           if deps.empty?
-            node
+            rule_node
           else
-            [:guard, [deps, node]]
+            [:guard, [deps, rule_node]]
           end
         end
 
@@ -138,22 +140,22 @@ module Dry
         end
 
         def and(other)
-          new([:and, [node, other.to_ast]])
+          new([:and, [to_ast, other.to_ast]])
         end
         alias_method :&, :and
 
         def or(other)
-          new([:or, [node, other.to_ast]])
+          new([:or, [to_ast, other.to_ast]])
         end
         alias_method :|, :or
 
         def xor(other)
-          new([:xor, [node, other.to_ast]])
+          new([:xor, [to_ast, other.to_ast]])
         end
         alias_method :^, :xor
 
         def then(other)
-          new([:implication, [node, other.to_ast]])
+          new([:implication, [to_ast, other.to_ast]])
         end
         alias_method :>, :then
 
@@ -171,6 +173,10 @@ module Dry
 
         def with(new_options)
           self.class.new(node, options.merge(new_options))
+        end
+
+        def to_rule
+          self
         end
 
         private

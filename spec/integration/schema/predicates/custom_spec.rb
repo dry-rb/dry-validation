@@ -6,7 +6,7 @@ RSpec.describe 'Predicates: custom' do
           config.messages_file = 'spec/fixtures/locales/en.yml'
 
           def email?(current)
-            current.match(/\@/)
+            !current.match(/\@/).nil?
           end
         end
 
@@ -39,8 +39,8 @@ RSpec.describe 'Predicates: custom' do
           predicates (Module.new do
             include Dry::Logic::Predicates
 
-            predicate(:email?) do |current|
-              current.match(/@/)
+            def self.email?(current)
+              !current.match(/\@/).nil?
             end
           end)
         end
@@ -97,7 +97,7 @@ RSpec.describe 'Predicates: custom' do
 
     it 'allows groups to define their own custom predicates' do
       expect(result).to_not be_success
-      expect(result.messages.fetch(:details)).to eq(foo: ['must be odd'])
+      expect(result.messages[:details]).to eq(foo: ['must be odd'])
     end
   end
 end

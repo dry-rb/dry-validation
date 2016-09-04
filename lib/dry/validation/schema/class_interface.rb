@@ -85,7 +85,7 @@ module Dry
         klass =
           if other.is_a?(self)
             Class.new(other.class)
-          elsif other.is_a?(Class) && other < Types::Struct
+          elsif other.is_a?(Class) && other < Dry::Struct
             Validation.Schema(parent: target, build: false) do
               other.schema.each { |attr, type| required(attr).filled(type) }
             end
@@ -151,12 +151,8 @@ module Dry
         end
       end
 
-      def self.error_compiler
-        @error_compiler ||= ErrorCompiler.new(messages)
-      end
-
-      def self.hint_compiler
-        @hint_compiler ||= HintCompiler.new(messages, rules: rule_ast)
+      def self.message_compiler
+        @message_compiler ||= MessageCompiler.new(messages)
       end
 
       def self.rule_ast
@@ -165,8 +161,7 @@ module Dry
 
       def self.default_options
         @default_options ||= { predicate_registry: registry,
-          error_compiler: error_compiler,
-          hint_compiler: hint_compiler,
+          message_compiler: message_compiler,
           input_processor: input_processor,
           checks: config.checks }
       end

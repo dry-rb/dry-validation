@@ -1,3 +1,6 @@
+require 'dry/validation/constants'
+require 'dry/logic/rule/predicate'
+
 module Dry
   module Validation
     class PredicateRegistry
@@ -24,7 +27,7 @@ module Dry
 
         def update(other)
           unbound_predicates = other.each_with_object({}) { |(n, p), res|
-            res[n] = Logic::Predicate.new(n, fn: p)
+            res[n] = Logic::Rule::Predicate.new(p, name: n)
           }
           predicates.update(unbound_predicates)
           self
@@ -59,7 +62,7 @@ module Dry
 
       def [](name)
         predicates.fetch(name) do
-          if external.key?(name)
+          if external.public_methods.include?(name)
             external[name]
           else
             raise_unknown_predicate_error(name)
@@ -68,7 +71,16 @@ module Dry
       end
 
       def key?(name)
-        predicates.key?(name) || external.key?(name)
+        predicates.key?(name) || external.public_methods.include?(name)
+      end
+
+      def arg_list(name, *values)
+        predicate = self[name]
+
+        predicate
+          .parameters
+          .map(&:last)
+          .zip(values + Array.new(predicate.arity - values.size, Undefined))
       end
 
       def ensure_valid_predicate(name, args_or_arity, schema = nil)
