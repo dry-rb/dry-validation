@@ -110,4 +110,30 @@ RSpec.describe 'Macros #input' do
       )
     end
   end
+
+  context 'using a custom predicate' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          def valid_keys?(input)
+            input.size == 2 || input.size == 1
+          end
+        end
+
+        input :hash?, :valid_keys?
+
+        required(:foo).filled
+        optional(:bar).filled
+      end
+    end
+
+    it 'passes when input is valid' do
+      expect(schema.(foo: 'bar')).to be_successful
+      expect(schema.(foo: 'bar', bar: 'baz')).to be_successful
+    end
+
+    it 'fails when one of the root-rules fails' do
+      expect(schema.(foo: 'bar', bar: 'baz', oops: 'heh')).to be_failure
+    end
+  end
 end

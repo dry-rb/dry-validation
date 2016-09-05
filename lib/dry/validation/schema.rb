@@ -47,7 +47,8 @@ module Dry
         @rule_compiler = SchemaCompiler.new(predicates, options)
         @message_compiler = options.fetch(:message_compiler)
         @input_processor = options[:input_processor]
-        @input_rule = rule_compiler.visit(config.input_rule.to_ast) if config.input_rule
+
+        @input_rule = rule_compiler.visit(config.input_rule.(predicates)) if config.input_rule
 
         initialize_options(options)
         initialize_rules(rules)
