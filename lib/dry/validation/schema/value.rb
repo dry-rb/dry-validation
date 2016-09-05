@@ -88,11 +88,11 @@ module Dry
 
         def rule(id = nil, **options, &block)
           if id
-            val = Value[id, registry: registry]
+            val = Value[id, registry: registry, schema_class: schema_class]
             res = val.instance_exec(&block)
           else
             id, deps = options.to_a.first
-            val = Value[id, registry: registry]
+            val = Value[id, registry: registry, schema_class: schema_class]
             res = val.instance_exec(*deps.map { |path| val.value(id, path: path) }, &block)
           end
 
