@@ -93,10 +93,10 @@ module Dry
           else
             id, deps = options.to_a.first
             val = Value[id, registry: registry]
-            res = val.instance_exec(*deps.map { |name| val.value(name) }, &block)
+            res = val.instance_exec(*deps.map { |path| val.value(id, path: path) }, &block)
           end
 
-          add_check(val.with(rules: [res.with(deps: deps || [])]))
+          add_check(val.with(rules: [res.with(name: id, deps: deps || [])]))
         end
 
         def confirmation
@@ -104,11 +104,13 @@ module Dry
 
           parent.optional(conf).maybe
 
-          rule(conf => [conf, name]) { |left, right| left.eql?(right) }
+          rule(conf => [conf, name]) do |left, right|
+            left.eql?(right)
+          end
         end
 
-        def value(name)
-          check(name, registry: registry, rules: rules)
+        def value(path, opts = {})
+          check(name || path, { registry: registry, rules: rules, path: path }.merge(opts))
         end
 
         def check(name, options = {})

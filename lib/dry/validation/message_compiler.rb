@@ -37,16 +37,7 @@ module Dry
 
       def visit_failure(node, opts = EMPTY_OPTS)
         rule, other = node
-
-        template = messages[rule, default_lookup_options]
-
-        if template
-          predicate, msg_opts, args, tokens = visit(other, opts.(message: false))
-          text = template % tokens
-          Message[predicate, msg_opts[:path], text, args: args, rule: rule]
-        else
-          visit(other, opts.(rule: rule))
-        end
+        visit(other, opts.(rule: rule))
       end
 
       def visit_hint(node, opts = EMPTY_OPTS)
@@ -63,7 +54,7 @@ module Dry
       end
 
       def visit_check(node, opts = EMPTY_OPTS)
-        name, keys, other = node
+        keys, other = node
         visit(other, opts.(path: keys.first))
       end
 
@@ -82,8 +73,13 @@ module Dry
       end
 
       def visit_or(node, opts = EMPTY_OPTS)
-        left, right = node
-        [visit(left, opts), visit(right, opts)]
+        left, right = node.map { |n| visit(n, opts) }
+
+        if [*left, *right].map(&:path).uniq.size == 1
+          Message::Or.new(left, right, -> k { messages[k, default_lookup_options] })
+        else
+          [left, right]
+        end
       end
 
       def visit_predicate(node, base_opts = EMPTY_OPTS)
@@ -94,14 +90,10 @@ module Dry
 
         input = val != Undefined ? val : nil
 
-        if base_opts[:message] == false
-          return [predicate, base_opts, arg_vals, tokens]
-        end
-
         options = base_opts.update(lookup_options(arg_vals: arg_vals, input: input))
         msg_opts = options.update(tokens)
 
-        rule = msg_opts[:rule] || options[:name]
+        rule = msg_opts[:rule]
         path = msg_opts[:path]
 
         template = messages[rule] || messages[predicate, msg_opts]
