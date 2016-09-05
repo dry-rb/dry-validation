@@ -88,14 +88,14 @@ module Dry
         end
 
         def maybe(*predicates, &block)
-          left = key(:none?)
+          left = key(:none?).not
 
           from_predicates = infer_predicates(predicates, :maybe).reduce(:and)
           from_block = block ? Key[name, registry: registry].instance_eval(&block) : nil
 
           right = [from_predicates, from_block].compact.reduce(:and) || key(:filled?)
 
-          rule = left.or(right)
+          rule = left.then(right)
 
           add_rule(__send__(type, rule))
         end
