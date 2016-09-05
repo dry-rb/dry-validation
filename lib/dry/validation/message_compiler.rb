@@ -127,8 +127,8 @@ module Dry
       end
 
       def visit_xor(node, opts = EMPTY_OPTS)
-        _, right = node
-        visit(right, opts)
+        left, right = node
+        [visit(left, opts), visit(right, opts)]
       end
 
       def lookup_options(arg_vals: [], input: nil)

@@ -27,9 +27,10 @@ RSpec.describe 'Schema with xor rules' do
     end
 
     it 'fails when both options are selected' do
-      messages = schema.(eat_cake: 'yes!', have_cake: 'yes!').messages[:have_cake]
-
-      expect(messages).to eql(['you cannot eat cake and have cake!'])
+      expect(schema.(eat_cake: 'yes!', have_cake: 'yes!').messages).to eql(
+        eat_cake: ['you cannot eat cake and have cake!'],
+        have_cake: ['you cannot eat cake and have cake!']
+      )
     end
   end
 end
