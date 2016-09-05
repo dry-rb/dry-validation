@@ -1,7 +1,7 @@
 RSpec.describe 'Predicates: Even' do
   context 'with required' do
     subject(:schema) do
-      Dry::Validation.Form do
+      Dry::Validation.Schema do
         required(:foo) { even? }
       end
     end
@@ -57,7 +57,7 @@ RSpec.describe 'Predicates: Even' do
 
   context 'with optional' do
     subject(:schema) do
-      Dry::Validation.Form do
+      Dry::Validation.Schema do
         optional(:foo) { even? }
       end
     end
@@ -115,7 +115,7 @@ RSpec.describe 'Predicates: Even' do
     context 'with required' do
       context 'with value' do
         subject(:schema) do
-          Dry::Validation.Form do
+          Dry::Validation.Schema do
             required(:foo).value(:even?)
           end
         end
@@ -171,7 +171,7 @@ RSpec.describe 'Predicates: Even' do
 
       context 'with filled' do
         subject(:schema) do
-          Dry::Validation.Form do
+          Dry::Validation.Schema do
             required(:foo).filled(:even?)
           end
         end
@@ -227,7 +227,7 @@ RSpec.describe 'Predicates: Even' do
 
       context 'with maybe' do
         subject(:schema) do
-          Dry::Validation.Form do
+          Dry::Validation.Schema do
             required(:foo).maybe(:even?)
           end
         end
@@ -260,7 +260,7 @@ RSpec.describe 'Predicates: Even' do
           let(:input) { { foo: '' } }
 
           it 'is successful' do
-            expect(result).to be_successful
+            expect { result }.to raise_error(NoMethodError)
           end
         end
 
@@ -285,7 +285,7 @@ RSpec.describe 'Predicates: Even' do
     context 'with optional' do
       context 'with value' do
         subject(:schema) do
-          Dry::Validation.Form do
+          Dry::Validation.Schema do
             optional(:foo).value(:even?)
           end
         end
@@ -341,7 +341,7 @@ RSpec.describe 'Predicates: Even' do
 
       context 'with filled' do
         subject(:schema) do
-          Dry::Validation.Form do
+          Dry::Validation.Schema do
             optional(:foo).filled(:even?)
           end
         end
@@ -397,7 +397,7 @@ RSpec.describe 'Predicates: Even' do
 
       context 'with maybe' do
         subject(:schema) do
-          Dry::Validation.Form do
+          Dry::Validation.Schema do
             optional(:foo).maybe(:even?)
           end
         end
@@ -430,7 +430,7 @@ RSpec.describe 'Predicates: Even' do
           let(:input) { { foo: '' } }
 
           it 'is successful' do
-            expect(result).to be_successful
+            expect { result }.to raise_error(NoMethodError)
           end
         end
 
