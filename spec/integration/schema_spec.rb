@@ -162,4 +162,12 @@ RSpec.describe Dry::Validation::Schema, 'defining key-based schema' do
       end
     end
   end
+
+  context 'nested keys' do
+    it 'raises error when defining nested keys without `schema` block`' do
+      expect {
+        Dry::Validation.Schema { required(:foo).value { required(:bar).value(:str?) } }
+      }.to raise_error(ArgumentError, /required/)
+    end
+  end
 end
