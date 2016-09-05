@@ -388,4 +388,26 @@ RSpec.describe 'Predicates: Type' do
       end
     end
   end
+
+  context 'with a custom class' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:foo).value(type?: CustomClass)
+      end
+    end
+
+    around do |example|
+      CustomClass = Class.new
+      example.run
+      Object.send(:remove_const, :CustomClass)
+    end
+
+    it 'it succeeds with valid input' do
+      expect(schema.(foo: CustomClass.new)).to be_success
+    end
+
+    it 'it fails with invalid input' do
+      expect(schema.(foo: 'oops')).to be_failing ["must be #{CustomClass}"]
+    end
+  end
 end
