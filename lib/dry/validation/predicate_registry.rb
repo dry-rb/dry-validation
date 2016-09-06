@@ -26,10 +26,7 @@ module Dry
         end
 
         def update(other)
-          unbound_predicates = other.each_with_object({}) { |(n, p), res|
-            res[n] = Logic::Rule::Predicate.new(p, name: n)
-          }
-          predicates.update(unbound_predicates)
+          predicates.update(other)
           self
         end
       end
