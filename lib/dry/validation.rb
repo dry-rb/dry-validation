@@ -26,12 +26,14 @@ module Dry
       end
     end
 
-    def self.Form(options = {}, &block)
-      Validation.Schema(Schema::Form, options, &block)
+    def self.Form(base = nil, **options, &block)
+      klass = base ? Schema::Form.configure(Class.new(base)) : Schema::Form
+      Validation.Schema(klass, options, &block)
     end
 
-    def self.JSON(options = {}, &block)
-      Validation.Schema(Schema::JSON, options, &block)
+    def self.JSON(base = Schema::JSON, **options, &block)
+      klass = base ? Schema::JSON.configure(Class.new(base)) : Schema::JSON
+      Validation.Schema(klass, options, &block)
     end
   end
 end
