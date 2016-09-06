@@ -14,6 +14,7 @@ module Dry
         @messages = messages
         @options = options
         @full = @options.fetch(:full, false)
+        @hints = @options.fetch(:hints, true)
         @locale = @options.fetch(:locale, messages.default_locale)
         @default_lookup_options = { locale: locale }
       end
@@ -22,13 +23,17 @@ module Dry
         @full
       end
 
+      def hints?
+        @hints
+      end
+
       def with(new_options)
         return self if new_options.empty?
         self.class.new(messages, options.merge(new_options))
       end
 
       def call(ast)
-        MessageSet[ast.map { |node| visit(node) }]
+        MessageSet[ast.map { |node| visit(node) }, failures: options.fetch(:failures, true)]
       end
 
       def visit(node, *args)
@@ -41,7 +46,11 @@ module Dry
       end
 
       def visit_hint(node, opts = EMPTY_OPTS)
-        visit(node, opts.(message_type: :hint))
+        if hints?
+          visit(node, opts.(message_type: :hint))
+        else
+          EMPTY_ARRAY
+        end
       end
 
       def visit_each(node, opts = EMPTY_OPTS)
