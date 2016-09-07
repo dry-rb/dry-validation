@@ -117,6 +117,12 @@ module Dry
           Check[name, options.merge(type: type)]
         end
 
+        def validate(**opts, &block)
+          name, *deps = opts.to_a.flatten
+          rule = create_rule([:check, [deps, [:custom, [name, block]]]], name).with(deps: deps)
+          add_check(rule)
+        end
+
         def configure(&block)
           schema_class.class_eval(&block)
           @registry = schema_class.registry

@@ -50,6 +50,11 @@ module Dry
         super.eval_args(schema)
       end
 
+      def visit_custom(node)
+        id, predicate = node
+        Logic::Rule.new(predicate).with(id: id).bind(schema)
+      end
+
       def visit_schema(klass)
         opt_keys = klass.config.options.keys
         opt_vals = options.values_at(*opt_keys).compact

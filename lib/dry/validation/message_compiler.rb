@@ -64,7 +64,7 @@ module Dry
 
       def visit_check(node, opts = EMPTY_OPTS)
         keys, other = node
-        visit(other, opts.(path: keys.first))
+        visit(other, opts.(path: keys.last))
       end
 
       def visit_rule(node, opts = EMPTY_OPTS)

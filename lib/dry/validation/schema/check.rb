@@ -26,7 +26,7 @@ module Dry
           registry.ensure_valid_predicate(meth, args.size + keys.size, schema_class)
           predicate = predicate(meth, args)
 
-          rule = create_rule([:check, [keys, predicate]])
+          rule = create_rule([:check, [keys.reverse, predicate]], name)
           add_rule(rule)
           rule
         end
