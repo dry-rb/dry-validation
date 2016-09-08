@@ -1,11 +1,9 @@
-require 'dry/monads/either'
 require 'dry/validation/constants'
 
 module Dry
   module Validation
     class Result
       include Dry::Equalizer(:output, :errors)
-      include Dry::Monads::Either::Mixin
       include Enumerable
 
       attr_reader :output
@@ -71,14 +69,6 @@ module Dry
         Array(path).last
       end
 
-      def to_either(options = EMPTY_HASH)
-        if success?
-          Right(output)
-        else
-          Left(messages(options))
-        end
-      end
-
       private
 
       def type
@@ -90,4 +80,12 @@ module Dry
       end
     end
   end
+end
+
+begin
+  require 'dry/monads/either'
+rescue LoadError
+  # noop
+else
+  require 'dry/validation/result/monads_ext'
 end
