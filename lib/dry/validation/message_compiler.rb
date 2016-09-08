@@ -64,7 +64,7 @@ module Dry
 
       def visit_check(node, opts = EMPTY_OPTS)
         keys, other = node
-        visit(other, opts.(path: keys.last))
+        visit(other, opts.(path: keys.last, check: true))
       end
 
       def visit_rule(node, opts = EMPTY_OPTS)
@@ -117,7 +117,11 @@ module Dry
 
         message_class[
           predicate, path, text,
-          args: arg_vals, input: input, rule: rule, each: base_opts[:each]
+          args: arg_vals,
+          input: input,
+          rule: rule,
+          check: base_opts[:check],
+          each: base_opts[:each]
         ]
       end
 
@@ -137,7 +141,7 @@ module Dry
 
       def visit_xor(node, opts = EMPTY_OPTS)
         left, right = node
-        [visit(left, opts), visit(right, opts)]
+        [visit(left, opts), visit(right, opts)].uniq
       end
 
       def lookup_options(arg_vals: [], input: nil)

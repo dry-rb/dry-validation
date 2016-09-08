@@ -29,8 +29,7 @@ RSpec.describe Schema, 'using high-level rules' do
 
     it 'fails when red and blue are not filled ' do
       expect(schema.(red: nil, blue: nil).messages).to eql(
-        blue: ['you must select either red or blue'],
-        red: ['you must select either red or blue']
+        destiny: ['you must select either red or blue']
       )
     end
   end
@@ -66,7 +65,7 @@ RSpec.describe Schema, 'using high-level rules' do
 
     it 'fails when login is false and email is present' do
       expect(schema.(login: false, email: 'jane@doe').messages).to eql(
-        email: ['must not be present when login is set to false']
+        email_absence: ['must not be present when login is set to false']
       )
     end
 
@@ -76,7 +75,7 @@ RSpec.describe Schema, 'using high-level rules' do
 
     it 'fails when login is true and email is not present' do
       expect(schema.(login: true, email: nil).messages).to eql(
-        email: ['must be present when login is set to true']
+        email_presence: ['must be present when login is set to true']
       )
     end
   end

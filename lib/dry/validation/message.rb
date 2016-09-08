@@ -43,7 +43,7 @@ module Dry
         end
 
         def to_s
-          "#{left} #{messages[:or]} #{right}"
+          [left, right].uniq.join(" #{messages[:or]} ")
         end
       end
 
@@ -57,9 +57,24 @@ module Dry
         end
       end
 
+      class Check < Message
+        def initialize(*args)
+          super
+          @path = [rule] unless rule.to_s.end_with?('?') || path.include?(rule)
+        end
+
+        def each?
+          false
+        end
+      end
+
       def self.[](predicate, path, text, options)
-        klass = options[:each] ? Message::Each : Message
-        klass.new(predicate, path, text, options)
+        if options[:check]
+          Message::Check.new(predicate, path, text, options)
+        else
+          klass = options[:each] ? Message::Each : Message
+          klass.new(predicate, path, text, options)
+        end
       end
 
       def initialize(predicate, path, text, options)

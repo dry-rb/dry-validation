@@ -20,13 +20,13 @@ RSpec.describe 'Schema with negated rules' do
 
   describe '#messages' do
     it 'passes when only one option is selected' do
-      messages = schema.(eat_cake: 'yes!', have_cake: 'no!').messages[:eat_cake]
+      messages = schema.(eat_cake: 'yes!', have_cake: 'no!').messages[:be_reasonable]
 
       expect(messages).to be(nil)
     end
 
     it 'fails when both options are selected' do
-      messages = schema.(eat_cake: 'yes!', have_cake: 'yes!').messages[:have_cake]
+      messages = schema.(eat_cake: 'yes!', have_cake: 'yes!').messages[:be_reasonable]
 
       expect(messages).to eql(['you cannot eat cake and have cake!'])
     end

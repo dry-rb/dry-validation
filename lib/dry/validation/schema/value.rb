@@ -77,11 +77,9 @@ module Dry
 
         def when(*predicates, &block)
           left = infer_predicates(predicates, Check[path, type: type, registry: registry])
+          right = Value.new(type: type, registry: registry).instance_eval(&block)
 
-          right = Value.new(type: type, registry: registry)
-          right.instance_eval(&block)
-
-          add_check(left.then(create_rule(right.to_ast)))
+          add_check(left.then(right.to_rule))
 
           self
         end
@@ -118,8 +116,9 @@ module Dry
         end
 
         def validate(**opts, &block)
-          name, *deps = opts.to_a.flatten
-          rule = create_rule([:check, [deps, [:custom, [name, block]]]], name).with(deps: deps)
+          id, *deps = opts.to_a.flatten
+          name = deps.size > 1 ? id : deps.first
+          rule = create_rule([:check, [deps, [:custom, [id, block]]]], name).with(deps: deps)
           add_check(rule)
         end
 

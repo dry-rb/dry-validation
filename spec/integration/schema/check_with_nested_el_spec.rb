@@ -7,7 +7,7 @@ RSpec.describe 'Check depending on a nested value from a hash' do
         end
       end
 
-      rule(red: [[:tag, :color, :value]]) do |value|
+      rule(tag: [[:tag, :color, :value]]) do |value|
         value.eql?('red')
       end
     end

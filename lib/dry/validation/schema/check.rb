@@ -27,6 +27,7 @@ module Dry
           predicate = predicate(meth, args)
 
           rule = create_rule([:check, [keys.reverse, predicate]], name)
+
           add_rule(rule)
           rule
         end

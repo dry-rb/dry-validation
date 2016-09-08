@@ -67,7 +67,8 @@ RSpec.describe 'Macros / rule' do
 
     it 'fails when rules failed' do
       expect(schema.(x: 2).messages).to eql(
-        x: ['must be greater than 3', 'must be greater than 5']
+        a: ['must be greater than 3'],
+        b: ['must be greater than 5']
       )
     end
   end

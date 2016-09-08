@@ -40,30 +40,7 @@ RSpec.describe 'Macros #when' do
     end
   end
 
-  describe 'with multiple result rules' do
-    subject(:schema) do
-      Dry::Validation.Schema do
-        required(:email).maybe
-        required(:password).maybe
-
-        required(:login).maybe(:bool?).when(:true?) do
-          value(:email).filled?
-          value(:password).filled?
-        end
-      end
-    end
-
-    it 'generates check rule' do
-      expect(schema.(login: false, email: nil, password: nil)).to be_success
-
-      expect(schema.(login: true, email: nil, password: nil).messages).to eql(
-        email: ['must be filled'],
-        password: ['must be filled']
-      )
-    end
-  end
-
-  context "predicate with options" do
+  context 'predicate with options' do
     subject(:schema) do
       Dry::Validation.Schema do
         required(:bar).maybe

@@ -6,7 +6,7 @@ RSpec.describe Dry::Validation::Schema, 'arbitrary validation blocks' do
           option :email_regex, /@/
 
           def self.messages
-            super.merge(en: { errors: { email?: '%{value} looks like an invalid email' }})
+            super.merge(en: { errors: { email?: '%{value} looks like an invalid email' } })
           end
         end
 
@@ -70,7 +70,7 @@ RSpec.describe Dry::Validation::Schema, 'arbitrary validation blocks' do
 
     it 'adds correct error message' do
       expect(schema.(newsletter: true, email: nil).errors).to eql(
-        email: ['provide email']
+        email_required: ['provide email']
       )
     end
 
