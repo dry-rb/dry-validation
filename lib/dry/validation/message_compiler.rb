@@ -48,8 +48,6 @@ module Dry
       def visit_hint(node, opts = EMPTY_OPTS)
         if hints?
           visit(node, opts.(message_type: :hint))
-        else
-          EMPTY_ARRAY
         end
       end
 
@@ -77,15 +75,22 @@ module Dry
       end
 
       def visit_and(node, opts = EMPTY_OPTS)
-        left, right = node
-        [visit(left, opts), visit(right, opts)]
+        left, right = node.map { |n| visit(n, opts) }
+
+        if right
+          [left, right]
+        else
+          left
+        end
       end
 
       def visit_or(node, opts = EMPTY_OPTS)
         left, right = node.map { |n| visit(n, opts) }
 
-        if [*left, *right].map(&:path).uniq.size == 1
+        if [left, right].flatten.map(&:path).uniq.size == 1
           Message::Or.new(left, right, -> k { messages[k, default_lookup_options] })
+        elsif right.is_a?(Array)
+          right
         else
           [left, right]
         end
