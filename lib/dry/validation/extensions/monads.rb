@@ -1,3 +1,5 @@
+require 'dry/monads/either'
+
 module Dry
   module Validation
     class Result

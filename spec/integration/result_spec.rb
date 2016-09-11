@@ -1,4 +1,6 @@
 RSpec.describe Dry::Validation::Result do
+  before(:all)  { Dry::Validation.load_extensions(:monads) }
+
   subject(:result) { schema.(input) }
 
   let(:schema) { Dry::Validation.Schema { required(:name).filled(:str?, size?: 2..4) } }

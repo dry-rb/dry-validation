@@ -81,11 +81,3 @@ module Dry
     end
   end
 end
-
-begin
-  require 'dry/monads/either'
-rescue LoadError
-  # noop
-else
-  require 'dry/validation/result/monads_ext'
-end

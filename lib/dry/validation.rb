@@ -1,6 +1,7 @@
 require 'dry-equalizer'
 require 'dry-configurable'
 require 'dry-container'
+require 'dry/core/extensions'
 
 require 'dry/validation/schema'
 require 'dry/validation/schema/form'
@@ -8,6 +9,8 @@ require 'dry/validation/schema/json'
 
 module Dry
   module Validation
+    extend Dry::Core::Extensions
+
     MissingMessageError = Class.new(StandardError)
     InvalidSchemaError = Class.new(StandardError)
 
@@ -37,3 +40,5 @@ module Dry
     end
   end
 end
+
+require 'dry/validation/extensions'
