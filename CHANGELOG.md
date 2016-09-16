@@ -6,6 +6,8 @@
 * Support for `or` error messages ie "must be a string or must be an integer" (solnic)
 * Support for retrieving error messages exclusively via `schema.(input).errors` (solnic)
 * Support for retrieving hint messages exclusively via `schema.(input).hints` (solnic)
+* Support for opt-in extensions loaded via `Dry::Validation.load_extensions(:my_ext)` (flash-gordon)
+* Add `:monads` extension which transforms a result instance to `Either` monad, `schema.(input).to_either` (flash-gordon)
 
 ### Fixed
 
