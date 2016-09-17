@@ -6,7 +6,6 @@ module Dry
           opts = super
           opts[:path] = EMPTY_ARRAY
           opts[:rule] = nil
-          opts[:each] = false
           opts[:message_type] = :failure
           opts
         end

@@ -108,11 +108,11 @@ RSpec.describe Schema, 'using high-level rules' do
       )
 
       expect(schema.(command: 'First', args: { second: true }).messages).to eql(
-        args: { first: ['is missing'] }
+        args: { first: ['is missing', 'must be filled', 'must be boolean'] }
       )
 
       expect(schema.(command: 'Second', args: { first: true }).messages).to eql(
-        args: { second: ['is missing'] }
+        args: { second: ['is missing', 'must be filled', 'must be boolean'] }
       )
     end
   end

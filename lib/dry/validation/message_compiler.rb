@@ -125,8 +125,7 @@ module Dry
           args: arg_vals,
           input: input,
           rule: rule,
-          check: base_opts[:check],
-          each: base_opts[:each]
+          check: base_opts[:check]
         ]
       end
 

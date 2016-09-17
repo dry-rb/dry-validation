@@ -67,7 +67,7 @@ module Dry
           msgs.each do |msg|
             node << msg
 
-            msg_hints = hint_groups[msg.index_path]
+            msg_hints = hint_groups[msg.path]
             node.concat(msg_hints) if msg_hints
           end
 
