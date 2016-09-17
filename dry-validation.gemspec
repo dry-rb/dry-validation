@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'dry-container', '~> 0.2', '>= 0.2.8'
   spec.add_runtime_dependency 'dry-equalizer', '~> 0.2'
   spec.add_runtime_dependency 'dry-logic', '~> 0.3', '>= 0.3.0'
-  spec.add_runtime_dependency 'dry-types', '~> 0.8', '>= 0.8.1'
+  spec.add_runtime_dependency 'dry-types', '~> 0.9', '>= 0.9.0'
   spec.add_runtime_dependency 'dry-core', '~> 0.1'
 
   spec.add_development_dependency 'bundler'
