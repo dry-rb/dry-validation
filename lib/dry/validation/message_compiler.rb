@@ -9,6 +9,7 @@ module Dry
       attr_reader :messages, :options, :locale, :default_lookup_options
 
       EMPTY_OPTS = VisitorOpts.new
+      LIST_SEPARATOR = ', '.freeze
 
       def initialize(messages, options = {})
         @messages = messages
@@ -170,7 +171,7 @@ module Dry
         args.each_with_object({}) { |arg, hash|
           case arg[1]
           when Array
-            hash[arg[0]] = arg[1].join(', ')
+            hash[arg[0]] = arg[1].join(LIST_SEPARATOR)
           when Range
             hash["#{arg[0]}_left".to_sym] = arg[1].first
             hash["#{arg[0]}_right".to_sym] = arg[1].last
