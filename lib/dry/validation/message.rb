@@ -47,7 +47,7 @@ module Dry
         if options[:check]
           Message::Check.new(predicate, path, text, options)
         else
-          new(predicate, path, text, options)
+          Message.new(predicate, path, text, options)
         end
       end
 
@@ -86,6 +86,10 @@ module Dry
     end
 
     class Hint < Message
+      def self.[](predicate, path, text, options)
+        Hint.new(predicate, path, text, options)
+      end
+
       def hint?
         true
       end
