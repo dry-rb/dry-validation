@@ -51,17 +51,19 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
   context 'structs' do
     subject(:schema) do
       Dry::Validation.Schema do
-        required(:person).filled(Person)
+        required(:person).filled(Test::Person)
       end
     end
 
-    class Name < Dry::Struct::Value
-      attribute :given_name, Dry::Types['strict.string']
-      attribute :family_name, Dry::Types['strict.string']
-    end
+    before do
+      class Test::Name < Dry::Struct::Value
+        attribute :given_name, Dry::Types['strict.string']
+        attribute :family_name, Dry::Types['strict.string']
+      end
 
-    class Person < Dry::Struct::Value
-      attribute :name, Name
+      class Test::Person < Dry::Struct::Value
+        attribute :name, Test::Name
+      end
     end
 
     it 'handles nested structs' do
