@@ -1,4 +1,3 @@
-require 'dry/struct'
 require 'dry/validation/schema/dsl'
 
 module Dry
