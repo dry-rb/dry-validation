@@ -10,6 +10,7 @@ if RUBY_ENGINE == "rbx"
 end
 
 require 'dry-validation'
+require 'dry/core/constants'
 require 'ostruct'
 
 SPEC_ROOT = Pathname(__dir__)
@@ -18,6 +19,7 @@ Dir[SPEC_ROOT.join('shared/**/*.rb')].each(&method(:require))
 Dir[SPEC_ROOT.join('support/**/*.rb')].each(&method(:require))
 
 include Dry::Validation
+include Dry::Core::Constants
 
 module Types
   include Dry::Types.module

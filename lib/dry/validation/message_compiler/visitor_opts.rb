@@ -1,10 +1,12 @@
+require 'dry/core/constants'
+
 module Dry
   module Validation
     class MessageCompiler
       class VisitorOpts < Hash
         def self.new
           opts = super
-          opts[:path] = EMPTY_ARRAY
+          opts[:path] = Core::Constants::EMPTY_ARRAY
           opts[:rule] = nil
           opts[:message_type] = :failure
           opts

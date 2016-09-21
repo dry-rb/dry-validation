@@ -1,4 +1,4 @@
-require 'dry/validation/constants'
+require 'dry/core/constants'
 require 'dry/validation/message'
 require 'dry/validation/message_set'
 require 'dry/validation/message_compiler/visitor_opts'
@@ -6,6 +6,8 @@ require 'dry/validation/message_compiler/visitor_opts'
 module Dry
   module Validation
     class MessageCompiler
+      include Core::Constants
+
       attr_reader :messages, :options, :locale, :default_lookup_options
 
       EMPTY_OPTS = VisitorOpts.new
