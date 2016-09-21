@@ -8,6 +8,7 @@
 * Support for retrieving hint messages exclusively via `schema.(input).hints` (solnic)
 * Support for opt-in extensions loaded via `Dry::Validation.load_extensions(:my_ext)` (flash-gordon)
 * Add `:monads` extension which transforms a result instance to `Either` monad, `schema.(input).to_either` (flash-gordon)
+* Add `dry-struct` integration via an extension activated by `Dry::Validation.load_extension(:struct)` (flash-gordon)
 
 ### Fixed
 

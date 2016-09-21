@@ -3,12 +3,12 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'dry-types', github: 'dry-rb/dry-types', branch: 'master'
-gem 'dry-struct', github: 'dry-rb/dry-struct', branch: 'master'
 
 group :test do
   gem 'i18n', require: false
   gem 'codeclimate-test-reporter', platform: :rbx
   gem 'dry-monads', require: false
+  gem 'dry-struct', github: 'dry-rb/dry-struct', branch: 'master', require: false
 end
 
 group :tools do
