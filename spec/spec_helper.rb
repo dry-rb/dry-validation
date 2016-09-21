@@ -40,4 +40,17 @@ RSpec.configure do |config|
   end
 
   config.include PredicatesIntegration
+
+  config.before do
+    module Test
+      def self.remove_constants
+        constants.each { |const| remove_const(const)  }
+        self
+      end
+    end
+  end
+
+  config.after do
+    Object.send(:remove_const, Test.remove_constants.name)
+  end
 end

@@ -6,7 +6,16 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 require 'rspec/core'
 require 'rspec/core/rake_task'
 
-task default: :spec
-
 desc 'Run all specs in spec directory'
-RSpec::Core::RakeTask.new(:spec)
+task :run_specs do
+  require 'rspec/core'
+
+  RSpec::Core::Runner.run(['spec/integration', 'spec/unit'])
+  RSpec.clear_examples
+  Dir[SPEC_ROOT.join('shared/**/*.rb')].each(&method(:load))
+
+  Dry::Validation.load_extensions(:monads)
+  RSpec::Core::Runner.run(['spec'])
+end
+
+task default: :run_specs

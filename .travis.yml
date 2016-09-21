@@ -3,7 +3,7 @@ sudo: false
 cache: bundler
 bundler_args: --without console benchmarks
 script:
-  - bundle exec rake spec
+  - bundle exec rake
 rvm:
   - 2.1.10
   - 2.2.5
