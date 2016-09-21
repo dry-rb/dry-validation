@@ -9,6 +9,7 @@ gem 'dry-struct', github: 'dry-rb/dry-struct', branch: 'master'
 group :test do
   gem 'i18n', require: false
   gem 'codeclimate-test-reporter', platform: :rbx
+  gem 'dry-monads', require: false
 end
 
 group :tools do
