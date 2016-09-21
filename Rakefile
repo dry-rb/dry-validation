@@ -18,4 +18,4 @@ task :run_specs do
   RSpec::Core::Runner.run(['spec'])
 end
 
-task default: :run_spec
+task default: :run_specs
