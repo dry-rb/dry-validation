@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'dry-types', github: 'dry-rb/dry-types', branch: 'master'
-
 group :test do
   gem 'i18n', require: false
   gem 'codeclimate-test-reporter', platform: :rbx
