@@ -1,4 +1,12 @@
-# v0.10.0 to-be-released
+# v0.10.1 2016-09-22
+
+### Fixed
+
+* Remove obsolete require of `dry/struct` which is now an optional extension (flash-gordon)
+
+[Compare v0.10.0...v0.10.1](https://github.com/dryrb/dry-validation/compare/v0.10.0...v0.10.1)
+
+# v0.10.0 2016-09-21
 
 ### Added
 
