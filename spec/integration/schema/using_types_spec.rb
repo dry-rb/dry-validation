@@ -82,6 +82,42 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
     end
   end
 
+  context 'with a nested schema' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:address).schema do
+          zip = Dry::Types['strict.string'].constrained(format: /\A[0-9]{5}(-[0-9]{4})?\z/)
+
+          required(:zip).filled(zip)
+        end
+      end
+    end
+
+    it 'returns success for valid input' do
+      expect(schema.(address: { zip: '12321' })).to be_success
+    end
+
+    it 'returns failure for invalid input' do
+      expect(schema.(address: { zip: '12-321' })).to be_failure
+    end
+
+    it 'returns messages for invalid input' do
+      expect(schema.(address: nil).messages).to eql(
+        address: ['must be a hash']
+      )
+    end
+
+    it 'returns error messages for invalid input' do
+      expect(schema.(address: {}).errors).to eql(
+        address: { zip: ['is missing'] }
+      )
+
+      expect(schema.(address: { zip: '12-321' }).errors).to eql(
+        address: { zip: ['is in invalid format'] }
+      )
+    end
+  end
+
   context 'with each' do
     subject(:schema) do
       Dry::Validation.Schema do

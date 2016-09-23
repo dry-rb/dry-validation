@@ -151,6 +151,10 @@ module Dry
         [visit(left, opts), visit(right, opts)].uniq
       end
 
+      def visit_type(node, opts = EMPTY_OPTS)
+        visit(node.rule.to_ast, opts)
+      end
+
       def lookup_options(arg_vals: [], input: nil)
         default_lookup_options.merge(
           arg_type: arg_vals.size == 1 && arg_vals[0].class,
