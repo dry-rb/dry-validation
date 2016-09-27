@@ -165,7 +165,7 @@ module Dry
         end
 
         def dyn_arg?(name)
-          schema_class.instance_methods.include?(name)
+          !name.to_s.end_with?('?') && schema_class.instance_methods.include?(name)
         end
 
         def respond_to?(name)

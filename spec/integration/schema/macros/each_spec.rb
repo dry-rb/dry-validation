@@ -237,4 +237,32 @@ RSpec.describe 'Macros #each' do
       end
     end
   end
+
+  context 'with a custom predicate' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          def self.messages
+            super.merge(en: { errors: { valid_content?: 'must have type key' }})
+          end
+
+          def valid_content?(content)
+            content.key?(:type)
+          end
+        end
+
+        required(:contents).each(:valid_content?)
+      end
+    end
+
+    it 'passes when all elements are valid' do
+      expect(schema.(contents: [{ type: 'foo' }, { type: 'bar' }]))
+    end
+
+    it 'fails when some elements are not valid' do
+      expect(schema.(contents: [{ type: 'foo' }, { oops: 'bar' }]).errors).to eql(
+        contents: { 1 => ['must have type key']}
+      )
+    end
+  end
 end
