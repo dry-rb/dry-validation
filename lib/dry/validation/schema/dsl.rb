@@ -6,7 +6,6 @@ module Dry
     class Schema
       class DSL < BasicObject
         include ::Dry::Validation::Deprecations
-        include ::Dry::Core::Constants
 
         attr_reader :name, :registry, :rules, :checks, :parent, :options
 

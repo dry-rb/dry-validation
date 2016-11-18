@@ -1,11 +1,8 @@
-require 'dry/core/constants'
 require 'dry/logic/rule/predicate'
 
 module Dry
   module Validation
     class PredicateRegistry
-      include Core::Constants
-
       attr_reader :predicates
       attr_reader :external
 

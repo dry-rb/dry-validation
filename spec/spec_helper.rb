@@ -19,7 +19,6 @@ Dir[SPEC_ROOT.join('shared/**/*.rb')].each(&method(:require))
 Dir[SPEC_ROOT.join('support/**/*.rb')].each(&method(:require))
 
 include Dry::Validation
-include Dry::Core::Constants
 
 module Types
   include Dry::Types.module

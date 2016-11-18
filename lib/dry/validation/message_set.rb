@@ -1,9 +1,6 @@
-require 'dry/core/constants'
-
 module Dry
   module Validation
     class MessageSet
-      include Core::Constants
       include Enumerable
 
       HINT_EXCLUSION = %i(key? filled? none? bool? str? int? float? decimal? date? date_time? time? hash? array?).freeze

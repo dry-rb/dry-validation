@@ -1,9 +1,6 @@
-require 'dry/core/constants'
-
 module Dry
   module Validation
     class Result
-      include Core::Constants
       include Dry::Equalizer(:output, :errors)
       include Enumerable
 

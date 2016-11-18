@@ -1,9 +1,6 @@
-require 'dry/core/constants'
-
 module Dry
   module Validation
     class Message
-      include Core::Constants
       include Dry::Equalizer(:predicate, :path, :text, :options)
 
       attr_reader :predicate, :path, :text, :rule, :args, :options
