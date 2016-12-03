@@ -4,7 +4,10 @@ gemspec
 
 group :test do
   gem 'i18n', require: false
-  gem 'codeclimate-test-reporter', platform: :rbx
+  platform :mri do
+    gem 'codeclimate-test-reporter', require: false
+    gem 'simplecov', require: false
+  end
   gem 'dry-monads', require: false
   gem 'dry-struct', github: 'dry-rb/dry-struct', branch: 'master', require: false
 end

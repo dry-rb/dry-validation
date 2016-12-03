@@ -1,13 +1,13 @@
-# encoding: utf-8
+if ENV['COVERAGE'] == 'true' && RUBY_ENGINE == 'ruby' && RUBY_VERSION == '2.3.1'
+  require "simplecov"
+  SimpleCov.start do
+    add_filter '/spec/'
+  end
+end
 
 begin
   require 'byebug'
 rescue LoadError; end
-
-if RUBY_ENGINE == "rbx"
-  require "codeclimate-test-reporter"
-  CodeClimate::TestReporter.start
-end
 
 require 'dry-validation'
 require 'dry/core/constants'
