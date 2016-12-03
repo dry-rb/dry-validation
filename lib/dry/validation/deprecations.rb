@@ -1,4 +1,5 @@
 require 'logger'
+require 'dry/configurable'
 
 module Dry
   module Validation

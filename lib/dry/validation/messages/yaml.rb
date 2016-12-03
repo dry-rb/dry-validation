@@ -1,6 +1,7 @@
 require 'yaml'
 require 'pathname'
 
+require 'dry/equalizer'
 require 'dry/validation/messages/abstract'
 
 module Dry

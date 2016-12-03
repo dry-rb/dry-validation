@@ -1,3 +1,5 @@
+require 'dry/equalizer'
+
 module Dry
   module Validation
     class Result

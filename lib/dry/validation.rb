@@ -1,5 +1,3 @@
-require 'dry-equalizer'
-require 'dry-configurable'
 require 'dry/core/extensions'
 require 'dry/core/constants'
 

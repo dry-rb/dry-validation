@@ -1,5 +1,7 @@
 require 'pathname'
 require 'concurrent/map'
+require 'dry/equalizer'
+require 'dry/configurable'
 
 module Dry
   module Validation

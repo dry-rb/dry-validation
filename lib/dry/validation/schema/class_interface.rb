@@ -1,3 +1,4 @@
+require 'dry/configurable'
 require 'dry/validation/messages'
 require 'dry/validation/type_specs'
 
