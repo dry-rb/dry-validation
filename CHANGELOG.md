@@ -3,6 +3,7 @@
 ### Fixed
 
 * Updated to dry-core >= 0.2.1 (ruby warnings are gone) (flash-gordon)
+* `format?` predicate is excluded from hints (solnic)
 
 ### Changed
 
