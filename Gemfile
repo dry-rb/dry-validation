@@ -9,7 +9,7 @@ group :test do
     gem 'simplecov', require: false
   end
   gem 'dry-monads', require: false
-  gem 'dry-struct', github: 'dry-rb/dry-struct', branch: 'master', require: false
+  gem 'dry-struct', require: false
 end
 
 group :tools do
