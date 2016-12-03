@@ -1,3 +1,15 @@
+# v0.10.4 2016-12-03
+
+### Fixed
+
+* Updated to dry-core >= 0.2.1 (ruby warnings are gone) (flash-gordon)
+
+### Changed
+
+* `version` file is now required by default (georgemillo)
+
+[Compare v0.10.3...v0.10.4](https://github.com/dryrb/dry-validation/compare/v0.10.3...v0.10.4)
+
 # v0.10.3 2016-09-27
 
 ### Fixed
