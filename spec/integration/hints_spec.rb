@@ -116,6 +116,19 @@ RSpec.describe 'Validation hints' do
     end
   end
 
+  context 'with a format? predicate' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        required(:name).value(size?: 2, format?: /xy/)
+      end
+    end
+
+    it 'skips hints' do
+      expect(schema.(name: 'x').messages[:name]).to_not include('is in invalid format')
+      expect(schema.(name: 'ab').messages[:name]).to include('is in invalid format')
+    end
+  end
+
   context 'when the message uses input value' do
     subject(:schema) do
       Dry::Validation.Schema do

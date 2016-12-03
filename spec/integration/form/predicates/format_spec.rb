@@ -18,7 +18,7 @@ RSpec.describe 'Predicates: Format' do
       let(:input) { {} }
 
       it 'is not successful' do
-        expect(result).to be_failing ['is missing', 'is in invalid format']
+        expect(result).to be_failing ['is missing']
       end
     end
 
@@ -26,7 +26,7 @@ RSpec.describe 'Predicates: Format' do
       let(:input) { { 'foo' => nil } }
 
       it 'is not successful' do
-        expect(result).to be_failing ['must be a string', 'is in invalid format']
+        expect(result).to be_failing ['must be a string']
       end
     end
 
@@ -42,7 +42,7 @@ RSpec.describe 'Predicates: Format' do
       let(:input) { { 'foo' => { 'a' => '1' } } }
 
       it 'raises error' do
-        expect(result).to be_failing ['must be a string', 'is in invalid format']
+        expect(result).to be_failing ['must be a string']
       end
     end
 
@@ -82,7 +82,7 @@ RSpec.describe 'Predicates: Format' do
       let(:input) { { 'foo' => nil } }
 
       it 'is not successful' do
-        expect(result).to be_failing ["must be a string", "is in invalid format"]
+        expect(result).to be_failing ['must be a string']
       end
     end
 
@@ -98,7 +98,7 @@ RSpec.describe 'Predicates: Format' do
       let(:input) { { 'foo' => { 'a' => '1' } } }
 
       it 'raises error' do
-        expect(result).to be_failing ['must be a string', 'is in invalid format']
+        expect(result).to be_failing ['must be a string']
       end
     end
 
@@ -132,7 +132,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { {} }
 
           it 'is not successful' do
-            expect(result).to be_failing ['is missing', 'is in invalid format']
+            expect(result).to be_failing ['is missing']
           end
         end
 
@@ -140,7 +140,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => nil } }
 
           it 'is not successful' do
-            expect(result).to be_failing ['must be a string', 'is in invalid format']
+            expect(result).to be_failing ['must be a string']
           end
         end
 
@@ -156,7 +156,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
           it 'raises error' do
-            expect(result).to be_failing ['must be a string', 'is in invalid format']
+            expect(result).to be_failing ['must be a string']
           end
         end
 
@@ -188,7 +188,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { {} }
 
           it 'is not successful' do
-            expect(result).to be_failing ['is missing', 'is in invalid format']
+            expect(result).to be_failing ['is missing']
           end
         end
 
@@ -196,7 +196,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => nil } }
 
           it 'is not successful' do
-            expect(result).to be_failing ['must be filled', 'is in invalid format']
+            expect(result).to be_failing ['must be filled']
           end
         end
 
@@ -204,7 +204,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => '' } }
 
           it 'is not successful' do
-            expect(result).to be_failing ['must be filled', 'is in invalid format']
+            expect(result).to be_failing ['must be filled']
           end
         end
 
@@ -212,7 +212,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
           it 'raises error' do
-            expect(result).to be_failing ["must be a string", "is in invalid format"]
+            expect(result).to be_failing ['must be a string']
           end
         end
 
@@ -244,7 +244,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { {} }
 
           it 'is not successful' do
-            expect(result).to be_failing ['is missing', 'is in invalid format']
+            expect(result).to be_failing ['is missing']
           end
         end
 
@@ -267,7 +267,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
           it 'is not successful' do
-            expect(result).to be_failing ['must be a string', 'is in invalid format']
+            expect(result).to be_failing ['must be a string']
           end
         end
 
@@ -309,7 +309,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => nil } }
 
           it 'is not successful' do
-            expect(result).to be_failing ['must be a string', 'is in invalid format']
+            expect(result).to be_failing ['must be a string']
           end
         end
 
@@ -325,7 +325,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
           it 'raises error' do
-            expect(result).to be_failing ['must be a string', 'is in invalid format']
+            expect(result).to be_failing ['must be a string']
           end
         end
 
@@ -365,7 +365,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => nil } }
 
           it 'is not successful' do
-            expect(result).to be_failing ['must be filled', 'is in invalid format']
+            expect(result).to be_failing ['must be filled']
           end
         end
 
@@ -373,7 +373,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => '' } }
 
           it 'is not successful' do
-            expect(result).to be_failing ['must be filled', 'is in invalid format']
+            expect(result).to be_failing ['must be filled']
           end
         end
 
@@ -381,7 +381,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
           it 'raises error' do
-            expect(result).to be_failing ['must be a string', 'is in invalid format']
+            expect(result).to be_failing ['must be a string']
           end
         end
 
@@ -437,7 +437,7 @@ RSpec.describe 'Predicates: Format' do
           let(:input) { { 'foo' => { 'a' => '1' } } }
 
           it 'raises error' do
-            expect(result).to be_failing ['must be a string', 'is in invalid format']
+            expect(result).to be_failing ['must be a string']
           end
         end
 

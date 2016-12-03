@@ -3,7 +3,12 @@ module Dry
     class MessageSet
       include Enumerable
 
-      HINT_EXCLUSION = %i(key? filled? none? bool? str? int? float? decimal? date? date_time? time? hash? array?).freeze
+      HINT_EXCLUSION = %i(
+        key? filled? none? bool?
+        str? int? float? decimal?
+        date? date_time? time? hash?
+        array? format?
+      ).freeze
 
       attr_reader :messages, :failures, :hints, :paths, :placeholders, :options
 
