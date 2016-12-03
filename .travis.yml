@@ -4,7 +4,7 @@ sudo: required
 cache: bundler
 bundler_args: --without benchmarks tools
 after_success:
-  - '[ "$TRAVIS_RUBY_VERSION" = "2.3.1" ] && [ "$TRAVIS_BRANCH" = "master" ] && bundle exec codeclimate-test-reporter'
+  - '[ -d coverage ] && bundle exec codeclimate-test-reporter'
 script:
   - bundle exec rake
 rvm:
