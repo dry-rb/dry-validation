@@ -59,7 +59,7 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::Form, '#call' do
         :and,
         [
           [:val, p(:key?, :age)],
-          [:key, [:age, p(:type?, Fixnum)]]
+          [:key, [:age, p(:type?, Integer)]]
         ]
       ]
     ]

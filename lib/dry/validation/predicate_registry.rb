@@ -92,7 +92,7 @@ module Dry
           case args_or_arity
           when Array
             raise_invalid_arity_error(name) if ![0, args_or_arity.size + 1].include?(arity)
-          when Fixnum
+          when Integer
             raise_invalid_arity_error(name) if args_or_arity != arity
           end
         else
