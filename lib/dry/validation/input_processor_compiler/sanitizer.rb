@@ -19,7 +19,7 @@ module Dry
       CONST_MAP = {
         NilClass => 'nil',
         String => 'string',
-        Fixnum => 'int',
+        Integer => 'int',
         Integer => 'int',
         Float => 'float',
         BigDecimal => 'decimal',
