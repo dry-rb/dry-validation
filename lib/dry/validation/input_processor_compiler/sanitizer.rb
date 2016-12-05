@@ -20,7 +20,6 @@ module Dry
         NilClass => 'nil',
         String => 'string',
         Integer => 'int',
-        Integer => 'int',
         Float => 'float',
         BigDecimal => 'decimal',
         Array => 'array',
