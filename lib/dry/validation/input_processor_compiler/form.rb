@@ -22,7 +22,6 @@ module Dry
         NilClass => 'form.nil',
         String => 'string',
         Integer => 'form.int',
-        Integer => 'form.int',
         Float => 'form.float',
         BigDecimal => 'form.decimal',
         Array => 'form.array',

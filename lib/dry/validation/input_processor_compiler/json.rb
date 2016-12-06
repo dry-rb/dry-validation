@@ -18,7 +18,6 @@ module Dry
         NilClass => 'nil',
         String => 'string',
         Integer => 'int',
-        Integer => 'int',
         Float => 'float',
         BigDecimal => 'json.decimal',
         Array => 'json.array',
