@@ -19,10 +19,6 @@ module Dry
         @default_lookup_options = { locale: locale }
       end
 
-      def full?
-        @full
-      end
-
       def hints?
         @hints
       end
@@ -160,14 +156,7 @@ module Dry
       end
 
       def message_text(rule, template, tokens, opts)
-        text = template % tokens
-
-        if full?
-          rule_name = messages.rule(rule, opts) || rule
-          "#{rule_name} #{text}"
-        else
-          text
-        end
+        template % tokens
       end
 
       def message_tokens(args)

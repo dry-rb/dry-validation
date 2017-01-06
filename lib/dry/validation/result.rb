@@ -38,15 +38,15 @@ module Dry
       end
 
       def messages(options = EMPTY_HASH)
-        message_set(options).dump
+        message_set(options).dump(full: options[:full])
       end
 
       def errors(options = EMPTY_HASH)
-        message_set(options.merge(hints: false)).dump
+        message_set(options.merge(hints: false)).dump(full: options[:full])
       end
 
       def hints(options = EMPTY_HASH)
-        message_set(options.merge(failures: false)).dump
+        message_set(options.merge(failures: false)).dump(full: options[:full])
       end
 
       def message_set(options = EMPTY_HASH)

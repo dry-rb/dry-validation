@@ -27,8 +27,12 @@ module Dry
         initialize_placeholders!
       end
 
-      def dump
-        root? ? to_a : to_h
+      def dump(full: false)
+        if full
+          to_h.flat_map { |attr, messages| messages.map { |m| "#{attr} #{m}" } }
+        else
+          root? ? to_a : to_h
+        end
       end
 
       def failures?

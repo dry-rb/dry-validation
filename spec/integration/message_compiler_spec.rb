@@ -58,16 +58,6 @@ RSpec.describe Dry::Validation::MessageCompiler do
   end
 
   describe '#visit with an :input node' do
-    context 'full message' do
-      it 'returns full message including rule name' do
-        msg = message_compiler.with(full: true).visit(
-          [:failure, [:num, [:key, [:num, p(:int?, '2')]]]]
-        )
-
-        expect(msg).to eql('num must be an integer')
-      end
-    end
-
     context 'rule name translations' do
       it 'translates rule name and its message' do
         msg = message_compiler.with(locale: :pl, full: true).visit(

@@ -31,7 +31,7 @@ RSpec.describe Dry::Validation::Result do
         either = result.to_either(full: true)
 
         expect(either).to be_left
-        expect(either.value).to eql(name: ['name must be filled', 'name length must be within 2 - 4'])
+        expect(either.value).to eql(['name must be filled', 'name length must be within 2 - 4'])
       end
     end
   end

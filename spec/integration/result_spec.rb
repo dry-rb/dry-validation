@@ -49,7 +49,7 @@ RSpec.describe Dry::Validation::Result do
 
       it 'with full: true returns full messages' do
         expect(result.messages(full: true)).to eql(
-          name: ['name must be filled', 'name length must be within 2 - 4']
+          ['name must be filled', 'name length must be within 2 - 4']
         )
       end
     end
@@ -60,6 +60,10 @@ RSpec.describe Dry::Validation::Result do
       it 'returns failure messages' do
         expect(result.errors).to eql(name: ['must be filled'])
       end
+
+      it 'with full: true returns full messages' do
+        expect(result.errors(full: true)).to eql ['name must be filled']
+      end
     end
 
     describe '#hints' do
@@ -67,6 +71,10 @@ RSpec.describe Dry::Validation::Result do
 
       it 'returns hint messages' do
         expect(result.hints).to eql(name: ['length must be within 2 - 4'])
+      end
+
+      it 'with full: true returns full messages' do
+        expect(result.hints(full: true)).to eql ['name length must be within 2 - 4']
       end
     end
 
