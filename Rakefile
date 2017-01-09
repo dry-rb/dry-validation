@@ -8,7 +8,6 @@ require 'rspec/core/rake_task'
 
 desc 'Run all specs in spec directory'
 task :run_specs do
-  require 'rspec/core'
 
   RSpec::Core::Runner.run(['spec/integration', 'spec/unit'])
   RSpec.clear_examples
