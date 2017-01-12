@@ -1,3 +1,11 @@
+# v0.10.5 2017-01-12
+
+### Fixed
+
+* Warnings under MRI 2.4.0 are gone (koic)
+
+[Compare v0.10.4...v0.10.5](https://github.com/dryrb/dry-validation/compare/v0.10.4...v0.10.5)
+
 # v0.10.4 2016-12-03
 
 ### Fixed
