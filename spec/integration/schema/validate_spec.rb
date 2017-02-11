@@ -91,7 +91,7 @@ RSpec.describe Dry::Validation::Schema, 'arbitrary validation blocks' do
             super.merge(en: {
               errors: {
                 email?:        '%{value} looks like an invalid email',
-                google_email?: '%{value} is not google email'
+                google_email?: '%{value} is not a google email'
               } })
           end
         end
