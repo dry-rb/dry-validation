@@ -402,11 +402,11 @@ RSpec.describe 'Predicates: Type' do
       Object.send(:remove_const, :CustomClass)
     end
 
-    it 'it succeeds with valid input' do
+    it 'succeeds with valid input' do
       expect(schema.(foo: CustomClass.new)).to be_success
     end
 
-    it 'it fails with invalid input' do
+    it 'fails with invalid input' do
       expect(schema.(foo: 'oops')).to be_failing ["must be #{CustomClass}"]
     end
   end

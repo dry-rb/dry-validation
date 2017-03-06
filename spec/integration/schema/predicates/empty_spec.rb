@@ -170,7 +170,7 @@ RSpec.describe 'Predicates: Empty' do
       end
 
       context 'with filled' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             required(:foo).filled(:empty?)
           end }.to raise_error InvalidSchemaError
@@ -178,7 +178,7 @@ RSpec.describe 'Predicates: Empty' do
       end
 
       context 'with maybe' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             required(:foo).maybe(:empty?)
           end }.to raise_error InvalidSchemaError
@@ -244,7 +244,7 @@ RSpec.describe 'Predicates: Empty' do
       end
 
       context 'with filled' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             optional(:foo).filled(:empty?)
           end }.to raise_error InvalidSchemaError
@@ -252,7 +252,7 @@ RSpec.describe 'Predicates: Empty' do
       end
 
       context 'with maybe' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             optional(:foo).maybe(:empty?)
           end }.to raise_error InvalidSchemaError

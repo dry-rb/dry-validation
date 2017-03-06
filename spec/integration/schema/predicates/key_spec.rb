@@ -15,7 +15,7 @@ RSpec.describe 'Predicates: Key' do
   end
 
   context 'with required' do
-    it "should raise error" do
+    it "raises error" do
       expect { Dry::Validation.Schema do
         required(:foo) { key? }
       end }.to raise_error InvalidSchemaError
@@ -24,7 +24,7 @@ RSpec.describe 'Predicates: Key' do
 
   context 'with optional' do
     subject(:schema) do
-      it "should raise error" do
+      it "raises error" do
         expect { Dry::Validation.Schema do
           optional(:foo) { key? }
         end }.to raise_error InvalidSchemaError
@@ -35,7 +35,7 @@ RSpec.describe 'Predicates: Key' do
   context 'as macro' do
     context 'with required' do
       context 'with value' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             required(:foo).value(:key?)
           end }.to raise_error InvalidSchemaError
@@ -43,7 +43,7 @@ RSpec.describe 'Predicates: Key' do
       end
 
       context 'with filled' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             required(:foo).filled(:key?)
           end }.to raise_error InvalidSchemaError
@@ -51,7 +51,7 @@ RSpec.describe 'Predicates: Key' do
       end
 
       context 'with maybe' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             required(:foo).maybe(:key?)
           end }.to raise_error InvalidSchemaError
@@ -61,7 +61,7 @@ RSpec.describe 'Predicates: Key' do
 
     context 'with optional' do
       context 'with value' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             optional(:foo).value(:key?)
           end }.to raise_error InvalidSchemaError
@@ -69,7 +69,7 @@ RSpec.describe 'Predicates: Key' do
       end
 
       context 'with filled' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             optional(:foo).filled(:key?)
           end }.to raise_error InvalidSchemaError
@@ -77,7 +77,7 @@ RSpec.describe 'Predicates: Key' do
       end
 
       context 'with maybe' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             optional(:foo).maybe(:key?)
           end }.to raise_error InvalidSchemaError

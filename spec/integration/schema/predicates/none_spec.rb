@@ -163,7 +163,7 @@ RSpec.describe 'Predicates: None' do
 
       #makes no sense see: #134
       context 'with maybe' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             required(:foo).maybe(:none?)
           end }.to raise_error InvalidSchemaError
@@ -254,7 +254,7 @@ RSpec.describe 'Predicates: None' do
 
       #makes no sense see: #134
       context 'with maybe' do
-        it "should raise error" do
+        it "raises error" do
           expect { Dry::Validation.Schema do
             optional(:foo).maybe(:none?)
           end }.to raise_error InvalidSchemaError
