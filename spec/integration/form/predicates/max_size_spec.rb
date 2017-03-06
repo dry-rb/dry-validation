@@ -25,7 +25,7 @@ RSpec.describe 'Predicates: Max Size' do
     context 'with nil input' do
       let(:input) { { 'foo' => nil } }
 
-      it 'is raises error' do
+      it 'raises error' do
         expect { result }.to raise_error(NoMethodError)
       end
     end
@@ -73,7 +73,7 @@ RSpec.describe 'Predicates: Max Size' do
     context 'with nil input' do
       let(:input) { { 'foo' => nil } }
 
-      it 'is raises error' do
+      it 'raises error' do
         expect { result }.to raise_error(NoMethodError)
       end
     end
@@ -269,7 +269,7 @@ RSpec.describe 'Predicates: Max Size' do
         context 'with nil input' do
           let(:input) { { 'foo' => nil } }
 
-          it 'is raises error' do
+          it 'raises error' do
             expect { result }.to raise_error(NoMethodError)
           end
         end

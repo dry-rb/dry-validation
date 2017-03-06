@@ -129,7 +129,7 @@ RSpec.describe Dry::Validation do
     )
   end
 
-  it 'should work with custom predicate args' do
+  it 'works with custom predicate args' do
     schema = Dry::Validation.Schema do
       configure do
         def self.messages

@@ -25,7 +25,7 @@ RSpec.describe 'Predicates: Lteq' do
     context 'with nil input' do
       let(:input) { { foo: nil } }
 
-      it 'is raises error' do
+      it 'raises error' do
         expect { result }.to raise_error(NoMethodError)
       end
     end
@@ -33,7 +33,7 @@ RSpec.describe 'Predicates: Lteq' do
     context 'with blank input' do
       let(:input) { { foo: '' } }
 
-      it 'is raises error' do
+      it 'raises error' do
         expect { result }.to raise_error(ArgumentError, 'comparison of String with 23 failed')
       end
     end
@@ -41,7 +41,7 @@ RSpec.describe 'Predicates: Lteq' do
     context 'with invalid input type' do
       let(:input) { { foo: [] } }
 
-      it 'is raises error' do
+      it 'raises error' do
         expect { result }.to raise_error(NoMethodError)
       end
     end
@@ -89,7 +89,7 @@ RSpec.describe 'Predicates: Lteq' do
     context 'with nil input' do
       let(:input) { { foo: nil } }
 
-      it 'is raises error' do
+      it 'raises error' do
         expect { result }.to raise_error(NoMethodError)
       end
     end
@@ -97,7 +97,7 @@ RSpec.describe 'Predicates: Lteq' do
     context 'with blank input' do
       let(:input) { { foo: '' } }
 
-      it 'is raises error' do
+      it 'raises error' do
         expect { result }.to raise_error(ArgumentError, 'comparison of String with 23 failed')
       end
     end
@@ -105,7 +105,7 @@ RSpec.describe 'Predicates: Lteq' do
     context 'with invalid input type' do
       let(:input) { { foo: [] } }
 
-      it 'is raises error' do
+      it 'raises error' do
         expect { result }.to raise_error(NoMethodError)
       end
     end
@@ -155,7 +155,7 @@ RSpec.describe 'Predicates: Lteq' do
         context 'with nil input' do
           let(:input) { { foo: nil } }
 
-          it 'is raises error' do
+          it 'raises error' do
             expect { result }.to raise_error(NoMethodError)
           end
         end
@@ -163,7 +163,7 @@ RSpec.describe 'Predicates: Lteq' do
         context 'with blank input' do
           let(:input) { { foo: '' } }
 
-          it 'is raises error' do
+          it 'raises error' do
             expect { result }.to raise_error(ArgumentError, 'comparison of String with 23 failed')
           end
         end
@@ -171,7 +171,7 @@ RSpec.describe 'Predicates: Lteq' do
         context 'with invalid input type' do
           let(:input) { { foo: [] } }
 
-          it 'is raises error' do
+          it 'raises error' do
             expect { result }.to raise_error(NoMethodError)
           end
         end
@@ -291,7 +291,7 @@ RSpec.describe 'Predicates: Lteq' do
         context 'with blank input' do
           let(:input) { { foo: '' } }
 
-          it 'is raises error' do
+          it 'raises error' do
             expect { result }.to raise_error(ArgumentError, 'comparison of String with 23 failed')
           end
         end
@@ -299,7 +299,7 @@ RSpec.describe 'Predicates: Lteq' do
         context 'with invalid input type' do
           let(:input) { { foo: [] } }
 
-          it 'is raises error' do
+          it 'raises error' do
             expect { result }.to raise_error(NoMethodError)
           end
         end
@@ -485,7 +485,7 @@ RSpec.describe 'Predicates: Lteq' do
         context 'with blank input' do
           let(:input) { { foo: '' } }
 
-          it 'is raises error' do
+          it 'raises error' do
             expect { result }.to raise_error(ArgumentError, 'comparison of String with 23 failed')
           end
         end
@@ -493,7 +493,7 @@ RSpec.describe 'Predicates: Lteq' do
         context 'with invalid input type' do
           let(:input) { { foo: [] } }
 
-          it 'is raises error' do
+          it 'raises error' do
             expect { result }.to raise_error(NoMethodError)
           end
         end
