@@ -248,6 +248,20 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
     expect(input_type.('ids' => [1, 2, 3])).to eql(ids: [1, 2, 3])
   end
 
+  it 'supports array? without each rule' do
+    rule_ast = [
+      [
+        :and, [
+          [:val, p(:key?, :ids)],
+          [:key, [:ids, p(:array?, [])]]
+        ]
+      ]
+    ]
+
+    input_type = compiler.(rule_ast)
+    expect(input_type.type.member_types[:ids].type.primitive).to eq(Array)
+  end
+
   it 'supports hash? with a set rule' do
     rule_ast = [
       [
@@ -279,5 +293,19 @@ RSpec.describe Dry::Validation::InputProcessorCompiler::JSON, '#call' do
     expect(input_type.('address' => { 'street' => 'ok' })).to eql(
       address: { street: 'ok' }
     )
+  end
+
+  it 'supports hash? without nested rules' do
+    rule_ast = [
+      [
+        :and, [
+          [:val, p(:key?, :address)],
+          [:key, [:address, p(:hash?, [])]]
+        ]
+      ]
+    ]
+
+    input_type = compiler.(rule_ast)
+    expect(input_type.type.member_types[:address].type.primitive).to eq(Hash)
   end
 end

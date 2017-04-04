@@ -11,7 +11,9 @@ module Dry
         decimal?: 'json.decimal',
         date?: 'json.date',
         date_time?: 'json.date_time',
-        time?: 'json.time'
+        time?: 'json.time',
+        hash?: 'json.hash',
+        array?: 'json.array'
       }.freeze
 
       CONST_MAP = {
