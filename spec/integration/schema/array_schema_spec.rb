@@ -56,4 +56,8 @@ RSpec.describe Dry::Validation::Schema, 'for an array' do
       )
     end
   end
+
+  it 'does not explode if array does not contain hashes' do
+    schema.(['hello', 'world'])
+  end
 end
