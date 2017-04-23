@@ -43,9 +43,19 @@ module Dry
 
     class ApplyChecks < ApplyRules
       def call(input, result)
-        rules.each_with_object(result) do |(name, check), hash|
-          check_res = check.is_a?(Guard) ? check.(input, result) : check.(input)
-          hash[name] = check_res if check_res
+        rules.each_with_object(result) do |(name, checks), hash|
+          checks.each do |check|
+            check_res = check.is_a?(Guard) ? check.(input, result) : check.(input)
+            if hash.key?(name)
+              if hash[name].is_a?(Array)
+                hash[name] << check_res
+              else
+                hash[name] = [hash[name], check_res]
+              end
+            else
+              hash[name] = check_res if check_res
+            end
+          end
         end
         input
       end
@@ -53,7 +63,7 @@ module Dry
 
     class BuildErrors
       def call(result)
-        result.values.select(&:failure?)
+        result.values.flatten.compact.select(&:failure?)
       end
     end
 
