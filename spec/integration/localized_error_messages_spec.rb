@@ -49,6 +49,24 @@ RSpec.describe Dry::Validation, 'with localized messages' do
           )
         end
       end
+
+      describe '#errors' do
+        context 'with different locale' do
+          before do
+            I18n.locale = :pl
+          end
+
+          after do
+            I18n.locale = :en
+          end
+
+          it 'contains the localized errors' do
+            expect(schema.(email: '').errors).to eql(
+              { email: ['Hej user! Dawaj ten email no!'] }
+            )
+          end
+        end
+      end
     end
   end
 end
