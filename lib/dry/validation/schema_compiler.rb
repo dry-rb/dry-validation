@@ -25,7 +25,9 @@ module Dry
           result = nil
           Array(path).each do |name|
             curr = results[name]
-            result = curr.success? if curr
+            if curr
+              result = curr.is_a?(Array) ? curr.first.success? : curr.success?
+            end
           end
           result
         end

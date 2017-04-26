@@ -80,4 +80,41 @@ RSpec.describe Dry::Validation::Schema, 'arbitrary validation blocks' do
       )
     end
   end
+
+  context 'with more than one validation' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          option :email_regex, /@/
+
+          def self.messages
+            super.merge(en: {
+              errors: {
+                email?:        '%{value} looks like an invalid email',
+                google_email?: '%{value} is not a google email'
+              } })
+          end
+        end
+
+        required(:email).filled
+
+        validate(email?: :email) do |value|
+          email_regex.match(value)
+        end
+
+        validate(google_email?: :email) do |value|
+          value.end_with?('@google.com')
+        end
+      end
+    end
+
+    it 'returns errors message for both validate' do
+      expect(schema.(email: 'jane').messages).to eql(
+        email: [
+          'jane looks like an invalid email',
+          'jane is not a google email'
+        ]
+      )
+    end
+  end
 end

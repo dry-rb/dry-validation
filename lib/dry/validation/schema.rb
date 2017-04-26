@@ -114,7 +114,11 @@ module Dry
 
       def initialize_checks(checks)
         @checks = checks.each_with_object({}) do |check, result|
-          result[check.name] = rule_compiler.visit(check.to_ast)
+          if result.key?(check.name)
+            result[check.name] << rule_compiler.visit(check.to_ast)
+          else
+            result[check.name] = [rule_compiler.visit(check.to_ast)]
+          end
         end
       end
     end
