@@ -1,3 +1,11 @@
+# v0.10.6 2017-04-26
+
+### Fixed
+
+* Fixes issue with wrong localized error messages when namespaced messages are used (kbredemeier)
+
+[Compare v0.10.5...v0.10.6](https://github.com/dryrb/dry-validation/compare/v0.10.5...v0.10.6)
+
 # v0.10.5 2017-01-12
 
 ### Fixed
