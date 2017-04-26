@@ -22,6 +22,10 @@ module Dry
         def lookup_paths(tokens)
           super(tokens.merge(root: "#{root}.rules.#{namespace}")) + super
         end
+
+        def default_locale
+          messages.default_locale
+        end
       end
     end
   end
