@@ -160,7 +160,11 @@ module Dry
       end
 
       def message_text(rule, template, tokens, opts)
-        text = template % tokens
+        text = begin
+          template % tokens
+        rescue ArgumentError
+          template
+        end
 
         if full?
           rule_name = messages.rule(rule, opts) || rule
