@@ -19,4 +19,12 @@ RSpec.describe 'Schema / Injecting Rules' do
     expect(schema.(login: true, email: nil)).to_not be_success
     expect(schema.(login: nil, email: 'jane@doe')).to_not be_success
   end
+
+  it 'keeps the original schema rules intact' do
+    expect(other.class.rules.size).to eq(1)
+
+    schema.(login: true, email: 'jane@doe')
+
+    expect(other.class.rules.size).to eq(1)
+  end
 end

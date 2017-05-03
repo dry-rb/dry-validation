@@ -41,6 +41,7 @@ module Dry
 
         dsl_ext = config.dsl_extensions
 
+        options = options.merge(rules: options[:rules].dup) if options.key?(:rules)
         dsl = Schema::Value.new(options.merge(registry: source.registry))
         dsl_ext.__send__(:extend_object, dsl) if dsl_ext
         dsl.predicates(options[:predicates]) if options.key?(:predicates)
