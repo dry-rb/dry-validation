@@ -8,19 +8,14 @@ after_success:
 script:
   - bundle exec rake
 rvm:
-  - 2.1
   - 2.2
   - 2.3
-  - 2.4.0
+  - 2.4.1
   - jruby-9.1.5.0
-  - rbx-3
 env:
   global:
     - COVERAGE=true
     - JRUBY_OPTS='--dev -J-Xmx1024M'
-matrix:
-  allow_failures:
-    - rvm: rbx-3
 notifications:
   email: false
   webhooks:
