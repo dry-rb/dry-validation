@@ -38,11 +38,11 @@ module Dry
       end
 
       def hash_node(schema)
-        [:type, ['form.hash', [:symbolized, schema]]]
+        [:form_hash, [schema, {}]]
       end
 
       def array_node(members)
-        [:type, ['form.array', members]]
+        [:form_array, [members, {}]]
       end
     end
   end

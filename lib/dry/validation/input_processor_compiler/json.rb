@@ -34,11 +34,11 @@ module Dry
       end
 
       def hash_node(schema)
-        [:type, ['json.hash', [:symbolized, schema]]]
+        [:json_hash, [schema, {}]]
       end
 
       def array_node(members)
-        [:type, ['json.array', members]]
+        [:json_array, [members, {}]]
       end
     end
   end

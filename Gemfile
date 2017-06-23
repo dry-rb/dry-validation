@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'dry-types', git: 'https://github.com/dry-rb/dry-types', branch: 'master'
+
 group :test do
   gem 'i18n', require: false
   platform :mri do

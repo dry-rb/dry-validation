@@ -6,7 +6,7 @@ module Dry
     class InputProcessorCompiler
       attr_reader :type_compiler
 
-      DEFAULT_TYPE_NODE = [[:type, 'string']].freeze
+      DEFAULT_TYPE_NODE = [:definition, [String, {}]].freeze
 
       def initialize
         @type_compiler = Dry::Types::Compiler.new(Dry::Types)
@@ -31,12 +31,15 @@ module Dry
 
       def visit_type(type, *args)
         if type.is_a?(Types::Constructor)
-          [:constructor, [type.primitive, type.fn]]
+          constructor(type)
         elsif type.respond_to?(:rule)
           visit(type.rule.to_ast, *args)
-        else
-          DEFAULT_TYPE_NODE.first
         end
+      end
+
+      def constructor(type)
+        fn_id = type.__send__(:register_fn, type.fn)
+        [:constructor, [[:definition, [type.primitive, {}]], fn_id, {}]]
       end
 
       def visit_schema(schema, *args)
@@ -45,7 +48,7 @@ module Dry
 
       def visit_or(node, *args)
         left, right = node
-        [:sum, [visit(left, *args), visit(right, *args)]]
+        [:sum, [visit(left, *args), visit(right, *args), {}]]
       end
 
       def visit_and(node, first = true)
@@ -55,7 +58,7 @@ module Dry
           if name.is_a?(Array)
             type
           else
-            [:key, [name, type]]
+            [:member, [name, type]]
           end
         else
           result = node.map { |n| visit(n, first) }.uniq
@@ -63,7 +66,7 @@ module Dry
           if result.size == 1
             result.first
           else
-            (result - self.class::DEFAULT_TYPE_NODE).last
+            result.select { |r| r != self.class::DEFAULT_TYPE_NODE }.last
           end
         end
       end
@@ -74,9 +77,9 @@ module Dry
         key = visit(left)
 
         if key.is_a?(Symbol)
-          [:key, [key, visit(right, false)]]
+          [:member, [key, visit(right, false)]]
         else
-          [:sum, [key, visit(right, false)]]
+          [:sum, [key, visit(right, false), {}]]
         end
       end
 
@@ -114,12 +117,13 @@ module Dry
       def type(predicate, args)
         default = self.class::PREDICATE_MAP[:default]
 
-        if predicate == :type?
-          const = args[0]
-          [:type, self.class::CONST_MAP[const] || Types.identifier(const)]
-        else
-          [:type, self.class::PREDICATE_MAP[predicate] || default]
-        end
+        type_value = if predicate == :type?
+                       const = args[0]
+                       self.class::CONST_MAP[const] || Types.identifier(const)
+                     else
+                       self.class::PREDICATE_MAP[predicate] || default
+                     end
+        Types[type_value].to_ast
       end
     end
   end
