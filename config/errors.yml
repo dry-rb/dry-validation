@@ -87,3 +87,96 @@ en:
           arg:
             default: "length must be %{size}"
             range: "length must be within %{size_left} - %{size_right}"
+
+zh-TW:
+  errors:
+    or: "或"
+
+    array?: "需為陣列(Array)"
+
+    empty?: "需為空白"
+
+    excludes?: "不得包括 %{value}"
+
+    excluded_from?:
+      arg:
+        default: "不得在 %{list} 之中"
+        range: "不得在 %{list_left} - %{list_right} 之中"
+
+    exclusion?: "不得在 %{list} 之中"
+
+    eql?: "需等於 %{left}"
+
+    not_eql?: "不得等於 %{left}"
+
+    filled?: "不得為空白"
+
+    format?: "格式不正確"
+
+    number?: "需為數值"
+
+    odd?: "需為奇數"
+
+    even?: "需為偶數"
+
+    gt?: "需大於 %{num}"
+
+    gteq?: "需大於等於 %{num}"
+
+    hash?: "需為雜湊(Hash)"
+
+    included_in?:
+      arg:
+        default: "需在 %{list} 之中"
+        range: "需在 %{list_left} - %{list_right} 之中"
+
+    inclusion?: "需在 %{list} 之中"
+
+    includes?: "需包括 %{value}"
+
+    bool?: "需為布林值(Boolean)"
+
+    true?: "需為 true"
+
+    false?: "需為 false"
+
+    int?: "需為整數(Integer)"
+
+    float?: "需為浮點數(Float)"
+
+    decimal?: "需為十進制小數(BigDecimal)"
+
+    date?: "需為日期(Date)"
+
+    date_time?: "需為日期時間(DateTime)"
+
+    time?: "需為時間(Time)"
+
+    key?: "缺少此 key"
+
+    attr?: "缺少此 attribute"
+
+    lt?: "需小於 %{num}"
+
+    lteq?: "需小於等於 %{num}"
+
+    max_size?: "最大值為 %{num}"
+
+    min_size?: "最小值為 %{num}"
+
+    none?: "需為空值(nil)"
+
+    str?: "需為字串(String)"
+
+    type?: "資料型態需為 %{type}"
+
+    size?:
+      arg:
+        default: "長度需為 %{size}"
+        range: "長度需在 %{size_left} - %{size_right} 之間"
+
+      value:
+        string:
+          arg:
+            default: "長度需為 %{size}"
+            range: "長度需在 %{size_left} - %{size_right} 之間"
