@@ -1,3 +1,11 @@
+# v0.11.0 2017-05-30
+
+### Changed
+
+* [internal] input processor compilers have been updated to work with new dry-types' AST (GustavoCaso)
+
+[Compare v0.10.7...v0.11.0](https://github.com/dry-rb/dry-validation/compare/v0.10.7...v0.11.0)
+
 # v0.10.7 2017-05-15
 
 ### Fixed
