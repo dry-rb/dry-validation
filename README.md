@@ -17,6 +17,7 @@
 ## Links
 
 * [Documentation](http://dry-rb.org/gems/dry-validation)
+* [Guidelines for contributing](CONTRIBUTING.md)
 
 ## License
 
