@@ -88,6 +88,26 @@ RSpec.describe Messages::I18n do
     end
   end
 
+  describe '#rule' do
+    subject { messages.rule('email') }
+
+    it { expect(subject).to eq('E-mail') }
+  end
+
+  describe '#key?' do
+    subject { messages.key?(key, {locale: :en}) }
+    let(:key) { 'rules.email' }
+
+    it { expect(subject).to be_truthy }
+  end
+
+  describe '#get' do
+    subject { messages.get(key, {locale: :en}) }
+    let(:key) { 'rules.email' }
+
+    it { expect(subject).to eq('E-mail') }
+  end
+
   after(:all) do
     I18n.locale = I18n.default_locale
   end

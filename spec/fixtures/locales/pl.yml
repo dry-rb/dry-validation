@@ -1,4 +1,8 @@
 pl:
+  rules:
+    user:
+      name: Name
+    email: E-mail
   errors:
     filled?: "nie może być pusty"
     size?:

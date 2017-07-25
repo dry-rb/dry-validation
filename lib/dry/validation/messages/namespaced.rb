@@ -26,6 +26,15 @@ module Dry
         def default_locale
           messages.default_locale
         end
+
+        def rule_path(name)
+          path_parts = messages.rule_path(name).split('.')
+          [
+              path_parts[0, path_parts.size - 1],
+              namespace,
+              path_parts.last
+          ].join('.')
+        end
       end
     end
   end

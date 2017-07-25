@@ -49,6 +49,10 @@ module Dry
           self.class.new(data.merge(Messages::YAML.load_file(overrides)))
         end
       end
+
+      def rule_path(name)
+        "%{locale}.#{super(name)}"
+      end
     end
   end
 end

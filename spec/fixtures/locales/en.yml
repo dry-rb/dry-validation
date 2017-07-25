@@ -1,4 +1,8 @@
 en:
+  rules:
+    user:
+      name: Name
+    email: E-mail
   errors:
     rules:
       email:

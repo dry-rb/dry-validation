@@ -54,8 +54,12 @@ module Dry
           @hash ||= config.hash
         end
 
+        def rule_path(name)
+          "rules.#{name}"
+        end
+
         def rule(name, options = {})
-          path = "%{locale}.rules.#{name}"
+          path = rule_path(name)
           get(path, options) if key?(path, options)
         end
 
