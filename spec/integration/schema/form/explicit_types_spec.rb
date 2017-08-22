@@ -179,4 +179,90 @@ RSpec.describe Dry::Validation::Schema::Form, 'explicit types' do
       )
     end
   end
+
+  context 'inherited schema' do
+    subject(:base_schema) do
+      Dry::Validation.Form do
+        configure { config.type_specs = true }
+        required(:email, :string)
+      end
+    end
+
+    subject(:schema) do
+      Dry::Validation.Schema(base_schema) do
+        required(:age, :int)
+      end
+    end
+
+    it 'uses form coercion for nested input' do
+      input = {
+        'email' => 'jane@doe.org',
+        'age' => '21'
+      }
+
+      expect(schema.(input).to_h).to eql(
+        email: 'jane@doe.org',
+        age: 21
+      )
+    end
+
+  end
+
+  context 'inherited schema with arrays' do
+    context 'hash extends nonempty array' do
+      subject(:base_schema) do
+        Dry::Validation.Form do
+          configure { config.type_specs = true }
+          each { required(:email, :string) }
+        end
+      end
+
+      subject(:schema) do
+        Dry::Validation.Schema(base_schema) do
+          required(:age, :int)
+        end
+      end
+
+      it 'uses form coercion for nested input' do
+        expect { schema }.to raise_error InvalidSchemaError
+      end
+    end
+
+    context 'array extends empty hash' do
+      subject(:base_schema) do
+        Dry::Validation.Form do
+          configure { config.type_specs = true }
+        end
+      end
+
+      subject(:schema) do
+        Dry::Validation.Schema(base_schema) do
+          each { required(:age, :int) }
+        end
+      end
+
+      it 'uses form coercion for nested input' do
+        expect { schema }.to_not raise_error
+      end
+    end
+
+    context 'array extends nonempty hash' do
+      subject(:base_schema) do
+        Dry::Validation.Form do
+          configure { config.type_specs = true }
+          required(:email, :string)
+        end
+      end
+
+      subject(:schema) do
+        Dry::Validation.Schema(base_schema) do
+          each { required(:age, :int) }
+        end
+      end
+
+      it 'uses form coercion for nested input' do
+        expect { schema }.to raise_error InvalidSchemaError
+      end
+    end
+  end
 end

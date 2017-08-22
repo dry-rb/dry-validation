@@ -61,7 +61,8 @@ module Dry
           cfg.rules = rules
           cfg.checks = cfg.checks + dsl.checks
           cfg.path = dsl.path
-          cfg.type_map = target.build_type_map(dsl.type_map) if cfg.type_specs
+          cfg.type_map = target.
+            build_inherited_type_map(dsl.type_map, config.type_map) if cfg.type_specs
         end
 
         target

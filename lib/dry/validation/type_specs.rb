@@ -10,6 +10,34 @@ module Dry
         end
       end
 
+      def build_inherited_type_map(type_specs, inherited_specs)
+        build_type_map(
+          if Array === type_specs
+            if inherited_specs.empty?
+              type_specs
+            elsif Dry::Types::Safe === inherited_specs
+              raise InvalidSchemaError,
+                "Composition of array schema type_maps not supported when config.type_specs = true"
+            else
+              raise InvalidSchemaError,
+                "Extending non-array schema with an array type_map not supported when config.type_specs = true"
+            end
+          elsif Dry::Types::Safe === inherited_specs
+            if type_specs.empty?
+              inherited_specs
+            elsif Array === type_specs
+              raise InvalidSchemaError,
+                "Composition of array schema type_maps not supported when config.type_specs = true"
+            else
+              raise InvalidSchemaError,
+                "Extending array schema with a non-array type_map not supported when config.type_specs = true"
+            end
+          else
+            inherited_specs.merge(type_specs)
+          end
+        )
+      end
+
       def build_type_map(type_specs, category = config.input_processor)
         if type_specs.is_a?(Array)
           build_array_type(type_specs[0], category)
