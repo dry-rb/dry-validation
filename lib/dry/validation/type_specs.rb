@@ -30,7 +30,7 @@ module Dry
         member_type = lookup_type("hash", category)
           .public_send(config.hash_type, member_schema)
 
-        lookup_type("array", category).member(member_type)
+        lookup_type("array", category).of(member_type)
       end
 
       def build_sum_type(spec, category)
@@ -51,7 +51,7 @@ module Dry
               build_array_type(spec[0], category)
             else
               array_member = lookup_type(spec[0], category)
-              lookup_type("array", category).member(array_member)
+              lookup_type("array", category).of(array_member)
             end
           else
             build_sum_type(spec, category)
