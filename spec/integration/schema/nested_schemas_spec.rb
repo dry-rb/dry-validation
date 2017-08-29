@@ -233,4 +233,51 @@ RSpec.describe Schema, 'nested schemas' do
       )
     end
   end
+
+  context 'with custom predicate defined on the parent schema' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          option :email_validator
+          option :postal_code_validator, -> { ->(input) { input.length == 6 } }
+
+          def email?(value)
+            email_validator.call(value)
+          end
+
+          def postal_code?(value)
+            postal_code_validator.call(value)
+          end
+        end
+
+        required(:email).filled(:email?)
+        optional(:address).schema do
+          required(:postal_code).filled(:postal_code?)
+        end
+      end
+    end
+
+    it 'uses injected dependency for the custom predicate' do
+      email_validator = ->(input) { input.include?('@') && input.end_with?('.com') }
+      postal_code_validator = ->(input) { input.length == 6 }
+      input = {
+        email: 'foo@bar.com',
+        address: {
+          postal_code: '123456'
+        }
+      }
+      expect(schema.with(email_validator: email_validator, postal_code_validator: postal_code_validator).(input)).to be_success
+    end
+
+    it 'uses the default dependency for the custom predicate' do
+      email_validator = ->(input) { input.include?('@') && input.end_with?('.com') }
+      input = {
+        email: 'foo@bar.com',
+        address: {
+          postal_code: '123456'
+        }
+      }
+      expect(schema.with(email_validator: email_validator).(input)).to be_success
+    end
+  end
 end

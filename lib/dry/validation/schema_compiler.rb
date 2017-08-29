@@ -59,12 +59,12 @@ module Dry
 
       def visit_schema(klass)
         opt_keys = klass.config.options.keys
-        opt_vals = options.values_at(*opt_keys).compact
+        opts = options.select { |k, _| opt_keys.include?(k) }
 
-        if opt_vals.empty?
+        if opts.empty?
           klass.new
         else
-          klass.new(klass.config.rules, Hash[opt_keys.zip(opt_vals)])
+          klass.new(klass.config.rules, opts)
         end
       end
 
