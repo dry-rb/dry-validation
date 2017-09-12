@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Andy Holland', 'Piotr Solnica']
   spec.email         = ['andyholland1991@aol.com', 'piotr.solnica@gmail.com']
   spec.summary       = 'A simple validation library'
-  spec.homepage      = 'https://github.com/dryrb/dry-validation'
+  spec.homepage      = 'https://github.com/dry-rb/dry-validation'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0") - ['bin/console']
