@@ -1,3 +1,11 @@
+# v0.11.1 2017-09-12
+
+### Changed
+
+* [internal] fix warnings from dry-types v0.12.0
+
+[Compare v0.11.0...v0.11.1](https://github.com/dry-rb/dry-validation/compare/v0.11.0...v0.11.1)
+
 # v0.11.0 2017-05-30
 
 ### Changed
