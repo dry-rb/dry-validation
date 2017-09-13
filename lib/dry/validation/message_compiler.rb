@@ -173,6 +173,10 @@ module Dry
       def message_tokens(args)
         args.each_with_object({}) { |arg, hash|
           case arg[1]
+          when Hash
+            arg[1].each do |k, v|
+              hash[k] = v
+            end
           when Array
             hash[arg[0]] = arg[1].join(LIST_SEPARATOR)
           when Range
