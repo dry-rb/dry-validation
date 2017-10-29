@@ -160,6 +160,8 @@ module Dry
       end
 
       def message_text(rule, template, tokens, opts)
+        original_verbosity = $VERBOSE
+        $VERBOSE = nil
         text = template % tokens
 
         if full?
@@ -168,6 +170,8 @@ module Dry
         else
           text
         end
+      ensure
+        $VERBOSE = original_verbosity
       end
 
       def message_tokens(args)
