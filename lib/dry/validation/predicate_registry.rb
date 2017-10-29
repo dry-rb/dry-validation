@@ -30,17 +30,22 @@ module Dry
         end
       end
 
-      def self.[](klass, predicates)
-        Unbound.new(predicates).tap do |registry|
-          klass.class_eval do
-            def self.method_added(name)
-              super
-              if name.to_s.end_with?('?')
-                registry.update(name => instance_method(name))
-              end
-            end
+      module PredicateDetector
+        def method_added(name)
+          super
+
+          if name.to_s.end_with?('?')
+            registry.update(name => instance_method(name))
           end
         end
+      end
+
+      def self.[](klass, predicates)
+        unless klass.kind_of?(PredicateDetector)
+          klass.extend(PredicateDetector)
+        end
+
+        Unbound.new(predicates)
       end
 
       def initialize(external, predicates = {})
