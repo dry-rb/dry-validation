@@ -3,6 +3,16 @@ require 'dry/logic/rule/predicate'
 module Dry
   module Validation
     class PredicateRegistry
+      module PredicateDetector
+        def method_added(name)
+          super
+
+          if name.to_s.end_with?('?')
+            registry.update(name => instance_method(name))
+          end
+        end
+      end
+
       attr_reader :predicates
       attr_reader :external
 
@@ -30,21 +40,7 @@ module Dry
         end
       end
 
-      module PredicateDetector
-        def method_added(name)
-          super
-
-          if name.to_s.end_with?('?')
-            registry.update(name => instance_method(name))
-          end
-        end
-      end
-
-      def self.[](klass, predicates)
-        unless klass.kind_of?(PredicateDetector)
-          klass.extend(PredicateDetector)
-        end
-
+      def self.[](predicates)
         Unbound.new(predicates)
       end
 

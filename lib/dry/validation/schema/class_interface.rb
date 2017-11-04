@@ -7,6 +7,7 @@ module Dry
     class Schema
       extend Dry::Configurable
       extend TypeSpecs
+      extend PredicateRegistry::PredicateDetector
 
       NOOP_INPUT_PROCESSOR = -> input { input }
 
@@ -179,7 +180,7 @@ module Dry
       end
 
       def self.set_registry!
-        config.registry = PredicateRegistry[self, config.predicates]
+        config.registry = PredicateRegistry[config.predicates]
       end
     end
   end
