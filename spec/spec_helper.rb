@@ -6,8 +6,10 @@ if ENV['COVERAGE'] == 'true' && RUBY_ENGINE == 'ruby' && RUBY_VERSION == '2.3.1'
 end
 
 begin
-  require 'byebug'
-rescue LoadError; end
+  require 'pry'
+  require 'pry-byebug'
+rescue LoadError
+end
 
 require 'dry-validation'
 require 'dry/core/constants'
