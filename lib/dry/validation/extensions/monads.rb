@@ -1,17 +1,18 @@
-require 'dry/monads/either'
+require 'dry/monads/result'
 
 module Dry
   module Validation
     class Result
-      include Dry::Monads::Either::Mixin
+      include Dry::Monads::Result::Mixin
 
-      def to_either(options = EMPTY_HASH)
+      def to_monad(options = EMPTY_HASH)
         if success?
-          Right(output)
+          Success(output)
         else
-          Left(messages(options))
+          Failure(messages(options))
         end
       end
+      alias_method :to_either, :to_monad
     end
   end
 end

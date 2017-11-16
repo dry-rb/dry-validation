@@ -6,12 +6,13 @@ RSpec.describe Dry::Validation::Result do
   context 'with valid input' do
     let(:input) { { name: 'Jane' } }
 
-    describe '#to_either' do
-      it 'returns a Right instance' do
-        either = result.to_either
+    describe '#to_monad' do
+      it 'returns a Success value' do
+        monad = result.to_monad
 
-        expect(either).to be_right
-        expect(either.value).to eql(name: 'Jane')
+        expect(monad).to be_a Dry::Monads::Result
+        expect(monad).to be_a_success
+        expect(monad.value!).to eql(name: 'Jane')
       end
     end
   end
@@ -19,19 +20,20 @@ RSpec.describe Dry::Validation::Result do
   context 'with invalid input' do
     let(:input) { { name: '' } }
 
-    describe '#to_either' do
-      it 'returns a Left instance' do
-        either = result.to_either
+    describe '#to_monad' do
+      it 'returns a Failure value' do
+        monad = result.to_monad
 
-        expect(either).to be_left
-        expect(either.value).to eql(name: ['must be filled', 'length must be within 2 - 4'])
+        expect(monad).to be_a_failure
+        expect(monad.failure).to eql(name: ['must be filled', 'length must be within 2 - 4'])
       end
 
       it 'returns full messages' do
-        either = result.to_either(full: true)
+        monad = result.to_monad(full: true)
 
-        expect(either).to be_left
-        expect(either.value).to eql(name: ['name must be filled', 'name length must be within 2 - 4'])
+        expect(monad).to be_a Dry::Monads::Result
+        expect(monad).to be_a_failure
+        expect(monad.failure).to eql(name: ['name must be filled', 'name length must be within 2 - 4'])
       end
     end
   end
