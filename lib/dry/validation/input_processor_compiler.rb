@@ -24,6 +24,14 @@ module Dry
         send(:"visit_#{node[0]}", node[1], *args)
       end
 
+      def visit_safe(node, *)
+        node.first
+      end
+
+      def visit_constructor(node, *)
+        [:constructor, node]
+      end
+
       def visit_rule(node, *args)
         _, rule = node
         visit(rule, *args)

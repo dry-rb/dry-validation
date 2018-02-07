@@ -76,6 +76,29 @@ module Dry
       def visit_type(type)
         type.rule
       end
+
+      def visit_constructor(constructor)
+        definition, _fn_name, _options = constructor
+        visit(definition)
+      end
+
+      def visit_definition(node)
+        type, _meta = node
+
+        Logic::Rule::Predicate.new(Logic::Predicates[:type?], args: [type])
+      end
+
+      def visit_safe(node)
+        ast, _meta = node
+
+        visit(ast)
+      end
+
+      def visit_sum(node)
+        *types, _meta = node
+
+        types.map { |type| visit(type) }.reduce(:|)
+      end
     end
   end
 end

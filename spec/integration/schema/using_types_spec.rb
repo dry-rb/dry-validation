@@ -65,6 +65,40 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
     end
   end
 
+  context 'form date coercion' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure { config.input_processor = :sanitizer }
+
+        required(:birth_date).value(Dry::Types['form.date'])
+      end
+    end
+
+    it 'applies custom types to input prior validation' do
+      result = schema.call(birth_date: '1994-03-14', foo: :bar)
+
+      expect(result).to be_success
+      expect(result.to_h).to eql(birth_date: Date.new(1994, 03, 14))
+    end
+  end
+
+  context 'form bool coercion' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure { config.input_processor = :sanitizer }
+
+        required(:remember_me).value(Dry::Types['form.bool'])
+      end
+    end
+
+    it 'applies custom types to input prior validation' do
+      result = schema.call(remember_me: 'true', foo: :bar)
+
+      expect(result).to be_success
+      expect(result.to_h).to eql(remember_me: true)
+    end
+  end
+
   context 'custom types' do
     subject(:schema) do
       Dry::Validation.Form do
