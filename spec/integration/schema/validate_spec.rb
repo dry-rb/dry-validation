@@ -117,4 +117,38 @@ RSpec.describe Dry::Validation::Schema, 'arbitrary validation blocks' do
       )
     end
   end
+
+  context 'with nested value' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          def self.messages
+            super.merge(en: { errors: { email_required: 'provide email' }})
+          end
+        end
+
+        required(:newsletter).value(:bool?)
+        required(:user).schema do
+          required(:email).maybe(:str?)
+        end
+
+        validate(email_required: [:newsletter, [:user, :email]]) do |newsletter, email|
+          if newsletter == true
+            !email.nil?
+          else
+            true
+          end
+        end
+      end
+    end
+
+    it 'returns success for valid input' do
+      expect(schema.(newsletter: false, user: { email: nil })).to be_success
+      expect(schema.(newsletter: false, user: { email: 'jane@doe.org' })).to be_success
+    end
+
+    it 'returns proper error for invalid input' do
+      expect(schema.(newsletter: true, user: { email: nil }).errors).to eq(email_required: ['provide email'])
+    end
+  end
 end

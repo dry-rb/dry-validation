@@ -115,7 +115,7 @@ module Dry
         end
 
         def validate(**opts, &block)
-          id, *deps = opts.to_a.flatten
+          id, *deps = opts.to_a.flatten(2)
           name = deps.size > 1 ? id : deps.first
           rule = create_rule([:check, [deps, [:custom, [id, block]]]], name).with(deps: deps)
           add_check(rule)
