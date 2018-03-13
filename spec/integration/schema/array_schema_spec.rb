@@ -56,4 +56,34 @@ RSpec.describe Dry::Validation::Schema, 'for an array' do
       )
     end
   end
+
+  context 'with hight-level rules' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        each do
+          schema do
+            required(:prefix).filled
+            required(:value).filled
+
+            rule(prefix_value: [:prefix, :value]) do |prefix, value|
+              prefix.gt?(1).then(value.gt?(100))
+            end
+          end
+        end
+      end
+    end
+
+    it 'applies its hight-level rules to array input' do
+      result = schema.([{ prefix: 1, value: 42 }, { prefix: 2, value: 123 }])
+
+      expect(result).to be_success
+
+      result = schema.([{ prefix: 2, value: 42 }, { prefix: 3, value: 89 }])
+
+      expect(result.messages).to eql(
+        0 => { prefix_value: ['must be greater than 100'] },
+        1 => { prefix_value: ['must be greater than 100'] }
+      )
+    end
+  end
 end

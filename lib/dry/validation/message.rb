@@ -36,19 +36,8 @@ module Dry
         end
       end
 
-      class Check < Message
-        def initialize(*args)
-          super
-          @path = [rule] unless rule.to_s.end_with?('?') || path.include?(rule)
-        end
-      end
-
       def self.[](predicate, path, text, options)
-        if options[:check]
-          Message::Check.new(predicate, path, text, options)
-        else
-          Message.new(predicate, path, text, options)
-        end
+        Message.new(predicate, path, text, options)
       end
 
       def initialize(predicate, path, text, options)

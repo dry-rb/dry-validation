@@ -62,7 +62,11 @@ module Dry
 
       def visit_check(node, opts = EMPTY_OPTS)
         keys, other = node
-        visit(other, opts.(path: keys.last, check: true))
+        path = Array(keys.last)
+        unless path.include?(opts[:rule]) || node.flatten.include?(:key?)
+          path[-1] = opts[:rule]
+        end
+        visit(other, opts.(path: path))
       end
 
       def visit_rule(node, opts = EMPTY_OPTS)
@@ -124,8 +128,7 @@ module Dry
           predicate, path, text,
           args: arg_vals,
           input: input,
-          rule: rule,
-          check: base_opts[:check]
+          rule: rule
         ]
       end
 
