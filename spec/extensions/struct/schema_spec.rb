@@ -17,16 +17,45 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry struct' do
 
     class Test::Person < Dry::Struct::Value
       attribute :name, Test::Name
+      attribute :numbers, Dry::Types['strict.array'].of(Dry::Types['strict.int'])
     end
   end
 
   it 'handles nested structs' do
-    expect(schema.call(person: { name: { given_name: 'Tim', family_name: 'Cooper' } })).to be_success
+    expect(
+      schema.call(
+        person: {
+          name: { given_name: 'Tim', family_name: 'Cooper'},
+          numbers: [123, 345]
+        }
+      )
+    ).to be_success
+  end
+
+  it 'handles empty arrays in nested structs' do
+    expect(
+      schema.call(
+        person: {
+          name: { given_name: 'Tim', family_name: 'Cooper'},
+          numbers: []
+        }
+      )
+    ).to be_success
   end
 
   it 'fails when input is not valid' do
-    expect(schema.call(person: { name: { given_name: 'Tim' } }).messages).to eq(
-      person: { name: { family_name: ['is missing', 'must be String'] } }
+    expect(
+      schema.call(
+        person: {
+          name: { given_name: 'Tim' },
+          numbers: [123, 'wrong']
+        }
+      ).messages
+    ).to eq(
+      person: {
+        name: { family_name: ['is missing', 'must be String'] },
+        numbers: { 1 => ['must be Integer'] }
+      }
     )
   end
 end

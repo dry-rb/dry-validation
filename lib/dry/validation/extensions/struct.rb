@@ -7,7 +7,13 @@ module Dry
         def create_class(target, other = nil)
           if other.is_a?(Class) && other < Dry::Struct
             super do
-              other.schema.each { |attr, type| required(attr).filled(type) }
+              other.schema.each do |attr, type|
+                if type.primitive == Array
+                  required(attr).each(type.member)
+                else
+                  required(attr).filled(type)
+                end
+              end
             end
           else
             super
