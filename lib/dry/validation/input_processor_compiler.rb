@@ -1,5 +1,6 @@
 require 'dry/types'
 require 'dry/types/compiler'
+require 'dry/types/compat'
 
 module Dry
   module Validation

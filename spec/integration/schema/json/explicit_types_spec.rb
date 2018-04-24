@@ -59,7 +59,7 @@ RSpec.describe Dry::Validation::Schema::JSON, 'explicit types' do
     subject(:schema) do
       Dry::Validation.JSON do
         configure { config.type_specs = true }
-        required(:bdate, Types::Json::Nil | Types::Json::Date)
+        required(:bdate, Types::JSON::Nil | Types::JSON::Date)
       end
     end
 
