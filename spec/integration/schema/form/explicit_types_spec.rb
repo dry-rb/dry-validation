@@ -12,6 +12,19 @@ RSpec.describe Dry::Validation::Schema::Form, 'explicit types' do
     end
   end
 
+  context 'integer' do
+    subject(:schema) do
+      Dry::Validation.Form do
+        configure { config.type_specs = true }
+        required(:age, :integer)
+      end
+    end
+
+    it 'uses form coercion' do
+      expect(schema.('age' => '19').to_h).to eql(age: 19)
+    end
+  end
+
   context 'single type spec with rules' do
     subject(:schema) do
       Dry::Validation.Form do

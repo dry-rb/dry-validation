@@ -8,7 +8,7 @@ module Dry
         true?: 'form.true',
         false?: 'form.false',
         str?: 'string',
-        int?: 'form.int',
+        int?: 'form.integer',
         float?: 'form.float',
         decimal?: 'form.decimal',
         date?: 'form.date',

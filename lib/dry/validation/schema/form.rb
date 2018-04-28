@@ -1,4 +1,5 @@
 require 'dry/validation/schema'
+require 'dry/types/compat/form_types'
 
 module Dry
   module Validation
