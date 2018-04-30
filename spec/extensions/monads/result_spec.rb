@@ -35,6 +35,15 @@ RSpec.describe Dry::Validation::Result do
         expect(monad).to be_a_failure
         expect(monad.failure).to eql(name: ['name must be filled', 'name length must be within 2 - 4'])
       end
+
+      it 'returns message set as Failure value' do
+        monad = result.to_monad(failure_value_as_message_set: true)
+
+        expect(monad).to be_a Dry::Monads::Result
+        expect(monad).to be_a_failure
+        expect(monad.failure).to be_a Dry::Validation::MessageSet
+        expect(monad.failure.dump).to eql(name: ['must be filled', 'length must be within 2 - 4'])
+      end
     end
   end
 end
