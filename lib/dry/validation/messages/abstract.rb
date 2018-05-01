@@ -32,6 +32,7 @@ module Dry
         setting :val_type_default, 'default'.freeze
 
         setting :arg_types, Hash.new { |*| config.arg_type_default }.update(
+          Hash => 'hash',
           Range => 'range'
         )
 
