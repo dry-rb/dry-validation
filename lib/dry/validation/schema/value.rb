@@ -99,7 +99,7 @@ module Dry
         def confirmation
           conf = :"#{name}_confirmation"
 
-          parent.optional(conf).maybe
+          parent.optional(conf, type_map[name]).maybe
 
           rule(conf => [conf, name]) do |left, right|
             left.eql?(right)
