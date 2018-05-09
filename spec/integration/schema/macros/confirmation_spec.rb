@@ -1,4 +1,23 @@
 RSpec.describe 'Macros #confirmation' do
+
+  shared_examples 'validates min_size and confirms password' do
+    it 'passes when values are equal' do
+      expect(schema.(password: 'foo', password_confirmation: 'foo')).to be_success
+    end
+
+    it 'fails when source value is invalid' do
+      expect(schema.(password: 'fo', password_confirmation: nil).messages).to eql(
+        password: ['size cannot be less than 3']
+      )
+    end
+
+    it 'fails when values are not equal' do
+      expect(schema.(password: 'foo', password_confirmation: 'fo').messages).to eql(
+        password_confirmation: ['does not match']
+      )
+    end
+  end
+
   describe 'with a maybe password with min-size specified' do
     subject(:schema) do
       Dry::Validation.Schema do
@@ -16,20 +35,26 @@ RSpec.describe 'Macros #confirmation' do
       end
     end
 
-    it 'passes when values are equal' do
-      expect(schema.(password: 'foo', password_confirmation: 'foo')).to be_success
-    end
+    include_examples "validates min_size and confirms password"
+  end
 
-    it 'fails when source value is invalid' do
-      expect(schema.(password: 'fo', password_confirmation: nil).messages).to eql(
-        password: ['size cannot be less than 3']
-      )
-    end
+  describe 'with type_specs and a maybe password with min-size specified' do
+    subject(:schema) do
+      Dry::Validation.Schema do
+        configure do
+          config.type_specs = true
+          config.input_processor = :sanitizer
 
-    it 'fails when values are not equal' do
-      expect(schema.(password: 'foo', password_confirmation: 'fo').messages).to eql(
-        password_confirmation: ['does not match']
-      )
+          def self.messages
+            Messages.default.merge(
+              en: { errors: { password_confirmation: 'does not match' } }
+            )
+          end
+        end
+
+        required(:password, :string).maybe(min_size?: 3).confirmation
+      end
     end
+    include_examples "validates min_size and confirms password"
   end
 end
