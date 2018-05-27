@@ -24,8 +24,8 @@ module Dry
       end
     end
 
-    def self.Form(base = nil, **options, &block)
-      klass = base ? Schema::Form.configure(Class.new(base)) : Schema::Form
+    def self.Params(base = nil, **options, &block)
+      klass = base ? Schema::Params.configure(Class.new(base)) : Schema::Params
       Validation.Schema(klass, options, &block)
     end
 
@@ -37,7 +37,7 @@ module Dry
 end
 
 require 'dry/validation/schema'
-require 'dry/validation/schema/form'
+require 'dry/validation/schema/params'
 require 'dry/validation/schema/json'
 require 'dry/validation/extensions'
 require 'dry/validation/version'

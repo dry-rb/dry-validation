@@ -1,8 +1,6 @@
-RSpec.describe 'Dry::Validation::Schema::Form', 'defining a schema' do
-  before(:all) { require 'dry/validation/compat/form' }
-
+RSpec.describe Dry::Validation::Schema::Params, 'defining a schema' do
   subject(:schema) do
-    Dry::Validation.Form do
+    Dry::Validation.Params do
       configure do
         def email?(value)
           true
@@ -122,7 +120,7 @@ RSpec.describe 'Dry::Validation::Schema::Form', 'defining a schema' do
 
   describe 'with an each and nested schema' do
     subject(:schema) do
-      Dry::Validation.Form do
+      Dry::Validation.Params do
         required(:items).each do
           schema do
             required(:title).filled(:str?)
@@ -144,7 +142,7 @@ RSpec.describe 'Dry::Validation::Schema::Form', 'defining a schema' do
 
   describe 'symbolizing keys when coercion fails' do
     subject(:schema) do
-      Dry::Validation.Form do
+      Dry::Validation.Params do
         required(:email).value(size?: 8..60)
         required(:birthdate).value(:date?)
         required(:age).value(:int?, gt?: 23)
@@ -194,7 +192,7 @@ RSpec.describe 'Dry::Validation::Schema::Form', 'defining a schema' do
 
   describe 'with nested schema in a high-level rule' do
     subject(:schema) do
-      Dry::Validation.Form do
+      Dry::Validation.Params do
         required(:address).maybe(:hash?)
 
         required(:delivery).filled(:bool?)
@@ -206,7 +204,7 @@ RSpec.describe 'Dry::Validation::Schema::Form', 'defining a schema' do
     end
 
     before do
-      AddressSchema = Dry::Validation.Form do
+      AddressSchema = Dry::Validation.Params do
         required(:city).filled
         required(:zipcode).filled(:int?)
       end
@@ -216,7 +214,7 @@ RSpec.describe 'Dry::Validation::Schema::Form', 'defining a schema' do
       Object.send(:remove_const, :AddressSchema)
     end
 
-    it 'succeeds when nested form schema succeeds' do
+    it 'succeeds when nested params schema succeeds' do
       result = schema.(delivery: '1', address: { city: 'NYC', zipcode: '123' })
       expect(result).to be_success
     end

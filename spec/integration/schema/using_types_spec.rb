@@ -67,7 +67,7 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
 
   context 'custom types' do
     subject(:schema) do
-      Dry::Validation.Form do
+      Dry::Validation.Params do
         required(:quantity).filled(Dry::Types['strict.int'].constrained(gt: 1))
         required(:percentage).filled(Dry::Types['strict.decimal'].constrained(gt: 0, lt: 1))
         required(:switch).filled(Dry::Types['strict.bool'])
