@@ -210,7 +210,7 @@ RSpec.describe 'Macros #each' do
   context 'with inferred predicates and a form schema' do
     context "predicate w/o options" do
       subject(:schema) do
-        Dry::Validation.Form do
+        Dry::Validation.Params do
           required(:songs).each(:str?)
         end
       end

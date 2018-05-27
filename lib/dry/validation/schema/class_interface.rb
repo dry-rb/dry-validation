@@ -24,11 +24,13 @@ module Dry
       setting :input_rule, nil
       setting :dsl_extensions, nil
 
-      setting :input_processor_map, {
+      DEFAULT_PROCESSOR_MAP = {
         sanitizer: InputProcessorCompiler::Sanitizer.new,
         json: InputProcessorCompiler::JSON.new,
-        form: InputProcessorCompiler::Form.new,
-      }.freeze
+        params: InputProcessorCompiler::Params.new,
+      }
+
+      setting :input_processor_map, DEFAULT_PROCESSOR_MAP
 
       setting :type_specs, false
 

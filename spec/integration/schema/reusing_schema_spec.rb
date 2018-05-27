@@ -9,7 +9,7 @@ RSpec.describe 'Reusing schemas' do
 
   before do
     LocationSchema = Dry::Validation.Schema do
-      configure { config.input_processor = :form }
+      configure { config.input_processor = :params }
 
       required(:lat).filled(:float?)
       required(:lng).filled(:float?)

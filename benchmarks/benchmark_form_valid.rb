@@ -28,14 +28,14 @@ schema = Dry::Validation.Schema do
   required(:age).filled(:int?, gt?: 18)
 end
 
-form = Dry::Validation.Form do
+form = Dry::Validation.Params do
   configure do
     config.messages = :i18n
     config.type_specs = true
   end
 
   required(:email, :string).filled
-  required(:age, :int).filled(:int?, gt?: 18)
+  required(:age, :integer).filled(:int?, gt?: 18)
 end
 
 params = { 'email' => 'foo@bar.baz', 'age' => '19' }

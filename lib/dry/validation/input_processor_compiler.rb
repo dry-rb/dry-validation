@@ -132,4 +132,4 @@ end
 
 require 'dry/validation/input_processor_compiler/sanitizer'
 require 'dry/validation/input_processor_compiler/json'
-require 'dry/validation/input_processor_compiler/form'
+require 'dry/validation/input_processor_compiler/params'

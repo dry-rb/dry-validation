@@ -2,7 +2,7 @@ RSpec.describe 'Extending DSL' do
   it 'allows configuring custom DSL methods' do
     dsl_ext = Module.new do
       def maybe_int(name, *predicates, &block)
-        required(name, [:nil, :int]).maybe(:int?, *predicates, &block)
+        required(name, [:nil, :integer]).maybe(:int?, *predicates, &block)
       end
     end
 
@@ -12,7 +12,7 @@ RSpec.describe 'Extending DSL' do
 
     schema = Dry::Validation.Schema do
       configure do
-        config.input_processor = :form
+        config.input_processor = :params
         config.type_specs = true
       end
 

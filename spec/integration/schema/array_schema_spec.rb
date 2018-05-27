@@ -27,13 +27,13 @@ RSpec.describe Dry::Validation::Schema, 'for an array' do
 
   context 'with type specs' do
     subject(:schema) do
-      Dry::Validation.Form do
+      Dry::Validation.Params do
         configure { config.type_specs = true }
 
         each do
           schema do
-            required(:prefix, :int).filled
-            required(:value, :int).filled
+            required(:prefix, :integer).filled
+            required(:value, :integer).filled
           end
         end
       end
