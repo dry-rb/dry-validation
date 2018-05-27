@@ -2,9 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'dry-types', git: 'https://github.com/dry-rb/dry-types', branch: 'master'
 gem 'dry-logic', git: 'https://github.com/dry-rb/dry-logic', branch: 'master'
-gem 'dry-inflector', git: 'https://github.com/dry-rb/dry-inflector', branch: 'master'
 
 group :test do
   gem 'i18n', require: false
@@ -21,8 +19,8 @@ group :tools do
   gem 'pry', platform: :jruby
 
   unless ENV['TRAVIS']
-    gem 'mutant', github: 'mbj/mutant'
-    gem 'mutant-rspec', github: 'mbj/mutant'
+    gem 'mutant', git: 'https://github.com/mbj/mutant'
+    gem 'mutant-rspec', git: 'https://github.com/mbj/mutant'
   end
 end
 
