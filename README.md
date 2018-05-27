@@ -1,6 +1,5 @@
 [gem]: https://rubygems.org/gems/dry-validation
 [travis]: https://travis-ci.org/dry-rb/dry-validation
-[gemnasium]: https://gemnasium.com/dry-rb/dry-validation
 [codeclimate]: https://codeclimate.com/github/dry-rb/dry-validation
 [coveralls]: https://coveralls.io/r/dry-rb/dry-validation
 [inchpages]: http://inch-ci.org/github/dry-rb/dry-validation
@@ -9,7 +8,6 @@
 
 [![Gem Version](https://badge.fury.io/rb/dry-validation.svg)][gem]
 [![Build Status](https://travis-ci.org/dry-rb/dry-validation.svg?branch=master)][travis]
-[![Dependency Status](https://gemnasium.com/dry-rb/dry-validation.svg)][gemnasium]
 [![Code Climate](https://codeclimate.com/github/dry-rb/dry-validation/badges/gpa.svg)][codeclimate]
 [![Test Coverage](https://codeclimate.com/github/dry-rb/dry-validation/badges/coverage.svg)][codeclimate]
 [![Inline docs](http://inch-ci.org/github/dry-rb/dry-validation.svg?branch=master)][inchpages]
