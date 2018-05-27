@@ -1,3 +1,11 @@
+# v0.12.0 to-be-released
+
+## Changed
+
+* Code updated to work with `dry-types` 0.13.1 and `dry-struct` 0.5.0, these are now minimal supported versions (flash-gordon)
+
+[Compare v0.11.1...master](https://github.com/dry-rb/dry-validation/compare/v0.11.0...master)
+
 # v0.11.1 2017-09-15
 
 ### Changed
