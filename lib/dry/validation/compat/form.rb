@@ -2,6 +2,7 @@ require 'dry/core/deprecations'
 
 Dry::Core::Deprecations.warn('Form was renamed to Params and will be removed in the next version', tag: :'dry-validation')
 
+require 'dry/types/compat/int'
 require 'dry/types/compat/form_types'
 require 'dry/validation/input_processor_compiler/params'
 require 'dry/validation/schema/params'
