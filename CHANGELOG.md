@@ -1,11 +1,11 @@
-# v0.12.0 to-be-released
+# v0.12.0 2018-05-31
 
-## Changed
+### Changed
 
 * Code updated to work with `dry-types` 0.13.1 and `dry-struct` 0.5.0, these are now minimal supported versions (flash-gordon)
 * [BREAKING] `Form` was renamed to `Params` to be consistent with the latest changes from `dry-types`. You can `require 'dry/validation/compat/form'` to use the previous names but it will be removed in the next version (flash-gordon)
- 
-[Compare v0.11.1...master](https://github.com/dry-rb/dry-validation/compare/v0.11.0...master)
+
+[Compare v0.11.1...v0.12.0](https://github.com/dry-rb/dry-validation/compare/v0.11.0...v0.12.0)
 
 # v0.11.1 2017-09-15
 
