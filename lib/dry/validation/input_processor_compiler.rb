@@ -1,6 +1,5 @@
 require 'dry/types'
 require 'dry/types/compiler'
-require 'dry/types/compat'
 
 module Dry
   module Validation
@@ -124,6 +123,9 @@ module Dry
                      else
                        self.class::PREDICATE_MAP[predicate] || default
                      end
+
+        require 'dry/types/compat/int' unless Types.container.key?(type_value)
+
         Types[type_value].to_ast
       end
     end
