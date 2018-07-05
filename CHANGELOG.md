@@ -1,3 +1,9 @@
+# v0.12.1 2018-07-06
+
+### Fixed
+
+* [internal] fixed deprecation warnings (flash-gordon)
+
 # v0.12.0 2018-05-31
 
 ### Changed
