@@ -6,7 +6,7 @@ module Dry
         none?: 'json.nil',
         bool?: 'bool',
         str?: 'string',
-        int?: 'int',
+        int?: 'integer',
         float?: 'float',
         decimal?: 'json.decimal',
         date?: 'json.date',
@@ -17,7 +17,7 @@ module Dry
       CONST_MAP = {
         NilClass => 'nil',
         String => 'string',
-        Integer => 'int',
+        Integer => 'integer',
         Float => 'float',
         BigDecimal => 'json.decimal',
         Array => 'json.array',

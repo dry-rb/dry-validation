@@ -6,7 +6,7 @@ module Dry
         none?: 'nil',
         bool?: 'bool',
         str?: 'string',
-        int?: 'int',
+        int?: 'integer',
         float?: 'float',
         decimal?: 'decimal',
         date?: 'date',
@@ -19,7 +19,7 @@ module Dry
       CONST_MAP = {
         NilClass => 'nil',
         String => 'string',
-        Integer => 'int',
+        Integer => 'integer',
         Float => 'float',
         BigDecimal => 'decimal',
         Array => 'array',

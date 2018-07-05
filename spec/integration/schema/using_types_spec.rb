@@ -10,7 +10,7 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
 
   before do
     Email = Dry::Types['strict.string']
-    Age = Dry::Types['strict.int'].constrained(gt: 18)
+    Age = Dry::Types['strict.integer'].constrained(gt: 18)
     Country = Dry::Types['strict.string'].enum('Australia', 'Poland')
     AdminBit = Dry::Types['strict.bool']
   end
@@ -68,7 +68,7 @@ RSpec.describe Dry::Validation::Schema, 'defining schema using dry types' do
   context 'custom types' do
     subject(:schema) do
       Dry::Validation.Params do
-        required(:quantity).filled(Dry::Types['strict.int'].constrained(gt: 1))
+        required(:quantity).filled(Dry::Types['strict.integer'].constrained(gt: 1))
         required(:percentage).filled(Dry::Types['strict.decimal'].constrained(gt: 0, lt: 1))
         required(:switch).filled(Dry::Types['strict.bool'])
       end
