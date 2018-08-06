@@ -197,6 +197,7 @@ RSpec.describe Dry::Validation do
       schema = Dry::Validation.Schema(base_schema) do
         required(:expected).filled(:int?)
         required(:excludes).filled(:int?)
+        required(:foo).filled(:int?)
 
         rule(foo: %i[foo expected excludes]) do |foo|
           foo.fav_number?(value(:expected), value(:excludes))

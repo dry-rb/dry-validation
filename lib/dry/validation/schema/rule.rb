@@ -62,7 +62,7 @@ module Dry
         end
 
         def filled(*predicates, &block)
-          left = ([key(:filled?)] + infer_predicates(predicates, :filled)).reduce(:and)
+          left = ([key(:filled?)] + infer_predicates(predicates, :filled, registry)).reduce(:and)
 
           rule =
             if block
@@ -79,7 +79,7 @@ module Dry
             ::Kernel.raise ::ArgumentError, "wrong number of arguments (given 0, expected at least 1)"
           end
 
-          from_predicates = infer_predicates(predicates, :value).reduce(:and)
+          from_predicates = infer_predicates(predicates, :value, registry).reduce(:and)
           from_block = block ? Key[name, registry: registry].instance_eval(&block) : nil
 
           rule = [from_predicates, from_block].compact.reduce(:and)
@@ -90,7 +90,7 @@ module Dry
         def maybe(*predicates, &block)
           left = key(:none?).not
 
-          from_predicates = infer_predicates(predicates, :maybe).reduce(:and)
+          from_predicates = infer_predicates(predicates, :maybe, registry).reduce(:and)
           from_block = block ? Key[name, registry: registry].instance_eval(&block) : nil
 
           right = [from_predicates, from_block].compact.reduce(:and) || key(:filled?)
