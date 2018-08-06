@@ -148,7 +148,71 @@ RSpec.describe Dry::Validation do
     expect(schema.(foo: 20).messages).to eql(
       foo: ['must be 23']
     )
+  end
 
+  context 'when custom predicate has multiple args' do
+    let(:base_schema) {
+      Dry::Validation.Schema do
+        configure do
+          def self.messages
+            Dry::Validation::Messages.default.merge(
+              en: { errors: { fav_number?: 'must be %{expected} but not %{excludes}' } }
+            )
+          end
+
+          def fav_number?(expected, excludes, current)
+            current == expected && current != excludes
+          end
+        end
+      end
+    }
+
+    let(:expected_error) { { foo: ['must be 23 but not 20'] } }
+
+    it 'works when called via block with static args' do
+      schema = Dry::Validation.Schema(base_schema) do
+        required(:foo) { fav_number?(23, 20) }
+      end
+
+      expect(schema.(foo: 20).messages).to eql(expected_error)
+    end
+
+    it 'works when called via value macro with static args' do
+      schema = Dry::Validation.Schema(base_schema) do
+        required(:foo).value(fav_number?: [23, 20])
+      end
+
+      expect(schema.(foo: 20).messages).to eql(expected_error)
+    end
+
+    it 'works when called via filled macro with static args' do
+      schema = Dry::Validation.Schema(base_schema) do
+        required(:foo).filled(fav_number?: [23, 20])
+      end
+
+      expect(schema.(foo: 20).messages).to eql(expected_error)
+    end
+
+    it 'works when called via HLR macro with dependent key values as arg' do
+      schema = Dry::Validation.Schema(base_schema) do
+        required(:expected).filled(:int?)
+        required(:excludes).filled(:int?)
+
+        rule(foo: %i[foo expected excludes]) do |foo|
+          foo.fav_number?(value(:expected), value(:excludes))
+        end
+      end
+
+      expect(schema.(foo: 20, expected: 23, excludes: 20).messages).to eql(expected_error)
+    end
+
+    it 'works when called via maybe macro with static args' do
+      schema = Dry::Validation.Schema(base_schema) do
+        required(:foo).maybe(fav_number?: [23, 20])
+      end
+
+      expect(schema.(foo: 20).messages).to eql(expected_error)
+    end
   end
 
   it 'works when no predicate args' do
