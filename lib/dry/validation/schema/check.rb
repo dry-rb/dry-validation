@@ -23,7 +23,8 @@ module Dry
 
           keys = [path, vals.map(&:path)].reject(&:empty?)
 
-          registry.ensure_valid_predicate(meth, args.size + keys.size, schema_class)
+          key_size = keys.size == 2 ? keys.flatten.size : keys.size
+          registry.ensure_valid_predicate(meth, args.size + key_size, schema_class)
           predicate = predicate(meth, args)
 
           rule = create_rule([:check, [keys.reverse, predicate]], name)

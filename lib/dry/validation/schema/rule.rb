@@ -159,13 +159,16 @@ module Dry
         end
         alias_method :>, :then
 
-        def infer_predicates(predicates, macro = nil)
+        def infer_predicates(predicates, macro = nil, registry=nil)
           predicates.flat_map(&::Kernel.method(:Array)).map do |predicate|
             name, *args = ::Kernel.Array(predicate)
-
             if macro && INVALID_PREDICATES[macro].include?(name)
               ::Kernel.raise InvalidSchemaError, "you can't use #{name} predicate with #{macro} macro"
             else
+              if registry && name.is_a?(::Symbol) && args[0].is_a?(::Array)
+                registry_predicate = registry[name]
+                args = args[0] if registry_predicate && registry_predicate.arity > 2
+              end
               key(name, args)
             end
           end
