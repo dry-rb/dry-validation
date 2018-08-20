@@ -48,7 +48,7 @@ RSpec.describe Messages::I18n do
     end
 
     context 'rule name translations' do
-      it 'translates rule name and its message' do
+      it 'translates rule name' do
         msg = messages.rule('email')
 
         expect(msg).to eql('Adres email')
