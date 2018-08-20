@@ -47,6 +47,14 @@ RSpec.describe Messages::I18n do
       end
     end
 
+    context 'rule name translations' do
+      it 'translates rule name and its message' do
+        msg = messages.rule('email')
+
+        expect(msg).to eql('Adres email')
+      end
+    end
+
     context 'with a different locale' do
       it 'returns a message for a predicate' do
         message = messages[:filled?, rule: :name, locale: :en]
