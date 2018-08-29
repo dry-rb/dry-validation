@@ -16,3 +16,7 @@ pl:
         rules:
           email:
             filled?: "Hej user! Dawaj ten email no!"
+
+  rules:
+    email:
+      'Adres email'
