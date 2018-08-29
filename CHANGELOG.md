@@ -1,8 +1,18 @@
+# v0.12.2 2018-08-29
+
+### Fixed
+
+* Use correct key names for rule messages when using i18n (jozzi05)
+
+[Compare v0.12.1...v0.12.2](https://github.com/dry-rb/dry-validation/compare/v0.12.1...v0.12.2)
+
 # v0.12.1 2018-07-06
 
 ### Fixed
 
 * [internal] fixed deprecation warnings (flash-gordon)
+
+[Compare v0.12.0...v0.12.1](https://github.com/dry-rb/dry-validation/compare/v0.12.0...v0.12.1)
 
 # v0.12.0 2018-05-31
 
