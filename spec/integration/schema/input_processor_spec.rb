@@ -18,6 +18,8 @@ RSpec.describe Dry::Validation::Schema, 'setting input processor in schema' do
         required(:prefix).filled
         required(:value).filled
       end
+
+      optional('height').filled
     end
   end
 
@@ -30,7 +32,8 @@ RSpec.describe Dry::Validation::Schema, 'setting input processor in schema' do
       phone_numbers: [
         { prefix: '48', value: '123' },
         { lol: '!!', prefix: '1', value: '312' }
-      ]
+      ],
+      'height' => 165
     )
 
     expect(result.output).to eql(
@@ -40,7 +43,8 @@ RSpec.describe Dry::Validation::Schema, 'setting input processor in schema' do
       phone_numbers: [
         { prefix: '48', value: '123' },
         { prefix: '1', value: '312' }
-      ]
+      ],
+      'height' => 165
     )
   end
 end

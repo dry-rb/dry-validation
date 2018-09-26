@@ -76,7 +76,7 @@ module Dry
 
         key = visit(left)
 
-        if key.is_a?(Symbol)
+        if key.is_a?(Symbol) || key.is_a?(String)
           [:member, [key, visit(right, false)]]
         else
           [:sum, [key, visit(right, false), {}]]
