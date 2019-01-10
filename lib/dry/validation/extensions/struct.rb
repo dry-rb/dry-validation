@@ -5,13 +5,36 @@ module Dry
     class Schema
       module StructClassBuilder
         def create_class(target, other = nil)
-          if other.is_a?(Class) && other < Dry::Struct
+          _self = self
+          if struct?(other)
             super do
-              other.schema.each { |attr, type| required(attr).filled(type) }
+              other.schema.each do |attr, type|
+                chain = if type.meta[:omittable]
+                  optional(attr)
+                else
+                  required(attr)
+                end
+
+                if _self.struct?(type)
+                  chain.schema(type)
+                elsif type.primitive == Array
+                  if _self.struct?(type.member)
+                    chain.each { schema(type.member) }
+                  else
+                    chain.each(type.member)
+                  end
+                else
+                  chain.value(type)
+                end
+              end
             end
           else
             super
           end
+        end
+
+        def struct?(object)
+          object.is_a?(Class) && object < Dry::Struct
         end
       end
 
