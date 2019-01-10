@@ -4,7 +4,7 @@ module Dry
   module Validation
     class Schema
       class Value < DSL
-        attr_reader :type, :schema_class, :schema, :type_map
+        attr_reader :type, :schema_class, :type_map
 
         def initialize(options = {})
           super
