@@ -11,37 +11,16 @@ begin
 rescue LoadError
 end
 
-require 'dry-validation'
-require 'dry/core/constants'
-require 'ostruct'
+require 'dry/validation'
 
 SPEC_ROOT = Pathname(__dir__)
 
 Dir[SPEC_ROOT.join('shared/**/*.rb')].each(&method(:require))
 Dir[SPEC_ROOT.join('support/**/*.rb')].each(&method(:require))
 
-include Dry::Validation
-
-module Types
-  include Dry::Types.module
-end
-
-Dry::Validation::Deprecations.configure do |config|
-  config.logger = Logger.new(SPEC_ROOT.join('../log/deprecations.log'))
-end
-
 RSpec.configure do |config|
   config.disable_monkey_patching!
   config.warnings = true
-
-  config.after do
-    if defined?(I18n)
-      I18n.load_path = Dry::Validation.messages_paths.dup
-      I18n.backend.reload!
-    end
-  end
-
-  config.include PredicatesIntegration
 
   config.before do
     module Test
