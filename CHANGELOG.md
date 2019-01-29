@@ -3,6 +3,7 @@
 ### Changed
 
 - `dry-logic` was bumped to `~> 0.5` (solnic)
+- `dry-types` was bumped to `~> 0.14` (solnic)
 
 ### Fixed
 
