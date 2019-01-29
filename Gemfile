@@ -8,7 +8,7 @@ group :test do
     gem 'codeclimate-test-reporter', require: false
     gem 'simplecov', require: false
   end
-  gem 'dry-monads', require: false
+  gem 'dry-monads', '< 1.0', require: false
   gem 'dry-struct', require: false
 end
 
