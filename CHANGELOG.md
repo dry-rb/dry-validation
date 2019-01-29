@@ -4,6 +4,10 @@
 
 - `dry-logic` was bumped to `~> 0.5` (solnic)
 
+### Fixed
+
+- Warning about method redefined (amatsuda)
+
 [Compare v0.12.2...v0.13.0](https://github.com/dry-rb/dry-validation/compare/v0.12.2...v0.13.0)
 
 # v0.12.2 2018-08-29
