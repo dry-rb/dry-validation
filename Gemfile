@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'dry-types', git: 'https://github.com/dry-rb/dry-types', branch: 'master'
 gem 'dry-logic', git: 'https://github.com/dry-rb/dry-logic', branch: 'master'
 
 group :test do
