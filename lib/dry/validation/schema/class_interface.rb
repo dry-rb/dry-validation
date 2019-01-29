@@ -1,4 +1,5 @@
 require 'dry/configurable'
+require 'dry/validation/predicates'
 require 'dry/validation/messages'
 require 'dry/validation/type_specs'
 
@@ -12,7 +13,7 @@ module Dry
       NOOP_INPUT_PROCESSOR = -> input { input }
 
       setting :path
-      setting :predicates, Logic::Predicates
+      setting :predicates, Dry::Validation::Predicates
       setting :registry
       setting :messages, :yaml
       setting :messages_file
