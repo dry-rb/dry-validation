@@ -1,52 +1,10 @@
 require 'dry-schema'
 require 'dry/validation/constants'
+require 'dry/validation/rule'
+require 'dry/validation/evaluator'
 
 module Dry
   module Validation
-    class Evaluator
-      attr_reader :name
-
-      attr_reader :params
-
-      attr_reader :msg
-
-      def initialize(name, params, &block)
-        @name = name
-        @params = params
-        @failure = false
-        instance_eval(&block)
-      end
-
-      def failure(msg)
-        @msg = msg
-        @failure = true
-        self
-      end
-
-      def failure?
-        @failure.equal?(true)
-      end
-
-      def to_error
-        { name => [msg] }
-      end
-    end
-
-    class Rule
-      attr_reader :name, :paths, :block
-
-      def initialize(paths, &block)
-        @name = paths.first
-        @paths = paths
-        @block = block
-      end
-
-      def call(result)
-        evaluator = Evaluator.new(name, result, &block)
-        evaluator
-      end
-    end
-
     class Contract
       def self.params(&block)
         @__schema__ ||= Schema.Params(&block)
