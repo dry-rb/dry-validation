@@ -37,7 +37,7 @@ module Dry
 
         messages = rules.each_with_object({}) do |rule, h|
           next if result.error?(rule.name)
-          rule_result = rule.(result)
+          rule_result = rule.(self, result)
           h.update(rule_result.to_error) if rule_result.failure?
         end
 

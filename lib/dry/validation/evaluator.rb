@@ -1,21 +1,27 @@
+require 'dry/initializer'
+require 'dry/validation/constants'
+
 module Dry
   module Validation
     class Evaluator
-      attr_reader :name
+      extend Dry::Initializer
 
-      attr_reader :params
+      param :context
 
-      attr_reader :msg
+      option :name
 
-      def initialize(name, params, &block)
-        @name = name
-        @params = params
+      option :params
+
+      attr_reader :message
+
+      def initialize(*args, &block)
+        super(*args)
         @failure = false
         instance_eval(&block)
       end
 
-      def failure(msg)
-        @msg = msg
+      def failure(message)
+        @message = message
         @failure = true
         self
       end
@@ -25,7 +31,22 @@ module Dry
       end
 
       def to_error
-        { name => [msg] }
+        if failure?
+          { name => [message] }
+        else
+          EMPTY_HASH
+        end
+      end
+
+      private
+
+      def method_missing(meth, *args, &block)
+        # yes, we do want to delegate to private methods too
+        if context.respond_to?(meth, true)
+          context.__send__(meth, *args, &block)
+        else
+          super
+        end
       end
     end
   end

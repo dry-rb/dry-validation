@@ -9,9 +9,8 @@ module Dry
         @block = block
       end
 
-      def call(result)
-        evaluator = Evaluator.new(name, result, &block)
-        evaluator
+      def call(context, result)
+        Evaluator.new(context, name: name, params: result, &block)
       end
     end
   end
