@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'dry-logic', git: 'https://github.com/dry-rb/dry-logic', branch: 'master'
+gem 'dry-types', git: 'https://github.com/dry-rb/dry-types', branch: 'master'
 gem 'dry-schema', git: 'https://github.com/dry-rb/dry-schema', branch: 'master'
 
 group :test do
