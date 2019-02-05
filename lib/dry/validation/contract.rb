@@ -1,4 +1,6 @@
 require 'dry-schema'
+require 'dry/initializer'
+
 require 'dry/validation/constants'
 require 'dry/validation/rule'
 require 'dry/validation/evaluator'
@@ -6,6 +8,8 @@ require 'dry/validation/evaluator'
 module Dry
   module Validation
     class Contract
+      extend Dry::Initializer
+
       def self.params(&block)
         @__schema__ ||= Schema.Params(&block)
       end
@@ -23,14 +27,9 @@ module Dry
         @__rules__ ||= []
       end
 
-      attr_reader :schema
+      option :schema, default: -> { self.class.schema }
 
-      attr_reader :rules
-
-      def initialize(rules: self.class.rules, schema: self.class.schema)
-        @rules = rules
-        @schema = schema
-      end
+      option :rules, default: -> { self.class.rules }
 
       def call(input)
         result = schema.(input)
