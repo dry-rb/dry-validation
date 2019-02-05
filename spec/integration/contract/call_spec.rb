@@ -1,6 +1,6 @@
 require 'dry/validation/contract'
 
-RSpec.describe Dry::Validation::Contract do
+RSpec.describe Dry::Validation::Contract, '#call' do
   subject(:contract) do
     Class.new(Dry::Validation::Contract) do
       params do
