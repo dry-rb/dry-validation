@@ -1,15 +1,16 @@
+require 'dry/initializer'
+
 module Dry
   module Validation
     class Rule
-      attr_reader :name, :block
+      extend Dry::Initializer
 
-      def initialize(name, &block)
-        @name = name
-        @block = block
-      end
+      option :name
+      
+      option :block
 
-      def call(context, result)
-        Evaluator.new(context, name: name, params: result, &block)
+      def call(context, params)
+        Evaluator.new(context, params: params, name: name, &block)
       end
     end
   end

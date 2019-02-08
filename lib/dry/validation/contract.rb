@@ -19,7 +19,7 @@ module Dry
       end
 
       def self.rule(name, &block)
-        rules << Rule.new(name, &block)
+        rules << Rule.new(name: name, block: block)
         rules
       end
 
