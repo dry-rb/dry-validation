@@ -22,6 +22,12 @@ RSpec.describe Dry::Validation::Contract, '#call' do
           failure("must be greater or equal 18")
         end
       end
+
+      rule(:age) do
+        if params[:age] < 0
+          failure("must be greater than 0")
+        end
+      end
     end.new
   end
 
@@ -41,5 +47,11 @@ RSpec.describe Dry::Validation::Contract, '#call' do
     result = contract.(email: "john@doe.org", age: "not-an-integer")
 
     expect(result.errors).to eql(age: ["must be an integer"])
+  end
+
+  it "gathers errors from multiple rules for the same key" do
+    result = contract.(email: 'john@doe.org', age: -1)
+
+    expect(result.errors).to eql(age: ["must be greater or equal 18", "must be greater than 0"])
   end
 end
