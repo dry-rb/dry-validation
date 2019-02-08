@@ -18,8 +18,8 @@ module Dry
         @__schema__
       end
 
-      def self.rule(*paths, &block)
-        rules << Rule.new(paths, &block)
+      def self.rule(name, &block)
+        rules << Rule.new(name, &block)
         rules
       end
 

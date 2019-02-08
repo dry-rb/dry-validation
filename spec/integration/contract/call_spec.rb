@@ -11,7 +11,7 @@ RSpec.describe Dry::Validation::Contract, '#call' do
         optional(:password_confirmation).maybe(:string)
       end
 
-      rule(:password, :login) do
+      rule(:password) do
         if params[:login] && !params[:password]
           failure("is required")
         end
