@@ -4,6 +4,7 @@ require 'dry/initializer'
 require 'dry/validation/constants'
 require 'dry/validation/rule'
 require 'dry/validation/evaluator'
+require 'dry/validation/result'
 
 module Dry
   module Validation
@@ -32,15 +33,13 @@ module Dry
       option :rules, default: -> { self.class.rules }
 
       def call(input)
-        result = schema.(input)
-
-        messages = rules.each_with_object({}) do |rule, h|
-          next if result.error?(rule.name)
-          rule_result = rule.(self, result)
-          h.update(rule_result.to_error) if rule_result.failure?
+        Result.new(schema.(input)) do |result|
+          rules.each do |rule|
+            next if result.error?(rule.name)
+            rule_result = rule.(self, result)
+            result.update(rule_result.to_error) if rule_result.failure?
+          end
         end
-
-        result.errors.merge(messages)
       end
     end
   end

@@ -28,18 +28,18 @@ RSpec.describe Dry::Validation::Contract, '#call' do
   it "applies rule to input processed by the schema" do
     result = contract.(email: "john@doe.org", age: 19)
 
-    expect(result).to eql({})
+    expect(result.errors).to eql({})
   end
 
   it "returns rule errors" do
     result = contract.(email: "john@doe.org", login: "jane", age: 19)
 
-    expect(result).to eql(password: ["is required"])
+    expect(result.errors).to eql(password: ["is required"])
   end
 
   it "doesn't execute rules when basic checks failed" do
     result = contract.(email: "john@doe.org", age: "not-an-integer")
 
-    expect(result).to eql(age: ["must be an integer"])
+    expect(result.errors).to eql(age: ["must be an integer"])
   end
 end

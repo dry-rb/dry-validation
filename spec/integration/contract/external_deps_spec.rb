@@ -22,6 +22,6 @@ RSpec.describe Dry::Validation::Contract, '.option' do
 
     contract = contract_class.new(db: db)
 
-    expect(contract.(email: 'jane@doe.org')).to eql(email: ['is taken'])
+    expect(contract.(email: 'jane@doe.org').errors).to eql(email: ['is taken'])
   end
 end
