@@ -5,28 +5,13 @@ require 'dry/validation/constants'
 require 'dry/validation/rule'
 require 'dry/validation/evaluator'
 require 'dry/validation/result'
+require 'dry/validation/contract/class_interface'
 
 module Dry
   module Validation
     class Contract
       extend Dry::Initializer
-
-      def self.params(&block)
-        @__schema__ ||= Schema.Params(&block)
-      end
-
-      def self.schema
-        @__schema__
-      end
-
-      def self.rule(name, &block)
-        rules << Rule.new(name: name, block: block)
-        rules
-      end
-
-      def self.rules
-        @__rules__ ||= []
-      end
+      extend ClassInterface
 
       option :schema, default: -> { self.class.schema }
 
