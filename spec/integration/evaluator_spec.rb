@@ -49,28 +49,6 @@ RSpec.describe Dry::Validation::Evaluator do
     end
   end
 
-  describe '#to_error' do
-    context 'when failure message was set' do
-      let(:block) do
-        Proc.new { failure('oops') }
-      end
-
-      it 'returns a hash with failures' do
-        expect(evaluator.to_error).to eql(email: ['oops'])
-      end
-    end
-
-    context 'when failure message was not set' do
-      let(:block) do
-        Proc.new {}
-      end
-
-      it 'returns an empty hash' do
-        expect(evaluator.to_error).to eql({})
-      end
-    end
-  end
-
   describe 'delegation' do
     let(:block) do
       Proc.new {
@@ -80,7 +58,7 @@ RSpec.describe Dry::Validation::Evaluator do
 
     it 'delegates to the context' do
       expect(context).to receive(:works?).and_return(true)
-      expect(evaluator.to_error).to eql(email: ['it works'])
+      expect(evaluator.message).to eql('it works')
     end
   end
 end

@@ -30,14 +30,6 @@ module Dry
         @failure.equal?(true)
       end
 
-      def to_error
-        if failure?
-          { name => [message] }
-        else
-          EMPTY_HASH
-        end
-      end
-
       private
 
       def method_missing(meth, *args, &block)

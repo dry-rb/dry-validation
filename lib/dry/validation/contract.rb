@@ -37,7 +37,7 @@ module Dry
           rules.each do |rule|
             next if result.error?(rule.name)
             rule_result = rule.(self, result)
-            result.update(rule_result.to_error) if rule_result.failure?
+            result.add_error(rule.name, rule_result.message) if rule_result.failure?
           end
         end
       end

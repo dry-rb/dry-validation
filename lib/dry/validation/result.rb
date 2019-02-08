@@ -22,6 +22,11 @@ module Dry
         params.error?(key)
       end
 
+      def add_error(key, message)
+        (errors[key] ||= EMPTY_ARRAY.dup) << message
+        self
+      end
+
       def [](key)
         params[key]
       end
