@@ -14,19 +14,13 @@ module Dry
         end
 
         def schema
-          if defined?(@__schema__)
-            instance_variable_get('@__schema__')
-          end
+          @__schema__ if defined?(@__schema__)
         end
 
         def rules
-          if defined?(@__rules__)
-            @__rules__
-          else
-            @__rules__ = EMPTY_ARRAY.
-              dup.
-              concat(superclass.respond_to?(:rules) ? superclass.rules : EMPTY_ARRAY)
-          end
+          @__rules__ ||= EMPTY_ARRAY.
+            dup.
+            concat(superclass.respond_to?(:rules) ? superclass.rules : EMPTY_ARRAY)
         end
       end
     end
