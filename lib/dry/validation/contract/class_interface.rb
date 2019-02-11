@@ -1,3 +1,4 @@
+require 'dry/schema'
 require 'dry/validation/constants'
 
 module Dry
@@ -21,6 +22,10 @@ module Dry
           @__rules__ ||= EMPTY_ARRAY.
             dup.
             concat(superclass.respond_to?(:rules) ? superclass.rules : EMPTY_ARRAY)
+        end
+
+        def messages
+          @__messages__ ||= Schema::Messages.setup(config)
         end
       end
     end

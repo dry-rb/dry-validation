@@ -20,8 +20,14 @@ module Dry
         instance_eval(&block)
       end
 
-      def failure(message)
-        @message = message
+      def failure(msg_or_key, **tokens)
+        @message =
+          case msg_or_key
+          when Symbol
+            context.message(msg_or_key, rule: name, tokens: tokens)
+          when String
+            msg_or_key
+          end
         @failure = true
         self
       end
