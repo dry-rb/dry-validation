@@ -1,7 +1,13 @@
-if ENV['COVERAGE'] == 'true' && RUBY_ENGINE == 'ruby' && RUBY_VERSION == '2.3.1'
-  require "simplecov"
-  SimpleCov.start do
-    add_filter '/spec/'
+if RUBY_ENGINE == 'ruby' && ENV['COVERAGE'] == 'true'
+  require 'yaml'
+  rubies = YAML.load(File.read(File.join(__dir__, '..', '.travis.yml')))['rvm']
+  latest_mri = rubies.select { |v| v =~ /\A\d+\.\d+.\d+\z/ }.max
+
+  if RUBY_VERSION == latest_mri
+    require 'simplecov'
+    SimpleCov.start do
+      add_filter '/spec/'
+    end
   end
 end
 
@@ -11,37 +17,16 @@ begin
 rescue LoadError
 end
 
-require 'dry-validation'
-require 'dry/core/constants'
-require 'ostruct'
+require 'dry/validation'
 
 SPEC_ROOT = Pathname(__dir__)
 
 Dir[SPEC_ROOT.join('shared/**/*.rb')].each(&method(:require))
 Dir[SPEC_ROOT.join('support/**/*.rb')].each(&method(:require))
 
-include Dry::Validation
-
-module Types
-  include Dry::Types.module
-end
-
-Dry::Validation::Deprecations.configure do |config|
-  config.logger = Logger.new(SPEC_ROOT.join('../log/deprecations.log'))
-end
-
 RSpec.configure do |config|
   config.disable_monkey_patching!
   config.warnings = true
-
-  config.after do
-    if defined?(I18n)
-      I18n.load_path = Dry::Validation.messages_paths.dup
-      I18n.backend.reload!
-    end
-  end
-
-  config.include PredicatesIntegration
 
   config.before do
     module Test

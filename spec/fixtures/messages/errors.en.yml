@@ -1,0 +1,6 @@
+en:
+  errors:
+    rules:
+      email:
+        invalid: "oh noez bad email"
+        taken: "looks like %{email} is taken"

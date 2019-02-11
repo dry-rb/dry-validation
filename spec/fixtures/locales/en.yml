@@ -1,6 +1,0 @@
-en:
-  errors:
-    rules:
-      email:
-        filled?: "Please provide your email"
-    email?: "must be an email"
