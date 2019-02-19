@@ -35,7 +35,7 @@ module Dry
       end
 
       def message(key, tokens: EMPTY_HASH, **opts)
-        messages[key, **opts] % tokens
+        messages[key, **opts].(tokens)
       end
     end
   end
