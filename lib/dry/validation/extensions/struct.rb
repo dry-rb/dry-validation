@@ -7,7 +7,7 @@ module Dry
         def create_class(target, other = nil)
           if other.is_a?(Class) && other < Dry::Struct
             super do
-              other.schema.each { |attr, type| required(attr).filled(type) }
+              other.schema.each { |key| required(key.name).filled(key.type) }
             end
           else
             super
