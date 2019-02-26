@@ -1,6 +1,7 @@
 en:
-  errors:
-    rules:
-      email:
-        invalid: "oh noez bad email"
-        taken: "looks like %{email} is taken"
+  dry_validation:
+    errors:
+      rules:
+        email:
+          invalid: "oh noez bad email"
+          taken: "looks like %{email} is taken"

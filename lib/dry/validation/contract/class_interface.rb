@@ -1,4 +1,5 @@
 require 'dry/schema'
+require 'dry/validation/messages'
 require 'dry/validation/constants'
 
 module Dry
@@ -25,7 +26,7 @@ module Dry
         end
 
         def messages
-          @__messages__ ||= Schema::Messages.setup(config)
+          @__messages__ ||= Messages.setup(config)
         end
       end
     end
