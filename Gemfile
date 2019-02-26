@@ -4,7 +4,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gemspec
 
-gem 'dry-types', github: 'dry-rb/dry-types', branch: 'rework-schemas'
+gem 'dry-types', github: 'dry-rb/dry-types'
 
 group :test do
   gem 'i18n', require: false
@@ -12,7 +12,7 @@ group :test do
     gem 'simplecov', require: false
   end
   gem 'dry-monads', '>= 0.4.0', require: false
-  gem 'dry-struct', github: 'dry-rb/dry-struct', branch: 'update-schemas'
+  gem 'dry-struct', github: 'dry-rb/dry-struct'
 end
 
 group :tools do
