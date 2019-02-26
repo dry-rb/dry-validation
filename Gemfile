@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'dry-logic', git: 'https://github.com/dry-rb/dry-logic', branch: 'master'
-gem 'dry-types', git: 'https://github.com/dry-rb/dry-types', branch: 'master'
 gem 'dry-schema', git: 'https://github.com/dry-rb/dry-schema', branch: 'master'
 
 group :test do
@@ -14,7 +12,7 @@ group :test do
   end
 
   gem 'dry-monads', '>= 0.4.0', require: false
-  gem 'dry-struct', git: 'https://github.com/dry-rb/dry-struct', branch: 'master'
+  gem 'dry-struct'
 end
 
 group :tools do
