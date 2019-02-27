@@ -1,12 +1,13 @@
 require 'json'
 require 'dry-validation'
 
-schema = Dry::Validation.JSON do
-  required(:email).filled
+contract = Class.new(Dry::Validation::Contract) do
+  json do
+    required(:email).filled
+    required(:age).filled(:int?, gt?: 18)
+  end
+end.new
 
-  required(:age).filled(:int?, gt?: 18)
-end
+result = contract.call(JSON.parse('{"email": "", "age": "18"}'))
 
-errors = schema.call(JSON.parse('{"email": "", "age": "18"}')).messages
-
-puts errors.inspect
+puts result.inspect
