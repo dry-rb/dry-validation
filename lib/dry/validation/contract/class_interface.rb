@@ -10,6 +10,10 @@ module Dry
           @__schema__ ||= Schema.Params(parent: superclass&.schema, &block)
         end
 
+        def json(&block)
+          @__schema__ ||= Schema.JSON(parent: superclass&.schema, &block)
+        end
+
         def rule(name, &block)
           rules << Rule.new(name: name, block: block)
           rules
