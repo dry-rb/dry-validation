@@ -23,7 +23,7 @@ RSpec.describe Dry::Validation::Contract, '#call' do
         end
       end
 
-      rule(:age) do
+      rule('age') do
         if params[:age] < 0
           failure("must be greater than 0")
         end
