@@ -8,3 +8,5 @@ tmp/
 .idea/
 Gemfile.lock
 *.gem
+doc
+.yardoc/
