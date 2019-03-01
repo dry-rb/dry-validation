@@ -13,6 +13,8 @@ RSpec.describe Dry::Validation::Contract, '.inherited' do
 
   let(:parent_class) do
     Class.new(Dry::Validation::Contract) do
+      config.messages = :i18n
+
       params do
         required(:name).filled(:string)
       end
@@ -27,5 +29,9 @@ RSpec.describe Dry::Validation::Contract, '.inherited' do
 
   it 'inherits rules' do
     expect(child_class.rules.map(&:name).sort).to eql([:email, :name])
+  end
+
+  it 'inherits configuration' do
+    expect(child_class.config.messages).to eql(parent_class.config.messages)
   end
 end
