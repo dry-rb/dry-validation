@@ -29,6 +29,7 @@ module Dry
           @__messages__ ||= Messages.setup(config)
         end
 
+        # @api private
         def build(option = nil, &block)
           Class.new(self, &block).new(option)
         end
