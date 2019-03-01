@@ -18,7 +18,7 @@ module Dry
       setting :messages_file
       setting :namespace
 
-      option :schema, default: -> { self.class.schema }
+      option :schema, default: -> { self.class.__schema__ }
 
       option :rules, default: -> { self.class.rules }
 
