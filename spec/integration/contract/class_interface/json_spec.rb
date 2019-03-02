@@ -9,8 +9,7 @@ RSpec.describe Dry::Validation::Contract, '.json' do
     end
   end
 
-  it 'calls Dry::Scheme.JSON' do
-    expect(Dry::Schema).to receive(:JSON)
-    contract.new
+  it 'defines a JSON schema' do
+    expect(contract.__schema__).to be_a(Dry::Schema::JSON)
   end
 end

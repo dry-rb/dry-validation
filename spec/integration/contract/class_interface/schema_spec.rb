@@ -9,8 +9,7 @@ RSpec.describe Dry::Validation::Contract, '.params' do
     end
   end
 
-  it 'calls Dry::Scheme.Params' do
-    expect(Dry::Schema).to receive(:define)
-    contract.new
+  it 'defines a schema' do
+    expect(contract.__schema__).to be_a(Dry::Schema::Processor)
   end
 end
