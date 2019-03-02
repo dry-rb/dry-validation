@@ -10,7 +10,7 @@ RSpec.describe Dry::Validation::Evaluator do
   end
 
   let(:options) do
-    { name: :email, values: values }
+    { keys: [:email], values: values }
   end
 
   let(:values) do
@@ -23,7 +23,7 @@ RSpec.describe Dry::Validation::Evaluator do
     end
 
     it 'sets a failure message' do
-      expect(evaluator.message).to eql('oops')
+      expect(evaluator.message).to eql([:email, 'oops'])
     end
   end
 
@@ -58,7 +58,7 @@ RSpec.describe Dry::Validation::Evaluator do
 
     it 'delegates to the context' do
       expect(context).to receive(:works?).and_return(true)
-      expect(evaluator.message).to eql('it works')
+      expect(evaluator.message).to eql([:email, 'it works'])
     end
   end
 end

@@ -18,10 +18,15 @@ module Dry
       #   @api private
       param :context
 
-      # @!attribute [r] name
-      #   @return [Symbol]
+      # @!attribute [r] keys
+      #   @return [Array<String, Symbol, Hash>]
       #   @api private
-      option :name
+      option :keys
+
+      # @!attribute [r] default_id
+      #   @return [String, Symbol, Hash]
+      #   @api private
+      option :default_id, default: proc { keys.first }
 
       # @!attribute [r] values
       #   @return [Object]
@@ -56,14 +61,17 @@ module Dry
       #
       # @api public
       def failure(msg_or_key, **tokens)
-        @message =
+        id, text =
           case msg_or_key
           when Symbol
-            context.message(msg_or_key, rule: name, tokens: tokens)
+            [default_id, context.message(msg_or_key, rule: default_id, tokens: tokens)]
           when String
+            [default_id, msg_or_key]
+          when Array
             msg_or_key
           end
         @failure = true
+        @message = [id, text]
         self
       end
 
