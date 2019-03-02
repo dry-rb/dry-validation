@@ -7,15 +7,15 @@ module Dry
     class Contract
       module ClassInterface
         def params(&block)
-          @__schema__ ||= Schema.Params(parent: superclass&.__schema__, &block)
+          @__schema__ ||= Schema.Params(schema_opts, &block)
         end
 
         def json(&block)
-          @__schema__ ||= Schema.JSON(parent: superclass&.__schema__, &block)
+          @__schema__ ||= Schema.JSON(schema_opts, &block)
         end
 
         def schema(&block)
-          @__schema__ ||= Schema.define(parent: superclass&.__schema__, &block)
+          @__schema__ ||= Schema.define(schema_opts, &block)
         end
 
         def rule(name, &block)
@@ -40,6 +40,10 @@ module Dry
         # @api private
         def build(option = nil, &block)
           Class.new(self, &block).new(option)
+        end
+
+        def schema_opts
+          { parent: superclass&.__schema__, config: config }
         end
       end
     end

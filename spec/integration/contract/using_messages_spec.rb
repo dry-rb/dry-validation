@@ -17,6 +17,10 @@ RSpec.describe Dry::Validation::Contract do
     end.new
   end
 
+  it 'configures messages for the schema' do
+    expect(contract.schema.config.messages_file).to eql(contract.class.config.messages_file)
+  end
+
   describe 'failure' do
     it 'uses messages for failures' do
       expect(contract.(email: 'foo').errors)

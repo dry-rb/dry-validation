@@ -1,4 +1,5 @@
 require 'dry/validation/contract'
+require 'dry/schema/messages/i18n'
 
 RSpec.describe Dry::Validation::Contract, '.inherited' do
   subject(:child_class) do
