@@ -1,3 +1,4 @@
+require 'dry/equalizer'
 require 'dry/initializer'
 
 module Dry
