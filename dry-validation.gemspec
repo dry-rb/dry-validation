@@ -6,10 +6,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Piotr Solnica']
   spec.email         = ['piotr.solnica@gmail.com']
   spec.summary       = 'Validation library'
-  spec.homepage      = 'https://github.com/dry-rb/dry-validation'
+  spec.homepage      = 'https://dry-rb.org/gems/dry-validation'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files -z`.split("\x0") - ['bin/console']
+  spec.files         = Dir['CHANGELOG.md', 'LICENSE', 'README.md', 'lib/**/*']
   spec.executables   = []
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
