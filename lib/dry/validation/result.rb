@@ -39,6 +39,10 @@ module Dry
       def update(new_errors)
         errors.update(new_errors)
       end
+
+      def inspect
+        "#<#{self.class}#{to_h.inspect} errors=#{errors.inspect}>"
+      end
     end
   end
 end
