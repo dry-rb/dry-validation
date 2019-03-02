@@ -7,11 +7,15 @@ module Dry
     class Contract
       module ClassInterface
         def params(&block)
-          @__schema__ ||= Schema.Params(parent: superclass&.schema, &block)
+          @__schema__ ||= Schema.Params(parent: superclass&.__schema__, &block)
         end
 
         def json(&block)
-          @__schema__ ||= Schema.JSON(parent: superclass&.schema, &block)
+          @__schema__ ||= Schema.JSON(parent: superclass&.__schema__, &block)
+        end
+
+        def schema(&block)
+          @__schema__ ||= Schema.define(parent: superclass&.__schema__, &block)
         end
 
         def rule(name, &block)
@@ -19,7 +23,7 @@ module Dry
           rules
         end
 
-        def schema
+        def __schema__
           @__schema__ if defined?(@__schema__)
         end
 
