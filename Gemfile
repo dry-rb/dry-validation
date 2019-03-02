@@ -6,13 +6,7 @@ gem 'dry-schema', git: 'https://github.com/dry-rb/dry-schema', branch: 'master'
 
 group :test do
   gem 'i18n', require: false
-
-  platform :mri do
-    gem 'simplecov', require: false
-  end
-
-  gem 'dry-monads', '>= 0.4.0', require: false
-  gem 'dry-struct'
+  gem 'simplecov', require: false, platform: :mri
 end
 
 group :tools do
