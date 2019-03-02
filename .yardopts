@@ -1,3 +1,4 @@
+--query '@api.text != "private"'
 --no-private
 --hide-void-return
 
