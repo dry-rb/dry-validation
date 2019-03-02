@@ -19,13 +19,13 @@ RSpec.describe Dry::Validation::Contract do
 
   describe 'failure' do
     it 'uses messages for failures' do
-      expect(contract.(email: 'foo').errors).
-        to eql(email: ["oh noez bad email"])
+      expect(contract.(email: 'foo').errors)
+        .to eql(email: ['oh noez bad email'])
     end
 
     it 'passes tokens to message templates' do
-      expect(contract.(email: 'jane@doe.org').errors).
-        to eql(email: ["looks like jane@doe.org is taken"])
+      expect(contract.(email: 'jane@doe.org').errors)
+        .to eql(email: ['looks like jane@doe.org is taken'])
     end
   end
 end
