@@ -17,6 +17,7 @@ begin
 rescue LoadError
 end
 
+require 'i18n'
 require 'dry/validation'
 
 SPEC_ROOT = Pathname(__dir__)

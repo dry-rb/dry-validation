@@ -10,7 +10,7 @@ module Dry
         }
       end
 
-      if defined?(Schema::I18n)
+      if defined?(::I18n)
         class I18n < Schema::Messages::I18n
           config.root = config.root.gsub('dry_schema', 'dry_validation')
           config.rule_lookup_paths = config.rule_lookup_paths.map { |path|
