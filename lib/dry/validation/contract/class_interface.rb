@@ -17,7 +17,7 @@ module Dry
         #
         # @api public
         def params(&block)
-          @__schema__ ||= Schema.Params(schema_opts, &block)
+          define(:Params, &block)
         end
 
         # Define a JSON schema for your contract
@@ -28,7 +28,7 @@ module Dry
         #
         # @api public
         def json(&block)
-          @__schema__ ||= Schema.JSON(schema_opts, &block)
+          define(:JSON, &block)
         end
 
         # Define a plain schema for your contract
@@ -39,7 +39,7 @@ module Dry
         #
         # @api public
         def schema(&block)
-          @__schema__ ||= Schema.define(schema_opts, &block)
+          define(:schema, &block)
         end
 
         # Define a rule for your contract
@@ -62,6 +62,13 @@ module Dry
           rules
         end
 
+        # A shortcut that can be used to define contracts that won't be reused or inherited
+        #
+        # @api public
+        def build(option = nil, &block)
+          Class.new(self, &block).new(option)
+        end
+
         # @api private
         def __schema__
           @__schema__ if defined?(@__schema__)
@@ -79,14 +86,25 @@ module Dry
           @__messages__ ||= Messages.setup(config)
         end
 
-        # @api private
-        def build(option = nil, &block)
-          Class.new(self, &block).new(option)
-        end
+        private
 
         # @api private
         def schema_opts
           { parent: superclass&.__schema__, config: config }
+        end
+
+        # @api private
+        def define(method_name, &block)
+          raise ::Dry::Validation::DuplicateSchemaError, 'Schema has already been defined' if defined?(@__schema__)
+
+          case method_name
+          when :schema
+            @__schema__ = Schema.define(schema_opts, &block)
+          when :Params
+            @__schema__ = Schema.Params(schema_opts, &block)
+          when :JSON
+            @__schema__ = Schema.JSON(schema_opts, &block)
+          end
         end
       end
     end
