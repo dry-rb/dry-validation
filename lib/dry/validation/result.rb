@@ -9,17 +9,17 @@ module Dry
         result.freeze
       end
 
-      attr_reader :params
+      attr_reader :values
 
       attr_reader :errors
 
-      def initialize(params, errors)
-        @params = params
-        @errors = errors.update(params.errors)
+      def initialize(values, errors)
+        @values = values
+        @errors = errors.update(values.errors)
       end
 
       def error?(key)
-        params.error?(key)
+        values.error?(key)
       end
 
       def add_error(key, message)
@@ -28,7 +28,7 @@ module Dry
       end
 
       def [](key)
-        params[key]
+        values[key]
       end
 
       def update(new_errors)
