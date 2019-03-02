@@ -28,9 +28,9 @@ module Dry
         end
 
         def rules
-          @__rules__ ||= EMPTY_ARRAY.
-            dup.
-            concat(superclass.respond_to?(:rules) ? superclass.rules : EMPTY_ARRAY)
+          @__rules__ ||= EMPTY_ARRAY
+                         .dup
+                         .concat(superclass.respond_to?(:rules) ? superclass.rules : EMPTY_ARRAY)
         end
 
         def messages
