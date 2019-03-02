@@ -19,7 +19,7 @@ RSpec.describe Dry::Validation::Evaluator do
 
   describe '#failure' do
     let(:block) do
-      Proc.new { failure('oops') }
+      proc { failure('oops') }
     end
 
     it 'sets a failure message' do
@@ -30,7 +30,7 @@ RSpec.describe Dry::Validation::Evaluator do
   describe '#failure?' do
     context 'when failure message was set' do
       let(:block) do
-        Proc.new { failure("oops") }
+        proc { failure('oops') }
       end
 
       it 'returns true' do
@@ -40,7 +40,7 @@ RSpec.describe Dry::Validation::Evaluator do
 
     context 'when failure message was not set' do
       let(:block) do
-        Proc.new {}
+        proc {}
       end
 
       it 'returns false' do
@@ -51,7 +51,7 @@ RSpec.describe Dry::Validation::Evaluator do
 
   describe 'delegation' do
     let(:block) do
-      Proc.new {
+      proc {
         failure('it works') if works?
       }
     end

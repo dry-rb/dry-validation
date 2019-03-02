@@ -12,46 +12,40 @@ RSpec.describe Dry::Validation::Contract, '#call' do
       end
 
       rule(:password) do
-        if values[:login] && !values[:password]
-          failure("is required")
-        end
+        failure('is required') if values[:login] && !values[:password]
       end
 
       rule(:age) do
-        if values[:age] < 18
-          failure("must be greater or equal 18")
-        end
+        failure('must be greater or equal 18') if values[:age] < 18
       end
 
       rule(:age) do
-        if values[:age] < 0
-          failure("must be greater than 0")
-        end
+        failure('must be greater than 0') if values[:age] < 0
       end
     end.new
   end
 
-  it "applies rule to input processed by the schema" do
-    result = contract.(email: "john@doe.org", age: 19)
+  it 'applies rule to input processed by the schema' do
+    result = contract.(email: 'john@doe.org', age: 19)
 
     expect(result.errors).to eql({})
   end
 
-  it "returns rule errors" do
-    result = contract.(email: "john@doe.org", login: "jane", age: 19)
+  it 'returns rule errors' do
+    result = contract.(email: 'john@doe.org', login: 'jane', age: 19)
 
-    expect(result.errors).to eql(password: ["is required"])
+    expect(result.errors).to eql(password: ['is required'])
   end
 
   it "doesn't execute rules when basic checks failed" do
-    result = contract.(email: "john@doe.org", age: "not-an-integer")
+    result = contract.(email: 'john@doe.org', age: 'not-an-integer')
 
-    expect(result.errors).to eql(age: ["must be an integer"])
+    expect(result.errors).to eql(age: ['must be an integer'])
   end
 
-  it "gathers errors from multiple rules for the same key" do
+  it 'gathers errors from multiple rules for the same key' do
     result = contract.(email: 'john@doe.org', age: -1)
 
-    expect(result.errors).to eql(age: ["must be greater or equal 18", "must be greater than 0"])
+    expect(result.errors).to eql(age: ['must be greater or equal 18', 'must be greater than 0'])
   end
 end

@@ -9,7 +9,7 @@ RSpec.describe Dry::Validation::Contract, '.build' do
     end
   end
 
-  it "return instance of Dry::Validation::Contract" do
+  it 'return instance of Dry::Validation::Contract' do
     expect(contract).to be_a(Dry::Validation::Contract)
   end
 end

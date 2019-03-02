@@ -17,7 +17,7 @@ RSpec.describe Dry::Validation::Contract, '.option' do
 
   let(:db) { double(:db) }
 
-  it "allows injecting objects to the constructor" do
+  it 'allows injecting objects to the constructor' do
     expect(db).to receive(:unique?).with('jane@doe.org').and_return(false)
 
     contract = contract_class.new(db: db)

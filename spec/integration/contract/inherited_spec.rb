@@ -25,11 +25,11 @@ RSpec.describe Dry::Validation::Contract, '.inherited' do
   end
 
   it 'inherits schema params' do
-    expect(child_class.__schema__.key_map.map(&:name).sort).to eql(["email", "name"])
+    expect(child_class.__schema__.key_map.map(&:name).sort).to eql(%w[email name])
   end
 
   it 'inherits rules' do
-    expect(child_class.rules.map(&:name).sort).to eql([:email, :name])
+    expect(child_class.rules.map(&:name).sort).to eql(%i[email name])
   end
 
   it 'inherits configuration' do
