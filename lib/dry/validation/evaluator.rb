@@ -36,6 +36,10 @@ module Dry
         @failure.equal?(true)
       end
 
+      def respond_to_missing?(meth, include_private = false)
+        super || context.respond_to?(meth, true)
+      end
+
       private
 
       def method_missing(meth, *args, &block)
