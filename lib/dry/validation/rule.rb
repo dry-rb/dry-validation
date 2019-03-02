@@ -6,7 +6,7 @@ module Dry
       extend Dry::Initializer
 
       option :name
-      
+
       option :block
 
       def call(context, params)
