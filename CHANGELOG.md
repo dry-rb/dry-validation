@@ -1,3 +1,14 @@
+# v1.0.0.alpha1 to-be-released
+
+Complete rewrite on top of `dry-schema`.
+
+### Added
+
+* [BREAKING] `Dry::Validation::Contract` as a replacement for validation schemas (solnic)
+* [BREAKING] New `rule` DSL with an improved API for setting error messages (solnic)
+
+[Compare v0.13.0...v1.0.0.alpha1](https://github.com/dry-rb/dry-validation/compare/v0.13.0...v1.0.0.alpha1)
+
 # v0.13.0 2019-01-29
 
 ### Changed
