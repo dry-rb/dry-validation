@@ -103,10 +103,10 @@ module Dry
       def call(input)
         Result.new(schema.(input)) do |result|
           rules.each do |rule|
-            next if result.error?(rule.name)
+            next if rule.keys.any? { |key| result.error?(key) }
 
             rule_result = rule.(self, result)
-            result.add_error(rule.name, rule_result.message) if rule_result.failure?
+            result.add_error(*rule_result.message) if rule_result.failure?
           end
         end
       end

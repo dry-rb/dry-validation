@@ -57,8 +57,8 @@ module Dry
         # @return [Array<Rule>]
         #
         # @api public
-        def rule(name, &block)
-          rules << Rule.new(name: name, block: block)
+        def rule(*keys, &block)
+          rules << Rule.new(keys: keys, block: block)
           rules
         end
 

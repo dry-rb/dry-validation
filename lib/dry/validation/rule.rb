@@ -11,10 +11,10 @@ module Dry
 
       extend Dry::Initializer
 
-      # @!atrribute [r] name
-      #   @return [Symbol]
+      # @!atrribute [r] keys
+      #   @return [Array<Symbol, String, Hash>]
       #   @api private
-      option :name
+      option :keys
 
       # @!atrribute [r] block
       #   @return [Proc]
@@ -28,7 +28,7 @@ module Dry
       #
       # @api private
       def call(context, values)
-        Evaluator.new(context, values: values, name: name, &block)
+        Evaluator.new(context, values: values, keys: keys, &block)
       end
     end
   end
