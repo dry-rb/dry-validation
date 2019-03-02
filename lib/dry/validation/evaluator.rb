@@ -10,7 +10,7 @@ module Dry
 
       option :name
 
-      option :params
+      option :values
 
       attr_reader :message
 

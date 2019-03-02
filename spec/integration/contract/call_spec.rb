@@ -12,19 +12,19 @@ RSpec.describe Dry::Validation::Contract, '#call' do
       end
 
       rule(:password) do
-        if params[:login] && !params[:password]
+        if values[:login] && !values[:password]
           failure("is required")
         end
       end
 
       rule(:age) do
-        if params[:age] < 18
+        if values[:age] < 18
           failure("must be greater or equal 18")
         end
       end
 
       rule(:age) do
-        if params[:age] < 0
+        if values[:age] < 0
           failure("must be greater than 0")
         end
       end

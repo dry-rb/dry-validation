@@ -10,10 +10,10 @@ RSpec.describe Dry::Validation::Evaluator do
   end
 
   let(:options) do
-    { name: :email, params: params }
+    { name: :email, values: values }
   end
 
-  let(:params) do
+  let(:values) do
     {}
   end
 

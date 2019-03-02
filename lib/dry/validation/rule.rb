@@ -9,8 +9,8 @@ module Dry
 
       option :block
 
-      def call(context, params)
-        Evaluator.new(context, params: params, name: name, &block)
+      def call(context, values)
+        Evaluator.new(context, values: values, name: name, &block)
       end
     end
   end
