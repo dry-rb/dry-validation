@@ -1,8 +1,11 @@
+require 'dry/equalizer'
 require 'dry/validation/constants'
 
 module Dry
   module Validation
     class Result
+      include Dry::Equalizer(:values, :errors)
+
       def self.new(params, errors = EMPTY_HASH.dup)
         result = super
         yield(result) if block_given?

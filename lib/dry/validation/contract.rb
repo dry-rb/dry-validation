@@ -1,3 +1,4 @@
+require 'dry/equalizer'
 require 'dry/configurable'
 require 'dry/initializer'
 
@@ -10,6 +11,8 @@ require 'dry/validation/contract/class_interface'
 module Dry
   module Validation
     class Contract
+      include Dry::Equalizer(:schema, :rules, :messages)
+
       extend Dry::Configurable
       extend Dry::Initializer
       extend ClassInterface

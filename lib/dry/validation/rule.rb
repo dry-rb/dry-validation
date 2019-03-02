@@ -3,6 +3,8 @@ require 'dry/initializer'
 module Dry
   module Validation
     class Rule
+      include Dry::Equalizer(:name, :block)
+
       extend Dry::Initializer
 
       option :name
