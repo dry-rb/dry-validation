@@ -17,7 +17,7 @@ RSpec.describe Dry::Validation::Contract do
         rule(:email) do
           value = values[:email]
           failure(:invalid) unless value.include?('@')
-          failure(:taken, email: value) if value == 'jane@doe.org'
+          failure(:taken, values) if value == 'jane@doe.org'
         end
       end
     end

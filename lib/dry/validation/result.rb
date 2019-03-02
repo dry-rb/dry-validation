@@ -31,6 +31,11 @@ module Dry
         values[key]
       end
 
+      def to_h
+        values.to_h
+      end
+      alias_method :to_hash, :to_h
+
       def update(new_errors)
         errors.update(new_errors)
       end
