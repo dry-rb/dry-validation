@@ -36,7 +36,13 @@ module Dry
       end
 
       def message(key, tokens: EMPTY_HASH, **opts)
-        messages[key, **opts].(tokens)
+        template = messages[key, opts.merge(tokens)]
+
+        if template
+          template.(template.data(tokens))
+        else
+          raise MissingMessageError, "Message template for #{key.inspect} was not found"
+        end
       end
     end
   end
