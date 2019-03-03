@@ -1,0 +1,12 @@
+AllCops:
+  TargetRubyVersion: 2.6
+
+Style/LambdaCall:
+  Enabled: false
+
+Style/StabbyLambdaParentheses:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: true
+  Max: 10
