@@ -36,6 +36,24 @@ module Dry
         @errors = errors.update(values.errors)
       end
 
+      # Check if result is successful
+      #
+      # @return [Bool]
+      #
+      # @api public
+      def success?
+        errors.empty?
+      end
+
+      # Check if result is not successful
+      #
+      # @return [Bool]
+      #
+      # @api public
+      def failure?
+        !success?
+      end
+
       # Check if values include an error for the provided key
       #
       # @api private
