@@ -5,5 +5,6 @@ module Dry
     include Dry::Core::Constants
 
     MissingMessageError = Class.new(StandardError)
+    DuplicateSchemaError = Class.new(StandardError)
   end
 end
