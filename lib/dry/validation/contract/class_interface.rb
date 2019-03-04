@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/schema'
 require 'dry/validation/messages'
 require 'dry/validation/constants'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry-validation'
 
 schema = Dry::Validation.Schema do

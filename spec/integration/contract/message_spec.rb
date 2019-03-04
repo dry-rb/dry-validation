@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Validation::Contract, '#message' do
   subject(:contract) do
     Class.new(Dry::Validation::Contract) do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/validation/evaluator'
 
 RSpec.describe Dry::Validation::Evaluator do

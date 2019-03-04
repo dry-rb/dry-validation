@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry-validation'
 
 contract = Class.new(Dry::Validation::Contract) do

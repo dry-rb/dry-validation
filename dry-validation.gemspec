@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path('lib/dry/validation/version', __dir__)
 
 Gem::Specification.new do |spec|

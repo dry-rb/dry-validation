@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/validation/contract'
 
 RSpec.describe Dry::Validation::Contract, '.rule' do
