@@ -14,4 +14,16 @@ RSpec.describe Dry::Validation::Result do
       expect(result.inspect).to eql('#<Dry::Validation::Result{:email=>"jane@doe.org"} errors={:email=>["not valid"]}>')
     end
   end
+
+  describe '#[]' do
+    let(:params) do
+      double(:params, errors: {}, to_h: {}, key?: false)
+    end
+
+    it 'returns nil for missing values' do
+      Dry::Validation::Result.new(params) do |r|
+        expect(r[:missing]).to be nil
+      end
+    end
+  end
 end

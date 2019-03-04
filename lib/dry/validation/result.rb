@@ -86,7 +86,13 @@ module Dry
       #
       # @api public
       def [](key)
-        values.key?(key) && values[key] || storage.key?(key) && storage[key]
+        if values.key?(key)
+          values[key]
+        elsif storage.key?(key)
+          storage[key]
+        else
+          nil
+        end
       end
 
       # Store value under specified key
