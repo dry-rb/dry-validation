@@ -7,8 +7,8 @@ gemspec
 gem 'dry-schema', git: 'https://github.com/dry-rb/dry-schema', branch: 'master'
 
 group :test do
-  gem 'i18n', require: false
   gem 'dry-monads', '~> 1.0'
+  gem 'i18n', require: false
   gem 'simplecov', require: false, platform: :mri
 end
 
