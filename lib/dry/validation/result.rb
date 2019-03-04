@@ -38,6 +38,13 @@ module Dry
         @errors = errors.update(values.errors)
       end
 
+      # Return all messages including hints from schema
+      #
+      # @api public
+      def messages
+        values.messages
+      end
+
       # Check if result is successful
       #
       # @return [Bool]
