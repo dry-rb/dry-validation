@@ -41,13 +41,18 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
   context 'with a list of keys' do
     before do
       contract_class.rule(:email, :login) do
-        failure(:login, 'is not needed when email is provided') if email.size > 0 && login.size > 0
+        if !values[:email].empty? && !values[:login].empty?
+          failure(:login, 'is not needed when email is provided') 
+        end
       end
     end
 
     it 'applies the rule when all values passed schema checks' do
       expect(contract.(email: nil, login: nil).errors)
         .to eql(email: ['must be a string'], login: ['must be a string'])
+
+      expect(contract.(email: 'jane@doe.org', login: 'jane').errors)
+        .to eql(login: ['is not needed when email is provided'])
     end
   end
 end

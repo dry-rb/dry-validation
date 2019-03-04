@@ -51,26 +51,38 @@ module Dry
 
       # Set failure message
       #
-      # @example using a message string
-      #   failure("this is not valid")
+      # @overload failure(message)
+      #   Set message text explicitly
+      #   @param message [String] The message text
+      #   @example
+      #     failure('this failed')
       #
-      # @example using a message identifier
-      #   failure(:invalid) # needs a corresponding message translation
+      # @overload failure(id)
+      #   Use message identifier (needs localized messages setup)
+      #   @param id [Symbol] The message id
+      #   @example
+      #     failure(:taken)
       #
-      # @param [Symbol, String] msg_or_key The message or its identifier
+      # @overload failure(key, message)
+      #   Set message under specified key (overrides rule's default key)
+      #   @param id [Symbol] The message key
+      #   @example
+      #     failure(:my_error, 'this failed')
       #
       # @return [Evaluator]
       #
       # @api public
-      def failure(msg_or_key, **tokens)
+      def failure(*args, **tokens)
         id, text =
-          case msg_or_key
-          when Symbol
-            [default_id, _context.message(msg_or_key, rule: default_id, tokens: tokens)]
-          when String
-            [default_id, msg_or_key]
-          when Array
-            msg_or_key
+          if args.size.equal?(1)
+            case (msg = args[0])
+            when Symbol
+              [default_id, _context.message(msg, rule: default_id, tokens: tokens)]
+            when String
+              [default_id, msg]
+            end
+          else
+            args
           end
         @failure = true
         @message = [id, text]
