@@ -17,6 +17,15 @@
 * [Documentation](http://dry-rb.org/gems/dry-validation)
 * [Guidelines for contributing](CONTRIBUTING.md)
 
+## Supported Ruby versions
+
+This library officially supports following Ruby versions:
+
+* MRI >= `2.4`
+* jruby >= `9.2`
+
+It **should** work on MRI `2.3.x` too, but there's no official support for this version.
+
 ## License
 
 See `LICENSE` file.
