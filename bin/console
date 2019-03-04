@@ -7,8 +7,8 @@ require 'dry-validation'
 
 if ARGV.include?('--pry')
   require 'pry'
-  Pry.start
+  binding.pry
 else
   require 'irb'
-  IRB.start
+  binding.irb
 end
