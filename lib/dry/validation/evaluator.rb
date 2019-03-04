@@ -15,10 +15,10 @@ module Dry
     class Evaluator
       extend Dry::Initializer
 
-      # @!attribute [r] context
+      # @!attribute [r] _context
       #   @return [Contract]
       #   @api private
-      param :context
+      param :_context
 
       # @!attribute [r] keys
       #   @return [Array<String, Symbol, Hash>]
@@ -66,7 +66,7 @@ module Dry
         id, text =
           case msg_or_key
           when Symbol
-            [default_id, context.message(msg_or_key, rule: default_id, tokens: tokens)]
+            [default_id, _context.message(msg_or_key, rule: default_id, tokens: tokens)]
           when String
             [default_id, msg_or_key]
           when Array
@@ -88,7 +88,7 @@ module Dry
 
       # @api private
       def respond_to_missing?(meth, include_private = false)
-        super || context.respond_to?(meth, true)
+        super || _context.respond_to?(meth, true)
       end
 
       private
@@ -98,8 +98,8 @@ module Dry
       # @api private
       def method_missing(meth, *args, &block)
         # yes, we do want to delegate to private methods too
-        if context.respond_to?(meth, true)
-          context.__send__(meth, *args, &block)
+        if _context.respond_to?(meth, true)
+          _context.__send__(meth, *args, &block)
         else
           super
         end
