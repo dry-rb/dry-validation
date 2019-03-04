@@ -26,7 +26,7 @@ Complete rewrite on top of `dry-schema`.
 
 ### Changed
 
-* [internal] dyr-logic was pinned to `~> 0.4.2` (flash-gordon)
+* [internal] dry-logic was pinned to `~> 0.4.2` (flash-gordon)
 
 [Compare v0.12.2...v0.12.3](https://github.com/dry-rb/dry-validation/compare/v0.12.2...v0.12.3)
 
