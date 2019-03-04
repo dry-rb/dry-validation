@@ -1,12 +1,43 @@
 AllCops:
   TargetRubyVersion: 2.4
 
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: single_quotes
+
+Style/Alias:
+  Enabled: false
+
 Style/LambdaCall:
   Enabled: false
 
 Style/StabbyLambdaParentheses:
   Enabled: false
 
+Layout/MultilineMethodCallIndentation:
+  Enabled: true
+  EnforcedStyle: indented
+
+Metrics/LineLength:                                                             
+  Max: 100 
+
+Metrics/MethodLength:
+  Max: 22
+
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/BlockLength:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*_spec.rb'
+
 Metrics/CyclomaticComplexity:
   Enabled: true
   Max: 10
+
+Lint/BooleanSymbol:
+  Enabled: false
