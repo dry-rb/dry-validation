@@ -62,5 +62,19 @@ RSpec.describe Dry::Validation::Evaluator do
       expect(context).to receive(:works?).and_return(true)
       expect(evaluator.message).to eql([:email, 'it works'])
     end
+
+    describe 'with custom methods defined on the context' do
+      let(:context) do
+        double(context: :my_context)
+      end
+
+      let(:block) do
+        proc { failure("message with #{context}") }
+      end
+
+      it 'forwards to the context' do
+        expect(evaluator.message).to eql([:email, 'message with my_context'])
+      end
+    end
   end
 end
