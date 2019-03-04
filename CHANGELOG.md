@@ -1,4 +1,4 @@
-# v1.0.0.alpha1 to-be-released
+# v1.0.0.alpha1 2019-03-04
 
 Complete rewrite on top of `dry-schema`.
 
