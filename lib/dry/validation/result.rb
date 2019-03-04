@@ -86,7 +86,32 @@ module Dry
       #
       # @api public
       def [](key)
-        values[key]
+        values.key?(key) && values[key] || storage.key?(key) && storage[key]
+      end
+
+      # Store value under specified key
+      #
+      # @param [Symbol] key
+      # @param [Object] value
+      #
+      # @return [Object]
+      #
+      # @api public
+      def []=(key, value)
+        raise ArgumentError, "Key +#{key}+ was already set" if key?(key)
+
+        storage[key] = value
+      end
+
+      # Check if a key was set
+      #
+      # @param [Symbol] key
+      #
+      # @return [Bool]
+      #
+      # @api public
+      def key?(key)
+        values.key?(key) || storage.key?(key)
       end
 
       # Coerce to a hash
@@ -109,6 +134,13 @@ module Dry
       # @api public
       def inspect
         "#<#{self.class}#{to_h.inspect} errors=#{errors.inspect}>"
+      end
+
+      private
+
+      # @api private
+      def storage
+        @storage ||= EMPTY_HASH.dup
       end
     end
   end
