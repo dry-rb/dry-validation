@@ -74,7 +74,7 @@ module Dry
       #
       # @api private
       def add_error(key, message)
-        (errors[key] ||= EMPTY_ARRAY.dup) << message
+        add_to(errors, key, message)
         self
       end
 
@@ -147,6 +147,17 @@ module Dry
       # @api private
       def storage
         @storage ||= EMPTY_HASH.dup
+      end
+
+      # @api private
+      def add_to(hash, path, value)
+        if path.is_a?(Hash)
+          key = path.keys[0]
+          messages = (hash[key] ||= EMPTY_HASH.dup)
+          add_to(messages, path[key], value)
+        else
+          (hash[path] ||= EMPTY_ARRAY.dup) << value
+        end
       end
     end
   end

@@ -11,6 +11,10 @@ RSpec.describe Dry::Validation::Contract, '#call' do
         optional(:login).maybe(:string, :filled?)
         optional(:password).maybe(:string, min_size?: 10)
         optional(:password_confirmation).maybe(:string)
+        optional(:address).hash do
+          required(:country).value(:string)
+          required(:zip).value(:string)
+        end
       end
 
       rule(:password) do
@@ -23,6 +27,13 @@ RSpec.describe Dry::Validation::Contract, '#call' do
 
       rule(:age) do
         failure('must be greater than 0') if values[:age] < 0
+      end
+
+      rule(address: :zip) do
+        address = values[:address]
+        if address && address[:country] == 'Russia' && address[:zip] != /\A\d{6}\z/
+          failure('must have 6 digit')
+        end
       end
     end.new
   end
@@ -53,5 +64,12 @@ RSpec.describe Dry::Validation::Contract, '#call' do
 
     expect(result).to be_failure
     expect(result.errors).to eql(age: ['must be greater or equal 18', 'must be greater than 0'])
+  end
+
+  it 'build nested message keys for nested rules' do
+    result = contract.(email: 'john@doe.org', age: 20, address: { country: 'Russia', zip: 'abc' })
+
+    expect(result).to be_failure
+    expect(result.errors).to eql(address: { zip: ['must have 6 digit'] })
   end
 end
