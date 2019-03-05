@@ -10,6 +10,10 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
       params do
         required(:email).filled(:string)
         optional(:login).filled(:string)
+
+        optional(:address).hash do
+          required(:street).value(:string)
+        end
       end
     end
   end
@@ -35,6 +39,22 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
 
     it 'applies the rule regardless of the schema result' do
       expect(contract.(email: 'jane@doe.org', login: 'jane').errors).to eql(custom: ['this works'])
+    end
+  end
+
+  context 'with a hash as the key identifier' do
+    before do
+      contract_class.rule(address: :street) do
+        failure('cannot be empty') if values[:address][:street].strip.empty?
+      end
+    end
+
+    it 'applies the rule when nested value passed schema checks' do
+      expect(contract.(email: 'jane@doe.org', login: 'jane', address: nil).errors)
+        .to eql(address: ['must be a hash'])
+
+      expect(contract.(email: 'jane@doe.org', login: 'jane', address: { street: ' ' }).errors)
+        .to eql(address: { street: ['cannot be empty'] })
     end
   end
 
