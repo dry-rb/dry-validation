@@ -5,6 +5,8 @@ en:
         email:
           invalid: "oh noez bad email"
           taken: "looks like %{email} is taken"
+        city:
+          invalid: "is not a valid city name"
         address:
           street:
             invalid: "doesn't look good"

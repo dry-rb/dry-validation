@@ -17,6 +17,11 @@ RSpec.describe Dry::Validation::Contract, '#message' do
         .to eql('looks like jane@doe.org is taken')
     end
 
+    it 'returns message text for nested rule when it is defined under root' do
+      expect(contract.message(:invalid, rule: %i[address city]))
+        .to eql('is not a valid city name')
+    end
+
     it 'returns message text for nested rule' do
       expect(contract.message(:invalid, rule: %i[address street]))
         .to eql("doesn't look good")
