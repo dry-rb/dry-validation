@@ -24,7 +24,9 @@ RSpec.describe Dry::Validation::Contract, '#message' do
 
     it 'raises error when template was not found' do
       expect { contract.message(:not_here, rule: :email) }
-        .to raise_error(Dry::Validation::MissingMessageError, /not_here/)
+        .to raise_error(Dry::Validation::MissingMessageError, <<~STR)
+          Message template for :not_here under "email" was not found
+        STR
     end
   end
 

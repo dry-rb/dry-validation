@@ -123,7 +123,9 @@ module Dry
         template = messages[key, opts.merge(rule: rule, **tokens)]
 
         unless template
-          raise MissingMessageError, "Message template for #{key.inspect} was not found"
+          raise MissingMessageError, <<~STR
+            Message template for #{key.inspect} under #{rule.inspect} was not found
+          STR
         end
 
         template.(template.data(tokens))
