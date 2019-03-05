@@ -119,13 +119,19 @@ module Dry
       #
       # @api private
       def message(key, tokens: EMPTY_HASH, **opts)
-        template = messages[key, opts.merge(tokens)]
+        msg_opts = opts.merge(tokens)
+        rule_path = Array(opts.fetch(:rule)).flatten
 
-        if template
-          template.(template.data(tokens))
-        else
-          raise MissingMessageError, "Message template for #{key.inspect} was not found"
+        template = messages[key, msg_opts.merge(rule: rule_path.join(DOT))]
+        template ||= messages[key, msg_opts.merge(rule: rule_path.last)]
+
+        unless template
+          raise MissingMessageError, <<~STR
+            Message template for #{key.inspect} under #{rule_path.join(DOT).inspect} was not found
+          STR
         end
+
+        template.(template.data(tokens))
       end
     end
   end
