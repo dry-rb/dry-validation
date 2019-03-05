@@ -17,6 +17,10 @@ Style/StabbyLambdaParentheses:
 Style/Documentation:
   Enabled: false
 
+Style/BlockDelimiters:
+  Enabled: true
+  EnforcedStyle: semantic
+
 Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented
