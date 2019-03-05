@@ -73,19 +73,21 @@ module Dry
       #
       # @api public
       def failure(*args, **tokens)
-        id, text =
+        error =
           if args.size.equal?(1)
             case (msg = args[0])
             when Symbol
-              [default_id, _context.message(msg, rule: default_id, tokens: tokens)]
+              _context.message(msg, rule: default_id, tokens: tokens)
             when String
-              [default_id, msg]
+              Error.new(msg, rule: default_id, path: default_id)
             end
           else
-            args
+            Error.new(args[1], rule: args[0], path: args[0])
           end
+
         @failure = true
-        @message = [id, text]
+        @message = error
+
         self
       end
 

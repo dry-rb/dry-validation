@@ -13,17 +13,17 @@ RSpec.describe Dry::Validation::Contract, '#message' do
     end
 
     it 'returns message text for flat rule' do
-      expect(contract.message(:taken, rule: :email, tokens: { email: 'jane@doe.org' }))
+      expect(contract.message(:taken, rule: :email, tokens: { email: 'jane@doe.org' }).to_s)
         .to eql('looks like jane@doe.org is taken')
     end
 
     it 'returns message text for nested rule when it is defined under root' do
-      expect(contract.message(:invalid, rule: %i[address city]))
+      expect(contract.message(:invalid, rule: %i[address city]).to_s)
         .to eql('is not a valid city name')
     end
 
     it 'returns message text for nested rule' do
-      expect(contract.message(:invalid, rule: %i[address street]))
+      expect(contract.message(:invalid, rule: %i[address street]).to_s)
         .to eql("doesn't look good")
     end
 
