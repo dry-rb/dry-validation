@@ -1,3 +1,19 @@
+# v1.0.0.alpha2 2019-03-05
+
+First round of bug fixes. Thanks for testing <3!
+
+### Fixed
+
+* Errors with nested messages are correctly built (flash-gordon)
+* Messages for nested keys are correctly resolved (solnic)
+* A message for a nested key is resolved when it's defined under `errors.rule.%{key}` too, but a message under nested key will override it (solnic)
+
+### Changed
+
+* When a message template is not found a more meaningful error is raised that includes both rule identifier and key path (solnic)
+
+[Compare v1.0.0.alpha1...v1.0.0.alpha2](https://github.com/dry-rb/dry-validation/compare/v1.0.0.alpha1...v1.0.0.alpha2)
+
 # v1.0.0.alpha1 2019-03-04
 
 Complete rewrite on top of `dry-schema`.
