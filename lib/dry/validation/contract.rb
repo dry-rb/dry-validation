@@ -121,11 +121,11 @@ module Dry
       def message(key, tokens: EMPTY_HASH, **opts)
         template = messages[key, opts.merge(tokens)]
 
-        if template
-          template.(template.data(tokens))
-        else
+        unless template
           raise MissingMessageError, "Message template for #{key.inspect} was not found"
         end
+
+        template.(template.data(tokens))
       end
     end
   end
