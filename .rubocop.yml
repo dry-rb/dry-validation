@@ -21,6 +21,9 @@ Style/BlockDelimiters:
   Enabled: true
   EnforcedStyle: semantic
 
+Style/EachWithObject:
+  Enabled: false
+
 Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented
