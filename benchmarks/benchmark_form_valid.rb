@@ -3,10 +3,8 @@
 require 'benchmark/ips'
 require 'active_model'
 
+require 'i18n'
 require 'dry-validation'
-
-I18n.locale = :en
-I18n.backend.load_translations
 
 class User
   include ActiveModel::Validations
@@ -14,37 +12,29 @@ class User
   attr_reader :email, :age
 
   validates :email, :age, presence: true
-  validates :age, numericality: { greater_than: 18 }
+  validates :age, presence: true, numericality: { greater_than: 18 }
 
   def initialize(attrs)
     @email, @age = attrs.values_at('email', 'age')
   end
 end
 
-schema = Dry::Validation.Schema do
-  configure do
-    config.messages = :i18n
+contract = Dry::Validation::Contract.build {
+  config.messages = :i18n
+
+  params do
+    required(:email).filled(:string)
+    required(:age).filled(:integer)
   end
 
-  required(:email).filled
-  required(:age).filled(:int?, gt?: 18)
-end
-
-form = Dry::Validation.Params do
-  configure do
-    config.messages = :i18n
-    config.type_specs = true
+  rule(:age) do
+    failure('must be greater than 18') if values[:age] <= 18
   end
+}
 
-  required(:email, :string).filled
-  required(:age, :integer).filled(:int?, gt?: 18)
-end
+params = { 'email' => 'jane@doe.org', 'age' => '19' }
 
-params = { 'email' => 'foo@bar.baz', 'age' => '19' }
-coerced = { email: 'foo@bar.baz', age: 19 }
-
-puts schema.(coerced).inspect
-puts form.(params).inspect
+puts contract.(params).inspect
 puts User.new(params).validate
 
 Benchmark.ips do |x|
@@ -54,12 +44,8 @@ Benchmark.ips do |x|
     user.errors
   end
 
-  x.report('dry-validation / schema') do
-    schema.(coerced).messages
-  end
-
-  x.report('dry-validation / form') do
-    form.(params).messages
+  x.report('dry-validation') do
+    contract.(params).error_set
   end
 
   x.compare!
