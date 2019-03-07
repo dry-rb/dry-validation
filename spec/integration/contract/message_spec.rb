@@ -12,23 +12,28 @@ RSpec.describe Dry::Validation::Contract, '#message' do
       end
     end
 
+    it 'returns message text for base rule' do
+      expect(contract.message(:not_weekend, path: nil).to_s)
+        .to eql('this only works on weekends')
+    end
+
     it 'returns message text for flat rule' do
-      expect(contract.message(:taken, rule: :email, tokens: { email: 'jane@doe.org' }).to_s)
+      expect(contract.message(:taken, path: :email, tokens: { email: 'jane@doe.org' }).to_s)
         .to eql('looks like jane@doe.org is taken')
     end
 
     it 'returns message text for nested rule when it is defined under root' do
-      expect(contract.message(:invalid, rule: %i[address city]).to_s)
+      expect(contract.message(:invalid, path: %i[address city]).to_s)
         .to eql('is not a valid city name')
     end
 
     it 'returns message text for nested rule' do
-      expect(contract.message(:invalid, rule: %i[address street]).to_s)
+      expect(contract.message(:invalid, path: %i[address street]).to_s)
         .to eql("doesn't look good")
     end
 
     it 'raises error when template was not found' do
-      expect { contract.message(:not_here, rule: :email) }
+      expect { contract.message(:not_here, path: :email) }
         .to raise_error(Dry::Validation::MissingMessageError, <<~STR)
           Message template for :not_here under "email" was not found
         STR

@@ -119,12 +119,18 @@ module Dry
       # @return [String]
       #
       # @api private
+      #
+      # rubocop:disable Metrics/AbcSize
       def message(key, tokens: EMPTY_HASH, **opts)
         msg_opts = opts.merge(tokens)
-        rule_path = Array(opts.fetch(:rule)).flatten
+        rule_path = Array(opts.fetch(:path)).flatten.compact
 
-        template = messages[key, msg_opts.merge(rule: rule_path.join(DOT))]
-        template ||= messages[key, msg_opts.merge(rule: rule_path.last)]
+        if rule_path.empty?
+          template = messages["rules.#{key}"]
+        else
+          template = messages[key, msg_opts.merge(rule: rule_path.join(DOT))]
+          template ||= messages[key, msg_opts.merge(rule: rule_path.last)]
+        end
 
         unless template
           raise MissingMessageError, <<~STR
@@ -134,6 +140,7 @@ module Dry
 
         Error.new(template.(template.data(tokens)), rule: key, path: rule_path)
       end
+      # rubocop:enable Metrics/AbcSize
     end
   end
 end

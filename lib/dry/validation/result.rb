@@ -52,6 +52,11 @@ module Dry
       end
       alias_method :messages, :errors
 
+      # @api public
+      def base_errors
+        error_set.filter(:base?).map(&:to_s)
+      end
+
       # Check if result is successful
       #
       # @return [Bool]

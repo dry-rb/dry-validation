@@ -77,12 +77,12 @@ module Dry
           if args.size.equal?(1)
             case (msg = args[0])
             when Symbol
-              _context.message(msg, rule: default_id, tokens: tokens)
+              _context.message(msg, path: default_id, tokens: tokens)
             when String
-              Error.new(msg, rule: default_id, path: default_id)
+              Error.new(msg, path: default_id)
             end
           else
-            Error.new(args[1], rule: args[0], path: args[0])
+            Error.new(args[1], path: args[0])
           end
 
         @failure = true

@@ -88,6 +88,22 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
     end
   end
 
+  context 'with a rule that sets a general base error for the whole input' do
+    before do
+      contract_class.rule do
+        failure('this whole thing is invalid')
+      end
+    end
+
+    it 'sets a base error not attached to any key' do
+      expect(contract.(email: 'jane@doe.org', login: '').errors)
+        .to eql(login: ['must be filled'])
+
+      expect(contract.(email: 'jane@doe.org', login: '').base_errors)
+        .to eql(['this whole thing is invalid'])
+    end
+  end
+
   context 'with a list of keys' do
     before do
       contract_class.rule(:email, :login) do

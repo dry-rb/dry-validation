@@ -26,11 +26,43 @@ module Dry
         self
       end
 
+      # Filter error set using provided predicates
+      #
+      # This method is open to any predicate because errors can be anything that
+      # implements Message API, thus they can implement whatever predicates you
+      # may need.
+      #
+      # @example get a list of base errors
+      #   error_set = contract.(input).error_set
+      #   error_set.filter(:base?)
+      #
+      # @param [Array<Symbol>] *predicates
+      #
+      # @return [ErrorSet]
+      #
+      # @api public
+      def filter(*predicates)
+        errors = select { |e|
+          predicates.all? { |predicate| e.respond_to?(predicate) && e.public_send(predicate) }
+        }
+        self.class.new(errors)
+      end
+
       private
 
       # @api private
+      def key_errors
+        reject { |error| error.path.empty? }
+      end
+
+      # @api private
+      def unique_paths
+        key_errors.uniq(&:path).map(&:path)
+      end
+
+      # @api private
       def messages_map
-        reduce(placeholders) do |hash, msg|
+        key_errors.reduce(placeholders) do |hash, msg|
           node = msg.path.reduce(hash) { |a, e| a.is_a?(Hash) ? a[e] : a.last[e] }
           (node.size > 1 ? node[0] : node) << msg.to_s
           hash
@@ -42,7 +74,7 @@ module Dry
       # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/PerceivedComplexity
       def initialize_placeholders!
-        @placeholders = uniq(&:path).map(&:path).each_with_object(EMPTY_HASH.dup) { |path, hash|
+        @placeholders = unique_paths.each_with_object(EMPTY_HASH.dup) { |path, hash|
           curr_idx = 0
           last_idx = path.size - 1
           node = hash
