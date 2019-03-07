@@ -32,6 +32,15 @@ module Dry
         @rule = rule || @path.last
       end
 
+      # Check if this is a base error not associated with any key
+      #
+      # @return [Boolean]
+      #
+      # @api public
+      def base?
+        @base ||= path.size.equal?(0)
+      end
+
       # Dump error to a string
       #
       # @return [String]

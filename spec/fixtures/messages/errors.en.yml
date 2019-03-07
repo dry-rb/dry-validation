@@ -2,6 +2,7 @@ en:
   dry_validation:
     errors:
       rules:
+        not_weekend: "this only works on weekends"
         email:
           invalid: "oh noez bad email"
           taken: "looks like %{email} is taken"
