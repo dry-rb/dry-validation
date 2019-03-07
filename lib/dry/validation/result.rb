@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'dry/equalizer'
+
 require 'dry/validation/constants'
+require 'dry/validation/error_set'
 
 module Dry
   module Validation
@@ -13,8 +15,10 @@ module Dry
 
       # Build a new result
       #
+      # @param [Dry::Schema::Result]
+      #
       # @api private
-      def self.new(params, errors = EMPTY_HASH.dup)
+      def self.new(values)
         result = super
         yield(result) if block_given?
         result.freeze
@@ -25,25 +29,28 @@ module Dry
       #   @api private
       attr_reader :values
 
-      # @!attribute [r] errors
-      #   @return [Hash<Symbol=>Array<String>>]
+      # @!attribute [r] error_set
+      #   @return [ErrorSet]
       #   @api public
-      attr_reader :errors
+      attr_reader :error_set
 
       # Initialize a new result
       #
       # @api private
-      def initialize(values, errors)
+      def initialize(values)
         @values = values
-        @errors = errors.update(values.errors)
+        @error_set = ErrorSet.new(values.message_set.to_a, failures: true)
       end
 
-      # Return all messages including hints from schema
+      # Return error hash
+      #
+      # @return [Hash<Symbol=>Array<String>>]
       #
       # @api public
-      def messages
-        values.messages
+      def errors
+        error_set.to_h
       end
+      alias_method :messages, :errors
 
       # Check if result is successful
       #
@@ -51,7 +58,7 @@ module Dry
       #
       # @api public
       def success?
-        errors.empty?
+        error_set.empty?
       end
 
       # Check if result is not successful
@@ -73,8 +80,8 @@ module Dry
       # Add a new error for the provided key
       #
       # @api private
-      def add_error(key, message)
-        add_to(errors, key, message)
+      def add_error(error)
+        error_set.add(error)
         self
       end
 
@@ -90,8 +97,6 @@ module Dry
           values[key]
         elsif storage.key?(key)
           storage[key]
-        else
-          nil
         end
       end
 
@@ -128,13 +133,6 @@ module Dry
       end
       alias_method :to_hash, :to_h
 
-      # Add new errors
-      #
-      # @api private
-      def update(new_errors)
-        errors.update(new_errors)
-      end
-
       # Return a string representation
       #
       # @api public
@@ -142,22 +140,19 @@ module Dry
         "#<#{self.class}#{to_h.inspect} errors=#{errors.inspect}>"
       end
 
+      # Freeze result and its error set
+      #
+      # @api private
+      def freeze
+        error_set.freeze
+        super
+      end
+
       private
 
       # @api private
       def storage
         @storage ||= EMPTY_HASH.dup
-      end
-
-      # @api private
-      def add_to(hash, path, value)
-        if path.is_a?(Hash)
-          key = path.keys[0]
-          messages = (hash[key] ||= EMPTY_HASH.dup)
-          add_to(messages, path[key], value)
-        else
-          (hash[path] ||= EMPTY_ARRAY.dup) << value
-        end
       end
     end
   end

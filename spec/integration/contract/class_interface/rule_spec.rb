@@ -58,6 +58,36 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
     end
   end
 
+  context 'with a rule for nested hash and another rule for its member' do
+    before do
+      contract_class.rule(:address) do
+        failure('invalid no matter what')
+      end
+
+      contract_class.rule(:address) do
+        failure('seriously invalid')
+      end
+
+      contract_class.rule(address: :street) do
+        failure('cannot be empty') if values[:address][:street].strip.empty?
+      end
+
+      contract_class.rule(address: :street) do
+        failure('must include a number') unless values[:address][:street].match?(/\d+/)
+      end
+    end
+
+    it 'applies the rule when nested value passed schema checks' do
+      expect(contract.(email: 'jane@doe.org', login: 'jane', address: { street: ' ' }).errors)
+        .to eql(
+          address: [
+            ['invalid no matter what', 'seriously invalid'],
+            { street: ['cannot be empty', 'must include a number'] }
+          ]
+        )
+    end
+  end
+
   context 'with a list of keys' do
     before do
       contract_class.rule(:email, :login) do

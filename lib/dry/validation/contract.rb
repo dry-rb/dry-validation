@@ -8,6 +8,7 @@ require 'dry/validation/constants'
 require 'dry/validation/rule'
 require 'dry/validation/evaluator'
 require 'dry/validation/result'
+require 'dry/validation/error'
 require 'dry/validation/contract/class_interface'
 
 module Dry
@@ -108,7 +109,7 @@ module Dry
             next if rule.keys.any? { |key| result.error?(key) }
 
             rule_result = rule.(self, result)
-            result.add_error(*rule_result.message) if rule_result.failure?
+            result.add_error(rule_result.message) if rule_result.failure?
           end
         end
       end
@@ -131,7 +132,7 @@ module Dry
           STR
         end
 
-        template.(template.data(tokens))
+        Error.new(template.(template.data(tokens)), rule: key, path: rule_path)
       end
     end
   end

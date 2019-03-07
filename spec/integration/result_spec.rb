@@ -3,12 +3,12 @@
 RSpec.describe Dry::Validation::Result do
   describe '#inspect' do
     let(:params) do
-      double(:params, errors: {}, to_h: { email: 'jane@doe.org' })
+      double(:params, message_set: [], to_h: { email: 'jane@doe.org' })
     end
 
     it 'returns a string representation' do
       result = Dry::Validation::Result.new(params) do |r|
-        r.add_error(:email, 'not valid')
+        r.add_error(Dry::Validation::Error.new('not valid', path: :email))
       end
 
       expect(result.inspect).to eql('#<Dry::Validation::Result{:email=>"jane@doe.org"} errors={:email=>["not valid"]}>')
@@ -17,7 +17,7 @@ RSpec.describe Dry::Validation::Result do
 
   describe '#[]' do
     let(:params) do
-      double(:params, errors: {}, to_h: {}, key?: false)
+      double(:params, message_set: [], to_h: {}, key?: false)
     end
 
     it 'returns nil for missing values' do
