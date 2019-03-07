@@ -50,13 +50,7 @@ module Dry
       def errors
         error_set.to_h
       end
-
-      # Return all messages including hints from schema
-      #
-      # @api public
-      def messages
-        values.messages
-      end
+      alias_method :messages, :errors
 
       # Check if result is successful
       #
