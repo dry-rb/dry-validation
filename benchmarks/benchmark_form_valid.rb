@@ -45,7 +45,7 @@ Benchmark.ips do |x|
   end
 
   x.report('dry-validation') do
-    contract.(params).error_set
+    contract.(params).errors
   end
 
   x.compare!
