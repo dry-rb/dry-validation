@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 require 'benchmark/ips'
-
 require 'active_model'
+
+require 'i18n'
 require 'dry-validation'
+require 'byebug'
 
-I18n.locale = :en
-I18n.backend.load_translations
-
-COUNT = ENV['COUNT'].to_i
+COUNT = (ENV['COUNT'] || 100).to_i
 FIELDS = COUNT.times.map { |i| :"field_#{i}" }
 
 class User
@@ -24,30 +23,30 @@ class User
   end
 end
 
-schema = Dry::Validation.Schema do
-  configure do
-    config.messages = :i18n
-  end
+contract = Dry::Validation::Contract.build do
+  config.messages = :i18n
 
-  FIELDS.each do |field|
-    required(field).value(:int?, gt?: FIELDS.size / 2)
+  params do
+    FIELDS.each do |field|
+      required(field).value(:int?, gt?: FIELDS.size / 2)
+    end
   end
 end
 
-data = FIELDS.reduce({}) { |h, f| h.update(f => FIELDS.index(f) + 1) }
+params = FIELDS.reduce({}) { |h, f| h.update(f => FIELDS.index(f) + 1) }
 
-puts schema.(data).inspect
-puts User.new(data).validate
+puts contract.(params).inspect
+puts User.new(params).validate
 
 Benchmark.ips do |x|
   x.report('ActiveModel::Validations') do
-    user = User.new(data)
+    user = User.new(params)
     user.validate
     user.errors
   end
 
   x.report('dry-validation / schema') do
-    schema.(data).messages
+    contract.(params).errors
   end
 
   x.compare!
