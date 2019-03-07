@@ -103,8 +103,6 @@ module Dry
           values[key]
         elsif storage.key?(key)
           storage[key]
-        else
-          nil
         end
       end
 
