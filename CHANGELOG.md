@@ -1,3 +1,13 @@
+# v1.0.0.alpha3 to-be-released
+
+### Added
+
+* Support for `base` errors associated with a key even when child keys have errors too (solnic)
+* Support for `base` errors not associated with any key (solnic)
+* Result objects use `ErrorSet` object now for managing messages (solnic)
+
+[Compare v1.0.0.alpha2...v1.0.0.alpha3](https://github.com/dry-rb/dry-validation/compare/v1.0.0.alpha2...v1.0.0.alpha3)
+
 # v1.0.0.alpha2 2019-03-05
 
 First round of bug fixes. Thanks for testing <3!
