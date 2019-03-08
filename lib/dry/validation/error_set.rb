@@ -51,18 +51,13 @@ module Dry
       private
 
       # @api private
-      def key_errors
-        reject { |error| error.path.empty? }
-      end
-
-      # @api private
       def unique_paths
-        key_errors.uniq(&:path).map(&:path)
+        uniq(&:path).map(&:path)
       end
 
       # @api private
       def messages_map
-        key_errors.reduce(placeholders) do |hash, msg|
+        reduce(placeholders) do |hash, msg|
           node = msg.path.reduce(hash) { |a, e| a.is_a?(Hash) ? a[e] : a.last[e] }
           (node.size > 1 ? node[0] : node) << msg.to_s
           hash

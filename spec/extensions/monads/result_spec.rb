@@ -35,7 +35,7 @@ RSpec.describe Dry::Validation::Result do
         monad = result.to_monad
 
         expect(monad).to be_a_failure
-        expect(monad.failure.messages).to eql(name: ['must be filled', 'length must be within 2 - 4'])
+        expect(monad.failure.messages.to_h).to eql(name: ['must be filled', 'length must be within 2 - 4'])
       end
     end
   end
