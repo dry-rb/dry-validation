@@ -26,7 +26,7 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
     end
 
     it 'applies rule when value passed schema checks' do
-      expect(contract.(email: 'jane@doe.org', login: 'ab').errors).to eql(login: ['is too short'])
+      expect(contract.(email: 'jane@doe.org', login: 'ab').errors.to_h).to eql(login: ['is too short'])
     end
   end
 
@@ -38,7 +38,7 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
     end
 
     it 'applies the rule regardless of the schema result' do
-      expect(contract.(email: 'jane@doe.org', login: 'jane').errors).to eql(custom: ['this works'])
+      expect(contract.(email: 'jane@doe.org', login: 'jane').errors.to_h).to eql(custom: ['this works'])
     end
   end
 
@@ -50,10 +50,10 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
     end
 
     it 'applies the rule when nested value passed schema checks' do
-      expect(contract.(email: 'jane@doe.org', login: 'jane', address: nil).errors)
+      expect(contract.(email: 'jane@doe.org', login: 'jane', address: nil).errors.to_h)
         .to eql(address: ['must be a hash'])
 
-      expect(contract.(email: 'jane@doe.org', login: 'jane', address: { street: ' ' }).errors)
+      expect(contract.(email: 'jane@doe.org', login: 'jane', address: { street: ' ' }).errors.to_h)
         .to eql(address: { street: ['cannot be empty'] })
     end
   end
@@ -78,7 +78,7 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
     end
 
     it 'applies the rule when nested value passed schema checks' do
-      expect(contract.(email: 'jane@doe.org', login: 'jane', address: { street: ' ' }).errors)
+      expect(contract.(email: 'jane@doe.org', login: 'jane', address: { street: ' ' }).errors.to_h)
         .to eql(
           address: [
             ['invalid no matter what', 'seriously invalid'],
@@ -96,10 +96,10 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
     end
 
     it 'sets a base error not attached to any key' do
-      expect(contract.(email: 'jane@doe.org', login: '').errors)
-        .to eql(login: ['must be filled'])
+      expect(contract.(email: 'jane@doe.org', login: '').errors.to_h)
+        .to eql(login: ['must be filled'], nil => ['this whole thing is invalid'])
 
-      expect(contract.(email: 'jane@doe.org', login: '').base_errors)
+      expect(contract.(email: 'jane@doe.org', login: '').errors.filter(:base?).map(&:to_s))
         .to eql(['this whole thing is invalid'])
     end
   end
@@ -114,10 +114,10 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
     end
 
     it 'applies the rule when all values passed schema checks' do
-      expect(contract.(email: nil, login: nil).errors)
+      expect(contract.(email: nil, login: nil).errors.to_h)
         .to eql(email: ['must be a string'], login: ['must be a string'])
 
-      expect(contract.(email: 'jane@doe.org', login: 'jane').errors)
+      expect(contract.(email: 'jane@doe.org', login: 'jane').errors.to_h)
         .to eql(login: ['is not needed when email is provided'])
     end
   end

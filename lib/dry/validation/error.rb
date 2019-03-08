@@ -28,8 +28,9 @@ module Dry
       # @api private
       def initialize(text, path:, rule: nil)
         @text = text
-        @path = Array(path).flatten
+        @path = path ? Array(path).flatten : [nil]
         @rule = rule || @path.last
+        @base = path.nil?
       end
 
       # Check if this is a base error not associated with any key
@@ -38,7 +39,7 @@ module Dry
       #
       # @api public
       def base?
-        @base ||= path.size.equal?(0)
+        @base
       end
 
       # Dump error to a string

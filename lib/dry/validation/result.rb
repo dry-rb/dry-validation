@@ -29,32 +29,18 @@ module Dry
       #   @api private
       attr_reader :values
 
-      # @!attribute [r] error_set
+      # @!attribute [r] errors
       #   @return [ErrorSet]
       #   @api public
-      attr_reader :error_set
+      attr_reader :errors
+      alias_method :messages, :errors
 
       # Initialize a new result
       #
       # @api private
       def initialize(values)
         @values = values
-        @error_set = ErrorSet.new(values.message_set.to_a, failures: true)
-      end
-
-      # Return error hash
-      #
-      # @return [Hash<Symbol=>Array<String>>]
-      #
-      # @api public
-      def errors
-        error_set.to_h
-      end
-      alias_method :messages, :errors
-
-      # @api public
-      def base_errors
-        error_set.filter(:base?).map(&:to_s)
+        @errors = ErrorSet.new(values.message_set.to_a, failures: true)
       end
 
       # Check if result is successful
@@ -63,7 +49,7 @@ module Dry
       #
       # @api public
       def success?
-        error_set.empty?
+        errors.empty?
       end
 
       # Check if result is not successful
@@ -86,7 +72,7 @@ module Dry
       #
       # @api private
       def add_error(error)
-        error_set.add(error)
+        errors.add(error)
         self
       end
 
@@ -142,14 +128,14 @@ module Dry
       #
       # @api public
       def inspect
-        "#<#{self.class}#{to_h.inspect} errors=#{errors.inspect}>"
+        "#<#{self.class}#{to_h.inspect} errors=#{errors.to_h.inspect}>"
       end
 
       # Freeze result and its error set
       #
       # @api private
       def freeze
-        error_set.freeze
+        errors.freeze
         super
       end
 

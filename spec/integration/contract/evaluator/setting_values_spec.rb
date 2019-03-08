@@ -24,8 +24,8 @@ RSpec.describe Dry::Validation::Evaluator, 'values writer' do
     end
 
     it 'stores new values between rule execution' do
-      expect(contract.(user_id: 3, email: 'john@doe.org').errors).to eql(user: ['must be jane'])
-      expect(contract.(user_id: 312, email: 'john@doe.org').errors).to eql(email: ['is invalid'])
+      expect(contract.(user_id: 3, email: 'john@doe.org').errors.to_h).to eql(user: ['must be jane'])
+      expect(contract.(user_id: 312, email: 'john@doe.org').errors.to_h).to eql(email: ['is invalid'])
     end
   end
 
