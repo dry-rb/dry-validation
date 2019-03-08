@@ -11,8 +11,6 @@ module Dry
     #
     # @api public
     class ErrorSet < Schema::MessageSet
-      include Enumerable
-
       # Add a new error
       #
       # This is used when result is being prepared
