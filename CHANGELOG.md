@@ -6,6 +6,10 @@
 * Support for `base` errors not associated with any key (solnic)
 * Result objects use `ErrorSet` object now for managing messages (solnic)
 
+### Changed
+
+* [BREAKING] `Result#errors` returns an instance of `ErrorSet` now, it's an enumerable, coerible to a hash (solnic)
+
 [Compare v1.0.0.alpha2...v1.0.0.alpha3](https://github.com/dry-rb/dry-validation/compare/v1.0.0.alpha2...v1.0.0.alpha3)
 
 # v1.0.0.alpha2 2019-03-05
