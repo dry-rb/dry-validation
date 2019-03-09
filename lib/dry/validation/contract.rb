@@ -126,10 +126,10 @@ module Dry
         rule_path = Array(opts.fetch(:path)).flatten.compact
 
         if rule_path.empty?
-          template = messages["rules.#{key}"]
+          template = messages["rules.#{key}", path: rule_path]
         else
-          template = messages[key, msg_opts.merge(rule: rule_path.join(DOT))]
-          template ||= messages[key, msg_opts.merge(rule: rule_path.last)]
+          template = messages[key, msg_opts.merge(path: rule_path.join(DOT))]
+          template ||= messages[key, msg_opts.merge(path: rule_path.last)]
         end
 
         unless template
