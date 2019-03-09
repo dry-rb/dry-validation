@@ -46,6 +46,12 @@ module Dry
         self.class.new(errors)
       end
 
+      # @api private
+      def freeze
+        to_h
+        self
+      end
+
       private
 
       # @api private
@@ -55,11 +61,11 @@ module Dry
 
       # @api private
       def messages_map
-        reduce(placeholders) do |hash, msg|
+        @messages_map ||= reduce(placeholders) { |hash, msg|
           node = msg.path.reduce(hash) { |a, e| a.is_a?(Hash) ? a[e] : a.last[e] }
           (node.size > 1 ? node[0] : node) << msg.to_s
           hash
-        end
+        }
       end
 
       # @api private
