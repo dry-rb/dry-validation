@@ -14,6 +14,10 @@ RSpec.describe Dry::Validation::Contract, '#call' do
         optional(:address).hash do
           required(:country).value(:string)
           required(:zip).value(:string)
+          optional(:geolocation).hash do
+            required(:lon).value(:float)
+            required(:lat).value(:float)
+          end
         end
       end
 
@@ -33,6 +37,15 @@ RSpec.describe Dry::Validation::Contract, '#call' do
         address = values[:address]
         if address && address[:country] == 'Russia' && address[:zip] != /\A\d{6}\z/
           failure('must have 6 digit')
+        end
+      end
+
+      rule(address: { geolocation: :lon }) do
+        address = values[:address]
+        geolocation = address[:geolocation] if address
+
+        if geolocation && !(-180.0...180.0).cover?(geolocation[:lon])
+          failure('invalid longitude')
         end
       end
     end.new
@@ -66,10 +79,24 @@ RSpec.describe Dry::Validation::Contract, '#call' do
     expect(result.errors.to_h).to eql(age: ['must be greater or equal 18', 'must be greater than 0'])
   end
 
-  it 'build nested message keys for nested rules' do
+  it 'builds nested message keys for nested rules' do
     result = contract.(email: 'john@doe.org', age: 20, address: { country: 'Russia', zip: 'abc' })
 
     expect(result).to be_failure
     expect(result.errors.to_h).to eql(address: { zip: ['must have 6 digit'] })
+  end
+
+  it 'builds deeply nested messages for deeply nested rules' do
+    result = contract.(
+      email: 'john@doe.org',
+      age: 20,
+      address: {
+        country: 'UK', zip: 'irrelevant',
+        geolocation: { lon: '365', lat: '78' }
+      }
+    )
+
+    expect(result).to be_failure
+    expect(result.errors.to_h).to eql(address: { geolocation: { lon: ['invalid longitude'] } })
   end
 end

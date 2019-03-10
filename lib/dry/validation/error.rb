@@ -28,7 +28,7 @@ module Dry
       # @api private
       def initialize(text, path:, rule: nil)
         @text = text
-        @path = path ? Array(path).flatten : [nil]
+        @path = build_path(path, [])
         @rule = rule || @path.last
         @base = path.nil?
       end
@@ -49,6 +49,21 @@ module Dry
       # @api public
       def to_s
         text
+      end
+
+      private
+
+      # @api private
+      def build_path(path, acc)
+        case path
+        when Hash
+          key, value = path.first
+          build_path(value, acc << key)
+        when Array
+          acc.concat(path)
+        else
+          acc << path
+        end
       end
     end
   end
