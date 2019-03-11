@@ -110,19 +110,9 @@ module Dry
             next if rule.keys.any? { |key| result.error?(key) }
 
             rule_result = rule.(self, result)
-            result.add_error(rule_result.message) if rule_result.failure?
+            result.add_error(message_resolver[rule_result.message]) if rule_result.failure?
           end
         end
-      end
-
-      # Get message text for the given rule name and options
-      #
-      # @return [String]
-      #
-      # @api private
-      def message(key, rule: key, tokens: EMPTY_HASH, **opts)
-        path = Array(opts.fetch(:path)).flatten.compact
-        Error.new(message_resolver[key, tokens: tokens, path: path], rule: rule, path: path)
       end
     end
   end

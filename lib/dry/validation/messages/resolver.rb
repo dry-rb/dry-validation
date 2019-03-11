@@ -17,30 +17,54 @@ module Dry
           @messages = messages
         end
 
+        # Resolve Error object from provided args and path
+        #
+        # This is used internally by contracts when rules are applied
+        #
+        # @return [Error, Error::Localized]
+        #
+        # @api public
+        def call(args:, tokens:, path:)
+          text, path =
+            if args.size.equal?(1)
+              case (msg = args[0])
+              when Symbol
+                [message(msg, path: path, tokens: tokens), path]
+              when String
+                [msg, path]
+              end
+            else
+              args.reverse
+            end
+
+          Error.new(text, path: path)
+        end
+        alias_method :[], :call
+
         # Resolve a message
         #
         # @return [String]
         #
         # @api public
-        def call(key, tokens: EMPTY_HASH, path:)
-          msg_opts = tokens.merge(path: path)
+        def message(rule, tokens: EMPTY_HASH, path:)
+          keys = path.to_a.compact
+          msg_opts = tokens.merge(path: keys)
 
-          if path.empty?
-            template = messages["rules.#{key}", path: path]
+          if keys.empty?
+            template = messages["rules.#{rule}", path: keys]
           else
-            template = messages[key, msg_opts.merge(path: path.join(DOT))]
-            template ||= messages[key, msg_opts.merge(path: path.last)]
+            template = messages[rule, msg_opts.merge(path: keys.join(DOT))]
+            template ||= messages[rule, msg_opts.merge(path: keys.last)]
           end
 
           unless template
             raise MissingMessageError, <<~STR
-              Message template for #{key.inspect} under #{path.join(DOT).inspect} was not found
+              Message template for #{rule.inspect} under #{keys.join(DOT).inspect} was not found
             STR
           end
 
           template.(template.data(tokens))
         end
-        alias_method :[], :call
       end
     end
   end

@@ -36,8 +36,8 @@ RSpec.describe Dry::Validation::Result do
 
     let(:result) do
       Dry::Validation::Result.new(params) do |r|
-        r.add_error(Dry::Validation::Error.new('root error', path: nil))
-        r.add_error(Dry::Validation::Error.new('email error', path: :email))
+        r.add_error(Dry::Validation::Error.new('root error', path: [nil]))
+        r.add_error(Dry::Validation::Error.new('email error', path: [:email]))
       end
     end
 
