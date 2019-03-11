@@ -1,26 +1,12 @@
 # frozen_string_literal: true
 
 require 'dry/schema/messages'
+require 'dry/validation/messages/yaml'
+require 'dry/validation/messages/i18n' if defined?(I18n)
 
 module Dry
   module Validation
     module Messages
-      class YAML < Schema::Messages::YAML
-        config.root = config.root.gsub('dry_schema', 'dry_validation')
-        config.rule_lookup_paths = config.rule_lookup_paths.map { |path|
-          path.gsub('dry_schema', 'dry_validation')
-        }
-      end
-
-      if defined?(::I18n)
-        class I18n < Schema::Messages::I18n
-          config.root = config.root.gsub('dry_schema', 'dry_validation')
-          config.rule_lookup_paths = config.rule_lookup_paths.map { |path|
-            path.gsub('dry_schema', 'dry_validation')
-          }
-        end
-      end
-
       # @api private
       def self.setup(config)
         messages = build(config)
