@@ -112,7 +112,7 @@ module Dry
       #
       # @api public
       def call(input)
-        Result.new(schema.(input)) do |result|
+        Result.new(schema.(input), locale: locale) do |result|
           rules.each do |rule|
             next if rule.keys.any? { |key| result.error?(key) }
 

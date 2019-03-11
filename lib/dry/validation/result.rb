@@ -18,7 +18,7 @@ module Dry
       # @param [Dry::Schema::Result]
       #
       # @api private
-      def self.new(values)
+      def self.new(values, options = EMPTY_HASH)
         result = super
         yield(result) if block_given?
         result.freeze
@@ -29,19 +29,29 @@ module Dry
       #   @api private
       attr_reader :values
 
-      # @!attribute [r] errors
-      #   @return [ErrorSet]
-      #   @api public
-      attr_reader :errors
-      alias_method :messages, :errors
+      # @!attribute [r] options
+      #   @return [Hash]
+      #   @api private
+      attr_reader :options
 
       # Initialize a new result
       #
       # @api private
-      def initialize(values)
+      def initialize(values, options)
         @values = values
-        @errors = ErrorSet.new(values.message_set.to_a, failures: true)
+        @options = options
+        @errors = initialize_errors
       end
+
+      # Get error set
+      #
+      # @return [ErrorSet]
+      #
+      # @api public
+      def errors(options = EMPTY_HASH)
+        options.empty? ? @errors : initialize_errors(options)
+      end
+      alias_method :messages, :errors
 
       # Check if result is successful
       #
@@ -49,7 +59,7 @@ module Dry
       #
       # @api public
       def success?
-        errors.empty?
+        @errors.empty?
       end
 
       # Check if result is not successful
@@ -140,6 +150,13 @@ module Dry
       end
 
       private
+
+      # @api private
+      def initialize_errors(options = self.options)
+        result_errors = defined?(@errors) ? @errors.to_a : EMPTY_ARRAY
+        schema_errors = values.message_set(options).to_a
+        ErrorSet.new(schema_errors + result_errors, options)
+      end
 
       # @api private
       def storage
