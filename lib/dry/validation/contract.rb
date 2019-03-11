@@ -7,6 +7,7 @@ require 'dry/initializer'
 require 'dry/validation/constants'
 require 'dry/validation/rule'
 require 'dry/validation/evaluator'
+require 'dry/validation/messages/resolver'
 require 'dry/validation/result'
 require 'dry/validation/error'
 require 'dry/validation/contract/class_interface'
@@ -93,10 +94,10 @@ module Dry
       #   @api private
       option :rules, default: -> { self.class.rules }
 
-      # @!attribute [r] messages
-      #   @return [Messages::I18n, Messages::YAML]
+      # @!attribute [r] message_resolver
+      #   @return [Messages::Resolver]
       #   @api private
-      option :messages, default: -> { self.class.messages }
+      option :message_resolver, default: -> { Messages::Resolver.new(self.class.messages) }
 
       # Apply contract to an input
       #
@@ -119,28 +120,10 @@ module Dry
       # @return [String]
       #
       # @api private
-      #
-      # rubocop:disable Metrics/AbcSize
-      def message(key, tokens: EMPTY_HASH, **opts)
-        msg_opts = opts.merge(tokens)
-        rule_path = Array(opts.fetch(:path)).flatten.compact
-
-        if rule_path.empty?
-          template = messages["rules.#{key}", path: rule_path]
-        else
-          template = messages[key, msg_opts.merge(path: rule_path.join(DOT))]
-          template ||= messages[key, msg_opts.merge(path: rule_path.last)]
-        end
-
-        unless template
-          raise MissingMessageError, <<~STR
-            Message template for #{key.inspect} under #{rule_path.join(DOT).inspect} was not found
-          STR
-        end
-
-        Error.new(template.(template.data(tokens)), rule: key, path: rule_path)
+      def message(key, rule: key, tokens: EMPTY_HASH, **opts)
+        path = Array(opts.fetch(:path)).flatten.compact
+        Error.new(message_resolver[key, tokens: tokens, path: path], rule: rule, path: path)
       end
-      # rubocop:enable Metrics/AbcSize
     end
   end
 end
