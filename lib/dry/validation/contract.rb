@@ -84,6 +84,11 @@ module Dry
 
       # @!endgroup
 
+      # @!attribute [r] locale
+      #   @return [Symbol]
+      #   @api public
+      option :locale, default: -> { :en }
+
       # @!attribute [r] schema
       #   @return [Dry::Schema::Params, Dry::Schema::JSON, Dry::Schema::Processor]
       #   @api private
@@ -97,7 +102,9 @@ module Dry
       # @!attribute [r] message_resolver
       #   @return [Messages::Resolver]
       #   @api private
-      option :message_resolver, default: -> { Messages::Resolver.new(self.class.messages) }
+      option :message_resolver, default: proc {
+        Messages::Resolver.new(self.class.messages, locale)
+      }
 
       # Apply contract to an input
       #

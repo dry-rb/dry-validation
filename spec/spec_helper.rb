@@ -44,5 +44,9 @@ RSpec.configure do |config|
 
   config.after do
     Object.send(:remove_const, Test.remove_constants.name)
+
+    I18n.load_path = Dry::Schema.messages_paths.dup
+    I18n.locale = :en
+    I18n.reload!
   end
 end

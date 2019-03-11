@@ -12,9 +12,15 @@ module Dry
         #   @api private
         attr_reader :messages
 
+        # @!attribute [r] locale
+        #   @return [Symbol] current locale
+        #   @api private
+        attr_reader :locale
+
         # @api private
-        def initialize(messages)
+        def initialize(messages, locale = :en)
           @messages = messages
+          @locale = locale
         end
 
         # Resolve Error object from provided args and path
@@ -48,10 +54,10 @@ module Dry
         # @api public
         def message(rule, tokens: EMPTY_HASH, path:)
           keys = path.to_a.compact
-          msg_opts = tokens.merge(path: keys)
+          msg_opts = tokens.merge(path: keys, locale: locale)
 
           if keys.empty?
-            template = messages["rules.#{rule}", path: keys]
+            template = messages["rules.#{rule}", msg_opts]
           else
             template = messages[rule, msg_opts.merge(path: keys.join(DOT))]
             template ||= messages[rule, msg_opts.merge(path: keys.last)]
