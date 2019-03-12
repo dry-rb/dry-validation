@@ -11,6 +11,17 @@ module Dry
     #
     # @api public
     class ErrorSet < Schema::MessageSet
+      # @!attribute [r] locale
+      #   @return [Symbol] locale
+      #   @api public
+      attr_reader :locale
+
+      # @api private
+      def initialize(messages, options = EMPTY_HASH)
+        super
+        @locale = options.fetch(:locale, :en)
+      end
+
       # Add a new error
       #
       # This is used when result is being prepared
@@ -48,6 +59,9 @@ module Dry
 
       # @api private
       def freeze
+        select { |err| err.respond_to?(:evaluate) }.each do |err|
+          messages[messages.index(err)] = err.evaluate(locale)
+        end
         to_h
         self
       end

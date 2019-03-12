@@ -19,6 +19,23 @@ module Dry
       #   @return [Array<Symbol, Integer>] path The path to the value with the error
       attr_reader :path
 
+      # @api public
+      class Localized < Error
+        # @api public
+        def evaluate(locale)
+          Error.new(text.(locale), path: path)
+        end
+      end
+
+      # Build an error
+      #
+      # @return [Error, Error::Localized]
+      #
+      # @api public
+      def self.[](text, path)
+        text.respond_to?(:call) ? Localized.new(text, path: path) : Error.new(text, path: path)
+      end
+
       # Initialize a new error object
       #
       # @api private

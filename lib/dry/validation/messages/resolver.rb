@@ -31,19 +31,20 @@ module Dry
         #
         # @api public
         def call(args:, tokens:, path:)
-          text, path =
-            if args.size.equal?(1)
-              case (msg = args[0])
-              when Symbol
-                [message(msg, path: path, tokens: tokens), path]
-              when String
-                [msg, path]
-              end
-            else
-              args.reverse
-            end
+          if args.size.equal?(1)
+            case (msg = args[0])
+            when Symbol
+              text = lambda { |locale|
+                message(msg, path: path, tokens: tokens, locale: locale)
+              }
 
-          Error.new(text, path: path)
+              Error[text, path]
+            when String
+              Error[msg, path]
+            end
+          else
+            Error[*args.reverse]
+          end
         end
         alias_method :[], :call
 
@@ -52,7 +53,7 @@ module Dry
         # @return [String]
         #
         # @api public
-        def message(rule, tokens: EMPTY_HASH, path:)
+        def message(rule, tokens: EMPTY_HASH, path:, locale: self.locale)
           keys = path.to_a.compact
           msg_opts = tokens.merge(path: keys, locale: locale)
 
