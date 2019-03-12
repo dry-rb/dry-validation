@@ -34,8 +34,8 @@ module Dry
           if args.size.equal?(1)
             case (msg = args[0])
             when Symbol
-              text = lambda { |locale|
-                message(msg, path: path, tokens: tokens, locale: locale)
+              text = lambda { |**opts|
+                message(msg, path: path, tokens: tokens, **opts)
               }
 
               Error[text, path]
@@ -53,7 +53,7 @@ module Dry
         # @return [String]
         #
         # @api public
-        def message(rule, tokens: EMPTY_HASH, path:, locale: self.locale)
+        def message(rule, tokens: EMPTY_HASH, path:, locale: self.locale, full: false)
           keys = path.to_a.compact
           msg_opts = tokens.merge(path: keys, locale: locale)
 
@@ -70,7 +70,9 @@ module Dry
             STR
           end
 
-          template.(template.data(tokens))
+          text = template.(template.data(tokens))
+
+          full ? "#{messages.rule(keys.last, msg_opts)} #{text}" : text
         end
       end
     end

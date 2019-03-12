@@ -48,8 +48,8 @@ module Dry
       # @return [ErrorSet]
       #
       # @api public
-      def errors(options = EMPTY_HASH)
-        options.empty? ? @errors : initialize_errors(options)
+      def errors(new_options = EMPTY_HASH)
+        new_options.empty? ? @errors : @errors.with(schema_errors(new_options), new_options)
       end
       alias_method :messages, :errors
 
@@ -153,9 +153,12 @@ module Dry
 
       # @api private
       def initialize_errors(options = self.options)
-        result_errors = defined?(@errors) ? @errors.to_a : EMPTY_ARRAY
-        schema_errors = values.message_set(options).to_a
-        ErrorSet.new(schema_errors + result_errors, options)
+        ErrorSet.new(schema_errors(options), options)
+      end
+
+      # @api private
+      def schema_errors(options)
+        values.message_set(options).to_a
       end
 
       # @api private

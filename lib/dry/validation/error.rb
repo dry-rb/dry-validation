@@ -22,8 +22,8 @@ module Dry
       # @api public
       class Localized < Error
         # @api public
-        def evaluate(locale)
-          Error.new(text.(locale), path: path)
+        def evaluate(**opts)
+          Error.new(text.(opts), path: path)
         end
       end
 
