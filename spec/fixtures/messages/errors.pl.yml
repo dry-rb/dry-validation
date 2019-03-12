@@ -1,0 +1,13 @@
+pl:
+  dry_validation:
+    errors:
+      rules:
+        not_weekend: "to działa tylko w weekendy"
+        email:
+          invalid: "oh nie zły email"
+          taken: "wygląda, że %{email} jest zajęty"
+        city:
+          invalid: "nie jest poprawną nazwą miasta"
+        address:
+          street:
+            invalid: "nie wygląda dobrze"

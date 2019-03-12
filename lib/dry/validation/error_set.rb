@@ -11,6 +11,38 @@ module Dry
     #
     # @api public
     class ErrorSet < Schema::MessageSet
+      # @!attribute [r] source
+      #   Return the source set of messages used to produce final evaluated messages
+      #   @return [Array<Error, Error::Localized, Schema::Message>]
+      #   @api private
+      attr_reader :source_messages
+
+      # @!attribute [r] locale
+      #   @return [Symbol] locale
+      #   @api public
+      attr_reader :locale
+
+      # @api private
+      def initialize(messages, options = EMPTY_HASH)
+        @locale = options.fetch(:locale, :en)
+        @source_messages = options.fetch(:source, messages.dup)
+        super
+      end
+
+      # Return a new error set using updated options
+      #
+      # @return [ErrorSet]
+      #
+      # @api private
+      def with(other, new_options = EMPTY_HASH)
+        return self if new_options.empty?
+
+        self.class.new(
+          other + select { |err| err.is_a?(Error) },
+          options.merge(source: source_messages, **new_options)
+        ).freeze
+      end
+
       # Add a new error
       #
       # This is used when result is being prepared
@@ -19,6 +51,7 @@ module Dry
       #
       # @api private
       def add(error)
+        source_messages << error
         messages << error
         initialize_placeholders!
         self
@@ -48,6 +81,11 @@ module Dry
 
       # @api private
       def freeze
+        source_messages.select { |err| err.respond_to?(:evaluate) }.each do |err|
+          idx = source_messages.index(err)
+          msg = err.evaluate(locale: locale, full: options[:full])
+          messages[idx] = msg
+        end
         to_h
         self
       end
@@ -56,7 +94,7 @@ module Dry
 
       # @api private
       def unique_paths
-        uniq(&:path).map(&:path)
+        source_messages.uniq(&:path).map(&:path)
       end
 
       # @api private

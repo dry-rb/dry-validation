@@ -1,5 +1,10 @@
 en:
+  dry_schema:
+    rules:
+      email: "E-mail"
   dry_validation:
+    rules:
+      email: "E-mail"
     errors:
       rules:
         not_weekend: "this only works on weekends"

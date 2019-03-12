@@ -28,6 +28,18 @@ RSpec.describe Dry::Validation::Contract do
       expect(contract.schema.config.messages_file).to eql(contract.class.config.messages_file)
     end
 
+    describe 'result errors' do
+      it 'supports full: true option for schema errors' do
+        expect(contract.(email: '').errors(full: true).map(&:to_s))
+          .to eql(['E-mail must be filled'])
+      end
+
+      it 'supports full: true option for contract errors' do
+        expect(contract.(email: 'jane').errors(full: true).map(&:to_s))
+          .to eql(['E-mail oh noez bad email'])
+      end
+    end
+
     describe 'failure' do
       it 'uses messages for failures' do
         expect(contract.(email: 'foo').errors.to_h)

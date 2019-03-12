@@ -25,10 +25,10 @@ module Dry
       #   @api private
       option :keys
 
-      # @!attribute [r] default_id
-      #   @return [String, Symbol, Hash]
+      # @!attribute [r] path
+      #   @return [Dry::Schema::Path]
       #   @api private
-      option :default_id, default: proc { keys.first }
+      option :path, default: proc { Dry::Schema::Path[(key = keys.first) ? key : [nil]] }
 
       # @!attribute [r] values
       #   @return [Object]
@@ -73,21 +73,8 @@ module Dry
       #
       # @api public
       def failure(*args, **tokens)
-        error =
-          if args.size.equal?(1)
-            case (msg = args[0])
-            when Symbol
-              _context.message(msg, path: default_id, tokens: tokens)
-            when String
-              Error.new(msg, path: default_id)
-            end
-          else
-            Error.new(args[1], path: args[0])
-          end
-
         @failure = true
-        @message = error
-
+        @message = { args: args, tokens: tokens, path: path }
         self
       end
 

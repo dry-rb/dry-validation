@@ -7,6 +7,7 @@ require 'dry/initializer'
 require 'dry/validation/constants'
 require 'dry/validation/rule'
 require 'dry/validation/evaluator'
+require 'dry/validation/messages/resolver'
 require 'dry/validation/result'
 require 'dry/validation/error'
 require 'dry/validation/contract/class_interface'
@@ -83,6 +84,11 @@ module Dry
 
       # @!endgroup
 
+      # @!attribute [r] locale
+      #   @return [Symbol]
+      #   @api public
+      option :locale, default: -> { :en }
+
       # @!attribute [r] schema
       #   @return [Dry::Schema::Params, Dry::Schema::JSON, Dry::Schema::Processor]
       #   @api private
@@ -93,10 +99,12 @@ module Dry
       #   @api private
       option :rules, default: -> { self.class.rules }
 
-      # @!attribute [r] messages
-      #   @return [Messages::I18n, Messages::YAML]
+      # @!attribute [r] message_resolver
+      #   @return [Messages::Resolver]
       #   @api private
-      option :messages, default: -> { self.class.messages }
+      option :message_resolver, default: proc {
+        Messages::Resolver.new(self.class.messages, locale)
+      }
 
       # Apply contract to an input
       #
@@ -104,43 +112,15 @@ module Dry
       #
       # @api public
       def call(input)
-        Result.new(schema.(input)) do |result|
+        Result.new(schema.(input), locale: locale) do |result|
           rules.each do |rule|
             next if rule.keys.any? { |key| result.error?(key) }
 
             rule_result = rule.(self, result)
-            result.add_error(rule_result.message) if rule_result.failure?
+            result.add_error(message_resolver[rule_result.message]) if rule_result.failure?
           end
         end
       end
-
-      # Get message text for the given rule name and options
-      #
-      # @return [String]
-      #
-      # @api private
-      #
-      # rubocop:disable Metrics/AbcSize
-      def message(key, tokens: EMPTY_HASH, **opts)
-        msg_opts = opts.merge(tokens)
-        rule_path = Array(opts.fetch(:path)).flatten.compact
-
-        if rule_path.empty?
-          template = messages["rules.#{key}", path: rule_path]
-        else
-          template = messages[key, msg_opts.merge(path: rule_path.join(DOT))]
-          template ||= messages[key, msg_opts.merge(path: rule_path.last)]
-        end
-
-        unless template
-          raise MissingMessageError, <<~STR
-            Message template for #{key.inspect} under #{rule_path.join(DOT).inspect} was not found
-          STR
-        end
-
-        Error.new(template.(template.data(tokens)), rule: key, path: rule_path)
-      end
-      # rubocop:enable Metrics/AbcSize
     end
   end
 end

@@ -19,17 +19,6 @@ RSpec.describe Dry::Validation::Evaluator do
     {}
   end
 
-  describe '#failure' do
-    let(:block) do
-      proc { failure('oops') }
-    end
-
-    it 'sets a failure message' do
-      expect(evaluator.message.rule).to eql(:email)
-      expect(evaluator.message.text).to eql('oops')
-    end
-  end
-
   describe '#failure?' do
     context 'when failure message was set' do
       let(:block) do
@@ -61,8 +50,8 @@ RSpec.describe Dry::Validation::Evaluator do
 
     it 'delegates to the context' do
       expect(context).to receive(:works?).and_return(true)
-      expect(evaluator.message.rule).to eql(:email)
-      expect(evaluator.message.text).to eql('it works')
+      expect(evaluator.message[:path].to_a).to eql([:email])
+      expect(evaluator.message[:args]).to eql(['it works'])
     end
 
     describe 'with custom methods defined on the context' do
@@ -75,8 +64,7 @@ RSpec.describe Dry::Validation::Evaluator do
       end
 
       it 'forwards to the context' do
-        expect(evaluator.message.rule).to eql(:email)
-        expect(evaluator.message.text).to eql('message with my_context')
+        expect(evaluator.message[:args]).to eql(['message with my_context'])
       end
     end
   end
