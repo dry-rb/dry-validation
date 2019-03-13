@@ -17,6 +17,27 @@ module Dry
 
       ROOT_PATH = [nil].freeze
 
+      # @api private
+      class Failures
+        # @api private
+        attr_reader :path
+
+        # @api private
+        attr_reader :opts
+
+        # @api private
+        def initialize(path = ROOT_PATH)
+          @path = path
+          @opts = []
+        end
+
+        # @api private
+        def failure(*args, **tokens)
+          @opts << { args: args, tokens: tokens, path: path }
+          self
+        end
+      end
+
       # @!attribute [r] _context
       #   @return [Contract]
       #   @api private
@@ -37,18 +58,26 @@ module Dry
       #   @api private
       option :values
 
-      # @!attribute [r] message
-      #   @return [String]
-      #   @api private
-      attr_reader :message
-
       # Initialize a new evaluator
       #
       # @api private
       def initialize(*args, &block)
         super(*args)
-        @failure = false
         instance_eval(&block)
+      end
+
+      # Key message failures
+      #
+      # @api public
+      def key
+        @key ||= Failures.new(path)
+      end
+
+      # Base message failures
+      #
+      # @api public
+      def base
+        @base ||= Failures.new
       end
 
       # Set failure message
@@ -75,18 +104,20 @@ module Dry
       #
       # @api public
       def failure(*args, **tokens)
-        @failure = true
-        @message = { args: args, tokens: tokens, path: path }
+        key.failure(*args, **tokens)
         self
       end
 
-      # Check if evaluation resulted in a failure message
+      # Return aggregated failures
       #
-      # @return [Boolean]
+      # @return [Array<Hash>]
       #
       # @api private
-      def failure?
-        @failure.equal?(true)
+      def failures
+        failures = []
+        failures += base.opts if defined?(@base)
+        failures += key.opts if defined?(@key)
+        failures
       end
 
       # @api private
