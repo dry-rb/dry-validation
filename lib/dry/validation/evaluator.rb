@@ -15,6 +15,8 @@ module Dry
     class Evaluator
       extend Dry::Initializer
 
+      ROOT_PATH = [nil].freeze
+
       # @!attribute [r] _context
       #   @return [Contract]
       #   @api private
@@ -28,7 +30,7 @@ module Dry
       # @!attribute [r] path
       #   @return [Dry::Schema::Path]
       #   @api private
-      option :path, default: proc { Dry::Schema::Path[(key = keys.first) ? key : [nil]] }
+      option :path, default: proc { Dry::Schema::Path[(key = keys.first) ? key : ROOT_PATH] }
 
       # @!attribute [r] values
       #   @return [Object]
