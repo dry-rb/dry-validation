@@ -13,7 +13,7 @@ RSpec.describe Dry::Validation::Evaluator do
     end
   end
 
-  context 'setting key failures' do
+  context 'setting key failures using default rule path' do
     before do
       contract_class.rule(:email) do
         key.failure('is invalid')
@@ -22,6 +22,18 @@ RSpec.describe Dry::Validation::Evaluator do
 
     it 'sets error under specified key' do
       expect(contract.(email: 'foo').errors.to_h).to eql(email: ['is invalid'])
+    end
+  end
+
+  context 'setting key failures using via explicit path' do
+    before do
+      contract_class.rule(:email) do
+        key(:contact).failure('is invalid')
+      end
+    end
+
+    it 'sets error under specified key' do
+      expect(contract.(email: 'foo').errors.to_h).to eql(contact: ['is invalid'])
     end
   end
 

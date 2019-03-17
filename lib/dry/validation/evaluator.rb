@@ -69,8 +69,8 @@ module Dry
       # Key message failures
       #
       # @api public
-      def key
-        @key ||= Failures.new(path)
+      def key(path = self.path)
+        (@key ||= EMPTY_HASH.dup)[path] ||= Failures.new(path)
       end
 
       # Base message failures
@@ -115,8 +115,8 @@ module Dry
       # @api private
       def failures
         failures = []
-        failures += base.opts if defined?(@base)
-        failures += key.opts if defined?(@key)
+        failures += @base.opts if defined?(@base)
+        failures.concat(@key.values.flat_map(&:opts)) if defined?(@key)
         failures
       end
 
