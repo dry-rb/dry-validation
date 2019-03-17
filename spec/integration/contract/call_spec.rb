@@ -22,21 +22,21 @@ RSpec.describe Dry::Validation::Contract, '#call' do
       end
 
       rule(:password) do
-        failure('is required') if values[:login] && !values[:password]
+        key.failure('is required') if values[:login] && !values[:password]
       end
 
       rule(:age) do
-        failure('must be greater or equal 18') if values[:age] < 18
+        key.failure('must be greater or equal 18') if values[:age] < 18
       end
 
       rule(:age) do
-        failure('must be greater than 0') if values[:age] < 0
+        key.failure('must be greater than 0') if values[:age] < 0
       end
 
       rule(address: :zip) do
         address = values[:address]
         if address && address[:country] == 'Russia' && address[:zip] != /\A\d{6}\z/
-          failure('must have 6 digit')
+          key.failure('must have 6 digit')
         end
       end
 
@@ -45,7 +45,7 @@ RSpec.describe Dry::Validation::Contract, '#call' do
         geolocation = address[:geolocation] if address
 
         if geolocation && !(-180.0...180.0).cover?(geolocation[:lon])
-          failure('invalid longitude')
+          key.failure('invalid longitude')
         end
       end
     end.new

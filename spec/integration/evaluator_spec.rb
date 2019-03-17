@@ -22,14 +22,14 @@ RSpec.describe Dry::Validation::Evaluator do
   describe 'delegation' do
     let(:block) do
       proc {
-        failure('it works') if works?
+        key.failure('it works') if works?
       }
     end
 
     it 'delegates to the context' do
       expect(context).to receive(:works?).and_return(true)
       expect(evaluator.failures[0][:path].to_a).to eql([:email])
-      expect(evaluator.failures[0][:args]).to eql(['it works'])
+      expect(evaluator.failures[0][:message]).to eql('it works')
     end
 
     describe 'with custom methods defined on the context' do
@@ -38,11 +38,11 @@ RSpec.describe Dry::Validation::Evaluator do
       end
 
       let(:block) do
-        proc { failure("message with #{context}") }
+        proc { key.failure("message with #{context}") }
       end
 
       it 'forwards to the context' do
-        expect(evaluator.failures[0][:args]).to eql(['message with my_context'])
+        expect(evaluator.failures[0][:message]).to eql('message with my_context')
       end
     end
   end

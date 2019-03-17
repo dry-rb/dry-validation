@@ -30,20 +30,12 @@ module Dry
         # @return [Error, Error::Localized]
         #
         # @api public
-        def call(args:, tokens:, path:)
-          if args.size.equal?(1)
-            case (msg = args[0])
-            when Symbol
-              text = lambda { |**opts|
-                message(msg, path: path, tokens: tokens, **opts)
-              }
-
-              Error[text, path]
-            when String
-              Error[msg, path]
-            end
-          else
-            Error[*args.reverse]
+        def call(message:, tokens:, path:)
+          case message
+          when Symbol
+            Error[->(**opts) { message(message, path: path, tokens: tokens, **opts) }, path]
+          when String
+            Error[message, path]
           end
         end
         alias_method :[], :call

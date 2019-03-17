@@ -21,31 +21,33 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
   context 'when the name matches one of the keys' do
     before do
       contract_class.rule(:login) do
-        failure('is too short') if values[:login].size < 3
+        key.failure('is too short') if values[:login].size < 3
       end
     end
 
     it 'applies rule when value passed schema checks' do
-      expect(contract.(email: 'jane@doe.org', login: 'ab').errors.to_h).to eql(login: ['is too short'])
+      expect(contract.(email: 'jane@doe.org', login: 'ab').errors.to_h)
+        .to eql(login: ['is too short'])
     end
   end
 
   context 'when the name does not match one of the keys' do
     before do
       contract_class.rule(:custom) do
-        failure('this works')
+        key.failure('this works')
       end
     end
 
     it 'applies the rule regardless of the schema result' do
-      expect(contract.(email: 'jane@doe.org', login: 'jane').errors.to_h).to eql(custom: ['this works'])
+      expect(contract.(email: 'jane@doe.org', login: 'jane').errors.to_h)
+        .to eql(custom: ['this works'])
     end
   end
 
   context 'with a hash as the key identifier' do
     before do
       contract_class.rule(address: :street) do
-        failure('cannot be empty') if values[:address][:street].strip.empty?
+        key.failure('cannot be empty') if values[:address][:street].strip.empty?
       end
     end
 
@@ -61,19 +63,19 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
   context 'with a rule for nested hash and another rule for its member' do
     before do
       contract_class.rule(:address) do
-        failure('invalid no matter what')
+        key.failure('invalid no matter what')
       end
 
       contract_class.rule(:address) do
-        failure('seriously invalid')
+        key.failure('seriously invalid')
       end
 
       contract_class.rule(address: :street) do
-        failure('cannot be empty') if values[:address][:street].strip.empty?
+        key.failure('cannot be empty') if values[:address][:street].strip.empty?
       end
 
       contract_class.rule(address: :street) do
-        failure('must include a number') unless values[:address][:street].match?(/\d+/)
+        key.failure('must include a number') unless values[:address][:street].match?(/\d+/)
       end
     end
 
@@ -91,7 +93,7 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
   context 'with a rule that sets a general base error for the whole input' do
     before do
       contract_class.rule do
-        failure('this whole thing is invalid')
+        key.failure('this whole thing is invalid')
       end
     end
 
@@ -108,7 +110,7 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
     before do
       contract_class.rule(:email, :login) do
         if !values[:email].empty? && !values[:login].empty?
-          failure(:login, 'is not needed when email is provided') 
+          key(:login).failure('is not needed when email is provided')
         end
       end
     end

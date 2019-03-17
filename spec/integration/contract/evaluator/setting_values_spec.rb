@@ -13,12 +13,12 @@ RSpec.describe Dry::Validation::Evaluator, 'values writer' do
           if values[:user_id].equal?(312)
             values[:user] = 'jane'
           else
-            failure(:user, 'must be jane')
+            key(:user).failure('must be jane')
           end
         end
 
         rule(:email) do
-          failure('is invalid') if values[:user] == 'jane' && values[:email] != 'jane@doe.org'
+          key.failure('is invalid') if values[:user] == 'jane' && values[:email] != 'jane@doe.org'
         end
       end
     end
