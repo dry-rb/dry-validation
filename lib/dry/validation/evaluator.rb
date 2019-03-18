@@ -17,6 +17,43 @@ module Dry
 
       ROOT_PATH = [nil].freeze
 
+      # Failure accumulator object
+      #
+      # @api public
+      class Failures
+        # @api private
+        attr_reader :path
+
+        # @api private
+        attr_reader :opts
+
+        # @api private
+        def initialize(path = ROOT_PATH)
+          @path = path
+          @opts = []
+        end
+
+        # Set failure
+        #
+        # @overload failure(message)
+        #   Set message text explicitly
+        #   @param message [String] The message text
+        #   @example
+        #     failure('this failed')
+        #
+        # @overload failure(id)
+        #   Use message identifier (needs localized messages setup)
+        #   @param id [Symbol] The message id
+        #   @example
+        #     failure(:taken)
+        #
+        # @api public
+        def failure(message, **tokens)
+          @opts << { message: message, tokens: tokens, path: path }
+          self
+        end
+      end
+
       # @!attribute [r] _context
       #   @return [Contract]
       #   @api private
@@ -37,56 +74,48 @@ module Dry
       #   @api private
       option :values
 
-      # @!attribute [r] message
-      #   @return [String]
-      #   @api private
-      attr_reader :message
-
       # Initialize a new evaluator
       #
       # @api private
       def initialize(*args, &block)
         super(*args)
-        @failure = false
         instance_eval(&block)
       end
 
-      # Set failure message
+      # Get failures object for the default or provided path
       #
-      # @overload failure(message)
-      #   Set message text explicitly
-      #   @param message [String] The message text
-      #   @example
-      #     failure('this failed')
+      # @param [Symbol,String,Hash,Array<Symbol>] path
       #
-      # @overload failure(id)
-      #   Use message identifier (needs localized messages setup)
-      #   @param id [Symbol] The message id
-      #   @example
-      #     failure(:taken)
+      # @return [Failures]
       #
-      # @overload failure(key, message)
-      #   Set message under specified key (overrides rule's default key)
-      #   @param id [Symbol] The message key
-      #   @example
-      #     failure(:my_error, 'this failed')
-      #
-      # @return [Evaluator]
+      # @see Failures#failure
       #
       # @api public
-      def failure(*args, **tokens)
-        @failure = true
-        @message = { args: args, tokens: tokens, path: path }
-        self
+      def key(path = self.path)
+        (@key ||= EMPTY_HASH.dup)[path] ||= Failures.new(path)
       end
 
-      # Check if evaluation resulted in a failure message
+      # Get failures object for base errors
       #
-      # @return [Boolean]
+      # @return [Failures]
+      #
+      # @see Failures#failure
+      #
+      # @api public
+      def base
+        @base ||= Failures.new
+      end
+
+      # Return aggregated failures
+      #
+      # @return [Array<Hash>]
       #
       # @api private
-      def failure?
-        @failure.equal?(true)
+      def failures
+        failures = []
+        failures += @base.opts if defined?(@base)
+        failures.concat(@key.values.flat_map(&:opts)) if defined?(@key)
+        failures
       end
 
       # @api private

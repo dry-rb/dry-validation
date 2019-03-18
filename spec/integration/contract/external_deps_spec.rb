@@ -12,7 +12,7 @@ RSpec.describe Dry::Validation::Contract, '.option' do
       end
 
       rule(:email) do
-        failure('is taken') unless db.unique?(values[:email])
+        key.failure('is taken') unless db.unique?(values[:email])
       end
     end
   end
