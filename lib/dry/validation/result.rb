@@ -132,7 +132,6 @@ module Dry
       def to_h
         values.to_h
       end
-      alias_method :to_hash, :to_h
 
       # Return a string representation
       #
