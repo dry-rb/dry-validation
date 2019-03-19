@@ -92,7 +92,8 @@ module Dry
       #
       # @api public
       def key(path = self.path)
-        (@key ||= EMPTY_HASH.dup)[path] ||= Failures.new(path)
+        key = Array(path)
+        (@key ||= EMPTY_HASH.dup)[key] ||= Failures.new(key)
       end
 
       # Get failures object for base errors

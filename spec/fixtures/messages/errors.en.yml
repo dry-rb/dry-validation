@@ -16,3 +16,5 @@ en:
         address:
           street:
             invalid: "doesn't look good"
+        contact:
+          wrong: "not right"
