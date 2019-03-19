@@ -48,7 +48,7 @@ module Dry
         #     failure(:taken)
         #
         # @api public
-        def failure(message, **tokens)
+        def failure(message, tokens = EMPTY_HASH)
           @opts << { message: message, tokens: tokens, path: path }
           self
         end
