@@ -40,7 +40,9 @@ RSpec.describe Dry::Validation::Evaluator do
 
     context 'with a symbol' do
       before do
-        contract_class.config.messages_file = SPEC_ROOT.join('fixtures/messages/errors.en.yml').realpath
+        contract_class.config.messages_file = SPEC_ROOT
+          .join('fixtures/messages/errors.en.yml').realpath
+
         contract_class.rule(:email) do
           key(:contact).failure(:wrong)
         end
