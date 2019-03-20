@@ -29,7 +29,7 @@ module Dry
 
         # @api private
         def initialize(path = ROOT_PATH)
-          @path = path
+          @path = Dry::Schema::Path[path]
           @opts = []
         end
 
@@ -92,8 +92,7 @@ module Dry
       #
       # @api public
       def key(path = self.path)
-        key = Array(path)
-        (@key ||= EMPTY_HASH.dup)[key] ||= Failures.new(key)
+        (@key ||= EMPTY_HASH.dup)[path] ||= Failures.new(path)
       end
 
       # Get failures object for base errors

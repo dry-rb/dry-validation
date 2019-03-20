@@ -38,6 +38,18 @@ RSpec.describe Dry::Validation::Evaluator do
       end
     end
 
+    context 'with a nested key as a hash and a string message' do
+      before do
+        contract_class.rule(:email) do
+          key(contact: :details).failure('is invalid')
+        end
+      end
+
+      it 'sets error under specified key' do
+        expect(contract.(email: 'foo').errors.to_h).to eql(contact: { details: ['is invalid'] })
+      end
+    end
+
     context 'with a symbol' do
       before do
         contract_class.config.messages_file = SPEC_ROOT
