@@ -93,14 +93,14 @@ module Dry
 
         # @api private
         def rules
-          @__rules__ ||= EMPTY_ARRAY
-                         .dup
-                         .concat(superclass.respond_to?(:rules) ? superclass.rules : EMPTY_ARRAY)
+          @rules ||= EMPTY_ARRAY
+            .dup
+            .concat(superclass.respond_to?(:rules) ? superclass.rules : EMPTY_ARRAY)
         end
 
         # @api private
         def messages
-          @__messages__ ||= Messages.setup(config.messages)
+          @messages ||= Messages.setup(config.messages)
         end
 
         private
@@ -112,7 +112,9 @@ module Dry
 
         # @api private
         def define(method_name, &block)
-          raise ::Dry::Validation::DuplicateSchemaError, 'Schema has already been defined' if defined?(@__schema__)
+          if defined?(@__schema__)
+            raise ::Dry::Validation::DuplicateSchemaError, 'Schema has already been defined'
+          end
 
           case method_name
           when :schema
