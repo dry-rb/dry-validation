@@ -11,6 +11,21 @@ module Dry
       #
       # @api public
       module ClassInterface
+        # @api private
+        def inherited(klass)
+          super
+          klass.instance_variable_set('@config', config.dup)
+        end
+
+        # Configuration
+        #
+        # @return [Config]
+        #
+        # @api public
+        def config
+          @config ||= Validation::Config.new
+        end
+
         # Define a params schema for your contract
         #
         # This type of schema is suitable for HTTP parameters
@@ -85,7 +100,7 @@ module Dry
 
         # @api private
         def messages
-          @__messages__ ||= Messages.setup(config)
+          @__messages__ ||= Messages.setup(config.messages)
         end
 
         private
