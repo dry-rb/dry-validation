@@ -1,3 +1,11 @@
+# v0.13.1 2019-03-22
+
+### Changed
+
+- `dry-types` was locked to `~> 0.14.0` (flash-gordon)
+
+[Compare v0.13.0...v0.13.1](https://github.com/dry-rb/dry-validation/compare/v0.13.0...v0.13.1)
+
 # v0.13.0 2019-01-29
 
 ### Changed
