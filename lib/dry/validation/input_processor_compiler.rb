@@ -58,7 +58,7 @@ module Dry
           if name.is_a?(Array)
             type
           else
-            [:key, [name, true, type]]
+            [:member, [name, type]]
           end
         else
           result = node.map { |n| visit(n, first) }.uniq
@@ -77,7 +77,7 @@ module Dry
         key = visit(left)
 
         if key.is_a?(Symbol)
-          [:key, [key, true, visit(right, false)]]
+          [:member, [key, visit(right, false)]]
         else
           [:sum, [key, visit(right, false), {}]]
         end

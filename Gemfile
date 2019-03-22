@@ -1,10 +1,6 @@
 source 'https://rubygems.org'
 
-git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
-
 gemspec
-
-gem 'dry-types', github: 'dry-rb/dry-types'
 
 group :test do
   gem 'i18n', require: false
@@ -12,7 +8,7 @@ group :test do
     gem 'simplecov', require: false
   end
   gem 'dry-monads', '>= 0.4.0', require: false
-  gem 'dry-struct', github: 'dry-rb/dry-struct'
+  gem 'dry-struct', git: 'https://github.com/dry-rb/dry-struct', branch: 'master'
 end
 
 group :tools do
