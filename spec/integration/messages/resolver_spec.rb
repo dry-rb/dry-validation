@@ -11,12 +11,10 @@ RSpec.describe Dry::Validation::Messages::Resolver, '#message' do
     end
 
     before do
-      contract_class.config.messages_file = SPEC_ROOT
+      contract_class.config.messages.load_paths << SPEC_ROOT
         .join("fixtures/messages/errors.#{locale}.yml").realpath
 
       I18n.available_locales << :pl
-      I18n.backend.load_translations
-      I18n.reload!
     end
 
     context ':en' do
@@ -77,7 +75,7 @@ RSpec.describe Dry::Validation::Messages::Resolver, '#message' do
 
   context 'using :yaml' do
     before do
-      contract_class.config.messages = :yaml
+      contract_class.config.messages.backend = :yaml
     end
 
     include_context 'resolving'
@@ -85,7 +83,7 @@ RSpec.describe Dry::Validation::Messages::Resolver, '#message' do
 
   context 'using :i18n' do
     before do
-      contract_class.config.messages = :i18n
+      contract_class.config.messages.backend = :i18n
     end
 
     include_context 'resolving'

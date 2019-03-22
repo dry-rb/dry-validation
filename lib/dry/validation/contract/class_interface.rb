@@ -11,6 +11,21 @@ module Dry
       #
       # @api public
       module ClassInterface
+        # @api private
+        def inherited(klass)
+          super
+          klass.instance_variable_set('@config', config.dup)
+        end
+
+        # Configuration
+        #
+        # @return [Config]
+        #
+        # @api public
+        def config
+          @config ||= Validation::Config.new
+        end
+
         # Define a params schema for your contract
         #
         # This type of schema is suitable for HTTP parameters
@@ -78,14 +93,14 @@ module Dry
 
         # @api private
         def rules
-          @__rules__ ||= EMPTY_ARRAY
-                         .dup
-                         .concat(superclass.respond_to?(:rules) ? superclass.rules : EMPTY_ARRAY)
+          @rules ||= EMPTY_ARRAY
+            .dup
+            .concat(superclass.respond_to?(:rules) ? superclass.rules : EMPTY_ARRAY)
         end
 
         # @api private
         def messages
-          @__messages__ ||= Messages.setup(config)
+          @messages ||= Messages.setup(config.messages)
         end
 
         private
@@ -97,7 +112,9 @@ module Dry
 
         # @api private
         def define(method_name, &block)
-          raise ::Dry::Validation::DuplicateSchemaError, 'Schema has already been defined' if defined?(@__schema__)
+          if defined?(@__schema__)
+            raise ::Dry::Validation::DuplicateSchemaError, 'Schema has already been defined'
+          end
 
           case method_name
           when :schema

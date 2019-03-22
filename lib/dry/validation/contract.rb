@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'dry/equalizer'
-require 'dry/configurable'
 require 'dry/initializer'
 
+require 'dry/validation/config'
 require 'dry/validation/constants'
 require 'dry/validation/rule'
 require 'dry/validation/evaluator'
@@ -49,40 +49,13 @@ module Dry
     class Contract
       include Dry::Equalizer(:schema, :rules, :messages)
 
-      extend Dry::Configurable
       extend Dry::Initializer
       extend ClassInterface
 
-      # @!group Configuration
-
-      # @overload config.messages=(identifier)
-      #   Set message backend
-      #
-      #   @param identifier [Symbol] the backend identifier, either `:yaml` or `:i18n`
-      #
+      # @!attribute [r] config
+      #   @return [Config]
       #   @api public
-      # @!scope class
-      setting :messages, :yaml
-
-      # @overload config.messages_file=(path)
-      #   Set additional path to messages file
-      #
-      #   @param path [String, Pathname] the path
-      #
-      #   @api public
-      # @!scope class
-      setting :messages_file
-
-      # @overload config.namespace=(name)
-      #   Set namespace that will be used to override default messages
-      #
-      #   @param name [Symbol] the namespace
-      #
-      #   @api public
-      # @!scope class
-      setting :namespace
-
-      # @!endgroup
+      option :config, default: -> { self.class.config }
 
       # @!attribute [r] locale
       #   @return [Symbol]
@@ -102,9 +75,7 @@ module Dry
       # @!attribute [r] message_resolver
       #   @return [Messages::Resolver]
       #   @api private
-      option :message_resolver, default: proc {
-        Messages::Resolver.new(self.class.messages, locale)
-      }
+      option :message_resolver, default: -> { Messages::Resolver.new(self.class.messages, locale) }
 
       # Apply contract to an input
       #

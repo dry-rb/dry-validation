@@ -10,7 +10,7 @@ RSpec.describe Dry::Validation::Contract do
 
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
-        config.messages_file = SPEC_ROOT.join('fixtures/messages/errors.en.yml').realpath
+        config.messages.load_paths << SPEC_ROOT.join('fixtures/messages/errors.en.yml').realpath
 
         params do
           required(:email).filled(:string)
@@ -25,7 +25,8 @@ RSpec.describe Dry::Validation::Contract do
     end
 
     it 'configures messages for the schema' do
-      expect(contract.schema.config.messages_file).to eql(contract.class.config.messages_file)
+      expect(contract.schema.config.messages.load_paths)
+        .to eql(contract.class.config.messages.load_paths)
     end
 
     describe 'result errors' do
@@ -54,13 +55,13 @@ RSpec.describe Dry::Validation::Contract do
   end
 
   context 'using :yaml messages' do
-    before { contract_class.config.messages = :yaml }
+    before do contract_class.config.messages.backend = :yaml end
 
     include_context 'translated messages'
   end
 
   context 'using :i18n messages' do
-    before { contract_class.config.messages = :i18n }
+    before do contract_class.config.messages.backend = :i18n end
 
     include_context 'translated messages'
   end
