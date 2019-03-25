@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'dry/schema'
-require 'dry/validation/messages'
+require 'dry/schema/messages'
+
 require 'dry/validation/constants'
 
 module Dry
@@ -100,7 +101,7 @@ module Dry
 
         # @api private
         def messages
-          @messages ||= Messages.setup(config.messages)
+          @messages ||= Schema::Messages.setup(config.messages)
         end
 
         private

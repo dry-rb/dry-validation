@@ -1,7 +1,4 @@
 en:
-  dry_schema:
-    rules:
-      email: "E-mail"
   dry_validation:
     rules:
       email: "E-mail"

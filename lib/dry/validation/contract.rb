@@ -52,6 +52,8 @@ module Dry
       extend Dry::Initializer
       extend ClassInterface
 
+      config.messages.top_namespace = 'dry_validation'
+
       # @!attribute [r] config
       #   @return [Config]
       #   @api public
