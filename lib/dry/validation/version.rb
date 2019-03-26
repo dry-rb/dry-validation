@@ -2,6 +2,6 @@
 
 module Dry
   module Validation
-    VERSION = '1.0.0.alpha2'
+    VERSION = '1.0.0.beta1'
   end
 end
