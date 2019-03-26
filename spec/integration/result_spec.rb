@@ -15,18 +15,6 @@ RSpec.describe Dry::Validation::Result do
     end
   end
 
-  describe '#[]' do
-    let(:params) do
-      double(:params, message_set: [], to_h: {}, key?: false)
-    end
-
-    it 'returns nil for missing values' do
-      Dry::Validation::Result.new(params) do |r|
-        expect(r[:missing]).to be nil
-      end
-    end
-  end
-
   describe '#errors' do
     subject(:errors) { result.errors }
 

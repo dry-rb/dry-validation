@@ -9,6 +9,7 @@
 * Nested keys are properly handled when generating messages hash (issue #489) (flash-gordon + solnic)
 * Result objects support `locale` and `full` options now (solnic)
 * Ability to configure `top_namespace` for messages, which will be used for both schema and rule localization (solnic)
+* Rule blocks receive a context object that you can use to share data between rules (solnic)
 
 ### Changed
 

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'concurrent/map'
+
 require 'dry/equalizer'
 require 'dry/initializer'
 
@@ -86,10 +88,12 @@ module Dry
       # @api public
       def call(input)
         Result.new(schema.(input), locale: locale) do |result|
+          context = Concurrent::Map.new
+
           rules.each do |rule|
             next if rule.keys.any? { |key| result.error?(key) }
 
-            rule.(self, result).failures.each do |failure|
+            rule.(self, result, context).failures.each do |failure|
               result.add_error(message_resolver[failure])
             end
           end
