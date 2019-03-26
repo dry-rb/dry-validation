@@ -25,12 +25,13 @@ module Dry
 
       # Evaluate the rule within the provided context
       #
-      # @param [Contract] context
-      # @param [Object] values
+      # @param [Contract] contract
+      # @param [Result] result
+      # @param [Concurrent::Map] context
       #
       # @api private
-      def call(context, values)
-        Evaluator.new(context, values: values, keys: keys, &block)
+      def call(contract, result, context)
+        Evaluator.new(contract, values: result, keys: keys, _context: context, &block)
       end
     end
   end

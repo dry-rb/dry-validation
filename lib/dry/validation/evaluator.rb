@@ -54,15 +54,20 @@ module Dry
         end
       end
 
-      # @!attribute [r] _context
+      # @!attribute [r] _contract
       #   @return [Contract]
       #   @api private
-      param :_context
+      param :_contract
 
       # @!attribute [r] keys
       #   @return [Array<String, Symbol, Hash>]
       #   @api private
       option :keys
+
+      # @!attribute [r] _context
+      #   @return [Concurrent::Map]
+      #   @api public
+      option :_context
 
       # @!attribute [r] path
       #   @return [Dry::Schema::Path]
@@ -79,7 +84,7 @@ module Dry
       # @api private
       def initialize(*args, &block)
         super(*args)
-        instance_eval(&block)
+        instance_exec(_context, &block)
       end
 
       # Get failures object for the default or provided path
@@ -120,18 +125,18 @@ module Dry
 
       # @api private
       def respond_to_missing?(meth, include_private = false)
-        super || _context.respond_to?(meth, true)
+        super || _contract.respond_to?(meth, true)
       end
 
       private
 
-      # Forward to the underlying context
+      # Forward to the underlying contract
       #
       # @api private
       def method_missing(meth, *args, &block)
         # yes, we do want to delegate to private methods too
-        if _context.respond_to?(meth, true)
-          _context.__send__(meth, *args, &block)
+        if _contract.respond_to?(meth, true)
+          _contract.__send__(meth, *args, &block)
         else
           super
         end

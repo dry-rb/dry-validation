@@ -94,25 +94,7 @@ module Dry
       #
       # @api public
       def [](key)
-        if values.key?(key)
-          values[key]
-        elsif storage.key?(key)
-          storage[key]
-        end
-      end
-
-      # Store value under specified key
-      #
-      # @param [Symbol] key
-      # @param [Object] value
-      #
-      # @return [Object]
-      #
-      # @api public
-      def []=(key, value)
-        raise ArgumentError, "Key +#{key}+ was already set" if key?(key)
-
-        storage[key] = value
+        values[key]
       end
 
       # Check if a key was set
@@ -123,7 +105,7 @@ module Dry
       #
       # @api public
       def key?(key)
-        values.key?(key) || storage.key?(key)
+        values.key?(key)
       end
 
       # Coerce to a hash
@@ -158,11 +140,6 @@ module Dry
       # @api private
       def schema_errors(options)
         values.message_set(options).to_a
-      end
-
-      # @api private
-      def storage
-        @storage ||= EMPTY_HASH.dup
       end
     end
   end
