@@ -1,16 +1,22 @@
-# v1.0.0.alpha3 to-be-released
+# v1.0.0.beta1 2019-03-26
 
 ### Added
 
+* New API for setting failures `base.failure` for base errors and `key.failure` for key errors (solnic)
 * Support for `base` errors associated with a key even when child keys have errors too (solnic)
 * Support for `base` errors not associated with any key (solnic)
 * Result objects use `ErrorSet` object now for managing messages (solnic)
+* Nested keys are properly handled when generating messages hash (issue #489) (flash-gordon + solnic)
+* Result objects support `locale` and `full` options now (solnic)
+* Ability to configure `top_namespace` for messages, which will be used for both schema and rule localization (solnic)
 
 ### Changed
 
 * [BREAKING] `Result#errors` returns an instance of `ErrorSet` now, it's an enumerable, coerible to a hash (solnic)
+* [BREAKING] `failure` was removed in favor of `key.failure` or `key(:foo).failure` (solnic)
+* [BREAKING] `Result#to_hash` was removed (flash-gordon)
 
-[Compare v1.0.0.alpha2...v1.0.0.alpha3](https://github.com/dry-rb/dry-validation/compare/v1.0.0.alpha2...v1.0.0.alpha3)
+[Compare v1.0.0.alpha2...v1.0.0.beta1](https://github.com/dry-rb/dry-validation/compare/v1.0.0.alpha2...v1.0.0.beta1)
 
 # v1.0.0.alpha2 2019-03-05
 
