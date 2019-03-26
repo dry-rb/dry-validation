@@ -21,7 +21,7 @@ class User
 end
 
 contract = Dry::Validation::Contract.build do
-  config.messages = :i18n
+  config.messages.backend = :i18n
 
   params do
     required(:email).filled(:string)
@@ -29,7 +29,7 @@ contract = Dry::Validation::Contract.build do
   end
 
   rule(:age) do
-    failure('must be greater than 18') if values[:age] <= 18
+    key.failure('must be greater than 18') if values[:age] <= 18
   end
 end
 

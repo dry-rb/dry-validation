@@ -24,7 +24,7 @@ class User
 end
 
 contract = Dry::Validation::Contract.build do
-  config.messages = :i18n
+  config.messages.backend = :i18n
 
   params do
     FIELDS.each do |field|
