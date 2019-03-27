@@ -1,22 +1,26 @@
 # frozen_string_literal: true
 
 require_relative 'suite'
-require 'hotch'
 
-schema = Dry::Validation.Schema do
-  configure { config.messages = :i18n }
+class TestContract < Dry::Validation::Contract
+  config.messages.backend = :i18n
 
-  required(:email).filled
-  required(:age).filled(:int?, gt?: 18)
-  required(:address).filled(:hash?)
+  params do
+    required(:email).filled(:string)
+    required(:age).filled(:integer)
+    required(:address).filled(:hash)
+  end
+
+  rule(:age) do
+    key.failure('must be greater than 18') if values[:age] <= 18
+  end
 end
 
+contract = TestContract.new
 input = { email: '', age: 18, address: {} }
 
-puts schema.(input).inspect
-
-Hotch() do
+profile do
   10_000.times do
-    schema.(input)
+    contract.(input)
   end
 end
