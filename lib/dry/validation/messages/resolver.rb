@@ -34,7 +34,7 @@ module Dry
           case message
           when Symbol
             Error[->(**opts) { message(message, path: path, tokens: tokens, **opts) }, path]
-          when String
+          else
             Error[message, path]
           end
         end

@@ -9,11 +9,11 @@ module Dry
     #
     # @api public
     class Error < Schema::Message
-      include Dry::Equalizer(:text, :path)
+      include Dry::Equalizer(:error, :path)
 
-      # @!attribute [r] text
-      #   @return [String] text The error message text
-      attr_reader :text
+      # @!attribute [r] error
+      #   @return [Object] error The error object. Usually a string but can be an arbitrary value
+      attr_reader :error
 
       # @!attribute [r] path
       #   @return [Array<Symbol, Integer>] path The path to the value with the error
@@ -23,7 +23,7 @@ module Dry
       class Localized < Error
         # @api public
         def evaluate(**opts)
-          Error.new(text.(opts), path: path)
+          Error.new(error.(opts), path: path)
         end
       end
 
@@ -32,15 +32,15 @@ module Dry
       # @return [Error, Error::Localized]
       #
       # @api public
-      def self.[](text, path)
-        text.respond_to?(:call) ? Localized.new(text, path: path) : Error.new(text, path: path)
+      def self.[](error, path)
+        error.respond_to?(:call) ? Localized.new(error, path: path) : Error.new(error, path: path)
       end
 
       # Initialize a new error object
       #
       # @api private
-      def initialize(text, path:)
-        @text = text
+      def initialize(error, path:)
+        @error = error
         @path = Array(path)
       end
 
@@ -53,13 +53,13 @@ module Dry
         @base ||= path.compact.empty?
       end
 
-      # Dump error to a string
+      # Returns error message or object
       #
-      # @return [String]
+      # @return [String, Object]
       #
       # @api public
-      def to_s
-        text
+      def dump
+        error
       end
     end
   end

@@ -101,7 +101,7 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
       expect(contract.(email: 'jane@doe.org', login: '').errors.to_h)
         .to eql(login: ['must be filled'], nil => ['this whole thing is invalid'])
 
-      expect(contract.(email: 'jane@doe.org', login: '').errors.filter(:base?).map(&:to_s))
+      expect(contract.(email: 'jane@doe.org', login: '').errors.filter(:base?).map(&:dump))
         .to eql(['this whole thing is invalid'])
     end
   end

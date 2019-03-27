@@ -77,4 +77,17 @@ RSpec.describe Dry::Validation::Evaluator do
       expect(contract.(email: 'foo').errors.to_h).to eql(nil => ['is invalid'])
     end
   end
+
+  context 'using custom message objects' do
+    before do
+      contract_class.rule(:email) do
+        key.failure(message: 'domain is invalid', domain: values[:email].split('@', 2)[1])
+      end
+    end
+
+    it 'returns error object without transformation' do
+      expect(contract.(email: 'foo@bar').errors.to_h).
+        to eql(email: [message: 'domain is invalid', domain: 'bar'])
+    end
+  end
 end

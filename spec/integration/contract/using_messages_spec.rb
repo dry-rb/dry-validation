@@ -31,12 +31,12 @@ RSpec.describe Dry::Validation::Contract do
 
     describe 'result errors' do
       it 'supports full: true option for schema errors' do
-        expect(contract.(email: '').errors(full: true).map(&:to_s))
+        expect(contract.(email: '').errors(full: true).map(&:dump))
           .to eql(['E-mail must be filled'])
       end
 
       it 'supports full: true option for contract errors' do
-        expect(contract.(email: 'jane').errors(full: true).map(&:to_s))
+        expect(contract.(email: 'jane').errors(full: true).map(&:dump))
           .to eql(['E-mail oh noez bad email'])
       end
     end
