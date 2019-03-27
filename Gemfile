@@ -4,7 +4,10 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'dry-schema', git: 'https://github.com/dry-rb/dry-schema', branch: 'master'
+git_source(:github) { |repo_name| "https://github.com/dry-rb/#{repo_name}" }
+
+gem 'dry-logic', github: 'dry-logic', branch: 'master'
+gem 'dry-schema', github: 'dry-schema', branch: 'master'
 
 group :test do
   gem 'dry-monads', '~> 1.0'
