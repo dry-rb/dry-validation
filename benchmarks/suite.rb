@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
+require 'hotch'
 require 'i18n'
+
 require 'dry-validation'
 
-I18n.locale = :en
-I18n.backend.load_translations
+def profile(&block)
+  Hotch(filter: 'Dry', &block)
+end
