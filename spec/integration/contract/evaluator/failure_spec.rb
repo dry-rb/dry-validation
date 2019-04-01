@@ -77,4 +77,19 @@ RSpec.describe Dry::Validation::Evaluator do
       expect(contract.(email: 'foo').errors.to_h).to eql(nil => ['is invalid'])
     end
   end
+
+  context 'setting failures with meta data' do
+    before do
+      contract_class.rule(:email) do
+        key.failure(text: 'is invalid', code: 102)
+      end
+    end
+
+    it 'sets error under specified key' do
+      errors = contract.(email: 'foo').errors
+
+      expect(errors.to_h).to eql(email: ['is invalid'])
+      expect(errors.first.meta).to eql(code: 102)
+    end
+  end
 end

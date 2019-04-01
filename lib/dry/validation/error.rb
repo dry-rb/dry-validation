@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'dry/equalizer'
+
+require 'dry/schema/constants'
 require 'dry/schema/message'
 
 module Dry
@@ -9,7 +11,7 @@ module Dry
     #
     # @api public
     class Error < Schema::Message
-      include Dry::Equalizer(:text, :path)
+      include Dry::Equalizer(:text, :path, :meta)
 
       # @!attribute [r] text
       #   @return [String] text The error message text
@@ -19,11 +21,16 @@ module Dry
       #   @return [Array<Symbol, Integer>] path The path to the value with the error
       attr_reader :path
 
+      # @!attribute [r] meta
+      #   @return [Hash] meta Optional hash with meta-data
+      attr_reader :meta
+
       # @api public
       class Localized < Error
         # @api public
         def evaluate(**opts)
-          Error.new(text.(opts), path: path)
+          evaluated_text, rest = text.(opts)
+          Error.new(evaluated_text, path: path, meta: rest.merge(meta))
         end
       end
 
@@ -32,16 +39,18 @@ module Dry
       # @return [Error, Error::Localized]
       #
       # @api public
-      def self.[](text, path)
-        text.respond_to?(:call) ? Localized.new(text, path: path) : Error.new(text, path: path)
+      def self.[](text, path, meta)
+        klass = text.respond_to?(:call) ? Localized : Error
+        klass.new(text, path: path, meta: meta)
       end
 
       # Initialize a new error object
       #
       # @api private
-      def initialize(text, path:)
+      def initialize(text, path:, meta: EMPTY_HASH)
         @text = text
         @path = Array(path)
+        @meta = meta
       end
 
       # Check if this is a base error not associated with any key
