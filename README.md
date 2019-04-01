@@ -4,7 +4,7 @@
 [chat]: https://dry-rb.zulipchat.com
 [inchpages]: http://inch-ci.org/github/dry-rb/dry-validation
 
-# dry-validation [![Join the chat at https://dry-rb.zulipchat.com](https://img.shields.io/badge/dry--rb-join%20chat-%23346b7a.svg)](chat)
+# dry-validation [![Join the chat at https://dry-rb.zulipchat.com](https://img.shields.io/badge/dry--rb-join%20chat-%23346b7a.svg)][chat]
 
 [![Gem Version](https://badge.fury.io/rb/dry-validation.svg)][gem]
 [![Build Status](https://travis-ci.org/dry-rb/dry-validation.svg?branch=master)][travis]
