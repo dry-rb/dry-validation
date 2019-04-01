@@ -30,12 +30,16 @@ module Dry
         # @return [Error, Error::Localized]
         #
         # @api public
-        def call(message:, tokens:, path:)
+        def call(message:, tokens:, path:, meta: EMPTY_HASH)
           case message
           when Symbol
-            Error[->(**opts) { message(message, path: path, tokens: tokens, **opts) }, path]
+            Error[->(**opts) { message(message, path: path, tokens: tokens, **opts) }, path, meta]
           when String
-            Error[message, path]
+            Error[message, path, meta]
+          when Hash
+            meta = message.dup
+            text = meta.delete(:text)
+            call(message: text, tokens: tokens, path: path, meta: meta)
           end
         end
         alias_method :[], :call
@@ -50,10 +54,10 @@ module Dry
           msg_opts = tokens.merge(path: keys, locale: locale)
 
           if keys.empty?
-            template = messages["rules.#{rule}", msg_opts]
+            template, meta = messages["rules.#{rule}", msg_opts]
           else
-            template = messages[rule, msg_opts.merge(path: keys.join(DOT))]
-            template ||= messages[rule, msg_opts.merge(path: keys.last)]
+            template, meta = messages[rule, msg_opts.merge(path: keys.join(DOT))]
+            template, meta = messages[rule, msg_opts.merge(path: keys.last)] unless template
           end
 
           unless template
@@ -64,7 +68,7 @@ module Dry
 
           text = template.(template.data(tokens))
 
-          full ? "#{messages.rule(keys.last, msg_opts)} #{text}" : text
+          [full ? "#{messages.rule(keys.last, msg_opts)} #{text}" : text, meta]
         end
       end
     end
