@@ -3,17 +3,17 @@
 require 'dry/schema/message_set'
 
 require 'dry/validation/constants'
-require 'dry/validation/error'
+require 'dry/validation/message'
 
 module Dry
   module Validation
-    # ErrorSet is a specialized message set for handling validation errors
+    # MessageSet is a specialized message set for handling validation messages
     #
     # @api public
-    class ErrorSet < Schema::MessageSet
+    class MessageSet < Schema::MessageSet
       # @!attribute [r] source
       #   Return the source set of messages used to produce final evaluated messages
-      #   @return [Array<Error, Error::Localized, Schema::Message>]
+      #   @return [Array<Message, Message::Localized, Schema::Message>]
       #   @api private
       attr_reader :source_messages
 
@@ -29,54 +29,54 @@ module Dry
         super
       end
 
-      # Return a new error set using updated options
+      # Return a new message set using updated options
       #
-      # @return [ErrorSet]
+      # @return [MessageSet]
       #
       # @api private
       def with(other, new_options = EMPTY_HASH)
         return self if new_options.empty?
 
         self.class.new(
-          other + select { |err| err.is_a?(Error) },
+          other + select { |err| err.is_a?(Message) },
           options.merge(source: source_messages, **new_options)
         ).freeze
       end
 
-      # Add a new error
+      # Add a new message
       #
       # This is used when result is being prepared
       #
-      # @return [ErrorSet]
+      # @return [MessageSet]
       #
       # @api private
-      def add(error)
-        source_messages << error
-        messages << error
+      def add(message)
+        source_messages << message
+        messages << message
         initialize_placeholders!
         self
       end
 
-      # Filter error set using provided predicates
+      # Filter message set using provided predicates
       #
-      # This method is open to any predicate because errors can be anything that
+      # This method is open to any predicate because messages can be anything that
       # implements Message API, thus they can implement whatever predicates you
       # may need.
       #
-      # @example get a list of base errors
-      #   error_set = contract.(input).error_set
-      #   error_set.filter(:base?)
+      # @example get a list of base messages
+      #   message_set = contract.(input).message_set
+      #   message_set.filter(:base?)
       #
       # @param [Array<Symbol>] *predicates
       #
-      # @return [ErrorSet]
+      # @return [MessageSet]
       #
       # @api public
       def filter(*predicates)
-        errors = select { |e|
-          predicates.all? { |predicate| e.respond_to?(predicate) && e.public_send(predicate) }
+        messages = select { |msg|
+          predicates.all? { |predicate| msg.respond_to?(predicate) && msg.public_send(predicate) }
         }
-        self.class.new(errors)
+        self.class.new(messages)
       end
 
       # @api private
