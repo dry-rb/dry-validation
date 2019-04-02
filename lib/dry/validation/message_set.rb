@@ -101,7 +101,7 @@ module Dry
       def messages_map
         @messages_map ||= reduce(placeholders) { |hash, msg|
           node = msg.path.reduce(hash) { |a, e| a.is_a?(Hash) ? a[e] : a.last[e] }
-          (node.size > 1 ? node[0] : node) << msg.to_s
+          (node.size > 1 ? node[0] : node) << msg.dump
           hash
         }
       end

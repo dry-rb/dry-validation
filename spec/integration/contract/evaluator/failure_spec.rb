@@ -88,7 +88,7 @@ RSpec.describe Dry::Validation::Evaluator do
     it 'sets error under specified key' do
       errors = contract.(email: 'foo').errors
 
-      expect(errors.to_h).to eql(email: ['is invalid'])
+      expect(errors.to_h).to eql(email: [text: 'is invalid', code: 102])
       expect(errors.first.meta).to eql(code: 102)
     end
   end
