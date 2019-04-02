@@ -10,3 +10,4 @@ Gemfile.lock
 *.gem
 doc
 .yardoc/
+.rubocop.yml
