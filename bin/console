@@ -1,14 +1,31 @@
 #!/usr/bin/env ruby
+
 # frozen_string_literal: true
 
-require 'optparse'
+require 'pry'
 require 'bundler/setup'
 require 'dry-validation'
 
-if ARGV.include?('--pry')
-  require 'pry'
-  binding.pry
-else
-  require 'irb'
-  binding.irb
+module Types
+  include Dry::Types()
 end
+
+class Context
+  def schema(&block)
+    Dry::Schema.define(&block)
+  end
+
+  def params(&block)
+    Dry::Schema.Params(&block)
+  end
+
+  def json(&block)
+    Dry::Schema.JSON(&block)
+  end
+
+  def contract
+    Dry::Validation::Contract.build(&:build)
+  end
+end
+
+Pry.start(Context.new, prompt: [proc { 'dry-validation> ' }, proc { 'dry-validation*> ' }])
