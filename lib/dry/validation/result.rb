@@ -3,7 +3,7 @@
 require 'dry/equalizer'
 
 require 'dry/validation/constants'
-require 'dry/validation/error_set'
+require 'dry/validation/message_set'
 
 module Dry
   module Validation
@@ -45,7 +45,7 @@ module Dry
 
       # Get error set
       #
-      # @return [ErrorSet]
+      # @return [MessageSet]
       #
       # @api public
       def errors(new_options = EMPTY_HASH)
@@ -134,7 +134,7 @@ module Dry
 
       # @api private
       def initialize_errors(options = self.options)
-        ErrorSet.new(schema_errors(options), options)
+        MessageSet.new(schema_errors(options), options)
       end
 
       # @api private

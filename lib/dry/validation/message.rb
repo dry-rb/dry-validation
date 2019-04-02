@@ -7,10 +7,10 @@ require 'dry/schema/message'
 
 module Dry
   module Validation
-    # Error message
+    # Message message
     #
     # @api public
-    class Error < Schema::Message
+    class Message < Schema::Message
       include Dry::Equalizer(:text, :path, :meta)
 
       # @!attribute [r] text
@@ -26,21 +26,21 @@ module Dry
       attr_reader :meta
 
       # @api public
-      class Localized < Error
+      class Localized < Message
         # @api public
         def evaluate(**opts)
           evaluated_text, rest = text.(opts)
-          Error.new(evaluated_text, path: path, meta: rest.merge(meta))
+          Message.new(evaluated_text, path: path, meta: rest.merge(meta))
         end
       end
 
       # Build an error
       #
-      # @return [Error, Error::Localized]
+      # @return [Message, Message::Localized]
       #
       # @api public
       def self.[](text, path, meta)
-        klass = text.respond_to?(:call) ? Localized : Error
+        klass = text.respond_to?(:call) ? Localized : Message
         klass.new(text, path: path, meta: meta)
       end
 

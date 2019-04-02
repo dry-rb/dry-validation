@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'dry/validation/message'
+
 module Dry
   module Validation
     module Messages
@@ -23,19 +25,19 @@ module Dry
           @locale = locale
         end
 
-        # Resolve Error object from provided args and path
+        # Resolve Message object from provided args and path
         #
         # This is used internally by contracts when rules are applied
         #
-        # @return [Error, Error::Localized]
+        # @return [Message, Message::Localized]
         #
         # @api public
         def call(message:, tokens:, path:, meta: EMPTY_HASH)
           case message
           when Symbol
-            Error[->(**opts) { message(message, path: path, tokens: tokens, **opts) }, path, meta]
+            Message[->(**opts) { message(message, path: path, tokens: tokens, **opts) }, path, meta]
           when String
-            Error[message, path, meta]
+            Message[message, path, meta]
           when Hash
             meta = message.dup
             text = meta.delete(:text)

@@ -11,7 +11,6 @@ require 'dry/validation/rule'
 require 'dry/validation/evaluator'
 require 'dry/validation/messages/resolver'
 require 'dry/validation/result'
-require 'dry/validation/error'
 require 'dry/validation/contract/class_interface'
 
 module Dry

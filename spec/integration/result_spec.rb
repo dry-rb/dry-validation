@@ -8,7 +8,7 @@ RSpec.describe Dry::Validation::Result do
 
     it 'returns a string representation' do
       result = Dry::Validation::Result.new(params) do |r|
-        r.add_error(Dry::Validation::Error.new('not valid', path: :email))
+        r.add_error(Dry::Validation::Message.new('not valid', path: :email))
       end
 
       expect(result.inspect).to eql('#<Dry::Validation::Result{:email=>"jane@doe.org"} errors={:email=>["not valid"]}>')
@@ -24,8 +24,8 @@ RSpec.describe Dry::Validation::Result do
 
     let(:result) do
       Dry::Validation::Result.new(params) do |r|
-        r.add_error(Dry::Validation::Error.new('root error', path: [nil]))
-        r.add_error(Dry::Validation::Error.new('email error', path: [:email]))
+        r.add_error(Dry::Validation::Message.new('root error', path: [nil]))
+        r.add_error(Dry::Validation::Message.new('email error', path: [:email]))
       end
     end
 
