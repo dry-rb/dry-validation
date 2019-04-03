@@ -27,7 +27,7 @@ module Dry
       #
       # @api public
       def to_monad
-        success? ? Success(to_h) : Failure(self)
+        success? ? Success(self) : Failure(self)
       end
     end
   end
