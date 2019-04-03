@@ -22,7 +22,7 @@ RSpec.describe Dry::Validation::Result do
 
         expect(monad).to be_a Dry::Monads::Result
         expect(monad).to be_a_success
-        expect(monad.value!).to eql(name: 'Jane')
+        expect(monad.value!).to be(result)
       end
     end
   end
@@ -35,7 +35,7 @@ RSpec.describe Dry::Validation::Result do
         monad = result.to_monad
 
         expect(monad).to be_a_failure
-        expect(monad.failure.messages.to_h).to eql(name: ['must be filled', 'length must be within 2 - 4'])
+        expect(monad.failure).to eql(result)
       end
     end
   end
