@@ -1,3 +1,31 @@
+# v1.0.0.beta2 2019-04-04
+
+### Added
+
+* Support for arbitrary meta-data in failures, ie:
+
+  ```ruby
+  class NewUserContract < Dry::Validation::Contract
+    params do
+      required(:login).filled(:string)
+    end
+
+    rule(:login) do
+      key.failure(text: 'is taken', code: 123) unless db.unique?(values[:login])
+    end
+  end
+  ```
+
+  Now your error hash will include `{ login: [{ text: 'is taken', code: 123 }] }` (solnic + flash-gordon)
+
+### Changed
+
+* [BREAKING] `Error` was renamed to `Message` as it is a more generic concept (solnic)
+* [BREAKING] `ErrorSet` was renamed to `MessageSet` for consistency (solnic)
+* [BREAKING] `:monads` extension wraps entire result objects in `Success` or `Failure` (flash-gordon)
+
+[Compare v1.0.0.beta1...v1.0.0.beta2](https://github.com/dry-rb/dry-validation/compare/v1.0.0.beta1...v1.0.0.beta2)
+
 # v1.0.0.beta1 2019-03-26
 
 ### Added
