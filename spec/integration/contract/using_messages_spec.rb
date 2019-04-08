@@ -13,7 +13,7 @@ RSpec.describe Dry::Validation::Contract do
         config.messages.load_paths << SPEC_ROOT.join('fixtures/messages/errors.en.yml').realpath
 
         params do
-          required(:email).filled(:string)
+          required(:email).filled(:string, min_size?: 3, max_size?: 100)
         end
 
         rule(:email) do
@@ -32,7 +32,11 @@ RSpec.describe Dry::Validation::Contract do
     describe 'result errors' do
       it 'supports full: true option for schema errors' do
         expect(contract.(email: '').errors(full: true).map(&:to_s))
-          .to eql(['E-mail must be filled'])
+          .to eql([
+            'E-mail must be filled',
+            'E-mail size cannot be less than 3',
+            'E-mail size cannot be greater than 100'
+          ])
       end
 
       it 'supports full: true option for contract errors' do
