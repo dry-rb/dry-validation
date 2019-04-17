@@ -2,7 +2,7 @@
 
 require 'dry/validation/contract'
 
-RSpec.describe Dry::Validation::Contract, '.params' do
+RSpec.describe Dry::Validation::Contract, '.schema' do
   subject(:contract_class) do
     Class.new(Dry::Validation::Contract) do
       schema do
