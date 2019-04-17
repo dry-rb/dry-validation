@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'concurrent/map'
 require 'dry/equalizer'
 
 require 'dry/validation/constants'
@@ -11,14 +12,14 @@ module Dry
     #
     # @api public
     class Result
-      include Dry::Equalizer(:values, :errors)
+      include Dry::Equalizer(:values, :context, :errors)
 
       # Build a new result
       #
       # @param [Dry::Schema::Result]
       #
       # @api private
-      def self.new(values, options = EMPTY_HASH)
+      def self.new(values, context = ::Concurrent::Map.new, options = EMPTY_HASH)
         result = super
         yield(result) if block_given?
         result.freeze
@@ -29,6 +30,11 @@ module Dry
       #   @api private
       attr_reader :values
 
+      # @!attribute [r] context
+      #   @return [Concurrent::Map]
+      #   @api public
+      attr_reader :context
+
       # @!attribute [r] options
       #   @return [Hash]
       #   @api private
@@ -37,8 +43,9 @@ module Dry
       # Initialize a new result
       #
       # @api private
-      def initialize(values, options)
+      def initialize(values, context, options)
         @values = values
+        @context = context
         @options = options
         @errors = initialize_errors
       end
@@ -119,7 +126,11 @@ module Dry
       #
       # @api public
       def inspect
-        "#<#{self.class}#{to_h.inspect} errors=#{errors.to_h.inspect}>"
+        if context.empty?
+          "#<#{self.class}#{to_h.inspect} errors=#{errors.to_h.inspect}>"
+        else
+          "#<#{self.class}#{to_h.inspect} errors=#{errors.to_h.inspect} context=#{context.to_h.inspect}>"
+        end
       end
 
       # Freeze result and its error set
