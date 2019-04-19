@@ -27,5 +27,9 @@ RSpec.describe Dry::Validation::Evaluator, 'using context' do
       expect(contract.(user_id: 3, email: 'john@doe.org').errors.to_h).to eql(user: ['must be jane'])
       expect(contract.(user_id: 312, email: 'john@doe.org').errors.to_h).to eql(email: ['is invalid'])
     end
+
+    it 'exposes context in result' do
+      expect(contract.(user_id: 312, email: 'jane@doe.org').context[:user]).to eql('jane')
+    end
   end
 end

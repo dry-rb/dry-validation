@@ -86,13 +86,11 @@ module Dry
       #
       # @api public
       def call(input)
-        Result.new(schema.(input), locale: locale) do |result|
-          context = Concurrent::Map.new
-
+        Result.new(schema.(input), Concurrent::Map.new, locale: locale) do |result|
           rules.each do |rule|
             next if rule.keys.any? { |key| result.error?(key) }
 
-            rule.(self, result, context).failures.each do |failure|
+            rule.(self, result, result.context).failures.each do |failure|
               result.add_error(message_resolver[failure])
             end
           end
