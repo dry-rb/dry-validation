@@ -129,7 +129,7 @@ module Dry
         if context.empty?
           "#<#{self.class}#{to_h.inspect} errors=#{errors.to_h.inspect}>"
         else
-          "#<#{self.class}#{to_h.inspect} errors=#{errors.to_h.inspect} context=#{context.to_h.inspect}>"
+          "#<#{self.class}#{to_h.inspect} errors=#{errors.to_h.inspect} context=#{context.each.to_h.inspect}>"
         end
       end
 

@@ -39,4 +39,24 @@ RSpec.describe Dry::Validation::Result do
       end
     end
   end
+
+  describe '#inspect' do
+    let(:params) do
+      double(:params, message_set: [], to_h: {})
+    end
+
+    let(:context) do
+      context = Concurrent::Map.new
+      context[:data] = 'foo'
+      context
+    end
+
+    let(:result) do
+      Dry::Validation::Result.new(params, context)
+    end
+
+    example 'results are inspectable' do
+      expect(result.inspect).to be_a(String)
+    end
+  end
 end
