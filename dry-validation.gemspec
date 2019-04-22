@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.3'
 
   spec.add_runtime_dependency 'concurrent-ruby', '~> 1.0'
-  spec.add_runtime_dependency 'dry-core', '~> 0.2', '>= 0.2.1'
+  spec.add_runtime_dependency 'dry-core', '~> 0.4'
   spec.add_runtime_dependency 'dry-equalizer', '~> 0.2'
   spec.add_runtime_dependency 'dry-initializer', '~> 3.0'
   spec.add_runtime_dependency 'dry-schema', '~> 0.5', '>= 0.5'
