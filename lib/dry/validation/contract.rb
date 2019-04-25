@@ -25,7 +25,7 @@ module Dry
     # your rules.
     #
     # @example
-    #   class NewUser < Dry::Validation::Contract
+    #   class NewUserContract < Dry::Validation::Contract
     #     params do
     #       required(:email).filled(:string)
     #       required(:age).filled(:integer)
@@ -35,11 +35,11 @@ module Dry
     #     end
     #
     #     rule(:password) do
-    #       failure('is required') if values[:login] && !values[:password]
+    #       key.failure('is required') if values[:login] && !values[:password]
     #     end
     #
     #     rule(:age) do
-    #       failure('must be greater or equal 18') if values[:age] < 18
+    #       key.failure('must be greater or equal 18') if values[:age] < 18
     #     end
     #   end
     #
