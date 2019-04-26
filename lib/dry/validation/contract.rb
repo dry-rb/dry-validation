@@ -48,7 +48,7 @@ module Dry
     #
     # @api public
     class Contract
-      include Dry::Equalizer(:schema, :rules, :messages)
+      include Dry::Equalizer(:schema, :rules, :messages, inspect: false)
 
       extend Dry::Initializer
       extend ClassInterface
@@ -95,6 +95,15 @@ module Dry
             end
           end
         end
+      end
+
+      # Return a nice string representation
+      #
+      # @return [String]
+      #
+      # @api public
+      def inspect
+        %(#<#{self.class} schema=#{schema.inspect} rules=#{rules.inspect}>)
       end
     end
   end

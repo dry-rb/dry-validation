@@ -9,7 +9,7 @@ module Dry
     #
     # @api private
     class Rule
-      include Dry::Equalizer(:name, :block)
+      include Dry::Equalizer(:keys, :block, inspect: false)
 
       extend Dry::Initializer
 
@@ -32,6 +32,15 @@ module Dry
       # @api private
       def call(contract, result, context)
         Evaluator.new(contract, values: result, keys: keys, _context: context, &block)
+      end
+
+      # Return a nice string representation
+      #
+      # @return [String]
+      #
+      # @api public
+      def inspect
+        %(#<#{self.class} keys=#{keys.inspect}>)
       end
     end
   end
