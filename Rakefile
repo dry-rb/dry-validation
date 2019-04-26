@@ -9,16 +9,21 @@ require 'rspec/core'
 require 'rspec/core/rake_task'
 
 desc 'Run all specs in spec directory'
-task :run_specs do
+task :spec do
   core_result = RSpec::Core::Runner.run(['spec/integration'])
+
   RSpec.clear_examples
 
-  Dir[SPEC_ROOT.join('shared/**/*.rb')].each(&method(:load))
+  ext_results = Dir[SPEC_ROOT.join('extensions/*')].map do |path|
+    ext = Pathname(path).basename.to_s.to_sym
 
-  Dry::Validation.load_extensions(:monads)
-  ext_result = RSpec::Core::Runner.run(['spec'])
+    puts "=> Running spec suite with #{ext.inspect} enabled"
 
-  exit [core_result, ext_result].max
+    Dry::Validation.load_extensions(ext)
+    RSpec::Core::Runner.run(['spec'])
+  end
+
+  exit [core_result, *ext_results].max
 end
 
-task default: :run_specs
+task default: :spec
