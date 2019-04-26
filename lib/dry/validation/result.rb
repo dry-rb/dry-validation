@@ -58,7 +58,6 @@ module Dry
       def errors(new_options = EMPTY_HASH)
         new_options.empty? ? @errors : @errors.with(schema_errors(new_options), new_options)
       end
-      alias_method :messages, :errors
 
       # Check if result is successful
       #
@@ -89,7 +88,7 @@ module Dry
       #
       # @api private
       def add_error(error)
-        errors.add(error)
+        @errors.add(error)
         self
       end
 
