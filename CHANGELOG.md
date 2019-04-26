@@ -8,6 +8,7 @@
 ### Fixed
 
 * Multiple hint messages no longer crash message set (flash-gordon)
+* `Contract#inspect` no longer crashes (solnic)
 
 ### Changed
 
