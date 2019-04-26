@@ -12,5 +12,9 @@ module Dry
     register_extension(:monads) do
       require 'dry/validation/extensions/monads'
     end
+
+    register_extension(:hints) do
+      require 'dry/validation/extensions/hints'
+    end
   end
 end

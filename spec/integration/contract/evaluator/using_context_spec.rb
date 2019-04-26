@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe Dry::Validation::Evaluator, 'using context' do
+  before(:all) do
+    Dry::Validation.load_extensions(:hints)
+  end
+
   context 'when key does not exist' do
     subject(:contract) do
       Dry::Validation::Contract.build do

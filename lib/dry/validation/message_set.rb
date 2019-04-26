@@ -38,7 +38,7 @@ module Dry
         return self if new_options.empty?
 
         self.class.new(
-          other + select { |err| err.is_a?(Message) },
+          (other + select { |err| err.is_a?(Message) }).uniq,
           options.merge(source: source_messages, **new_options)
         ).freeze
       end
