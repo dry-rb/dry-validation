@@ -22,8 +22,6 @@ end
 require 'i18n'
 require 'dry/validation'
 
-Dry::Schema.load_extensions(:hints)
-
 SPEC_ROOT = Pathname(__dir__)
 
 Dir[SPEC_ROOT.join('shared/**/*.rb')].each(&method(:require))
