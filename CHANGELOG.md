@@ -1,3 +1,21 @@
+# v1.0.0.rc1 2019-04-26
+
+### Added
+
+* `:hints` extension is back (solnic)
+* `Result` objects have access to the context object which is shared between rules (flash-gordon)
+
+### Fixed
+
+* Multiple hint messages no longer crash message set (flash-gordon)
+
+### Changed
+
+* Dependency on `dry-schema` was bumped to `~> 0.6` - this pulls in `dry-types 1.0.0` and `dry-logic 1.0.0` (solnic)
+* Dependency on `dry-initializer` was bumped to `~> 3.0` (solnic)
+
+[Compare v1.0.0.beta2...v1.0.0.rc1](https://github.com/dry-rb/dry-validation/compare/v1.0.0.beta2...v1.0.0.rc1)
+
 # v1.0.0.beta2 2019-04-04
 
 ### Added
