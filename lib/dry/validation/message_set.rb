@@ -25,7 +25,7 @@ module Dry
       # @api private
       def initialize(messages, options = EMPTY_HASH)
         @locale = options.fetch(:locale, :en)
-        @source_messages = options.fetch(:source, messages.dup)
+        @source_messages = options.fetch(:source) { messages.dup }
         super
       end
 
