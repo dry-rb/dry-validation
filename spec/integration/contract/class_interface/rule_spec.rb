@@ -11,8 +11,10 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
         required(:email).filled(:string)
         optional(:login).filled(:string)
 
-        optional(:address).hash do
-          required(:street).value(:string)
+        optional(:details).hash do
+          optional(:address).hash do
+            required(:street).value(:string)
+          end
         end
       end
     end
@@ -46,46 +48,49 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
 
   context 'with a hash as the key identifier' do
     before do
-      contract_class.rule(address: :street) do
-        key.failure('cannot be empty') if values[:address][:street].strip.empty?
+      contract_class.rule(details: { address: :street }) do
+        key.failure('cannot be empty') if values[:details][:address][:street].strip.empty?
       end
     end
 
     it 'applies the rule when nested value passed schema checks' do
-      expect(contract.(email: 'jane@doe.org', login: 'jane', address: nil).errors.to_h)
-        .to eql(address: ['must be a hash'])
+      expect(contract.(email: 'jane@doe.org', login: 'jane', details: nil).errors.to_h)
+        .to eql(details: ['must be a hash'])
 
-      expect(contract.(email: 'jane@doe.org', login: 'jane', address: { street: ' ' }).errors.to_h)
-        .to eql(address: { street: ['cannot be empty'] })
+      expect(contract.(email: 'jane@doe.org', login: 'jane', details: { address: nil }).errors.to_h)
+        .to eql(details: { address: ['must be a hash'] })
+
+      expect(contract.(email: 'jane@doe.org', login: 'jane', details: { address: { street: ' ' } }).errors.to_h)
+        .to eql(details: { address: { street: ['cannot be empty'] } })
     end
   end
 
   context 'with a rule for nested hash and another rule for its member' do
     before do
-      contract_class.rule(:address) do
+      contract_class.rule(details: :address) do
         key.failure('invalid no matter what')
       end
 
-      contract_class.rule(:address) do
+      contract_class.rule(details: :address) do
         key.failure('seriously invalid')
       end
 
-      contract_class.rule(address: :street) do
-        key.failure('cannot be empty') if values[:address][:street].strip.empty?
+      contract_class.rule(details: { address: :street }) do
+        key.failure('cannot be empty') if values[:details][:address][:street].strip.empty?
       end
 
-      contract_class.rule(address: :street) do
-        key.failure('must include a number') unless values[:address][:street].match?(/\d+/)
+      contract_class.rule(details: { address: :street }) do
+        key.failure('must include a number') unless values[:details][:address][:street].match?(/\d+/)
       end
     end
 
     it 'applies the rule when nested value passed schema checks' do
-      expect(contract.(email: 'jane@doe.org', login: 'jane', address: { street: ' ' }).errors.to_h)
+      expect(contract.(email: 'jane@doe.org', login: 'jane', details: { address: { street: ' ' } }).errors.to_h)
         .to eql(
-          address: [
+          details: { address: [
             ['invalid no matter what', 'seriously invalid'],
             { street: ['cannot be empty', 'must include a number'] }
-          ]
+          ] }
         )
     end
   end
