@@ -4,6 +4,7 @@ require 'concurrent/map'
 
 require 'dry/equalizer'
 require 'dry/initializer'
+require 'dry/schema/path'
 
 require 'dry/validation/config'
 require 'dry/validation/constants'
@@ -88,7 +89,7 @@ module Dry
       def call(input)
         Result.new(schema.(input), Concurrent::Map.new, locale: locale) do |result|
           rules.each do |rule|
-            next if rule.keys.any? { |key| result.error?(key) }
+            next if rule.keys.any? { |key| error?(result, key) }
 
             rule.(self, result, result.context).failures.each do |failure|
               result.add_error(message_resolver[failure])
@@ -104,6 +105,14 @@ module Dry
       # @api public
       def inspect
         %(#<#{self.class} schema=#{schema.inspect} rules=#{rules.inspect}>)
+      end
+
+      private
+
+      # @api private
+      def error?(result, key)
+        path = Schema::Path[key]
+        result.error?(path) || path.map.with_index { |k, i| result.error?(path.keys[0..i-2]) }.any?
       end
     end
   end
