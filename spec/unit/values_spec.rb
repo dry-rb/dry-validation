@@ -37,4 +37,10 @@ RSpec.describe Dry::Validation::Values do
         .to raise_error(NoMethodError, /not_really_implemented/)
     end
   end
+
+  describe '#method' do
+    it 'returns Method objects for a forwarded method' do
+      expect(values.method(:dig)).to be_instance_of(Method)
+    end
+  end
 end
