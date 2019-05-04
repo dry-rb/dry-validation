@@ -64,6 +64,11 @@ module Dry
       #   @api private
       option :keys
 
+      # @!attribute [r] macros
+      #   @return [Array<Symbol>]
+      #   @api private
+      option :macros, optional: true, default: proc { EMPTY_ARRAY.dup }
+
       # @!attribute [r] _context
       #   @return [Concurrent::Map]
       #   @api public
@@ -84,7 +89,12 @@ module Dry
       # @api private
       def initialize(*args, &block)
         super(*args)
-        instance_exec(_context, &block)
+
+        instance_exec(_context, &block) if block
+
+        macros.each do |macro|
+          instance_exec(_context, &Macros[macro])
+        end
       end
 
       # Get failures object for the default or provided path
@@ -121,6 +131,15 @@ module Dry
         failures += @base.opts if defined?(@base)
         failures.concat(@key.values.flat_map(&:opts)) if defined?(@key)
         failures
+      end
+
+      # Return default (first) key name
+      #
+      # @return [Symbol]
+      #
+      # @api public
+      def key_name
+        @key_name ||= keys.first
       end
 
       # @api private

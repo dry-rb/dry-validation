@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/validation/contract'
+require 'dry/validation/macros'
 
 module Dry
   # Main library namespace

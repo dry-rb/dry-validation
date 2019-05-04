@@ -3,6 +3,8 @@
 require 'dry/equalizer'
 require 'dry/initializer'
 
+require 'dry/validation/constants'
+
 module Dry
   module Validation
     # Rules are created by contracts
@@ -18,6 +20,11 @@ module Dry
       #   @api private
       option :keys
 
+      # @!atrribute [r] macros
+      #   @return [Array<Symbol>]
+      #   @api private
+      option :macros, default: proc { EMPTY_ARRAY.dup }
+
       # @!atrribute [r] block
       #   @return [Proc]
       #   @api private
@@ -32,9 +39,20 @@ module Dry
       def call(contract, result)
         Evaluator.new(
           contract,
-          values: result.values, keys: keys, _context: result.context,
+          values: result.values, keys: keys, macros: macros, _context: result.context,
           &block
         )
+      end
+
+      # Define which macros should be executed
+      #
+      # @return [Rule]
+      #
+      # @api public
+      def validate(*macros, &block)
+        @macros = macros
+        @block = block if block
+        self
       end
 
       # Return a nice string representation
