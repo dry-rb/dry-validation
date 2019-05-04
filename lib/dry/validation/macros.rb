@@ -9,8 +9,10 @@ module Dry
         module RuleMethods
           # @api public
           def acceptance
+            key_name = keys[0]
+
             @block = proc do
-              key.failure('must accept terms') unless values[keys[0]].equal?(true)
+              key.failure(:acceptance, key: key_name) unless values[key_name].equal?(true)
             end
           end
         end

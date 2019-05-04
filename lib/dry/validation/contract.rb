@@ -55,6 +55,7 @@ module Dry
       extend ClassInterface
 
       config.messages.top_namespace = 'dry_validation'
+      config.messages.load_paths << Pathname(__FILE__).join('../../../../config/errors.yml').realpath
 
       # @!attribute [r] config
       #   @return [Config]

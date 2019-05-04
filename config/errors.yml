@@ -1,0 +1,4 @@
+en:
+  dry_validation:
+    errors:
+      acceptance: "must accept %{key}"
