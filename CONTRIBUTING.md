@@ -6,11 +6,11 @@ If you found a bug, report an issue and describe what's the expected behavior ve
 
 ## Reporting feature requests
 
-Report a feature request **only after discussing it first on [the discussion forum][1]** where it was accepted. Please provide a concise description of the feature, don't link to a discussion thread, and instead summarize what was discussed.
+Report a feature request **only after discussing it first on [discourse.dry-rb.org](https://discuss.dry-rb.org)** where it was accepted. Please provide a concise description of the feature, don't link to a discussion thread, and instead summarize what was discussed.
 
 ## Reporting questions, support requests, ideas, concerns etc.
 
-**PLEASE DON'T** - use [the discussion forum][1] instead.
+**PLEASE DON'T** - use [discourse.dry-rb.org](http://discourse.dry-rb.org) instead.
 
 # Pull Request Guidelines
 
@@ -22,10 +22,8 @@ Other requirements:
 2) Follow the style conventions of the surrounding code. In most cases, this is standard ruby style.
 3) Add API documentation if it's a new feature
 4) Update API documentation if it changes an existing feature
-5) Bonus points for sending a PR to [github.com/dry-rb/dry-rb.org](https://github.com/dry-rb/dry-rb.org) which updates user documentation and guides
+5) Bonus points for sending a PR to [github.com/dry-rb/dry-rb.org](github.com/dry-rb/dry-rb.org) which updates user documentation and guides
 
 # Asking for help
 
-If these guidelines aren't helpful, and you're stuck, please post a message on [the discussion forum][1].
-
-[1]: https://discourse.dry-rb.org/
+If these guidelines aren't helpful, and you're stuck, please post a message on [discourse.dry-rb.org](https://discourse.dry-rb.org) or join [our chat](https://dry-rb.zulipchat.com).
