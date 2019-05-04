@@ -52,7 +52,7 @@ module Dry
       end
 
       # Return values wrapper with the input processed by schema
-      # 
+      #
       # @return [Values]
       #
       # @api public
