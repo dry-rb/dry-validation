@@ -1,4 +1,4 @@
-RSpec.describe Dry::Validation::Macros::Acceptance do
+RSpec.describe Dry::Validation::Macros, ':acceptance' do
   subject(:contract) do
     Dry::Validation::Contract.build do
       schema do

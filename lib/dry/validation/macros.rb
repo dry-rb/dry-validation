@@ -4,16 +4,24 @@ require 'dry/container/mixin'
 
 module Dry
   module Validation
+    # API for registering and accessing Rule macros
+    #
+    # @api public
     module Macros
       extend Container::Mixin
 
       # @api public
-      Acceptance = proc do
+      def self.register(name, &block)
+        super(name, block, call: false)
+      end
+
+      # Acceptance macro
+      #
+      # @api public
+      register(:acceptance) do
         key_name = keys[0]
         key.failure(:acceptance, key: key_name) unless values[key_name].equal?(true)
       end
-
-      register(:acceptance, Acceptance, call: false)
     end
   end
 end
