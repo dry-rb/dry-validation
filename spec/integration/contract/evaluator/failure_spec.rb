@@ -92,4 +92,16 @@ RSpec.describe Dry::Validation::Evaluator do
       expect(errors.first.meta).to eql(code: 102)
     end
   end
+
+  context 'when localized message id is invalid' do
+    before do
+      contract_class.rule(:email) do
+        key.failure([:oops_bad_id])
+      end
+    end
+
+    it 'raises a meaningful error' do
+      expect { contract.(email: 'foo') }.to raise_error(ArgumentError, /oops_bad_id/)
+    end
+  end
 end

@@ -42,6 +42,10 @@ module Dry
             meta = message.dup
             text = meta.delete(:text)
             call(message: text, tokens: tokens, path: path, meta: meta)
+          else
+            raise ArgumentError, <<~STR
+              +message+ must be either a Symbol, String or Hash (#{message.inspect} given)
+            STR
           end
         end
         alias_method :[], :call
