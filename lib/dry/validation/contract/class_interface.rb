@@ -72,12 +72,13 @@ module Dry
         #     failure('please provide a valid street address') if valid_street?(values[:street])
         #   end
         #
-        # @return [Array<Rule>]
+        # @return [Rule]
         #
         # @api public
         def rule(*keys, &block)
-          rules << Rule.new(keys: keys, block: block)
-          rules
+          Rule.new(keys: keys, block: block).tap do |rule|
+            rules << rule
+          end
         end
 
         # A shortcut that can be used to define contracts that won't be reused or inherited
