@@ -133,6 +133,15 @@ module Dry
         failures
       end
 
+      # Return default (first) key name
+      #
+      # @return [Symbol]
+      #
+      # @api public
+      def key_name
+        @key_name ||= keys.first
+      end
+
       # @api private
       def respond_to_missing?(meth, include_private = false)
         super || _contract.respond_to?(meth, true)

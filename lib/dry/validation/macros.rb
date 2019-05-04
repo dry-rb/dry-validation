@@ -19,7 +19,6 @@ module Dry
       #
       # @api public
       register(:acceptance) do
-        key_name = keys[0]
         key.failure(:acceptance, key: key_name) unless values[key_name].equal?(true)
       end
     end
