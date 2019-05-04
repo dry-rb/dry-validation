@@ -1,3 +1,21 @@
+# v1.0.0.rc2 2019-05-04
+
+### Added
+
+* [EXPERIMENTAL] support for registering macros via `Dry::Validation::Macros.register(:your_macro, &block)` (solnic)
+* [EXPERIMENTAL] `:acceptance` as the first built-in macro (issue #157) (solnic)
+
+### Fixed
+
+* Passing invalid argument to `failure` will raise a meaningful error instead of crashing (solnic)
+
+### Changed
+
+* In rule validation blocks, `values` is now an instance of a hash-like `Dry::Validation::Values` class, rather than `Dry::Schema::Result`. This gives more convenient access to data within rules (solnic)
+* Dependency on `dry-schema` was updated to `~> 1.0` (solnic)
+
+[Compare v1.0.0.rc1...v1.0.0.rc2](https://github.com/dry-rb/dry-validation/compare/v1.0.0.rc1...v1.0.0.rc2)
+
 # v1.0.0.rc1 2019-04-26
 
 ### Added
