@@ -91,7 +91,7 @@ module Dry
           rules.each do |rule|
             next if rule.keys.any? { |key| error?(result, key) }
 
-            rule.(self, result, result.context).failures.each do |failure|
+            rule.(self, result).failures.each do |failure|
               result.add_error(message_resolver[failure])
             end
           end
