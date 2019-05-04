@@ -27,11 +27,14 @@ module Dry
       #
       # @param [Contract] contract
       # @param [Result] result
-      # @param [Concurrent::Map] context
       #
       # @api private
-      def call(contract, result, context)
-        Evaluator.new(contract, values: result.values, keys: keys, _context: context, &block)
+      def call(contract, result)
+        Evaluator.new(
+          contract,
+          values: result.values, keys: keys, _context: result.context,
+          &block
+        )
       end
 
       # Return a nice string representation
