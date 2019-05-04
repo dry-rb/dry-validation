@@ -1,24 +1,19 @@
 # frozen_string_literal: true
 
+require 'dry/container/mixin'
+
 module Dry
   module Validation
     module Macros
-      # @api public
-      module Acceptance
-        # @api public
-        module RuleMethods
-          # @api public
-          def acceptance
-            key_name = keys[0]
+      extend Container::Mixin
 
-            @block = proc do
-              key.failure(:acceptance, key: key_name) unless values[key_name].equal?(true)
-            end
-          end
-        end
+      # @api public
+      Acceptance = proc do
+        key_name = keys[0]
+        key.failure(:acceptance, key: key_name) unless values[key_name].equal?(true)
       end
 
-      Rule.include(Acceptance::RuleMethods)
+      register(:acceptance, Acceptance, call: false)
     end
   end
 end

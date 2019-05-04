@@ -5,7 +5,7 @@ RSpec.describe Dry::Validation::Macros::Acceptance do
         required(:terms).value(:bool)
       end
 
-      rule(:terms).acceptance
+      rule(:terms).validate(:acceptance)
     end
   end
 
