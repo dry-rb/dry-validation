@@ -31,7 +31,7 @@ module Dry
       #
       # @api private
       def call(contract, result, context)
-        Evaluator.new(contract, values: result, keys: keys, _context: context, &block)
+        Evaluator.new(contract, values: result.values, keys: keys, _context: context, &block)
       end
 
       # Return a nice string representation

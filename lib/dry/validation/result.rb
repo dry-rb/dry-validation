@@ -5,6 +5,7 @@ require 'dry/equalizer'
 
 require 'dry/validation/constants'
 require 'dry/validation/message_set'
+require 'dry/validation/values'
 
 module Dry
   module Validation
@@ -12,7 +13,7 @@ module Dry
     #
     # @api public
     class Result
-      include Dry::Equalizer(:values, :context, :errors)
+      include Dry::Equalizer(:schema_result, :context, :errors, inspect: false)
 
       # Build a new result
       #
@@ -25,15 +26,15 @@ module Dry
         result.freeze
       end
 
-      # @!attribute [r] values
-      #   @return [Dry::Schema::Result]
-      #   @api private
-      attr_reader :values
-
       # @!attribute [r] context
       #   @return [Concurrent::Map]
       #   @api public
       attr_reader :context
+
+      # @!attribute [r] schema_result
+      #   @return [Dry::Schema::Result]
+      #   @api private
+      attr_reader :schema_result
 
       # @!attribute [r] options
       #   @return [Hash]
@@ -43,11 +44,20 @@ module Dry
       # Initialize a new result
       #
       # @api private
-      def initialize(values, context, options)
-        @values = values
+      def initialize(schema_result, context, options)
+        @schema_result = schema_result
         @context = context
         @options = options
         @errors = initialize_errors
+      end
+
+      # Return values wrapper with the input processed by schema
+      # 
+      # @return [Values]
+      #
+      # @api public
+      def values
+        @values ||= Values.new(schema_result.to_h)
       end
 
       # Get error set
@@ -81,7 +91,7 @@ module Dry
       #
       # @api private
       def error?(key)
-        values.error?(key)
+        schema_result.error?(key)
       end
 
       # Add a new error for the provided key
@@ -136,6 +146,7 @@ module Dry
       #
       # @api private
       def freeze
+        values.freeze
         errors.freeze
         super
       end
@@ -149,7 +160,7 @@ module Dry
 
       # @api private
       def schema_errors(options)
-        values.message_set(options).to_a
+        schema_result.message_set(options).to_a
       end
     end
   end

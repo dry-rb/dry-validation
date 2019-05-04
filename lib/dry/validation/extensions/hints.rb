@@ -49,7 +49,7 @@ module Dry
         #
         # @api public
         def hints(new_opts = EMPTY_HASH)
-          values.hints(new_opts)
+          schema_result.hints(new_opts)
         end
       end
 
