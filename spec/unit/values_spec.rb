@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/validation/values'
 
 RSpec.describe Dry::Validation::Values do
@@ -23,7 +25,9 @@ RSpec.describe Dry::Validation::Values do
     it 'forwards to data' do
       result = []
 
-      values.each { |k, v| result << [k, v] }
+      values.each do |k, v|
+        result << [k, v]
+      end
 
       expect(result).to eql(values.to_a)
     end
