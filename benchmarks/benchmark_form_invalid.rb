@@ -7,16 +7,20 @@ require 'i18n'
 require 'dry-validation'
 require 'byebug'
 
-class User
-  include ActiveModel::Validations
+require_relative 'active_record_setup'
 
-  attr_reader :email, :age
+module AM
+  class User
+    include ActiveModel::Validations
 
-  validates :email, :age, presence: true
-  validates :age, numericality: { greater_than: 18 }
+    attr_reader :email, :age
 
-  def initialize(attrs)
-    @email, @age = attrs.values_at('email', 'age')
+    validates :email, :age, presence: true
+    validates :age, numericality: { greater_than: 18 }
+
+    def initialize(attrs)
+      @email, @age = attrs.values_at('email', 'age')
+    end
   end
 end
 
@@ -36,11 +40,18 @@ end
 params = { 'email' => '', 'age' => '18' }
 
 puts contract.(params).inspect
-puts User.new(params).validate
+puts AR::User.new(params).validate
+puts AM::User.new(params).validate
 
 Benchmark.ips do |x|
-  x.report('ActiveModel::Validations') do
-    user = User.new(params)
+  x.report('ActiveModel') do
+    user = AM::User.new(params)
+    user.validate
+    user.errors
+  end
+
+  x.report('ActiveRecord') do
+    user = AR::User.new(params)
     user.validate
     user.errors
   end

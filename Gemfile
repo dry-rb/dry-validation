@@ -22,6 +22,8 @@ end
 group :benchmarks do
   gem 'benchmark-ips'
   gem 'hotch', platform: :mri
+  gem 'activerecord'
+  gem 'sqlite3'
   gem 'activemodel'
   gem 'actionpack'
   gem 'virtus'
