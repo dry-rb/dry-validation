@@ -27,6 +27,22 @@ module Dry
       def [](key)
         data[key]
       end
+
+      # @api private
+      def respond_to_missing?(meth, include_private = false)
+        super || data.respond_to?(meth, include_private)
+      end
+
+      private
+
+      # @api public
+      def method_missing(meth, *args, &block)
+        if data.respond_to?(meth)
+          data.public_send(meth, *args, &block)
+        else
+          super
+        end
+      end
     end
   end
 end
