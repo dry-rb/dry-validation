@@ -1,6 +1,9 @@
 --query '@api.text != "private"'
---no-private
---hide-void-return
-
+--embed-mixins
+-o doc
+-r README.md
+--files CHANGELOG.md
 --markup-provider=redcarpet
 --markup=markdown
+--plugin junk
+--hide-void-return
