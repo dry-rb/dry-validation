@@ -5,7 +5,11 @@ require 'dry/validation/macros'
 
 module Dry
   module Validation
-    # @api private
+    # Configuration for contracts
+    #
+    # @see Contract#config
+    #
+    # @api public
     class Config < Schema::Config
       setting :macros, Macros::Container.new, &:dup
 

@@ -15,14 +15,17 @@ module Dry
 
       # @!attribute [r] text
       #   @return [String] text The error message text
+      #   @api public
       attr_reader :text
 
       # @!attribute [r] path
       #   @return [Array<Symbol, Integer>] path The path to the value with the error
+      #   @api public
       attr_reader :path
 
       # @!attribute [r] meta
       #   @return [Hash] meta Optional hash with meta-data
+      #   @api public
       attr_reader :meta
 
       # @api public
@@ -38,7 +41,7 @@ module Dry
       #
       # @return [Message, Message::Localized]
       #
-      # @api public
+      # @api private
       def self.[](text, path, meta)
         klass = text.respond_to?(:call) ? Localized : Message
         klass.new(text, path: path, meta: meta)

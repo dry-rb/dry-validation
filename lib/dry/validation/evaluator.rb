@@ -11,7 +11,7 @@ module Dry
     # method calls to the contracts, so that you can use your contract
     # methods within rule blocks
     #
-    # @api private
+    # @api public
     class Evaluator
       extend Dry::Initializer
 
@@ -71,7 +71,7 @@ module Dry
 
       # @!attribute [r] _context
       #   @return [Concurrent::Map]
-      #   @api public
+      #   @api private
       option :_context
 
       # @!attribute [r] path
@@ -97,7 +97,7 @@ module Dry
         end
       end
 
-      # Get failures object for the default or provided path
+      # Get `Failures` object for the default or provided path
       #
       # @param [Symbol,String,Hash,Array<Symbol>] path
       #
@@ -110,7 +110,7 @@ module Dry
         (@key ||= EMPTY_HASH.dup)[path] ||= Failures.new(path)
       end
 
-      # Get failures object for base errors
+      # Get `Failures` object for base errors
       #
       # @return [Failures]
       #

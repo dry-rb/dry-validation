@@ -10,24 +10,47 @@ module Dry
     module Macros
       # Registry for macros
       #
-      # @api private
+      # @api public
       class Container
         include Dry::Container::Mixin
 
-        # @api private
+        # Register a new macro
+        #
+        # @example in a contract class
+        #   class MyContract < Dry::Validation::Contract
+        #     macros.register(:even_numbers) do
+        #       key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
+        #     end
+        #   end
+        #
+        # @return [self]
+        #
+        # @api public
         def register(name, &block)
           super(name, block, call: false)
+          self
         end
       end
 
+      # Return a registered macro
+      #
+      # @return [Proc]
+      #
       # @api public
       def self.[](name)
         container[name]
       end
 
+      # Register a global macro
+      #
+      # @see Container#register
+      #
+      # @return [Macros]
+      #
       # @api public
       def self.register(*args, &block)
         container.register(*args, &block)
+        self
       end
 
       # @api private

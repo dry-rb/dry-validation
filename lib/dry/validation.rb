@@ -6,7 +6,7 @@ require 'dry/validation/macros'
 module Dry
   # Main library namespace
   #
-  # @api private
+  # @api public
   module Validation
     extend Dry::Core::Extensions
 

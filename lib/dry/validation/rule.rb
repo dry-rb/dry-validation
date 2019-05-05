@@ -7,9 +7,14 @@ require 'dry/validation/constants'
 
 module Dry
   module Validation
-    # Rules are created by contracts
+    # Rules capture configuration and evaluator blocks
     #
-    # @api private
+    # When a rule is applied, it creates an `Evaluator` using schema result and its
+    # block will be evaluated in the context of the evaluator.
+    #
+    # @see Contract#rule
+    #
+    # @api public
     class Rule
       include Dry::Equalizer(:keys, :block, inspect: false)
 
@@ -46,6 +51,7 @@ module Dry
 
       # Define which macros should be executed
       #
+      # @see Contract#rule
       # @return [Rule]
       #
       # @api public

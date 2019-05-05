@@ -62,6 +62,11 @@ module Dry
 
       # Get error set
       #
+      # @param [Hash] new_options
+      # @option new_options [Symbol] :locale Set locale for messages
+      # @option new_options [Boolean] :hints Enable/disable hints
+      # @option new_options [Boolean] :full Get messages that include key names
+      #
       # @return [MessageSet]
       #
       # @api public

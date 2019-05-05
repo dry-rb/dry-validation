@@ -78,8 +78,9 @@ module Dry
       option :rules, default: -> { self.class.rules }
 
       # @!attribute [r] macros
-      #   @return [Hash]
-      #   @api private
+      #   @return [Macros::Container]
+      #   @see Macros::Container#register
+      #   @api public
       option :macros, default: -> { config.macros }
 
       # @!attribute [r] message_resolver
@@ -87,7 +88,7 @@ module Dry
       #   @api private
       option :message_resolver, default: -> { Messages::Resolver.new(self.class.messages, locale) }
 
-      # Apply contract to an input
+      # Apply the contract to an input
       #
       # @return [Result]
       #

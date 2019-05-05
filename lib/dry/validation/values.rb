@@ -37,7 +37,7 @@ module Dry
 
       private
 
-      # @api public
+      # @api private
       def method_missing(meth, *args, &block)
         if data.respond_to?(meth)
           data.public_send(meth, *args, &block)

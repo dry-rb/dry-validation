@@ -10,6 +10,8 @@ module Dry
     class Contract
       # Contract's class interface
       #
+      # @see Contract
+      #
       # @api public
       module ClassInterface
         # @api private
@@ -20,6 +22,11 @@ module Dry
 
         # Configuration
         #
+        # @example
+        #   class MyContract < Dry::Validation::Contract
+        #     config.messages.backend = :i18n
+        #   end
+        #
         # @return [Config]
         #
         # @api public
@@ -27,7 +34,7 @@ module Dry
           @config ||= Validation::Config.new
         end
 
-        # Macros
+        # Return macros registered for this class
         #
         # @return [Macros::Container]
         #
@@ -41,6 +48,7 @@ module Dry
         # This type of schema is suitable for HTTP parameters
         #
         # @return [Dry::Schema::Params]
+        # @see https://dry-rb.org/gems/dry-schema/params/
         #
         # @api public
         def params(&block)
@@ -52,6 +60,7 @@ module Dry
         # This type of schema is suitable for JSON data
         #
         # @return [Dry::Schema::JSON]
+        # @see https://dry-rb.org/gems/dry-schema/json/
         #
         # @api public
         def json(&block)
@@ -63,6 +72,7 @@ module Dry
         # This type of schema does not offer coercion out of the box
         #
         # @return [Dry::Schema::Processor]
+        # @see https://dry-rb.org/gems/dry-schema/
         #
         # @api public
         def schema(&block)
@@ -92,6 +102,17 @@ module Dry
 
         # A shortcut that can be used to define contracts that won't be reused or inherited
         #
+        # @example
+        #   my_contract = Dry::Validation::Contract.build do
+        #     params do
+        #       required(:name).filled(:string)
+        #     end
+        #   end
+        #
+        #   my_contract.call(name: "Jane")
+        #
+        # @return [Contract]
+        #
         # @api public
         def build(option = nil, &block)
           Class.new(self, &block).new(option)
@@ -102,6 +123,10 @@ module Dry
           @__schema__ if defined?(@__schema__)
         end
 
+        # Return rules defined in this class
+        #
+        # @return [Array<Rule>]
+        #
         # @api private
         def rules
           @rules ||= EMPTY_ARRAY
@@ -109,6 +134,10 @@ module Dry
             .concat(superclass.respond_to?(:rules) ? superclass.rules : EMPTY_ARRAY)
         end
 
+        # Return messages configured for this class
+        #
+        # @return [Dry::Schema::Messages]
+        #
         # @api private
         def messages
           @messages ||= Schema::Messages.setup(config.messages)
