@@ -67,7 +67,7 @@ module Dry
       #   message_set = contract.(input).message_set
       #   message_set.filter(:base?)
       #
-      # @param [Array<Symbol>] *predicates
+      # @param [Array<Symbol>] predicates
       #
       # @return [MessageSet]
       #

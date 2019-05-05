@@ -17,10 +17,10 @@ module Dry
 
       # Build a new result
       #
-      # @param [Dry::Schema::Result]
+      # @param [Dry::Schema::Result] schema_result
       #
       # @api private
-      def self.new(values, context = ::Concurrent::Map.new, options = EMPTY_HASH)
+      def self.new(schema_result, context = ::Concurrent::Map.new, options = EMPTY_HASH)
         result = super
         yield(result) if block_given?
         result.freeze

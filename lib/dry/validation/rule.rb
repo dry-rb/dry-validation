@@ -15,17 +15,17 @@ module Dry
 
       extend Dry::Initializer
 
-      # @!atrribute [r] keys
+      # @!attribute [r] keys
       #   @return [Array<Symbol, String, Hash>]
       #   @api private
       option :keys
 
-      # @!atrribute [r] macros
+      # @!attribute [r] macros
       #   @return [Array<Symbol>]
       #   @api private
       option :macros, default: proc { EMPTY_ARRAY.dup }
 
-      # @!atrribute [r] block
+      # @!attribute [r] block
       #   @return [Proc]
       #   @api private
       option :block
