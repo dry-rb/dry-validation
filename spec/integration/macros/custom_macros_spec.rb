@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'Defining custom macros' do
   subject(:contract) do
     Class.new(Test::BaseContract) do
@@ -10,7 +12,7 @@ RSpec.describe 'Defining custom macros' do
   end
 
   before do
-    class Test::BaseContract < Dry::Validation::Contract;end
+    class Test::BaseContract < Dry::Validation::Contract; end
   end
 
   shared_context 'a contract with a custom macro' do
