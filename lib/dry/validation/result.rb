@@ -26,19 +26,25 @@ module Dry
         result.freeze
       end
 
-      # @!attribute [r] context
-      #   @return [Concurrent::Map]
-      #   @api public
+      # Context that's shared between rules
+      #
+      # @return [Concurrent::Map]
+      #
+      # @api public
       attr_reader :context
 
-      # @!attribute [r] schema_result
-      #   @return [Dry::Schema::Result]
-      #   @api private
+      # Result from contract's schema
+      #
+      # @return [Dry::Schema::Result]
+      #
+      # @api private
       attr_reader :schema_result
 
-      # @!attribute [r] options
-      #   @return [Hash]
-      #   @api private
+      # Result options
+      #
+      # @return [Hash]
+      #
+      # @api private
       attr_reader :options
 
       # Initialize a new result

@@ -11,15 +11,18 @@ module Dry
     #
     # @api public
     class MessageSet < Schema::MessageSet
-      # @!attribute [r] source
-      #   Return the source set of messages used to produce final evaluated messages
-      #   @return [Array<Message, Message::Localized, Schema::Message>]
-      #   @api private
+      # Return the source set of messages used to produce final evaluated messages
+      #
+      # @return [Array<Message, Message::Localized, Schema::Message>]
+      #
+      # @api private
       attr_reader :source_messages
 
-      # @!attribute [r] locale
-      #   @return [Symbol] locale
-      #   @api public
+      # Configured locale
+      #
+      # @return [Symbol]
+      #
+      # @api public
       attr_reader :locale
 
       # @api private

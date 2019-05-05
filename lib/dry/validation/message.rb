@@ -13,23 +13,43 @@ module Dry
     class Message < Schema::Message
       include Dry::Equalizer(:text, :path, :meta)
 
-      # @!attribute [r] text
-      #   @return [String] text The error message text
-      #   @api public
+      # The error message text
+      #
+      # @return [String] text
+      #
+      # @api public
       attr_reader :text
 
-      # @!attribute [r] path
-      #   @return [Array<Symbol, Integer>] path The path to the value with the error
-      #   @api public
+      # The path to the value with the error
+      #
+      # @return [Array<Symbol, Integer>]
+      #
+      # @api public
       attr_reader :path
 
-      # @!attribute [r] meta
-      #   @return [Hash] meta Optional hash with meta-data
-      #   @api public
+      # Optional hash with meta-data
+      #
+      # @return [Hash]
+      #
+      # @api public
       attr_reader :meta
 
+      # A localized message type
+      #
+      # Localized messsages can be translated to other languages at run-time
+      #
       # @api public
       class Localized < Message
+        # Evaluate message text using provided locale
+        #
+        # @example
+        #   result.errors[:email].evaluate(locale: :en, full: true)
+        #   # "email is invalid"
+        #
+        # @param [Hash] opts
+        # @option opts [Symbol] :locale Which locale to use
+        # @option opts [Boolean] :full Whether message text should include the key name
+        #
         # @api public
         def evaluate(**opts)
           evaluated_text, rest = text.(opts)

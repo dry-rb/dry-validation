@@ -14,10 +14,11 @@ module Dry
       include Enumerable
       include Dry::Equalizer(:data)
 
-      # @!attribute [r] data
-      #   Schema's result output
-      #   @return [Hash]
-      #   @api private
+      # Schema's result output
+      #
+      # @return [Hash]
+      #
+      # @api private
       attr_reader :data
 
       # @api private

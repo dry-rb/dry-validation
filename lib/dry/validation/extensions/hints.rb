@@ -4,7 +4,7 @@ require 'dry/monads/result'
 
 module Dry
   module Validation
-    # Hints extension for contract results
+    # Hints extension
     #
     # @example
     #   Dry::Validation.load_extensions(:hints)
@@ -23,6 +23,9 @@ module Dry
     #
     # @api public
     module Hints
+      # Hints extensions for Result
+      #
+      # @api public
       module ResultExtensions
         # Return error messages excluding hints
         #
