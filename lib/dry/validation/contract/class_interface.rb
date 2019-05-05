@@ -27,6 +27,15 @@ module Dry
           @config ||= Validation::Config.new
         end
 
+        # Macros
+        #
+        # @return [Macros::Container]
+        #
+        # @api public
+        def macros
+          config.macros
+        end
+
         # Define a params schema for your contract
         #
         # This type of schema is suitable for HTTP parameters

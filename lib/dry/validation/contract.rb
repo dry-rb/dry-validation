@@ -77,6 +77,11 @@ module Dry
       #   @api private
       option :rules, default: -> { self.class.rules }
 
+      # @!attribute [r] macros
+      #   @return [Hash]
+      #   @api private
+      option :macros, default: -> { config.macros }
+
       # @!attribute [r] message_resolver
       #   @return [Messages::Resolver]
       #   @api private
@@ -114,6 +119,15 @@ module Dry
       def error?(result, key)
         path = Schema::Path[key]
         result.error?(path) || path.map.with_index { |k, i| result.error?(path.keys[0..i-2]) }.any?
+      end
+
+      # Get a registered macro
+      #
+      # @return [Proc,#to_proc]
+      #
+      # @api private
+      def macro(name)
+        macros.key?(name) ? macros[name] : Macros[name]
       end
     end
   end

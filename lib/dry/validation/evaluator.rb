@@ -93,7 +93,7 @@ module Dry
         instance_exec(_context, &block) if block
 
         macros.each do |macro|
-          instance_exec(_context, &Macros[macro])
+          instance_exec(_context, &macro(macro))
         end
       end
 
