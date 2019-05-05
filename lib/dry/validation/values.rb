@@ -26,6 +26,13 @@ module Dry
         @data = data
       end
 
+      # Read from the provided key
+      #
+      # @example
+      #   rule(:age) do
+      #     key.failure('must be > 18') if values[:age] <= 18
+      #   end
+      #
       # @api public
       def [](key)
         data[key]

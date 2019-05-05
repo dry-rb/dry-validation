@@ -58,14 +58,20 @@ module Dry
       config.messages.load_paths << Pathname(__FILE__).join('../../../../config/errors.yml').realpath
 
       # @!attribute [r] config
-      #   @return [Config]
+      #   @return [Config] Contract's configuration object
       #   @api public
       option :config, default: -> { self.class.config }
 
       # @!attribute [r] locale
-      #   @return [Symbol]
+      #   @return [Symbol] Contract's locale (default is `:en`)
       #   @api public
       option :locale, default: -> { :en }
+
+      # @!attribute [r] macros
+      #   @return [Macros::Container] Configured macros
+      #   @see Macros::Container#register
+      #   @api public
+      option :macros, default: -> { config.macros }
 
       # @!attribute [r] schema
       #   @return [Dry::Schema::Params, Dry::Schema::JSON, Dry::Schema::Processor]
@@ -76,12 +82,6 @@ module Dry
       #   @return [Hash]
       #   @api private
       option :rules, default: -> { self.class.rules }
-
-      # @!attribute [r] macros
-      #   @return [Macros::Container]
-      #   @see Macros::Container#register
-      #   @api public
-      option :macros, default: -> { config.macros }
 
       # @!attribute [r] message_resolver
       #   @return [Messages::Resolver]
