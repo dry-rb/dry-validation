@@ -29,30 +29,35 @@ module Dry
       module ResultExtensions
         # Return error messages excluding hints
         #
+        # @macro errors-options
         # @return [MessageSet]
         #
         # @api public
-        def errors(new_opts = EMPTY_HASH)
-          opts = new_opts.merge(hints: false)
+        def errors(new_options = EMPTY_HASH)
+          opts = new_options.merge(hints: false)
           @errors.with(schema_errors(opts), opts)
         end
 
         # Return errors and hints
         #
+        # @macro errors-options
+        #
         # @return [MessageSet]
         #
         # @api public
-        def messages(new_opts = EMPTY_HASH)
-          errors.with(hints.to_a, options.merge(**new_opts))
+        def messages(new_options = EMPTY_HASH)
+          errors.with(hints.to_a, options.merge(**new_options))
         end
 
         # Return hint messages
         #
+        # @macro errors-options
+        #
         # @return [MessageSet]
         #
         # @api public
-        def hints(new_opts = EMPTY_HASH)
-          schema_result.hints(new_opts)
+        def hints(new_options = EMPTY_HASH)
+          schema_result.hints(new_options)
         end
       end
 

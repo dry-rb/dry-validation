@@ -33,6 +33,10 @@ module Dry
       #     key.failure('must be > 18') if values[:age] <= 18
       #   end
       #
+      # @param [Symbol] key
+      #
+      # @return [Object]
+      #
       # @api public
       def [](key)
         data[key]

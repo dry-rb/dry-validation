@@ -90,6 +90,8 @@ module Dry
 
       # Apply the contract to an input
       #
+      # @param [Hash] input The input to validate
+      #
       # @return [Result]
       #
       # @api public

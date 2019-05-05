@@ -23,6 +23,8 @@ module Dry
         #     end
         #   end
         #
+        # @param [Symbol] name The name of the macro
+        #
         # @return [self]
         #
         # @api public
@@ -33,6 +35,8 @@ module Dry
       end
 
       # Return a registered macro
+      #
+      # @param [Symbol] name The name of the macro
       #
       # @return [Proc]
       #

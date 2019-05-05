@@ -67,7 +67,7 @@ module Dry
       # may need.
       #
       # @example get a list of base messages
-      #   message_set = contract.(input).message_set
+      #   message_set = contract.(input).errors
       #   message_set.filter(:base?)
       #
       # @param [Array<Symbol>] predicates
