@@ -135,8 +135,8 @@ module Dry
         # @return [Contract]
         #
         # @api public
-        def build(option = nil, &block)
-          Class.new(self, &block).new(option)
+        def build(options = EMPTY_HASH, &block)
+          Class.new(self, &block).new(options)
         end
 
         # @api private

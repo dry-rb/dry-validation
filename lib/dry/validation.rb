@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'dry/validation/constants'
 require 'dry/validation/contract'
 require 'dry/validation/macros'
 
@@ -33,6 +34,28 @@ module Dry
     def self.register_macro(name, &block)
       Macros.register(name, &block)
       self
+    end
+
+    # Define a contract and build its instance
+    #
+    # @example
+    #   my_contract = Dry::Validation.Contract do
+    #     params do
+    #       required(:name).filled(:string)
+    #     end
+    #   end
+    #
+    #   my_contract.call(name: "Jane")
+    #
+    # @param [Hash] options Contract options
+    #
+    # @see Contract
+    #
+    # @return [Contract]
+    #
+    # @api public
+    def self.Contract(options = EMPTY_HASH, &block)
+      Contract.build(options, &block)
     end
   end
 end
