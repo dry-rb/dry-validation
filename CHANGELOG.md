@@ -1,3 +1,16 @@
+# v1.0.0.rc3 2019-05-06
+
+### Added
+
+* [EXPERIMENTAL] `Validation.register_macro` for registering global macros (solnic)
+* [EXPERIMENTAL] `Contract.register_macro` for registering macros available to specific contract classes (solnic)
+
+### Fixed
+
+* `config/errors.yml` are now bundled with the gem, **`rc2` was broken because of this** (solnic)
+
+[Compare v1.0.0.rc2...v1.0.0.rc3](https://github.com/dry-rb/dry-validation/compare/v1.0.0.rc2...v1.0.0.rc3)
+
 # v1.0.0.rc2 2019-05-04
 
 ### Added
