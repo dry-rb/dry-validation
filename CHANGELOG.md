@@ -15,6 +15,8 @@
 
 # v1.0.0.rc2 2019-05-04
 
+This was **yanked** on rubygems.org because the bundled gem was missing `config` directory, thus it was not possible to require it. It was fixed in `rc3`.
+
 ### Added
 
 * [EXPERIMENTAL] support for registering macros via `Dry::Validation::Macros.register(:your_macro, &block)` (solnic)
