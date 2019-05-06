@@ -4,6 +4,8 @@
 
 * [EXPERIMENTAL] `Validation.register_macro` for registering global macros (solnic)
 * [EXPERIMENTAL] `Contract.register_macro` for registering macros available to specific contract classes (solnic)
+* `Dry::Validation.Contract` shortcut for quickly defining a contract and getting its instance back (solnic)
+* New configuration option `config.locale` for setting the default locale (solnic)
 
 ### Fixed
 
