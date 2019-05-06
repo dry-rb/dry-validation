@@ -17,5 +17,22 @@ module Dry
     register_extension(:hints) do
       require 'dry/validation/extensions/hints'
     end
+
+    # Register a new global macro
+    #
+    # @example
+    #   Dry::Validation.register_macro(:even_numbers) do
+    #     key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
+    #   end
+    #
+    # @param [Symbol] name The name of the macro
+    #
+    # @return [self]
+    #
+    # @api public
+    def self.register_macro(name, &block)
+      Macros.register(name, &block)
+      self
+    end
   end
 end

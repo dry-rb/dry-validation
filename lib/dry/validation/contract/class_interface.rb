@@ -43,6 +43,27 @@ module Dry
           config.macros
         end
 
+        # Register a new global macro
+        #
+        # Macros will be available for the contract class and its descendants
+        #
+        # @example
+        #   class MyContract < Dry::Validation::Contract
+        #     register_macro(:even_numbers) do
+        #       key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
+        #     end
+        #   end
+        #
+        # @param [Symbol] name The name of the macro
+        #
+        # @return [self]
+        #
+        # @api public
+        def register_macro(name, &block)
+          macros.register(name, &block)
+          self
+        end
+
         # Define a params schema for your contract
         #
         # This type of schema is suitable for HTTP parameters

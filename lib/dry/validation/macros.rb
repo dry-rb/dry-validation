@@ -18,7 +18,7 @@ module Dry
         #
         # @example in a contract class
         #   class MyContract < Dry::Validation::Contract
-        #     macros.register(:even_numbers) do
+        #     register_macro(:even_numbers) do
         #       key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
         #     end
         #   end
