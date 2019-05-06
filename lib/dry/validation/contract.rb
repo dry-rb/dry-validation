@@ -65,7 +65,7 @@ module Dry
       # @!attribute [r] locale
       #   @return [Symbol] Contract's locale (default is `:en`)
       #   @api public
-      option :locale, default: -> { :en }
+      option :locale, default: -> { self.class.config.locale }
 
       # @!attribute [r] macros
       #   @return [Macros::Container] Configured macros

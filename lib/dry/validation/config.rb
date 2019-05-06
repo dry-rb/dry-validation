@@ -11,11 +11,17 @@ module Dry
     #
     # @api public
     class Config < Schema::Config
+      setting :locale, :en
       setting :macros, Macros::Container.new, &:dup
 
       # @api private
       def macros
         config.macros
+      end
+
+      # @api private
+      def locale
+        config.locale
       end
     end
   end
