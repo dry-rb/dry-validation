@@ -4,6 +4,9 @@ require 'dry/validation/constants'
 require 'dry/validation/contract'
 require 'dry/validation/macros'
 
+# Main namespace
+#
+# @api public
 module Dry
   # Main library namespace
   #
