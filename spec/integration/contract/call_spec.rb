@@ -5,6 +5,10 @@ require 'dry/validation/contract'
 RSpec.describe Dry::Validation::Contract, '#call' do
   subject(:contract) do
     Class.new(Dry::Validation::Contract) do
+      def self.name
+        'TestContract'
+      end
+
       params do
         required(:email).filled(:string)
         required(:age).filled(:integer)
