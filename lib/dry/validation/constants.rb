@@ -8,6 +8,9 @@ module Dry
 
     DOT = '.'
 
+    # Error raised when `rule` specifies one or more keys that the schema doesn't specify
+    InvalidKeysError = Class.new(StandardError)
+
     # Error raised when a localized message was not found
     MissingMessageError = Class.new(StandardError)
 

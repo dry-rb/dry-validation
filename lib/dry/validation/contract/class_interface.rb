@@ -2,10 +2,38 @@
 
 require 'dry/schema'
 require 'dry/schema/messages'
+require 'dry/schema/path'
+require 'dry/schema/key_map'
 
 require 'dry/validation/constants'
 
 module Dry
+  module Schema
+    # @api private
+    class Key
+      # @api private
+      def to_dot_notation
+        [name.to_s]
+      end
+
+      # @api private
+      class Hash < Key
+        # @api private
+        def to_dot_notation
+          [name].product(members.map(&:to_dot_notation).flatten(1)).map { |e| e.join(DOT) }
+        end
+      end
+    end
+
+    # @api private
+    class KeyMap
+      # @api private
+      def to_dot_notation
+        @to_dot_notation ||= map(&:to_dot_notation).flatten
+      end
+    end
+  end
+
   module Validation
     class Contract
       # Contract's class interface
@@ -116,6 +144,8 @@ module Dry
         #
         # @api public
         def rule(*keys, &block)
+          ensure_valid_keys(*keys)
+
           Rule.new(keys: keys, block: block).tap do |rule|
             rules << rule
           end
@@ -165,6 +195,26 @@ module Dry
         end
 
         private
+
+        # @api private
+        def ensure_valid_keys(*keys)
+          valid_paths = key_map.to_dot_notation.map { |value| Schema::Path[value] }
+
+          invalid_keys = Schema::KeyMap[*keys]
+            .map(&:dump)
+            .reject { |spec| valid_paths.any? { |path| path.include?(Schema::Path[spec]) } }
+
+          return if invalid_keys.empty?
+
+          raise InvalidKeysError, <<~STR.strip
+            #{name}.rule specifies keys that are not defined by the schema: #{invalid_keys.inspect}
+          STR
+        end
+
+        # @api private
+        def key_map
+          __schema__.key_map
+        end
 
         # @api private
         def schema_opts

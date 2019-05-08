@@ -7,6 +7,10 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
 
   let(:contract_class) do
     Class.new(Dry::Validation::Contract) do
+      def self.name
+        'TestContract'
+      end
+
       params do
         required(:email).filled(:string)
         optional(:login).filled(:string)
@@ -35,8 +39,8 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
 
   context 'when the name does not match one of the keys' do
     before do
-      contract_class.rule(:custom) do
-        key.failure('this works')
+      contract_class.rule do
+        key(:custom).failure('this works')
       end
     end
 
@@ -126,6 +130,32 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
 
       expect(contract.(email: 'jane@doe.org', login: 'jane').errors.to_h)
         .to eql(login: ['is not needed when email is provided'])
+    end
+  end
+
+  context 'when keys are missing in the schema' do
+    it 'raises error with a list of symbol keys' do
+      expect { contract_class.rule(:invalid, :wrong) }
+        .to raise_error(
+          Dry::Validation::InvalidKeysError,
+          'TestContract.rule specifies keys that are not defined by the schema: [:invalid, :wrong]'
+        )
+    end
+
+    it 'raises error with a hash path' do
+      expect { contract_class.rule(invalid: :wrong) }
+        .to raise_error(
+          Dry::Validation::InvalidKeysError,
+          'TestContract.rule specifies keys that are not defined by the schema: [{:invalid=>[:wrong]}]'
+        )
+    end
+
+    it 'raises error with a hash path with multiple nested keys' do
+      expect { contract_class.rule(invalid: %i[wrong not_here]) }
+        .to raise_error(
+          Dry::Validation::InvalidKeysError,
+          'TestContract.rule specifies keys that are not defined by the schema: [{:invalid=>[:wrong, :not_here]}]'
+        )
     end
   end
 end
