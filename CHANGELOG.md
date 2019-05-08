@@ -1,3 +1,11 @@
+# v1.0.0 to-be-released
+
+### Added
+
+- `rule` will raise `InvalidKeysError` when specified keys are not defined by the schema (solnic)
+
+[Compare v1.0.0.rc3...v1.0.0](https://github.com/dry-rb/dry-validation/compare/v1.0.0.rc3...v1.0.0)
+
 # v1.0.0.rc3 2019-05-06
 
 ### Added
