@@ -150,6 +150,14 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
         )
     end
 
+    it 'raises error with a dot notation' do
+      expect { contract_class.rule('invalid.wrong') }
+        .to raise_error(
+          Dry::Validation::InvalidKeysError,
+          'TestContract.rule specifies keys that are not defined by the schema: ["invalid.wrong"]'
+        )
+    end
+
     it 'raises error with a hash path with multiple nested keys' do
       expect { contract_class.rule(invalid: %i[wrong not_here]) }
         .to raise_error(
