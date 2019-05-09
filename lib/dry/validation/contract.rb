@@ -86,7 +86,7 @@ module Dry
       # @!attribute [r] message_resolver
       #   @return [Messages::Resolver]
       #   @api private
-      option :message_resolver, default: -> { Messages::Resolver.new(self.class.messages, locale) }
+      option :message_resolver, default: -> { Messages::Resolver.new(messages, locale) }
 
       # Apply the contract to an input
       #
@@ -153,15 +153,6 @@ module Dry
       # @api private
       def messages
         self.class.messages
-      end
-
-      # Return class configuration
-      #
-      # @return [Config]
-      #
-      # @api private
-      def config
-        self.class.config
       end
     end
   end
