@@ -43,4 +43,16 @@ RSpec.describe Dry::Validation::Contract do
       end
     end
   end
+
+  describe '.new' do
+    it 'raises error when schema is not defined' do
+      Test::NewUserContract.instance_variable_set('@__schema__', nil)
+
+      expect { Test::NewUserContract.new }
+        .to raise_error(
+          Dry::Validation::SchemaMissingError,
+          "Test::NewUserContract cannot be instantiated without a schema defined"
+        )
+    end
+  end
 end

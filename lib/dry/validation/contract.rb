@@ -76,7 +76,7 @@ module Dry
       # @!attribute [r] schema
       #   @return [Dry::Schema::Params, Dry::Schema::JSON, Dry::Schema::Processor]
       #   @api private
-      option :schema, default: -> { self.class.__schema__ }
+      option :schema, default: -> { self.class.__schema__ or raise(SchemaMissingError, self.class) }
 
       # @!attribute [r] rules
       #   @return [Hash]

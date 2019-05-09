@@ -3,7 +3,7 @@
 RSpec.describe Dry::Validation::Messages::Resolver, '#message' do
   shared_context 'resolving' do
     subject(:resolver) do
-      contract_class.new(locale: locale).message_resolver
+      contract_class.new(locale: locale, schema: proc {}).message_resolver
     end
 
     let(:contract_class) do
