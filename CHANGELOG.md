@@ -1,8 +1,13 @@
 # v1.0.0 to-be-released
 
-### Added
+### Fixed
+
+- Contract's `:locale` option respects `I18n.locale` now (solnic)
+
+### Changed
 
 - `rule` will raise `InvalidKeysError` when specified keys are not defined by the schema (solnic)
+- `Contract.new` will raise `SchemaMissingError` when the class doesn't have schema defined (solnic)
 
 [Compare v1.0.0.rc3...v1.0.0](https://github.com/dry-rb/dry-validation/compare/v1.0.0.rc3...v1.0.0)
 
