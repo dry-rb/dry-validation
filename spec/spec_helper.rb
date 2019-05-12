@@ -50,6 +50,10 @@ RSpec.configure do |config|
         self
       end
     end
+
+    Dry::Validation::Messages::Abstract.instance_variable_set('@cache', nil)
+    Dry::Validation::Messages::YAML.instance_variable_set('@cache', nil)
+    Dry::Validation::Messages::I18n.instance_variable_set('@cache', nil) if defined?(I18n)
   end
 
   config.after do

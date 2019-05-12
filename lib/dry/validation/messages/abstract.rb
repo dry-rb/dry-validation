@@ -40,6 +40,8 @@ module Dry
           String => 'string'
         )
 
+        CACHE_KEYS = %i[path message_type val_type arg_type locale].freeze
+
         def self.cache
           @cache ||= Concurrent::Map.new { |h, k| h[k] = Concurrent::Map.new }
         end
@@ -59,13 +61,23 @@ module Dry
           get(path, options) if key?(path, options)
         end
 
-        def call(*args)
-          cache.fetch_or_store(args.hash) do
-            path, opts = lookup(*args)
+        def call(predicate, options = EMPTY_HASH)
+          cache.fetch_or_store(cache_key(predicate, options)) do
+            path, opts = lookup(predicate, options)
             get(path, opts) if path
           end
         end
         alias_method :[], :call
+
+        if ::Hash.instance_methods.include?(:slice)
+          def cache_key(predicate, options)
+            [predicate, options.slice(*CACHE_KEYS)]
+          end
+        else
+          def cache_key(predicate, options)
+            [predicate, options.select { |key,| CACHE_KEYS.include?(key) }]
+          end
+        end
 
         def lookup(predicate, options = {})
           tokens = options.merge(
@@ -100,7 +112,7 @@ module Dry
         end
 
         def cache
-          @cache ||= self.class.cache[self]
+          @cache ||= self.class.cache[hash]
         end
 
         def default_locale
