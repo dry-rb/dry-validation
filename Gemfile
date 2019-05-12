@@ -14,11 +14,6 @@ end
 group :tools do
   gem 'pry-byebug', platform: :mri
   gem 'pry', platform: :jruby
-
-  unless ENV['TRAVIS']
-    gem 'mutant', git: 'https://github.com/mbj/mutant'
-    gem 'mutant-rspec', git: 'https://github.com/mbj/mutant'
-  end
 end
 
 group :benchmarks do
