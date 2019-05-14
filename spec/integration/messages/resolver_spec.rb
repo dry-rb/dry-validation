@@ -41,11 +41,11 @@ RSpec.describe Dry::Validation::Messages::Resolver, '#message' do
       end
 
       it 'provides meaningful message when path=[nil]' do
-        if prepend_locale
-          path = "#{locale}.dry_validation.rules.not_here"
-        else
-          path = 'dry_validation.rules.not_here'
-        end
+        path = if prepend_locale
+                 "#{locale}.dry_validation.rules.not_here"
+               else
+                 'dry_validation.rules.not_here'
+               end
 
         expect { resolver.message(:not_here, path: [nil]) }
           .to raise_error(Dry::Validation::MissingMessageError, <<~STR)
@@ -54,11 +54,11 @@ RSpec.describe Dry::Validation::Messages::Resolver, '#message' do
       end
 
       it 'raises error when template was not found' do
-        if prepend_locale
-          path = "#{locale}.dry_validation.rules.not_here"
-        else
-          path = 'dry_validation.rules.not_here'
-        end
+        path = if prepend_locale
+                 "#{locale}.dry_validation.rules.not_here"
+               else
+                 'dry_validation.rules.not_here'
+               end
 
         expect { resolver.message(:not_here, path: [:email]) }
           .to raise_error(Dry::Validation::MissingMessageError, <<~STR)
