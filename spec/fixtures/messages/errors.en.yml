@@ -2,6 +2,7 @@ en:
   dry_validation:
     rules:
       email: "E-mail"
+      not_good_enough: "Email should be nicer"
     errors:
       rules:
         not_weekend: "this only works on weekends"

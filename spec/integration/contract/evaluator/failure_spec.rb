@@ -67,14 +67,28 @@ RSpec.describe Dry::Validation::Evaluator do
   end
 
   context 'setting base failures' do
-    before do
-      contract_class.rule(:email) do
-        base.failure('is invalid')
+    context 'string failure' do
+      before do
+        contract_class.rule(:email) do
+          base.failure('is invalid')
+        end
+      end
+
+      it 'sets error under specified key' do
+        expect(contract.(email: 'foo').errors.to_h).to eql(nil => ['is invalid'])
       end
     end
 
-    it 'sets error under specified key' do
-      expect(contract.(email: 'foo').errors.to_h).to eql(nil => ['is invalid'])
+    context 'symbol failure' do
+      before do
+        contract_class.rule(:email) do
+          base.failure(:not_good_enough)
+        end
+      end
+
+      it 'sets error under specified key' do
+        expect(contract.(email: 'foo').errors.to_h).to eql(nil => ['Email should be nicer'])
+      end
     end
   end
 
