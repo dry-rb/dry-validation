@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Dry::Validation::Messages::Resolver, '#message' do
-  shared_context 'resolving' do
+  shared_context 'resolving' do |prepend_locale: false|
     subject(:resolver) do
       contract_class.new(locale: locale, schema: proc {}).message_resolver
     end
@@ -40,10 +40,29 @@ RSpec.describe Dry::Validation::Messages::Resolver, '#message' do
           .to eql(["doesn't look good", {}])
       end
 
+      it 'provides meaningful message when path=[nil]' do
+        if prepend_locale
+          path = "#{locale}.dry_validation.rules.not_here"
+        else
+          path = 'dry_validation.rules.not_here'
+        end
+
+        expect { resolver.message(:not_here, path: [nil]) }
+          .to raise_error(Dry::Validation::MissingMessageError, <<~STR)
+            Message template for :not_here under ["#{path}"] was not found
+          STR
+      end
+
       it 'raises error when template was not found' do
+        if prepend_locale
+          path = "#{locale}.dry_validation.rules.not_here"
+        else
+          path = 'dry_validation.rules.not_here'
+        end
+
         expect { resolver.message(:not_here, path: [:email]) }
           .to raise_error(Dry::Validation::MissingMessageError, <<~STR)
-            Message template for :not_here under "email" was not found
+            Message template for :not_here under ["#{path}"] was not found
           STR
       end
     end
@@ -78,7 +97,7 @@ RSpec.describe Dry::Validation::Messages::Resolver, '#message' do
       contract_class.config.messages.backend = :yaml
     end
 
-    include_context 'resolving'
+    include_context 'resolving', prepend_locale: true
   end
 
   context 'using :i18n' do

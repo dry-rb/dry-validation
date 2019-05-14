@@ -68,7 +68,7 @@ module Dry
 
           unless template
             raise MissingMessageError, <<~STR
-              Message template for #{rule.inspect} under #{keys.join(DOT).inspect} was not found
+              Message template for #{rule.inspect} under #{messages.rule_lookup_paths(name: rule, locale: locale)} was not found
             STR
           end
 
