@@ -1,7 +1,10 @@
 require 'pathname'
 require 'concurrent/map'
+
 require 'dry/equalizer'
 require 'dry/configurable'
+
+require 'dry/validation/template'
 
 module Dry
   module Validation
@@ -62,22 +65,14 @@ module Dry
         end
 
         def call(predicate, options = EMPTY_HASH)
-          cache.fetch_or_store(cache_key(predicate, options)) do
+          cache.fetch_or_store([predicate, options.reject { |k,| k.equal?(:input) }]) do
             path, opts = lookup(predicate, options)
-            get(path, opts) if path
+            return unless path
+            text = yield(path, opts)
+            Template[text]
           end
         end
         alias_method :[], :call
-
-        if ::Hash.instance_methods.include?(:slice)
-          def cache_key(predicate, options)
-            [predicate, options.slice(*CACHE_KEYS)]
-          end
-        else
-          def cache_key(predicate, options)
-            [predicate, options.select { |key,| CACHE_KEYS.include?(key) }]
-          end
-        end
 
         def lookup(predicate, options = {})
           tokens = options.merge(
@@ -112,7 +107,7 @@ module Dry
         end
 
         def cache
-          @cache ||= self.class.cache[hash]
+          @cache ||= self.class.cache[self]
         end
 
         def default_locale

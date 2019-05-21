@@ -32,7 +32,7 @@ module Dry
         end
 
         def to_s
-          [left, right].uniq.join(" #{messages[:or]} ")
+          [left, right].uniq.join(" #{messages[:or].()} ")
         end
       end
 

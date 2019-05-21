@@ -34,6 +34,13 @@ module Dry
         @data = data
       end
 
+      def call(predicate, options = EMPTY_HASH)
+        super do |path, opts|
+          get(path, opts)
+        end
+      end
+      alias_method :[], :call
+
       def get(key, options = {})
         data[key % { locale: options.fetch(:locale, default_locale) }]
       end
