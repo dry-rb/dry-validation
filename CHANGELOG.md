@@ -1,3 +1,16 @@
+# v0.13.3 2019-05-21
+
+### Fixed
+
+* Fixed regression with caching templates that rely on predicate arguments (solnic)
+* Removed ugly workaround for template evaluation with extra tokens (solnic)
+
+### Changed
+
+* [internal] `Messages::Abstract#call` returns a `Template` object now, this was backported from dry-schema (solnic)
+
+[Compare v0.13.2...v0.13.3](https://github.com/dry-rb/dry-validation/compare/v0.13.2...v0.13.3)
+
 # v0.13.2 2019-05-12
 
 ### Fixed
