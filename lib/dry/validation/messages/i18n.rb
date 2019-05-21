@@ -13,8 +13,15 @@ module Dry
         @t = I18n.method(:t)
       end
 
+      def call(predicate, options = EMPTY_HASH)
+        super do |path, opts|
+          get(path, opts)
+        end
+      end
+      alias_method :[], :call
+
       def get(key, options = {})
-        t.(key, options) if key
+        t.(key, locale: options.fetch(:locale, default_locale)) if key
       end
 
       def rule(name, options = {})
