@@ -1,7 +1,10 @@
 require 'pathname'
 require 'concurrent/map'
+
 require 'dry/equalizer'
 require 'dry/configurable'
+
+require 'dry/validation/template'
 
 module Dry
   module Validation
@@ -65,7 +68,8 @@ module Dry
           cache.fetch_or_store([predicate, options.reject { |k,| k.equal?(:input) }]) do
             path, opts = lookup(predicate, options)
             return unless path
-            yield(path, opts)
+            text = yield(path, opts)
+            Template[text]
           end
         end
         alias_method :[], :call
