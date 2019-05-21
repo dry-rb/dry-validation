@@ -112,7 +112,7 @@ module Dry
         end
 
         def cache
-          @cache ||= self.class.cache[hash]
+          @cache ||= self.class.cache[self]
         end
 
         def default_locale
