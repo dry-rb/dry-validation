@@ -5,7 +5,7 @@ require 'dry/validation/contract'
 RSpec.describe Dry::Validation::Contract, 'setting default locale' do
   subject(:contract) do
     Dry::Validation.Contract do
-      config.locale = :pl
+      config.messages.default_locale = :pl
       config.messages.backend = :i18n
       config.messages.load_paths << SPEC_ROOT.join('fixtures/messages/errors.pl.yml')
 
@@ -20,8 +20,6 @@ RSpec.describe Dry::Validation::Contract, 'setting default locale' do
   end
 
   it 'uses configured default locale' do
-    pending 'this needs improvements on dry-schema side'
-
     expect(contract.(email: 'foo').errors.to_h).to eql(email: ['oh nie zły email'])
   end
 end

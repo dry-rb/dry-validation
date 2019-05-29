@@ -11,7 +11,6 @@ module Dry
     #
     # @api public
     class Config < Schema::Config
-      setting :locale, :en
       setting :macros, Macros::Container.new, &:dup
     end
   end
