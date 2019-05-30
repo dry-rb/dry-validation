@@ -20,7 +20,7 @@ RSpec.describe Dry::Validation::Contract do
   describe '#inspect' do
     it 'returns a string representation' do
       expect(contract.inspect).to eql(
-        %(#<Test::NewUserContract schema=#<Dry::Schema::Params keys=["email"] rules={:email=>"key?(:email) AND key[email](str? AND filled?)"}> rules=[#<Dry::Validation::Rule keys=[:email]>]>)
+        %(#<Test::NewUserContract schema=#<Dry::Schema::Params keys=["email"] rules={:email=>"key?(:email) AND key[email](str?)"}> rules=[#<Dry::Validation::Rule keys=[:email]>]>)
       )
     end
   end

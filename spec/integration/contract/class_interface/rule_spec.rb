@@ -126,7 +126,7 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
 
     it 'applies the rule when all values passed schema checks' do
       expect(contract.(email: nil, login: nil).errors.to_h)
-        .to eql(email: ['must be a string'], login: ['must be a string'])
+        .to eql(email: ['must be filled'], login: ['must be filled'])
 
       expect(contract.(email: 'jane@doe.org', login: 'jane').errors.to_h)
         .to eql(login: ['is not needed when email is provided'])
