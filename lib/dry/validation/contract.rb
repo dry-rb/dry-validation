@@ -65,7 +65,7 @@ module Dry
       # @!attribute [r] locale
       #   @return [Symbol] Contract's locale (default is `:en`)
       #   @api public
-      option :locale, default: -> { resolve_locale }
+      option :locale, default: -> { messages.default_locale }
 
       # @!attribute [r] macros
       #   @return [Macros::Container] Configured macros
@@ -131,19 +131,6 @@ module Dry
       # @api private
       def macro(name)
         macros.key?(name) ? macros[name] : Macros[name]
-      end
-
-      # Return configured locale
-      #
-      # @return [Symbol]
-      #
-      # @api private
-      def resolve_locale
-        if messages.default_locale.equal?(config.locale)
-          config.locale
-        else
-          messages.default_locale
-        end
       end
 
       # Return configured messages backend
