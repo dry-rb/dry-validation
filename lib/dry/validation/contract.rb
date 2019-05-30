@@ -62,11 +62,6 @@ module Dry
       #   @api public
       option :config, default: -> { self.class.config }
 
-      # @!attribute [r] locale
-      #   @return [Symbol] Contract's locale (default is `:en`)
-      #   @api public
-      option :locale, default: -> { messages.default_locale }
-
       # @!attribute [r] macros
       #   @return [Macros::Container] Configured macros
       #   @see Macros::Container#register
@@ -86,7 +81,7 @@ module Dry
       # @!attribute [r] message_resolver
       #   @return [Messages::Resolver]
       #   @api private
-      option :message_resolver, default: -> { Messages::Resolver.new(messages, locale) }
+      option :message_resolver, default: -> { Messages::Resolver.new(messages) }
 
       # Apply the contract to an input
       #
@@ -96,7 +91,7 @@ module Dry
       #
       # @api public
       def call(input)
-        Result.new(schema.(input), Concurrent::Map.new, locale: locale) do |result|
+        Result.new(schema.(input), Concurrent::Map.new) do |result|
           rules.each do |rule|
             next if rule.keys.any? { |key| error?(result, key) }
 

@@ -14,15 +14,9 @@ module Dry
         #   @api private
         attr_reader :messages
 
-        # @!attribute [r] locale
-        #   @return [Symbol] current locale
-        #   @api private
-        attr_reader :locale
-
         # @api private
-        def initialize(messages, locale = :en)
+        def initialize(messages)
           @messages = messages
-          @locale = locale
         end
 
         # Resolve Message object from provided args and path
@@ -55,9 +49,9 @@ module Dry
         # @return [String]
         #
         # @api public
-        def message(rule, tokens: EMPTY_HASH, path:, locale: self.locale, full: false)
+        def message(rule, tokens: EMPTY_HASH, locale: nil, full: false, path:)
           keys = path.to_a.compact
-          msg_opts = tokens.merge(path: keys, locale: locale)
+          msg_opts = tokens.merge(path: keys, locale: locale || messages.default_locale)
 
           if keys.empty?
             template, meta = messages["rules.#{rule}", msg_opts]

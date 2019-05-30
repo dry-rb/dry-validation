@@ -25,25 +25,6 @@ RSpec.describe Dry::Validation::Contract do
     end
   end
 
-  describe '#locale' do
-    context 'i18n' do
-      before do
-        I18n.available_locales = %i[en pl]
-        I18n.locale = :pl
-      end
-
-      after do
-        I18n.locale = :en
-      end
-
-      it 'respects i18n.locale' do
-        Test::NewUserContract.config.messages.backend = :i18n
-
-        expect(contract.locale).to be(:pl)
-      end
-    end
-  end
-
   describe '.new' do
     it 'raises error when schema is not defined' do
       Test::NewUserContract.instance_variable_set('@__schema__', nil)

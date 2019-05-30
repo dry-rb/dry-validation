@@ -27,7 +27,7 @@ module Dry
 
       # @api private
       def initialize(messages, options = EMPTY_HASH)
-        @locale = options.fetch(:locale, :en)
+        @locale = options[:locale]
         @source_messages = options.fetch(:source) { messages.dup }
         super
       end
@@ -38,7 +38,7 @@ module Dry
       #
       # @api private
       def with(other, new_options = EMPTY_HASH)
-        return self if new_options.empty?
+        return self if new_options.empty? && other.eql?(messages)
 
         self.class.new(
           (other + select { |err| err.is_a?(Message) }).uniq,
