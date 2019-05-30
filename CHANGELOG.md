@@ -2,7 +2,7 @@
 
 ### Fixed
 
-- Contract's `:locale` option respects `I18n.locale` now (solnic)
+- Contract's `config.locale` option was replaced by `config.messages.default_locale` to avoid conflicts with run-time `:locale` option and/or whatever is set via `I18n` gem (solnic)
 
 ### Changed
 
