@@ -12,6 +12,7 @@
 
 - `rule` will raise `InvalidKeysError` when specified keys are not defined by the schema (solnic)
 - `Contract.new` will raise `SchemaMissingError` when the class doesn't have schema defined (solnic)
+- Contracts no longer support `:locale` option in the constructor. Use `Result#errors(locale: :pl)` to change locale at run-time (solnic)
 
 [Compare v1.0.0.rc3...v1.0.0](https://github.com/dry-rb/dry-validation/compare/v1.0.0.rc3...v1.0.0)
 
