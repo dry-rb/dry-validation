@@ -11,6 +11,31 @@ RSpec.describe Dry::Validation::Values do
     { name: 'Jane', address: { city: 'Paris' } }
   end
 
+  describe '#[]' do
+    it 'works with a symbol' do
+      expect(values[:name]).to eql('Jane')
+    end
+
+    it 'works with a dot-notation path' do
+      expect(values['address.city']).to eql('Paris')
+    end
+
+    it 'works with a path' do
+      expect(values[:address, :city]).to eql('Paris')
+    end
+
+    it 'works with an array' do
+      expect(values[[:address, :city]]).to eql('Paris')
+    end
+
+    it 'raises on unpexpected argument type' do
+      expect { values[{}] }
+        .to raise_error(
+          ArgumentError, '+key+ must be a symbol, string, array, or a list of keys for dig'
+        )
+    end
+  end
+
   describe '#dig' do
     it 'returns a value from a nested hash when it exists' do
       expect(values.dig(:address, :city)).to eql('Paris')
