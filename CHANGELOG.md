@@ -1,5 +1,9 @@
 # v1.0.0 to-be-released
 
+### Added
+
+- `values#[]` is now compatible with path specs (symbol, array with keys or dot-notation) (issue #528) (solnic)
+
 ### Fixed
 
 - Contract's `config.locale` option was replaced by `config.messages.default_locale` to avoid conflicts with run-time `:locale` option and/or whatever is set via `I18n` gem (solnic)
