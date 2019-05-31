@@ -9,6 +9,35 @@ module Dry
     #
     # @api public
     module Macros
+      module Registrar
+        # Register a macro
+        #
+        # @example register a global macro
+        #   Dry::Validation.register_macro(:even_numbers) do
+        #     key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
+        #   end
+        #
+        # @example register a contract macro
+        #   class MyContract < Dry::Validation::Contract
+        #     register_macro(:even_numbers) do
+        #       key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
+        #     end
+        #   end
+        #
+        # @param [Symbol] name The name of the macro
+        # @param [Array] *args Optional default arguments for the macro
+        #
+        # @return [self]
+        #
+        # @see Macro
+        #
+        # @api public
+        def register_macro(name, *args, &block)
+          macros.register(name, *args, &block)
+          self
+        end
+      end
+
       # Registry for macros
       #
       # @api public

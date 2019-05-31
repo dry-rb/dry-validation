@@ -6,6 +6,7 @@ require 'dry/schema/path'
 require 'dry/schema/key_map'
 
 require 'dry/validation/constants'
+require 'dry/validation/macros'
 
 module Dry
   module Schema
@@ -42,6 +43,8 @@ module Dry
       #
       # @api public
       module ClassInterface
+        include Macros::Registrar
+
         # @api private
         def inherited(klass)
           super
@@ -69,27 +72,6 @@ module Dry
         # @api public
         def macros
           config.macros
-        end
-
-        # Register a new global macro
-        #
-        # Macros will be available for the contract class and its descendants
-        #
-        # @example
-        #   class MyContract < Dry::Validation::Contract
-        #     register_macro(:even_numbers) do
-        #       key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
-        #     end
-        #   end
-        #
-        # @param [Symbol] name The name of the macro
-        #
-        # @return [self]
-        #
-        # @api public
-        def register_macro(name, *args, &block)
-          macros.register(name, *args, &block)
-          self
         end
 
         # Define a params schema for your contract
