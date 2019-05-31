@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/container'
+require 'dry/validation/macro'
 
 module Dry
   module Validation
@@ -28,8 +29,9 @@ module Dry
         # @return [self]
         #
         # @api public
-        def register(name, &block)
-          super(name, block, call: false)
+        def register(name, *args, &block)
+          macro = Macro.new(name, args: args, block: block)
+          super(name, macro, call: false, &nil)
           self
         end
       end
@@ -52,8 +54,8 @@ module Dry
       # @return [Macros]
       #
       # @api public
-      def self.register(*args, &block)
-        container.register(*args, &block)
+      def self.register(name, *args, &block)
+        container.register(name, *args, &block)
         self
       end
 

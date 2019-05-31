@@ -87,8 +87,8 @@ module Dry
         # @return [self]
         #
         # @api public
-        def register_macro(name, &block)
-          macros.register(name, &block)
+        def register_macro(name, *args, &block)
+          macros.register(name, *args, &block)
           self
         end
 
