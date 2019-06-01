@@ -13,6 +13,7 @@ module Dry
   # @api public
   module Validation
     extend Dry::Core::Extensions
+    extend Macros::Registrar
 
     register_extension(:monads) do
       require 'dry/validation/extensions/monads'
@@ -20,23 +21,6 @@ module Dry
 
     register_extension(:hints) do
       require 'dry/validation/extensions/hints'
-    end
-
-    # Register a new global macro
-    #
-    # @example
-    #   Dry::Validation.register_macro(:even_numbers) do
-    #     key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
-    #   end
-    #
-    # @param [Symbol] name The name of the macro
-    #
-    # @return [self]
-    #
-    # @api public
-    def self.register_macro(name, &block)
-      Macros.register(name, &block)
-      self
     end
 
     # Define a contract and build its instance
@@ -59,6 +43,13 @@ module Dry
     # @api public
     def self.Contract(options = EMPTY_HASH, &block)
       Contract.build(options, &block)
+    end
+
+    # This is needed by Macros::Registrar
+    #
+    # @api private
+    def self.macros
+      Macros
     end
   end
 end

@@ -56,7 +56,7 @@ module Dry
       #
       # @api public
       def validate(*macros, &block)
-        @macros = macros
+        @macros = macros.map { |spec| Array(spec) }.map(&:flatten)
         @block = block if block
         self
       end

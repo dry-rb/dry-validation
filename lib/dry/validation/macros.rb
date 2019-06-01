@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/container'
+require 'dry/validation/macro'
 
 module Dry
   module Validation
@@ -8,6 +9,35 @@ module Dry
     #
     # @api public
     module Macros
+      module Registrar
+        # Register a macro
+        #
+        # @example register a global macro
+        #   Dry::Validation.register_macro(:even_numbers) do
+        #     key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
+        #   end
+        #
+        # @example register a contract macro
+        #   class MyContract < Dry::Validation::Contract
+        #     register_macro(:even_numbers) do
+        #       key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
+        #     end
+        #   end
+        #
+        # @param [Symbol] name The name of the macro
+        # @param [Array] *args Optional default arguments for the macro
+        #
+        # @return [self]
+        #
+        # @see Macro
+        #
+        # @api public
+        def register_macro(name, *args, &block)
+          macros.register(name, *args, &block)
+          self
+        end
+      end
+
       # Registry for macros
       #
       # @api public
@@ -28,8 +58,9 @@ module Dry
         # @return [self]
         #
         # @api public
-        def register(name, &block)
-          super(name, block, call: false)
+        def register(name, *args, &block)
+          macro = Macro.new(name, args: args, block: block)
+          super(name, macro, call: false, &nil)
           self
         end
       end
@@ -52,8 +83,8 @@ module Dry
       # @return [Macros]
       #
       # @api public
-      def self.register(*args, &block)
-        container.register(*args, &block)
+      def self.register(name, *args, &block)
+        container.register(name, *args, &block)
         self
       end
 

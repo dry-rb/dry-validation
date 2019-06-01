@@ -92,8 +92,9 @@ module Dry
 
         instance_exec(_context, &block) if block
 
-        macros.each do |macro|
-          instance_exec(_context, &macro(macro))
+        macros.each do |args|
+          macro = macro(*args.flatten(1))
+          instance_exec(_context, macro, &macro.block)
         end
       end
 

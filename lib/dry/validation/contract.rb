@@ -124,8 +124,8 @@ module Dry
       # @return [Proc,#to_proc]
       #
       # @api private
-      def macro(name)
-        macros.key?(name) ? macros[name] : Macros[name]
+      def macro(name, *args)
+        (macros.key?(name) ? macros[name] : Macros[name]).with(args)
       end
 
       # Return configured messages backend
