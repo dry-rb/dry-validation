@@ -68,6 +68,8 @@ module Dry
       # @api public
       def each(&block)
         root = keys
+        @keys = []
+
         @block = proc do
           values[root].each_with_index do |value, idx|
             path = [*root, idx]
@@ -79,7 +81,7 @@ module Dry
             failures.concat(evaluator.failures)
           end
         end
-        @keys = []
+
         self
       end
 
