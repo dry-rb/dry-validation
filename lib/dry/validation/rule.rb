@@ -74,14 +74,7 @@ module Dry
 
             next if result.error?(path)
 
-            evaluator = Evaluator.new(
-              _contract,
-              _context: value,
-              result: result,
-              values: values,
-              keys: [path],
-              &block
-            )
+            evaluator = with(_context: value, keys: [path], &block)
 
             failures.concat(evaluator.failures)
           end

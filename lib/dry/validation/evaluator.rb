@@ -139,6 +139,17 @@ module Dry
         @failures
       end
 
+      # @api private
+      def with(new_opts, &block)
+        options = {
+          _context: _context,
+          result: result,
+          values: values
+        }.merge(new_opts)
+
+        Evaluator.new(_contract, options, &block)
+      end
+
       # Return default (first) key name
       #
       # @return [Symbol]
