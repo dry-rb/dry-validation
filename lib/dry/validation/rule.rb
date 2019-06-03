@@ -65,6 +65,18 @@ module Dry
         self
       end
 
+      # Define a validation function for each element of an array
+      #
+      # The function will be applied only if schema checks passed
+      # for a given array item.
+      #
+      # @example
+      #   rule(:nums).each do |value|
+      #     key.failure("must be greater than 0") if value < 0
+      #   end
+      #
+      # @return [Rule]
+      #
       # @api public
       def each(&block)
         root = keys
