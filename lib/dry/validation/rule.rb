@@ -44,7 +44,11 @@ module Dry
       def call(contract, result)
         Evaluator.new(
           contract,
-          values: result.values, keys: keys, macros: macros, _context: result.context,
+          keys: keys,
+          macros: macros,
+          result: result,
+          values: result.values,
+          _context: result.context,
           &block
         )
       end
@@ -58,6 +62,31 @@ module Dry
       def validate(*macros, &block)
         @macros = macros.map { |spec| Array(spec) }.map(&:flatten)
         @block = block if block
+        self
+      end
+
+      # @api public
+      def each(&block)
+        root = keys
+        @block = proc do
+          values[root].each_with_index do |value, idx|
+            path = [*root, idx]
+
+            next if result.error?(path)
+
+            evaluator = Evaluator.new(
+              _contract,
+              _context: value,
+              result: result,
+              values: values,
+              keys: [path],
+              &block
+            )
+
+            failures.concat(evaluator.failures)
+          end
+        end
+        @keys = []
         self
       end
 

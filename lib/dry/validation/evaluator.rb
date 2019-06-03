@@ -59,6 +59,11 @@ module Dry
       #   @api private
       param :_contract
 
+      # @!attribute [r] result
+      #   @return [Result]
+      #   @api private
+      option :result
+
       # @!attribute [r] keys
       #   @return [Array<String, Symbol, Hash>]
       #   @api private
@@ -128,10 +133,10 @@ module Dry
       #
       # @api private
       def failures
-        failures = []
-        failures += @base.opts if defined?(@base)
-        failures.concat(@key.values.flat_map(&:opts)) if defined?(@key)
-        failures
+        @failures ||= []
+        @failures += @base.opts if defined?(@base)
+        @failures.concat(@key.values.flat_map(&:opts)) if defined?(@key)
+        @failures
       end
 
       # Return default (first) key name
@@ -141,6 +146,17 @@ module Dry
       # @api public
       def key_name
         @key_name ||= keys.first
+      end
+
+      # Check if there are any errors under the provided path
+      #
+      # @param [Symbol, String, Array] A Path-compatible spec
+      #
+      # @return [Boolean]
+      #
+      # @api public
+      def error?(path)
+        result.error?(path)
       end
 
       # @api private
