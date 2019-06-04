@@ -28,7 +28,7 @@ module Dry
       # @api private
       def initialize(path = ROOT_PATH)
         @path = Dry::Schema::Path[path]
-        @opts = []
+        @opts = EMPTY_ARRAY.dup
       end
 
       # Set failure
@@ -50,7 +50,7 @@ module Dry
       #
       # @api public
       def failure(message, tokens = EMPTY_HASH)
-        @opts << { message: message, tokens: tokens, path: path }
+        opts << { message: message, tokens: tokens, path: path }
         self
       end
     end
