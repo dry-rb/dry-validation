@@ -71,7 +71,7 @@ module Dry
       # for a given array item.
       #
       # @example
-      #   rule(:nums).each do |value|
+      #   rule(:nums).each do
       #     key.failure("must be greater than 0") if value < 0
       #   end
       #
