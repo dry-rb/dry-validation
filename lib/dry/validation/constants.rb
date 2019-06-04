@@ -8,6 +8,9 @@ module Dry
 
     DOT = '.'
 
+    # Root path is used for base errors in hash representation of error messages
+    ROOT_PATH = [nil].freeze
+
     # Error raised when `rule` specifies one or more keys that the schema doesn't specify
     InvalidKeysError = Class.new(StandardError)
 

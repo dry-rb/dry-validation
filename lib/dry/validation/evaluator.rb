@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'dry/initializer'
+
 require 'dry/validation/constants'
+require 'dry/validation/failures'
 
 module Dry
   module Validation
@@ -14,45 +16,6 @@ module Dry
     # @api public
     class Evaluator
       extend Dry::Initializer
-
-      ROOT_PATH = [nil].freeze
-
-      # Failure accumulator object
-      #
-      # @api public
-      class Failures
-        # @api private
-        attr_reader :path
-
-        # @api private
-        attr_reader :opts
-
-        # @api private
-        def initialize(path = ROOT_PATH)
-          @path = Dry::Schema::Path[path]
-          @opts = []
-        end
-
-        # Set failure
-        #
-        # @overload failure(message)
-        #   Set message text explicitly
-        #   @param message [String] The message text
-        #   @example
-        #     failure('this failed')
-        #
-        # @overload failure(id)
-        #   Use message identifier (needs localized messages setup)
-        #   @param id [Symbol] The message id
-        #   @example
-        #     failure(:taken)
-        #
-        # @api public
-        def failure(message, tokens = EMPTY_HASH)
-          @opts << { message: message, tokens: tokens, path: path }
-          self
-        end
-      end
 
       # @!attribute [r] _contract
       #   @return [Contract]
