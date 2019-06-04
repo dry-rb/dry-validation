@@ -122,6 +122,24 @@ module Dry
         @key_name ||= keys.first
       end
 
+      # Return the value found under the first specified key
+      #
+      # This is a convenient method that can be used in all the common cases
+      # where a rule depends on just one key and you want a quick access to
+      # the value
+      #
+      # @example
+      #   rule(:age) do
+      #     key.failure(:invalid) if value < 18
+      #   end
+      #
+      # @return [Object]
+      #
+      # @public
+      def value
+        values[key_name]
+      end
+
       # Check if there are any errors under the provided path
       #
       # @param [Symbol, String, Array] A Path-compatible spec

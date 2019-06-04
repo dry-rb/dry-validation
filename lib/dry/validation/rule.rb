@@ -83,12 +83,12 @@ module Dry
         @keys = []
 
         @block = proc do
-          values[root].each_with_index do |value, idx|
+          values[root].each_with_index do |_, idx|
             path = [*root, idx]
 
             next if result.error?(path)
 
-            evaluator = with(_context: value, keys: [path], &block)
+            evaluator = with(keys: [path], &block)
 
             failures.concat(evaluator.failures)
           end

@@ -30,11 +30,11 @@ RSpec.describe Dry::Validation::Contract, '#call' do
       end
 
       rule(:age) do
-        key.failure('must be greater or equal 18') if values[:age] < 18
+        key.failure('must be greater or equal 18') if value < 18
       end
 
       rule(:age) do
-        key.failure('must be greater than 0') if values[:age] < 0
+        key.failure('must be greater than 0') if value < 0
       end
 
       rule(address: :zip) do

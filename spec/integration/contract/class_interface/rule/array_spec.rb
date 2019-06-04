@@ -15,7 +15,7 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
         required(:nums).array(:integer)
       end
 
-      rule(:nums).each do |value|
+      rule(:nums).each do
         key.failure('invalid') if value < 3
       end
     end
