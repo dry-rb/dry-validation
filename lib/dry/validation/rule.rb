@@ -20,6 +20,11 @@ module Dry
 
       extend Dry::Initializer
 
+      # Mapping for block kwarg options used by block_options
+      #
+      # @see Rule#block_options
+      BLOCK_OPTIONS_MAPPINGS = Hash.new { |_, key| key }.update(context: :_context).freeze
+
       # @!attribute [r] keys
       #   @return [Array<Symbol, String, Hash>]
       #   @api private
@@ -46,6 +51,7 @@ module Dry
           contract,
           keys: keys,
           macros: macros,
+          block_options: block_options,
           result: result,
           values: result.values,
           _context: result.context,
@@ -104,6 +110,22 @@ module Dry
       # @api public
       def inspect
         %(#<#{self.class} keys=#{keys.inspect}>)
+      end
+
+      # Extract options for the block kwargs
+      #
+      # @return [Hash]
+      #
+      # @api private
+      def block_options
+        return EMPTY_HASH unless block
+
+        @block_options ||= block
+          .parameters
+          .select { |arg| arg[0].equal?(:keyreq) }
+          .map(&:last)
+          .map { |name| [name, BLOCK_OPTIONS_MAPPINGS[name]] }
+          .to_h
       end
     end
   end

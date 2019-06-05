@@ -52,17 +52,24 @@ module Dry
       #   @api private
       option :values
 
+      # @!attribute [r] block_options
+      #   @return [Hash<Symbol=>Symbol>]
+      #   @api private
+      option :block_options, default: proc { EMPTY_HASH }
+
       # Initialize a new evaluator
       #
       # @api private
       def initialize(*args, &block)
         super(*args)
 
-        instance_exec(_context, &block) if block
+        exec_opts = block_options.map { |key, value| [key, public_send(value)] }.to_h
+
+        instance_exec(exec_opts, &block) if block
 
         macros.each do |args|
           macro = macro(*args.flatten(1))
-          instance_exec(_context, macro, &macro.block)
+          instance_exec(exec_opts.merge(macro: macro), &macro.block)
         end
       end
 
