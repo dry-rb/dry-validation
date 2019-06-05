@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
 require 'dry/validation/constants'
+require 'dry/validation/function'
 
 module Dry
   module Validation
     # A wrapper for macro validation blocks
     #
     # @api public
-    class Macro
-      extend Dry::Initializer
-
+    class Macro < Function
       # @!attribute [r] name
       #   @return [Symbol]
       #   @api public
@@ -33,18 +32,6 @@ module Dry
       # @api private
       def extract_block_options(options)
         block_options.map { |key, value| [key, options[value]] }.to_h
-      end
-
-      private
-
-      # @api private
-      def block_options
-        @block_options ||= block
-          .parameters
-          .select { |arg| arg[0].equal?(:keyreq) }
-          .map(&:last)
-          .map { |name| [name, BLOCK_OPTIONS_MAPPINGS[name]] }
-          .to_h
       end
     end
   end
