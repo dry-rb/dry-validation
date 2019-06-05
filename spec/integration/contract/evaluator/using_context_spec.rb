@@ -7,7 +7,7 @@ RSpec.describe Dry::Validation::Evaluator, 'using context' do
 
   context 'when key does not exist' do
     subject(:contract) do
-      Dry::Validation::Contract.build do
+      Dry::Validation.Contract do
         schema do
           required(:email).filled(:string)
           required(:user_id).filled(:integer)
