@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry/validation/contract'
 
 RSpec.describe Dry::Validation::Contract do
@@ -32,7 +34,7 @@ RSpec.describe Dry::Validation::Contract do
       expect { Test::NewUserContract.new }
         .to raise_error(
           Dry::Validation::SchemaMissingError,
-          "Test::NewUserContract cannot be instantiated without a schema defined"
+          'Test::NewUserContract cannot be instantiated without a schema defined'
         )
     end
   end

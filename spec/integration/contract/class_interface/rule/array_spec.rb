@@ -24,7 +24,7 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
   context 'when the value is an array' do
     it 'applies rule when an item passed schema checks' do
       expect(contract.(nums: ['oops', 1, 4, 0]).errors.to_h)
-        .to eql(nums: { 0 => ['must be an integer'], 1 => ['invalid'], 3 => ['invalid']})
+        .to eql(nums: { 0 => ['must be an integer'], 1 => ['invalid'], 3 => ['invalid'] })
     end
   end
 end

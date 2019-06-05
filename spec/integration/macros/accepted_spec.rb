@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Dry::Validation::Macros, ':acceptance' do
   subject(:contract) do
     Dry::Validation::Contract.build do

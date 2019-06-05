@@ -66,9 +66,7 @@ RSpec.describe 'Defining custom macros' do
       Test::BaseContract.register_macro(:min) do |_, macro|
         num = macro.args[0]
 
-        unless values[key_name].size >= num
-          key.failure("must have at least #{num} items")
-        end
+        key.failure("must have at least #{num} items") unless values[key_name].size >= num
       end
 
       contract_class.rule(:numbers).validate(min: 3)

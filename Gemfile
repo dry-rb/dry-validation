@@ -15,16 +15,16 @@ group :test do
 end
 
 group :tools do
-  gem 'pry-byebug', platform: :mri
   gem 'pry', platform: :jruby
+  gem 'pry-byebug', platform: :mri
 end
 
 group :benchmarks do
+  gem 'actionpack'
+  gem 'activemodel'
+  gem 'activerecord'
   gem 'benchmark-ips'
   gem 'hotch', platform: :mri
-  gem 'activerecord'
   gem 'sqlite3'
-  gem 'activemodel'
-  gem 'actionpack'
   gem 'virtus'
 end

@@ -46,7 +46,7 @@ module Dry
           when String then self[*key.split(DOT).map(&:to_sym)]
           when Array then self[*key]
           else
-            raise ArgumentError, "+key+ must be a symbol, string, array, or a list of keys for dig"
+            raise ArgumentError, '+key+ must be a symbol, string, array, or a list of keys for dig'
           end
         else
           data.dig(*args)

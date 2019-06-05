@@ -25,7 +25,7 @@ RSpec.describe Dry::Validation::Values do
     end
 
     it 'works with an array' do
-      expect(values[[:address, :city]]).to eql('Paris')
+      expect(values[%i[address city]]).to eql('Paris')
     end
 
     it 'raises on unpexpected argument type' do

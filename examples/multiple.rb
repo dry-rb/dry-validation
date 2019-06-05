@@ -6,10 +6,11 @@ schema = Dry::Validation.Schema do
   configure do
     def self.messages
       super.merge(en: {
-        errors: {
-          john_email?: '%{value} is not a john email',
-          example_email?: '%{value} is not a example email'
-        } })
+                    errors: {
+                      john_email?: '%{value} is not a john email',
+                      example_email?: '%{value} is not a example email'
+                    }
+                  })
     end
   end
 
