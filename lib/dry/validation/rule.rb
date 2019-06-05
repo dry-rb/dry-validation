@@ -20,11 +20,6 @@ module Dry
 
       extend Dry::Initializer
 
-      # Mapping for block kwarg options used by block_options
-      #
-      # @see Rule#block_options
-      BLOCK_OPTIONS_MAPPINGS = Hash.new { |_, key| key }.update(context: :_context).freeze
-
       # @!attribute [r] keys
       #   @return [Array<Symbol, String, Hash>]
       #   @api private

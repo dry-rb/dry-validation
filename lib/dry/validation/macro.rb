@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'dry/validation/constants'
+
 module Dry
   module Validation
     # A wrapper for macro validation blocks
@@ -41,7 +43,7 @@ module Dry
           .parameters
           .select { |arg| arg[0].equal?(:keyreq) }
           .map(&:last)
-          .map { |name| [name, Rule::BLOCK_OPTIONS_MAPPINGS[name]] }
+          .map { |name| [name, BLOCK_OPTIONS_MAPPINGS[name]] }
           .to_h
       end
     end
