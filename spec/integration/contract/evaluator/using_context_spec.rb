@@ -7,22 +7,22 @@ RSpec.describe Dry::Validation::Evaluator, 'using context' do
 
   context 'when key does not exist' do
     subject(:contract) do
-      Dry::Validation::Contract.build do
+      Dry::Validation.Contract do
         schema do
           required(:email).filled(:string)
           required(:user_id).filled(:integer)
         end
 
-        rule(:user_id) do |ctx|
+        rule(:user_id) do |context:|
           if values[:user_id].equal?(312)
-            ctx[:user] = 'jane'
+            context[:user] = 'jane'
           else
             key(:user).failure('must be jane')
           end
         end
 
-        rule(:email) do |ctx|
-          key.failure('is invalid') if ctx[:user] == 'jane' && values[:email] != 'jane@doe.org'
+        rule(:email) do |context:|
+          key.failure('is invalid') if context[:user] == 'jane' && values[:email] != 'jane@doe.org'
         end
       end
     end

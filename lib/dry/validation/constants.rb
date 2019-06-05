@@ -11,6 +11,11 @@ module Dry
     # Root path is used for base errors in hash representation of error messages
     ROOT_PATH = [nil].freeze
 
+    # Mapping for block kwarg options used by block_options
+    #
+    # @see Rule#block_options
+    BLOCK_OPTIONS_MAPPINGS = Hash.new { |_, key| key }.update(context: :_context).freeze
+
     # Error raised when `rule` specifies one or more keys that the schema doesn't specify
     InvalidKeysError = Class.new(StandardError)
 

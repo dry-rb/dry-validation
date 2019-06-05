@@ -52,17 +52,30 @@ module Dry
       #   @api private
       option :values
 
+      # @!attribute [r] block_options
+      #   @return [Hash<Symbol=>Symbol>]
+      #   @api private
+      option :block_options, default: proc { EMPTY_HASH }
+
+      # @return [Hash]
+      attr_reader :_options
+
       # Initialize a new evaluator
       #
       # @api private
-      def initialize(*args, &block)
-        super(*args)
+      def initialize(contract, options, &block)
+        super(contract, options)
 
-        instance_exec(_context, &block) if block
+        @_options = options
+
+        if block
+          exec_opts = block_options.map { |key, value| [key, _options[value]] }.to_h
+          instance_exec(exec_opts, &block)
+        end
 
         macros.each do |args|
           macro = macro(*args.flatten(1))
-          instance_exec(_context, macro, &macro.block)
+          instance_exec(macro.extract_block_options(_options.merge(macro: macro)), &macro.block)
         end
       end
 
@@ -104,13 +117,7 @@ module Dry
 
       # @api private
       def with(new_opts, &block)
-        options = {
-          _context: _context,
-          result: result,
-          values: values
-        }.merge(new_opts)
-
-        Evaluator.new(_contract, options, &block)
+        self.class.new(_contract, _options.merge(new_opts), &block)
       end
 
       # Return default (first) key name

@@ -63,7 +63,7 @@ RSpec.describe 'Defining custom macros' do
 
   context 'using a macro with options' do
     before do
-      Test::BaseContract.register_macro(:min) do |_, macro|
+      Test::BaseContract.register_macro(:min) do |context:, macro:|
         num = macro.args[0]
 
         key.failure("must have at least #{num} items") unless values[key_name].size >= num

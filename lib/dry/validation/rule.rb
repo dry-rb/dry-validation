@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'dry/equalizer'
-require 'dry/initializer'
 
 require 'dry/validation/constants'
+require 'dry/validation/function'
 
 module Dry
   module Validation
@@ -15,10 +15,8 @@ module Dry
     # @see Contract#rule
     #
     # @api public
-    class Rule
+    class Rule < Function
       include Dry::Equalizer(:keys, :block, inspect: false)
-
-      extend Dry::Initializer
 
       # @!attribute [r] keys
       #   @return [Array<Symbol, String, Hash>]
@@ -29,11 +27,6 @@ module Dry
       #   @return [Array<Symbol>]
       #   @api private
       option :macros, default: proc { EMPTY_ARRAY.dup }
-
-      # @!attribute [r] block
-      #   @return [Proc]
-      #   @api private
-      option :block
 
       # Evaluate the rule within the provided context
       #
@@ -46,6 +39,7 @@ module Dry
           contract,
           keys: keys,
           macros: macros,
+          block_options: block_options,
           result: result,
           values: result.values,
           _context: result.context,
