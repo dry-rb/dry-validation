@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'dry/initializer'
+
 require 'dry/validation/constants'
+require 'dry/validation/failures'
 
 module Dry
   module Validation
@@ -15,49 +17,15 @@ module Dry
     class Evaluator
       extend Dry::Initializer
 
-      ROOT_PATH = [nil].freeze
-
-      # Failure accumulator object
-      #
-      # @api public
-      class Failures
-        # @api private
-        attr_reader :path
-
-        # @api private
-        attr_reader :opts
-
-        # @api private
-        def initialize(path = ROOT_PATH)
-          @path = Dry::Schema::Path[path]
-          @opts = []
-        end
-
-        # Set failure
-        #
-        # @overload failure(message)
-        #   Set message text explicitly
-        #   @param message [String] The message text
-        #   @example
-        #     failure('this failed')
-        #
-        # @overload failure(id)
-        #   Use message identifier (needs localized messages setup)
-        #   @param id [Symbol] The message id
-        #   @example
-        #     failure(:taken)
-        #
-        # @api public
-        def failure(message, tokens = EMPTY_HASH)
-          @opts << { message: message, tokens: tokens, path: path }
-          self
-        end
-      end
-
       # @!attribute [r] _contract
       #   @return [Contract]
       #   @api private
       param :_contract
+
+      # @!attribute [r] result
+      #   @return [Result]
+      #   @api private
+      option :result
 
       # @!attribute [r] keys
       #   @return [Array<String, Symbol, Hash>]
@@ -128,10 +96,21 @@ module Dry
       #
       # @api private
       def failures
-        failures = []
-        failures += @base.opts if defined?(@base)
-        failures.concat(@key.values.flat_map(&:opts)) if defined?(@key)
-        failures
+        @failures ||= []
+        @failures += @base.opts if defined?(@base)
+        @failures.concat(@key.values.flat_map(&:opts)) if defined?(@key)
+        @failures
+      end
+
+      # @api private
+      def with(new_opts, &block)
+        options = {
+          _context: _context,
+          result: result,
+          values: values
+        }.merge(new_opts)
+
+        Evaluator.new(_contract, options, &block)
       end
 
       # Return default (first) key name
@@ -141,6 +120,35 @@ module Dry
       # @api public
       def key_name
         @key_name ||= keys.first
+      end
+
+      # Return the value found under the first specified key
+      #
+      # This is a convenient method that can be used in all the common cases
+      # where a rule depends on just one key and you want a quick access to
+      # the value
+      #
+      # @example
+      #   rule(:age) do
+      #     key.failure(:invalid) if value < 18
+      #   end
+      #
+      # @return [Object]
+      #
+      # @public
+      def value
+        values[key_name]
+      end
+
+      # Check if there are any errors under the provided path
+      #
+      # @param [Symbol, String, Array] A Path-compatible spec
+      #
+      # @return [Boolean]
+      #
+      # @api public
+      def error?(path)
+        result.error?(path)
       end
 
       # @api private

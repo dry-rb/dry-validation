@@ -44,7 +44,11 @@ module Dry
       def call(contract, result)
         Evaluator.new(
           contract,
-          values: result.values, keys: keys, macros: macros, _context: result.context,
+          keys: keys,
+          macros: macros,
+          result: result,
+          values: result.values,
+          _context: result.context,
           &block
         )
       end
@@ -58,6 +62,38 @@ module Dry
       def validate(*macros, &block)
         @macros = macros.map { |spec| Array(spec) }.map(&:flatten)
         @block = block if block
+        self
+      end
+
+      # Define a validation function for each element of an array
+      #
+      # The function will be applied only if schema checks passed
+      # for a given array item.
+      #
+      # @example
+      #   rule(:nums).each do
+      #     key.failure("must be greater than 0") if value < 0
+      #   end
+      #
+      # @return [Rule]
+      #
+      # @api public
+      def each(&block)
+        root = keys
+        @keys = []
+
+        @block = proc do
+          values[root].each_with_index do |_, idx|
+            path = [*root, idx]
+
+            next if result.error?(path)
+
+            evaluator = with(keys: [path], &block)
+
+            failures.concat(evaluator.failures)
+          end
+        end
+
         self
       end
 

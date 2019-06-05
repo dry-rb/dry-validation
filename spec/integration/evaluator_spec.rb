@@ -12,7 +12,7 @@ RSpec.describe Dry::Validation::Evaluator do
   end
 
   let(:options) do
-    { keys: [:email], values: values, _context: {} }
+    { keys: [:email], result: {}, values: values, _context: {} }
   end
 
   let(:values) do
