@@ -27,6 +27,23 @@ module Dry
       def with(args)
         self.class.new(name, args: args, block: block)
       end
+
+      # @api private
+      def extract_block_options(options)
+        block_options.map { |key, value| [key, options[value]] }.to_h
+      end
+
+      private
+
+      # @api private
+      def block_options
+        @block_options ||= block
+          .parameters
+          .select { |arg| arg[0].equal?(:keyreq) }
+          .map(&:last)
+          .map { |name| [name, Rule::BLOCK_OPTIONS_MAPPINGS[name]] }
+          .to_h
+      end
     end
   end
 end
