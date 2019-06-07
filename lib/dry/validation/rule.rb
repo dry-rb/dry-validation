@@ -72,7 +72,7 @@ module Dry
       # @return [Rule]
       #
       # @api public
-      def each(&block)
+      def each(*macros, &block)
         root = keys
         @keys = []
 
@@ -82,7 +82,7 @@ module Dry
 
             next if result.error?(path)
 
-            evaluator = with(keys: [path], &block)
+            evaluator = with(macros: macros, keys: [path], &block)
 
             failures.concat(evaluator.failures)
           end
