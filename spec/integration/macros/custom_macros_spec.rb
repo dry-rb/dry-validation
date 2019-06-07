@@ -20,7 +20,7 @@ RSpec.describe 'Defining custom macros' do
   context 'using a macro without options' do
     shared_context 'a contract with a custom macro' do
       before do
-        contract.class.rule(:numbers).validate(:even_numbers)
+        contract_class.rule(:numbers).validate(:even_numbers)
       end
 
       it 'succeeds with valid input' do
@@ -33,30 +33,28 @@ RSpec.describe 'Defining custom macros' do
     end
 
     context 'using macro from the global registry' do
-      include_context 'a contract with a custom macro' do
-        before do
-          Dry::Validation.register_macro(:even_numbers) do
-            key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
-          end
-        end
-
-        after do
-          Dry::Validation::Macros.container._container.delete('even_numbers')
+      before do
+        Dry::Validation.register_macro(:even_numbers) do
+          key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
         end
       end
+
+      after do
+        Dry::Validation::Macros.container._container.delete('even_numbers')
+      end
+
+      include_context 'a contract with a custom macro'
     end
 
     context 'using macro from contract itself' do
-      include_context 'a contract with a custom macro' do
-        before do
-          Test::BaseContract.register_macro(:even_numbers) do
-            key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
-          end
+      before do
+        Test::BaseContract.register_macro(:even_numbers) do
+          key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
         end
+      end
 
-        after do
-          Test::BaseContract.macros._container.delete('even_numbers')
-        end
+      after do
+        Test::BaseContract.macros._container.delete('even_numbers')
       end
     end
   end

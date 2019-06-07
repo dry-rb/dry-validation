@@ -63,6 +63,13 @@ module Dry
           super(name, macro, call: false, &nil)
           self
         end
+
+        # @api private
+        def dup
+          self.class.new.tap do |container|
+            container._container.update(_container)
+          end
+        end
       end
 
       # Return a registered macro
