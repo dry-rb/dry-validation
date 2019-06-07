@@ -2,11 +2,16 @@
 
 ### Added
 
+- Support for defining rules for each element of an array via `rule(:items).each { ... }` (solnic)
+- Support for parameterized macros via `rule(:foo).validate(my_macro: :some_option)` (solnic)
 - `values#[]` is now compatible with path specs (symbol, array with keys or dot-notation) (issue #528) (solnic)
+- `value` shortcut for accessing the value found under the first key specified by a rule. ie `rule(:foo) { value }` returns `values[:foo]` (solnic)
 
 ### Fixed
 
 - Contract's `config.locale` option was replaced by `config.messages.default_locale` to avoid conflicts with run-time `:locale` option and/or whatever is set via `I18n` gem (solnic)
+- Macros no longer mutate `Dry::Validation::Contract.macros` when using inheritance (solnic)
+- Missing dependency on `dry-container` was added (solnic)
 
 ### Changed
 
