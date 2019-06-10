@@ -1,4 +1,20 @@
-# v1.0.0 to-be-released
+# v1.0.0 2019-06-10
+
+This release is a complete rewrite on top of `dry-schema` that uses contract classes to define schema and validation rules. It's **not backward-compatible**. This release addressed over 150 known issues, including bugs and missing features.
+
+See [the list of all addressed issues](https://github.com/dry-rb/dry-validation/issues?utf8=✓&q=is%3Aissue+is%3Aclosed+closed%3A%3E%3D2019-01-01+) as well as issues that were moved to dry-schema and [addressed there](https://github.com/dry-rb/dry-schema/issues?q=is%3Aissue+is%3Aclosed+dry-validation+milestone%3A1.0.0).
+
+### :sparkles: Release highlights :sparkles:
+
+- New `Dry::Validation::Contract` API for defining contract classes with schemas and validation rules
+- Improved message backends with support for `key` and `base` messages, and arbitrary meta-data (like error codes etc.)
+- Support for defining rules for array elements ie `rule(:items).each { ... }`
+- Support for macros that encapsulate common rule logic
+- Built-in `:acceptance` macro
+
+[Compare v0.13.3...v1.0.0](https://github.com/dry-rb/dry-validation/compare/v1.13.3...v1.0.0)
+
+# v1.0.0 2019-06-10 (compared to 1.0.0.rc3)
 
 ### Added
 
