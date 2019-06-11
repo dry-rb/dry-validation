@@ -54,7 +54,7 @@ module Dry
       #
       # @api public
       def validate(*macros, &block)
-        @macros = macros.map { |spec| Array(spec) }.map(&:flatten)
+        @macros = parse_macros(*macros)
         @block = block if block
         self
       end
@@ -68,12 +68,14 @@ module Dry
       #   rule(:nums).each do
       #     key.failure("must be greater than 0") if value < 0
       #   end
+      #   rule(:nums).each(min: 3)
       #
       # @return [Rule]
       #
       # @api public
       def each(*macros, &block)
         root = keys
+        macros = parse_macros(*macros)
         @keys = []
 
         @block = proc do
@@ -98,6 +100,22 @@ module Dry
       # @api public
       def inspect
         %(#<#{self.class} keys=#{keys.inspect}>)
+      end
+
+      # Parse function arguments into macros structure
+      #
+      # @return [Array]
+      #
+      # @api private
+      def parse_macros(*args)
+        args.each_with_object([]) do |spec, macros|
+          case spec
+          when Hash
+            spec.each { |k, v| macros << [k, Array(v)] }
+          else
+            macros << Array(spec)
+          end
+        end
       end
     end
   end
