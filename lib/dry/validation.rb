@@ -23,6 +23,10 @@ module Dry
       require 'dry/validation/extensions/hints'
     end
 
+    register_extension(:predicates_as_macros) do
+      require 'dry/validation/extensions/predicates_as_macros'
+    end
+
     # Define a contract and build its instance
     #
     # @example
