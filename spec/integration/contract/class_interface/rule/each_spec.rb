@@ -28,7 +28,113 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
     end
   end
 
+  context 'using a simple macro' do
+    let(:contract_class) do
+      Class.new(Dry::Validation::Contract) do
+        def self.name
+          'TestContract'
+        end
+
+        register_macro(:even?) do
+          key.failure('invalid') unless value.even?
+        end
+
+        params do
+          required(:nums).filled(:array)
+        end
+
+        rule(:nums).each(:even?)
+      end
+    end
+
+    it 'applies rule when an item passed schema checks' do
+      expect(contract.(nums: [2, 3]).errors.to_h)
+        .to eql(nums: { 1 => ['invalid'] })
+    end
+  end
+
+  context 'using multiple macros' do
+    let(:contract_class) do
+      Class.new(Dry::Validation::Contract) do
+        def self.name
+          'TestContract'
+        end
+
+        register_macro(:even?) do
+          key.failure('invalid') unless value.even?
+        end
+
+        register_macro(:below_ten?) do
+          key.failure('too big') unless value < 10
+        end
+
+        params do
+          required(:nums).filled(:array)
+        end
+
+        rule(:nums).each(:even?, :below_ten?)
+      end
+    end
+
+    it 'applies rules when an item passed schema checks' do
+      expect(contract.(nums: [2, 15]).errors.to_h)
+        .to eql(nums: { 1 => ['invalid', 'too big'] })
+    end
+  end
+
   context 'using a macro with args' do
+    let(:contract_class) do
+      Class.new(Dry::Validation::Contract) do
+        def self.name
+          'TestContract'
+        end
+
+        register_macro(:min) do |macro:|
+          min = macro.args[0]
+          key.failure('invalid') if value < min
+        end
+
+        params do
+          required(:nums).array(:integer)
+        end
+
+        rule(:nums).each(min: 3)
+      end
+    end
+
+    it 'applies rule when an item passed schema checks' do
+      expect(contract.(nums: ['oops', 1, 4, 0]).errors.to_h)
+        .to eql(nums: { 0 => ['must be an integer'], 1 => ['invalid'], 3 => ['invalid'] })
+    end
+  end
+
+  context 'using a macro with multiple args' do
+    let(:contract_class) do
+      Class.new(Dry::Validation::Contract) do
+        def self.name
+          'TestContract'
+        end
+
+        register_macro(:between) do |macro:|
+          min, max = macro.args[0..1]
+          key.failure('invalid') unless (min..max).include?(value)
+        end
+
+        params do
+          required(:nums).array(:integer)
+        end
+
+        rule(:nums).each(between: [3, 5])
+      end
+    end
+
+    it 'applies rule when an item passed schema checks' do
+      expect(contract.(nums: ['oops', 4, 0, 6]).errors.to_h)
+        .to eql(nums: { 0 => ['must be an integer'], 2 => ['invalid'], 3 => ['invalid'] })
+    end
+  end
+
+  context 'using multiple macros with args' do
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
         def self.name
@@ -53,34 +159,9 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
       end
     end
 
-    it 'applies rule when an item passed schema checks' do
+    it 'applies rules when an item passed schema checks' do
       expect(contract.(nums: ['oops', 4, 0, 6]).errors.to_h)
         .to eql(nums: { 0 => ['must be an integer'], 2 => ['invalid'], 3 => ['invalid'] })
-    end
-  end
-
-  context 'using a simple macro' do
-    let(:contract_class) do
-      Class.new(Dry::Validation::Contract) do
-        def self.name
-          'TestContract'
-        end
-
-        register_macro(:even?) do
-          key.failure('invalid') unless value.even?
-        end
-
-        params do
-          required(:nums).filled(:array)
-        end
-
-        rule(:nums).each(:even?)
-      end
-    end
-
-    it 'applies rule when an item passed schema checks' do
-      expect(contract.(nums: [2, 3]).errors.to_h)
-        .to eql(nums: { 1 => ['invalid'] })
     end
   end
 end
