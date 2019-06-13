@@ -117,7 +117,7 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
 
         register_macro(:between) do |macro:|
           min, max = macro.args[0..1]
-          key.failure('invalid') unless (min..max).include?(value)
+          key.failure('invalid') unless (min..max).cover?(value)
         end
 
         params do
