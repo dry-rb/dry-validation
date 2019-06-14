@@ -1,3 +1,17 @@
+# v1.1.0 2019-06-14
+
+### Added
+
+* `key?` method available within rules, that can be used to check if there's a value under the rule's default key (refs #540) (@solnic)
+* `value` supports hash-based path specifications now (refs #547) (@solnic)
+* `value` can read multiple values when the key points to them, ie in case of `rule(geo: [:lat, :lon])` it would return an array with `lat` and `lon` (@solnic)
+
+### Fixed
+
+* Passing multiple macro names to `validate` or `each` works correctly (fixed #538 #541) (@jandudulski)
+
+[Compare v1.0.0...v1.1.0](https://github.com/dry-rb/dry-validation/compare/v1.0.0...v1.1.0)
+
 # v1.0.0 2019-06-10
 
 This release is a complete rewrite on top of `dry-schema` that uses contract classes to define schema and validation rules. It's **not backward-compatible**. This release addressed over 150 known issues, including bugs and missing features.
@@ -12,7 +26,7 @@ See [the list of all addressed issues](https://github.com/dry-rb/dry-validation/
 - Support for macros that encapsulate common rule logic
 - Built-in `:acceptance` macro
 
-[Compare v0.13.3...v1.0.0](https://github.com/dry-rb/dry-validation/compare/v1.13.3...v1.0.0)
+[Compare v0.13.3...v1.0.0](https://github.com/dry-rb/dry-validation/compare/v0.13.3...v1.0.0)
 
 # v1.0.0 2019-06-10 (compared to 1.0.0.rc3)
 
