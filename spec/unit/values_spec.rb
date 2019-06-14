@@ -40,6 +40,24 @@ RSpec.describe Dry::Validation::Values do
     end
   end
 
+  describe '#key?' do
+    it 'returns true when a symbol key is present' do
+      expect(values.key?(:name)).to be(true)
+    end
+
+    it 'returns false when a symbol key is not present' do
+      expect(values.key?(:not_here)).to be(false)
+    end
+
+    it 'returns true when a nested key is present' do
+      expect(values.key?([:address, :city])).to be(true)
+    end
+
+    it 'returns false when a nested key is not present' do
+      expect(values.key?([:address, :not_here])).to be(false)
+    end
+  end
+
   describe '#dig' do
     it 'returns a value from a nested hash when it exists' do
       expect(values.dig(:address, :city)).to eql('Paris')

@@ -25,6 +25,18 @@ RSpec.describe Dry::Validation::Contract, '#call' do
         end
       end
 
+      rule(:login) do
+        if value?
+          key.failure('too short') if value.length < 3
+        end
+      end
+
+      rule(address: :geolocation) do
+        if value?
+          key.failure('not enough data') if value.size < 2
+        end
+      end
+
       rule(:password) do
         key.failure('is required') if values[:login] && !values[:password]
       end

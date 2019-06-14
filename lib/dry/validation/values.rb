@@ -51,6 +51,18 @@ module Dry
         end
       end
 
+      # @api public
+      def key?(key)
+        return data.key?(key) if key.is_a?(Symbol)
+
+        Schema::Path[key].reduce(data) do |a, e|
+          return false unless a.key?(e)
+          a[e]
+        end
+
+        true
+      end
+
       # @api private
       def respond_to_missing?(meth, include_private = false)
         super || data.respond_to?(meth, include_private)
