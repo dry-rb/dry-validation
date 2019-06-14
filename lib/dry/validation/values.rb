@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/equalizer'
+require 'dry/schema/path'
 require 'dry/validation/constants'
 
 module Dry
@@ -40,16 +41,13 @@ module Dry
       #
       # @api public
       def [](*args)
-        if args.size.equal?(1)
-          case (key = args[0])
-          when Symbol then data[key]
-          when String then self[*key.split(DOT).map(&:to_sym)]
-          when Array then self[*key]
-          else
-            raise ArgumentError, '+key+ must be a symbol, string, array, or a list of keys for dig'
-          end
+        return data.dig(*args) if args.size > 1
+
+        case (key = args[0])
+        when Symbol, String, Array, Hash
+          data.dig(*Schema::Path[key].to_a)
         else
-          data.dig(*args)
+          raise ArgumentError, '+key+ must be a valid path specification'
         end
       end
 
