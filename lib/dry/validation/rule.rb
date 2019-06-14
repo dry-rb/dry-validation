@@ -69,18 +69,21 @@ module Dry
       #     key.failure("must be greater than 0") if value < 0
       #   end
       #   rule(:nums).each(min: 3)
+      #   rule(address: :city) do
+      #      key.failure("oops") if value != 'Munich'
+      #   end
       #
       # @return [Rule]
       #
       # @api public
       def each(*macros, &block)
-        root = keys
+        root = keys[0]
         macros = parse_macros(*macros)
         @keys = []
 
         @block = proc do
-          values[root].each_with_index do |_, idx|
-            path = [*root, idx]
+          (values[root] || []).each_with_index do |_, idx|
+            path = [*Schema::Path[root].to_a, idx]
 
             next if result.error?(path)
 
