@@ -68,7 +68,7 @@ module Dry
             result = e.all? { |k| key?(k, a) }
             return result
           else
-            return false unless a.is_a?(Array) ? (0..a.size - 1).cover?(e) : a.key?(e)
+            return false unless a.is_a?(Array) ? (e >= 0 && e < a.size) : a.key?(e)
           end
           a[e]
         end
