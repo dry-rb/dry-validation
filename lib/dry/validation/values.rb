@@ -41,17 +41,13 @@ module Dry
       #
       # @api public
       def [](*args)
-        if args.size.equal?(1)
-          case (key = args[0])
-          when Symbol then data[key]
-          when String then self[*key.split(DOT).map(&:to_sym)]
-          when Array then self[*key]
-          when Hash then self[*Schema::Path[*args].to_a]
-          else
-            raise ArgumentError, '+key+ must be a valid path specification'
-          end
+        return data.dig(*args) if args.size > 1
+
+        case (key = args[0])
+        when Symbol, String, Array, Hash
+          data.dig(*Schema::Path[key].to_a)
         else
-          data.dig(*args)
+          raise ArgumentError, '+key+ must be a valid path specification'
         end
       end
 
