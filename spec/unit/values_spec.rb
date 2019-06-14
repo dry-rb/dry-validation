@@ -8,7 +8,7 @@ RSpec.describe Dry::Validation::Values do
   end
 
   let(:data) do
-    { name: 'Jane', address: { city: 'Paris', geo: { lat: 1, lon: 2 } } }
+    { name: 'Jane', address: { city: 'Paris', geo: { lat: 1, lon: 2 } }, phones: [123, 431] }
   end
 
   describe '#[]' do
@@ -65,8 +65,16 @@ RSpec.describe Dry::Validation::Values do
       expect(values.key?([:address, :geo, [:lat, :lon]])).to be(true)
     end
 
-    it 'returns true when nested keys are not all present' do
+    it 'returns false when nested keys are not all present' do
       expect(values.key?([:address, :geo, [:lat, :lon, :other]])).to be(false)
+    end
+
+    it 'returns true when a path to an array element is present' do
+      expect(values.key?([:phones, 1])).to be(true)
+    end
+
+    it 'returns false when a path to an array element is not present' do
+      expect(values.key?([:phones, 5])).to be(false)
     end
   end
 
