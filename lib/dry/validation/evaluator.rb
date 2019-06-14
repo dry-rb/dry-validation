@@ -153,13 +153,13 @@ module Dry
       #
       # @example
       #   rule(:age) do
-      #     key.failure(:invalid) if value? && value < 18
+      #     key.failure(:invalid) if key? && value < 18
       #   end
       #
       # @return [Boolean]
       #
       # @api public
-      def value?
+      def key?
         values.key?(key_name)
       end
 

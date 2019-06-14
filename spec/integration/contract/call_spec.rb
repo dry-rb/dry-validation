@@ -26,13 +26,13 @@ RSpec.describe Dry::Validation::Contract, '#call' do
       end
 
       rule(:login) do
-        if value?
+        if key?
           key.failure('too short') if value.length < 3
         end
       end
 
       rule(address: { geolocation: [:lon, :lat] }) do
-        if value?
+        if key?
           lon, lat = value
           key('address.geolocation.lat').failure('invalid') if lat < 10
           key('address.geolocation.lon').failure('invalid') if lon < 10
@@ -59,7 +59,7 @@ RSpec.describe Dry::Validation::Contract, '#call' do
       end
 
       rule('address.geolocation.lon') do
-        key.failure('invalid longitude') if value? && !(-180.0...180.0).cover?(value)
+        key.failure('invalid longitude') if key? && !(-180.0...180.0).cover?(value)
       end
     end.new
   end
