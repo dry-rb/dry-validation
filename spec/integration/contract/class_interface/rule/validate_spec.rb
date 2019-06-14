@@ -2,7 +2,7 @@
 
 require 'dry/validation/contract'
 
-RSpec.describe Dry::Validation::Contract, 'Rule#each' do
+RSpec.describe Dry::Validation::Contract, 'Rule#validate' do
   subject(:contract) { contract_class.new }
 
   context 'using a block' do
@@ -13,18 +13,18 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
         end
 
         params do
-          required(:nums).array(:integer)
+          required(:num).filled(:integer)
         end
 
-        rule(:nums).each do
+        rule(:num).validate do
           key.failure('invalid') if value < 3
         end
       end
     end
 
     it 'applies rule when an item passed schema checks' do
-      expect(contract.(nums: ['oops', 1, 4, 0]).errors.to_h)
-        .to eql(nums: { 0 => ['must be an integer'], 1 => ['invalid'], 3 => ['invalid'] })
+      expect(contract.(num: 2).errors.to_h)
+        .to eql(num: ['invalid'])
     end
   end
 
@@ -40,16 +40,16 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
         end
 
         params do
-          required(:nums).filled(:array)
+          required(:num).filled(:integer)
         end
 
-        rule(:nums).each(:even?)
+        rule(:num).validate(:even?)
       end
     end
 
-    it 'applies rule when an item passed schema checks' do
-      expect(contract.(nums: [2, 3]).errors.to_h)
-        .to eql(nums: { 1 => ['invalid'] })
+    it 'applies first rule when an item passed schema checks' do
+      expect(contract.(num: 3).errors.to_h)
+        .to eql(num: ['invalid'])
     end
   end
 
@@ -69,16 +69,16 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
         end
 
         params do
-          required(:nums).filled(:array)
+          required(:num).filled(:integer)
         end
 
-        rule(:nums).each(:even?, :below_ten?)
+        rule(:num).validate(:even?, :below_ten?)
       end
     end
 
     it 'applies rules when an item passed schema checks' do
-      expect(contract.(nums: [2, 15]).errors.to_h)
-        .to eql(nums: { 1 => ['invalid', 'too big'] })
+      expect(contract.(num: 15).errors.to_h)
+        .to eql(num: ['invalid', 'too big'])
     end
   end
 
@@ -95,16 +95,16 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
         end
 
         params do
-          required(:nums).array(:integer)
+          required(:num).filled(:integer)
         end
 
-        rule(:nums).each(min: 3)
+        rule(:num).validate(min: 3)
       end
     end
 
     it 'applies rule when an item passed schema checks' do
-      expect(contract.(nums: ['oops', 1, 4, 0]).errors.to_h)
-        .to eql(nums: { 0 => ['must be an integer'], 1 => ['invalid'], 3 => ['invalid'] })
+      expect(contract.(num: 2).errors.to_h)
+        .to eql(num: ['invalid'])
     end
   end
 
@@ -121,16 +121,16 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
         end
 
         params do
-          required(:nums).array(:integer)
+          required(:num).filled(:integer)
         end
 
-        rule(:nums).each(between: [3, 5])
+        rule(:num).validate(between: [3, 5])
       end
     end
 
     it 'applies rule when an item passed schema checks' do
-      expect(contract.(nums: ['oops', 4, 0, 6]).errors.to_h)
-        .to eql(nums: { 0 => ['must be an integer'], 2 => ['invalid'], 3 => ['invalid'] })
+      expect(contract.(num: 2).errors.to_h)
+        .to eql(num: ['invalid'])
     end
   end
 
@@ -143,25 +143,30 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
 
         register_macro(:min) do |macro:|
           min = macro.args[0]
-          key.failure('invalid') if value < min
+          key.failure('too small') if value < min
         end
 
         register_macro(:max) do |macro:|
           max = macro.args[0]
-          key.failure('invalid') if value > max
+          key.failure('too big') if value > max
         end
 
         params do
-          required(:nums).array(:integer)
+          required(:num).filled(:integer)
         end
 
-        rule(:nums).each(min: 3, max: 5)
+        rule(:num).validate(min: 3, max: 5)
       end
     end
 
-    it 'applies rules when an item passed schema checks' do
-      expect(contract.(nums: ['oops', 4, 0, 6]).errors.to_h)
-        .to eql(nums: { 0 => ['must be an integer'], 2 => ['invalid'], 3 => ['invalid'] })
+    it 'applies first rule when an item passed schema checks' do
+      expect(contract.(num: 2).errors.to_h)
+        .to eql(num: ['too small'])
+    end
+
+    it 'applies second rule when an item passed schema checks' do
+      expect(contract.(num: 6).errors.to_h)
+        .to eql(num: ['too big'])
     end
   end
 end
