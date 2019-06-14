@@ -97,7 +97,7 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
         end
 
         rule(:nums).each(:even?, :below_ten?)
-        rule([:hash, :another_nums]).each(:even?, :below_ten?)
+        rule(%i[hash another_nums]).each(:even?, :below_ten?)
       end
     end
 
