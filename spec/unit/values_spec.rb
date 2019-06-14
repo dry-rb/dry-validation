@@ -24,14 +24,18 @@ RSpec.describe Dry::Validation::Values do
       expect(values[:address, :city]).to eql('Paris')
     end
 
+    it 'works with a hash' do
+      expect(values[address: :city]).to eql('Paris')
+    end
+
     it 'works with an array' do
       expect(values[%i[address city]]).to eql('Paris')
     end
 
     it 'raises on unpexpected argument type' do
-      expect { values[{}] }
+      expect { values[123] }
         .to raise_error(
-          ArgumentError, '+key+ must be a symbol, string, array, or a list of keys for dig'
+          ArgumentError, '+key+ must be a valid path specification'
         )
     end
   end
