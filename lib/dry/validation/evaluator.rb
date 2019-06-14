@@ -147,6 +147,22 @@ module Dry
         values[key_name]
       end
 
+      # Return if the value under the default key is available
+      #
+      # This is useful when dealing with rules for optional keys
+      #
+      # @example
+      #   rule(:age) do
+      #     key.failure(:invalid) if key? && value < 18
+      #   end
+      #
+      # @return [Boolean]
+      #
+      # @api public
+      def key?
+        values.key?(key_name)
+      end
+
       # Check if there are any errors under the provided path
       #
       # @param [Symbol, String, Array] A Path-compatible spec

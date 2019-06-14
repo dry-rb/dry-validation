@@ -8,7 +8,7 @@ RSpec.describe Dry::Validation::Values do
   end
 
   let(:data) do
-    { name: 'Jane', address: { city: 'Paris' } }
+    { name: 'Jane', address: { city: 'Paris', geo: { lat: 1, lon: 2 } }, phones: [123, 431] }
   end
 
   describe '#[]' do
@@ -28,6 +28,10 @@ RSpec.describe Dry::Validation::Values do
       expect(values[address: :city]).to eql('Paris')
     end
 
+    it 'works with a hash pointing to multiple values' do
+      expect(values[address: { geo: [:lat, :lon] }]).to eql([1, 2])
+    end
+
     it 'works with an array' do
       expect(values[%i[address city]]).to eql('Paris')
     end
@@ -37,6 +41,40 @@ RSpec.describe Dry::Validation::Values do
         .to raise_error(
           ArgumentError, '+key+ must be a valid path specification'
         )
+    end
+  end
+
+  describe '#key?' do
+    it 'returns true when a symbol key is present' do
+      expect(values.key?(:name)).to be(true)
+    end
+
+    it 'returns false when a symbol key is not present' do
+      expect(values.key?(:not_here)).to be(false)
+    end
+
+    it 'returns true when a nested key is present' do
+      expect(values.key?([:address, :city])).to be(true)
+    end
+
+    it 'returns false when a nested key is not present' do
+      expect(values.key?([:address, :not_here])).to be(false)
+    end
+
+    it 'returns true when nested keys are all present' do
+      expect(values.key?([:address, :geo, [:lat, :lon]])).to be(true)
+    end
+
+    it 'returns false when nested keys are not all present' do
+      expect(values.key?([:address, :geo, [:lat, :lon, :other]])).to be(false)
+    end
+
+    it 'returns true when a path to an array element is present' do
+      expect(values.key?([:phones, 1])).to be(true)
+    end
+
+    it 'returns false when a path to an array element is not present' do
+      expect(values.key?([:phones, 5])).to be(false)
     end
   end
 

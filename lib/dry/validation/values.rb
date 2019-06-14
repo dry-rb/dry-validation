@@ -45,10 +45,35 @@ module Dry
 
         case (key = args[0])
         when Symbol, String, Array, Hash
-          data.dig(*Schema::Path[key].to_a)
+          path = Schema::Path[key]
+          keys = path.to_a
+
+          return data.dig(*keys) unless keys.last.is_a?(Array)
+
+          last = keys.pop
+          vals = self.class.new(data.dig(*keys))
+
+          last.map { |name| vals[name] }
         else
           raise ArgumentError, '+key+ must be a valid path specification'
         end
+      end
+
+      # @api public
+      def key?(key, hash = data)
+        return hash.key?(key) if key.is_a?(Symbol)
+
+        Schema::Path[key].reduce(hash) do |a, e|
+          if e.is_a?(Array)
+            result = e.all? { |k| key?(k, a) }
+            return result
+          else
+            return false unless a.is_a?(Array) ? (0..a.size - 1).cover?(e) : a.key?(e)
+          end
+          a[e]
+        end
+
+        true
       end
 
       # @api private
