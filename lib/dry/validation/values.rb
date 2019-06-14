@@ -52,11 +52,16 @@ module Dry
       end
 
       # @api public
-      def key?(key)
-        return data.key?(key) if key.is_a?(Symbol)
+      def key?(key, hash = data)
+        return hash.key?(key) if key.is_a?(Symbol)
 
-        Schema::Path[key].reduce(data) do |a, e|
-          return false unless a.key?(e)
+        Schema::Path[key].reduce(hash) do |a, e|
+          if e.is_a?(Array)
+            result = e.all? { |k| key?(k, a) }
+            return result
+          else
+            return false unless a.key?(e)
+          end
           a[e]
         end
 

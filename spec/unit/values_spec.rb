@@ -8,7 +8,7 @@ RSpec.describe Dry::Validation::Values do
   end
 
   let(:data) do
-    { name: 'Jane', address: { city: 'Paris' } }
+    { name: 'Jane', address: { city: 'Paris', geo: { lat: 1, lon: 2 } } }
   end
 
   describe '#[]' do
@@ -55,6 +55,14 @@ RSpec.describe Dry::Validation::Values do
 
     it 'returns false when a nested key is not present' do
       expect(values.key?([:address, :not_here])).to be(false)
+    end
+
+    it 'returns true when nested keys are all present' do
+      expect(values.key?([:address, :geo, [:lat, :lon]])).to be(true)
+    end
+
+    it 'returns true when nested keys are not all present' do
+      expect(values.key?([:address, :geo, [:lat, :lon, :other]])).to be(false)
     end
   end
 

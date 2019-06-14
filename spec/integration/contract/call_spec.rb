@@ -31,9 +31,10 @@ RSpec.describe Dry::Validation::Contract, '#call' do
         end
       end
 
-      rule(address: :geolocation) do
+      rule(address: { geolocation: [:lon, :lat] }) do
         if value?
-          key.failure('not enough data') if value.size < 2
+          key('address.geolocation.lat').failure('invalid') if values['address.geolocation.lat'] < 10
+          key('address.geolocation.lon').failure('invalid') if values['address.geolocation.lon'] < 10
         end
       end
 
@@ -72,6 +73,28 @@ RSpec.describe Dry::Validation::Contract, '#call' do
 
     expect(result).to be_success
     expect(result.errors.to_h).to eql({})
+  end
+
+  it 'applies rule to an optional field when value is present' do
+    result = contract.(email: 'john@doe.org', age: 19, login: 'ab')
+
+    expect(result).to be_failure
+    expect(result.errors.to_h).to eql(login: ['too short'], password: ['is required'])
+  end
+
+  it 'applies rule to an optional nested field when value is present' do
+    result = contract.(
+      email: 'john@doe.org',
+      age: 19,
+      address: {
+        geolocation: { lat: 11, lon: 1 },
+        country: 'Poland',
+        zip: '12345'
+      }
+    )
+
+    expect(result).to be_failure
+    expect(result.errors.to_h).to eql(address: { geolocation: { lon: ['invalid']} })
   end
 
   it 'returns rule errors' do
