@@ -33,8 +33,9 @@ RSpec.describe Dry::Validation::Contract, '#call' do
 
       rule(address: { geolocation: [:lon, :lat] }) do
         if value?
-          key('address.geolocation.lat').failure('invalid') if values['address.geolocation.lat'] < 10
-          key('address.geolocation.lon').failure('invalid') if values['address.geolocation.lon'] < 10
+          lon, lat = value
+          key('address.geolocation.lat').failure('invalid') if lat < 10
+          key('address.geolocation.lon').failure('invalid') if lon < 10
         end
       end
 

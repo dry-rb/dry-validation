@@ -28,6 +28,10 @@ RSpec.describe Dry::Validation::Values do
       expect(values[address: :city]).to eql('Paris')
     end
 
+    it 'works with a hash pointing to multiple values' do
+      expect(values[address: { geo: [:lat, :lon] }]).to eql([1, 2])
+    end
+
     it 'works with an array' do
       expect(values[%i[address city]]).to eql('Paris')
     end
