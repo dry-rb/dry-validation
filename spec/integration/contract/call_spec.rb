@@ -58,13 +58,8 @@ RSpec.describe Dry::Validation::Contract, '#call' do
         end
       end
 
-      rule(address: { geolocation: :lon }) do
-        address = values[:address]
-        geolocation = address[:geolocation] if address
-
-        if geolocation && !(-180.0...180.0).cover?(geolocation[:lon])
-          key.failure('invalid longitude')
-        end
+      rule('address.geolocation.lon') do
+        key.failure('invalid longitude') if value? && !(-180.0...180.0).cover?(value)
       end
     end.new
   end
