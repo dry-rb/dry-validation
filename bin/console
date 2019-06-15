@@ -23,8 +23,8 @@ class Context
     Dry::Schema.JSON(&block)
   end
 
-  def contract
-    Dry::Validation::Contract.build(&:build)
+  def contract(&block)
+    Dry::Validation::Contract.build(&block)
   end
 end
 
