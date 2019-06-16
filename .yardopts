@@ -1,6 +1,6 @@
 --query '@api.text != "private"'
 --embed-mixins
--o doc
+-o yard
 -r README.md
 --files CHANGELOG.md
 --markup-provider=redcarpet
