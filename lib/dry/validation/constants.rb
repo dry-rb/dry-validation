@@ -11,6 +11,12 @@ module Dry
     # Root path is used for base errors in hash representation of error messages
     ROOT_PATH = [nil].freeze
 
+    # Path to the default errors locale file
+    DEFAULT_ERRORS_NAMESPACE = 'dry_validation'
+
+    # Path to the default errors locale file
+    DEFAULT_ERRORS_PATH = Pathname(__FILE__).join('../../../../config/errors.yml').realpath.freeze
+
     # Mapping for block kwarg options used by block_options
     #
     # @see Rule#block_options
