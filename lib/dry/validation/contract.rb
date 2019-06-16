@@ -118,7 +118,9 @@ module Dry
       # @api private
       def error?(result, key)
         path = Schema::Path[key]
-        result.error?(path) || path.map.with_index { |_k, i| result.error?(path.keys[0..i - 2]) }.any?
+
+        result.error?(path) ||
+          path.map.with_index { |_k, i| result.error?(path.keys[0..i - 2]) }.any?
       end
 
       # Get a registered macro
