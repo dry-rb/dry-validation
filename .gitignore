@@ -8,6 +8,6 @@ tmp/
 .idea/
 Gemfile.lock
 *.gem
-doc
+yard
 .yardoc/
 .rubocop.yml
