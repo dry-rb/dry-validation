@@ -11,3 +11,5 @@ Gemfile.lock
 yard
 .yardoc/
 .rubocop.yml
+docs/_build
+
