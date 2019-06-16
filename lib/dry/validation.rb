@@ -41,9 +41,12 @@ module Dry
     # @return [Contract]
     #
     # @api public
+    #
+    # rubocop:disable Naming/MethodName
     def self.Contract(options = EMPTY_HASH, &block)
       Contract.build(options, &block)
     end
+    # rubocop:enable Naming/MethodName
 
     # This is needed by Macros::Registrar
     #
