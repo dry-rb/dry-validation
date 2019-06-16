@@ -49,6 +49,8 @@ module Dry
         # @return [String]
         #
         # @api public
+        #
+        # rubocop:disable Metrics/AbcSize
         def message(rule, tokens: EMPTY_HASH, locale: nil, full: false, path:)
           keys = path.to_a.compact
           msg_opts = tokens.merge(path: keys, locale: locale || messages.default_locale)
@@ -70,6 +72,7 @@ module Dry
 
           [full ? "#{messages.rule(keys.last, msg_opts)} #{text}" : text, meta]
         end
+        # rubocop:enable Metrics/AbcSize
       end
     end
   end
