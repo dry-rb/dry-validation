@@ -148,9 +148,9 @@ module Dry
       # @api public
       def inspect
         if context.empty?
-          "#<#{self.class}#{to_h.inspect} errors=#{errors.to_h.inspect}>"
+          "#<#{self.class}#{to_h} errors=#{errors.to_h}>"
         else
-          "#<#{self.class}#{to_h.inspect} errors=#{errors.to_h.inspect} context=#{context.each.to_h.inspect}>"
+          "#<#{self.class}#{to_h} errors=#{errors.to_h} context=#{context.each.to_h}>"
         end
       end
 
