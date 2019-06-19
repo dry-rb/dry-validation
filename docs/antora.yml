@@ -1,0 +1,6 @@
+name: dry-validation
+title: dry-validation documentation
+version: 1.1.0
+start_page: ROOT:introduction.adoc
+nav:
+- modules/ROOT/nav.adoc
