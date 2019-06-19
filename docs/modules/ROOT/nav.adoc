@@ -1,1 +1,8 @@
 * xref:introduction.adoc[Introduction]
+* xref:configuration.adoc[Configuration]
+* xref:schemas.adoc[Schemas]
+* xref:rules.adoc[Rules]
+* xref:messages.adoc[Messages]
+* xref:macros.adoc[Macros]
+* xref:external-dependencies.adoc[External Dependencies]
+* xref:extensions.adoc[Extensions]
