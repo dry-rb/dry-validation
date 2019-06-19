@@ -2,9 +2,7 @@
 :name: dry-validation
 :page-layout: gem-single
 
-____
-This is *an experimental feature* and its API may change before 2.0.0
-____
+WARNING: This is *an experimental feature* and its API may change before 2.0.0
 
 Macros are a simple way of streamlining rule definitions. Whenever you find yourself repeating the exact same type of validation rules, consider defining a macro to reduce duplication. You can either define globally available macros for all contracts, or a per-class macros where the class and its descandants will be able to access them.
 

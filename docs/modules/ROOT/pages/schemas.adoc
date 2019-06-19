@@ -121,4 +121,4 @@ contract.call(email: '   jane@doe   ', age: 21)
 
 * link:/gems/dry-schema[dry-schema] learn how to fully leverage schemas!
 * link:/gems/dry-types[dry-types] learn more about the coercion backend used in the schemas
-* link:/gems/dry-validation/rules[rules] learn how to define validation rules in addition to schemas
+* xref:rules.adoc[rules] learn how to define validation rules in addition to schemas

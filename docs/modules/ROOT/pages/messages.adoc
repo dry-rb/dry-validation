@@ -8,9 +8,7 @@ Messages in failure API can be set in 4 different ways:
 * By passing a message `identifier` that will be used to retrieve a corresponding message template that will be evaluated using provided (optional) data
 * By passing a hash with message text and arbitrary meta-data - this can be useful when you want to provide additional information in addition to message text, ie error codes etc.
 
-____
-Examples in this section will use `key` failures exclusively, but keep in mind that the exact same API is available when you use `base` failures
-____
+NOTE: Examples in this section will use `key` failures exclusively, but keep in mind that the exact same API is available when you use `base` failures
 
 === Explicit messages
 

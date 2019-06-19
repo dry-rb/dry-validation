@@ -30,6 +30,4 @@ new_user_contract = NewUserContract.new(address_validator: your_address_validato
 new_user_contract.call(address: "Some Street 15/412")
 ----
 
-____
-If you're using dependency injection with dry-auto_inject, this will work out-of-the-box
-____
+TIP: If you're using dependency injection with dry-auto_inject, this will work out-of-the-box

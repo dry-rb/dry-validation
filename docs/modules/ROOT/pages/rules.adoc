@@ -140,9 +140,7 @@ contract.call(start_date: Date.today+1, end_date: Date.today+2).errors.filter(:b
 # => ["creating events is allowed only on weekdays"]
 ----
 
-____
-Curious about that `option` method that we used to set `today` value? You can learn about it in link:/gems/dry-validation/external-dependencies[the external dependencies] section.
-____
+TIP: Curious about that `option` method that we used to set `today` value? You can learn about it in xref:external-dependencies.adoc[the external dependencies] section.
 
 === Reading rule values
 
