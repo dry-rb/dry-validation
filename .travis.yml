@@ -17,6 +17,9 @@ rvm:
 env:
   global:
     - COVERAGE=true
+matrix:
+  - USE_SCHEMA_MASTER=true
+  - USE_SCHEMA_MASTER=false
 notifications:
   email: false
   webhooks:

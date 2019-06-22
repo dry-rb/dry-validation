@@ -6,7 +6,9 @@ gemspec
 
 git_source(:github) { |repo_name| "https://github.com/dry-rb/#{repo_name}" }
 
-gem 'dry-schema', github: 'dry-schema', branch: 'master'
+if ENV['USE_SCHEMA_MASTER'].eql?('true')
+  gem 'dry-schema', github: 'dry-schema', branch: 'master'
+end
 
 group :test do
   gem 'dry-monads', '~> 1.0'
