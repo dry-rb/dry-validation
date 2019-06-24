@@ -1,3 +1,11 @@
+# v1.1.1 2019-06-24
+
+### Fixed
+
+* `Rule#each` works with array values from nested hashes (@mustardnoise)
+
+[Compare v1.1.0...v1.1.1](https://github.com/dry-rb/dry-validation/compare/v1.1.0...v1.1.1)
+
 # v1.1.0 2019-06-14
 
 ### Added
