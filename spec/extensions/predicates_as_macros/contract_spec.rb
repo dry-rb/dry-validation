@@ -17,6 +17,7 @@ RSpec.describe Dry::Validation::Contract do
     %i[
       filled? gt? gteq? included_in? includes? inclusion? is? lt?
       lteq? max_size? min_size? not_eql? odd? respond_to? size? true?
+      uuid_v4?
     ].each do |predicate|
       it "imports #{predicate}" do
         expect(
