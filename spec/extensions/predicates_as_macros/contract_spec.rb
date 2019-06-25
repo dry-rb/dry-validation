@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'dry/validation/extensions/predicates_as_macros'
+
 RSpec.describe Dry::Validation::Contract do
   context 'with predicates_as_macros extension' do
     before { Dry::Validation.load_extensions(:predicates_as_macros) }

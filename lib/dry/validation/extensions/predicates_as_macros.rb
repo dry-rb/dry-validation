@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'dry/logic/predicates'
+require 'dry/schema/predicate_registry'
+require 'dry/validation/contract'
+
 module Dry
   module Validation
     # Encapsulation of a dry-logic predicate.
