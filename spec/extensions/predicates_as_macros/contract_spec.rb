@@ -12,9 +12,16 @@ RSpec.describe Dry::Validation::Contract do
       end
     end
 
-    %i[gteq?].each do |predicate|
+    let(:registry) { Dry::Validation::Predicate::REGISTRY }
+
+    %i[
+      filled? gt? gteq? included_in? includes? inclusion? is? lt?
+      lteq? max_size? min_size? not_eql? odd? respond_to? size? true?
+    ].each do |predicate|
       it "imports #{predicate}" do
-        expect(contract.macros.key?(predicate)).to be(true)
+        expect(
+          registry.key?(predicate) && contract.macros.key?(predicate)
+        ).to be(true)
       end
     end
 
