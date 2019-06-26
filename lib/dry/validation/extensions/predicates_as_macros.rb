@@ -6,9 +6,10 @@ require 'dry/validation/contract'
 
 module Dry
   module Validation
-    # Encapsulation of a dry-logic predicate.
-    class Predicate
-      # List of predicates to be imported.
+    # Predicate registry with additional needed methods.
+    class PredicateRegistry < Schema::PredicateRegistry
+      # List of predicates to be imported by `:predicates_as_macros`
+      # extension.
       #
       # @see Dry::Validation::Contract
       WHITELIST = %i[
@@ -18,37 +19,25 @@ module Dry
       ].freeze
 
       # @api private
-      REGISTRY = Dry::Schema::PredicateRegistry.new(
-        Dry::Logic::Predicates
-      ).freeze
-
-      # @api private
-      attr_reader :name
-
-      # @api private
-      def initialize(name)
-        @name = name
+      def arg_names(name)
+        arg_list(name).map(&:first)
       end
 
       # @api private
-      def arg_names
-        REGISTRY.arg_list(name).map(&:first)
+      def call(name, args)
+        self[name].(*args)
       end
 
       # @api private
-      def call(args)
-        REGISTRY[name].(*args)
-      end
-
-      # @api private
-      def message_opts(arg_values)
-        arg_names.zip(arg_values).to_h
+      def message_opts(name, arg_values)
+        arg_names(name).zip(arg_values).to_h
       end
     end
 
     # Extension to use dry-logic predicates as macros.
     #
-    # @see Dry::Validation::Predicate::WHITELIST Available predicates
+    # @see Dry::Validation::PredicateRegistry::WHITELIST Available
+    # predicates
     #
     # @example
     #   Dry::Validation.load_extensions(:predicates_as_macros)
@@ -70,12 +59,12 @@ module Dry
     class Contract
       # Make macros available for self and its descendants.
       def self.import_predicates_as_macros
-        Predicate::WHITELIST.each do |name|
-          predicate = Predicate.new(name)
+        registry = PredicateRegistry.new
+        PredicateRegistry::WHITELIST.each do |name|
           register_macro(name) do |macro:|
             predicate_args = [*macro.args, value]
-            predicate.(predicate_args) ||
-              key.failure(name, predicate.message_opts(predicate_args))
+            registry.(name, predicate_args) ||
+              key.failure(name, registry.message_opts(name, predicate_args))
           end
         end
       end

@@ -12,7 +12,7 @@ RSpec.describe Dry::Validation::Contract do
       end
     end
 
-    let(:registry) { Dry::Validation::Predicate::REGISTRY }
+    let(:registry) { Dry::Validation::PredicateRegistry.new }
 
     %i[
       filled? gt? gteq? included_in? includes? inclusion? is? lt?
