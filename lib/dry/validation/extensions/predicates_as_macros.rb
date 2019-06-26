@@ -41,10 +41,8 @@ module Dry
       end
 
       # @api private
-      def add_failure_from_call(key, arg_values)
-        message_opts = arg_names.zip(arg_values).to_h
-
-        key.failure(name, message_opts)
+      def message_opts(arg_values)
+        arg_names.zip(arg_values).to_h
       end
     end
 
@@ -77,7 +75,7 @@ module Dry
           register_macro(name) do |macro:|
             predicate_args = [*macro.args, value]
             predicate.(predicate_args) ||
-              predicate.add_failure_from_call(key, predicate_args)
+              key.failure(name, predicate.message_opts(predicate_args))
           end
         end
       end
