@@ -62,8 +62,9 @@ module Dry
         PredicateRegistry::WHITELIST.each do |name|
           register_macro(name) do |macro:|
             predicate_args = [*macro.args, value]
-            registry.(name, predicate_args) ||
-              key.failure(name, registry.message_opts(name, predicate_args))
+            key.failure(
+              name, registry.message_opts(name, predicate_args)
+            ) unless registry.(name, predicate_args)
           end
         end
       end
