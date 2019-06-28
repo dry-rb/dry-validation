@@ -22,6 +22,9 @@ env:
     - USE_TYPES_MASTER=true
     - USE_SCHEMA_MASTER=false
     - USE_TYPES_MASTER=false
+matrix:
+  allow_failures:
+    - rvm: jruby-9.2.7.0
 notifications:
   email: false
   webhooks:
