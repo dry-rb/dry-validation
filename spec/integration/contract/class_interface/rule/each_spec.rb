@@ -26,6 +26,11 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
         rule(hash: :another_nums).each do
           key.failure('invalid') if value < 3
         end
+
+        rule(:nums).each do |context:|
+          context[:sum] ||= 0
+          context[:sum] += value
+        end
       end
     end
 
@@ -37,6 +42,10 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
     it 'applies rule to nested values when an item passed schema checks' do
       expect(contract.(nums: [4], hash: { another_nums: ['oops', 1, 4] }).errors.to_h)
         .to eql(hash: { another_nums: { 0 => ['must be an integer'], 1 => ['invalid'] } })
+    end
+
+    it 'passes block options' do
+      expect(contract.(nums: [10, 20]).context[:sum]).to eql(30)
     end
   end
 

@@ -19,21 +19,24 @@ module Dry
       #   @api private
       option :block
 
+      # @!attribute [r] block_options
+      #   @return [Hash]
+      #   @api private
+      option :block_options, default: -> { block ? map_keywords(block) : EMPTY_HASH }
+
       private
 
       # Extract options for the block kwargs
       #
-      # @return [Hash]
+      # @param [Proc] block Callable
+      # @return Hash
       #
       # @api private
-      def block_options
-        return EMPTY_HASH unless block
-
-        @block_options ||= block
+      def map_keywords(block)
+        block
           .parameters
-          .select { |arg| arg[0].equal?(:keyreq) }
-          .map(&:last)
-          .map { |name| [name, BLOCK_OPTIONS_MAPPINGS[name]] }
+          .select { |arg,| arg.equal?(:keyreq) }
+          .map { |_, name| [name, BLOCK_OPTIONS_MAPPINGS[name]] }
           .to_h
       end
     end
