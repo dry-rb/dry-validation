@@ -93,6 +93,8 @@ module Dry
           end
         end
 
+        @block_options = map_keywords(block) if block
+
         self
       end
 
