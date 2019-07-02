@@ -41,7 +41,7 @@ end
 desc 'Run all specs in isolation with extension enabled'
 task 'spec:isolation' => ['spec:core', *extensions.map { |ext| "spec:#{ext}" }]
 
-task default: 'spec:extensions'
-
 desc 'Run CI build'
 task ci: %w[spec:core spec:isolation spec:extensions]
+
+task default: :ci
