@@ -7,34 +7,9 @@ require 'dry/schema/key_map'
 
 require 'dry/validation/constants'
 require 'dry/validation/macros'
+require 'dry/validation/schema_ext'
 
 module Dry
-  module Schema
-    # @api private
-    class Key
-      # @api private
-      def to_dot_notation
-        [name.to_s]
-      end
-
-      # @api private
-      class Hash < Key
-        # @api private
-        def to_dot_notation
-          [name].product(members.map(&:to_dot_notation).flatten(1)).map { |e| e.join(DOT) }
-        end
-      end
-    end
-
-    # @api private
-    class KeyMap
-      # @api private
-      def to_dot_notation
-        @to_dot_notation ||= map(&:to_dot_notation).flatten
-      end
-    end
-  end
-
   module Validation
     class Contract
       # Contract's class interface
@@ -179,6 +154,7 @@ module Dry
         private
 
         # @api private
+        # rubocop:disable Metrics/AbcSize
         def ensure_valid_keys(*keys)
           valid_paths = key_map.to_dot_notation.map { |value| Schema::Path[value] }
 
