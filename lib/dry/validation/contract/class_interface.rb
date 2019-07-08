@@ -182,9 +182,25 @@ module Dry
         def ensure_valid_keys(*keys)
           valid_paths = key_map.to_dot_notation.map { |value| Schema::Path[value] }
 
-          invalid_keys = Schema::KeyMap[*keys]
-            .map(&:dump)
-            .reject { |spec| valid_paths.any? { |path| path.include?(Schema::Path[spec]) } }
+          invalid_keys = keys
+            .map { |key|
+              [key, Schema::Path[key]]
+            }
+            .map { |(key, path)|
+              if (last = path.last).is_a?(Array)
+                last.map { |last_key|
+                  path_key = [*path.to_a[0..-2], last_key]
+                  [path_key, Schema::Path[path_key]]
+                }
+              else
+                [[key, path]]
+              end
+            }
+            .flatten(1)
+            .reject { |(_, path)|
+              valid_paths.any? { |valid_path| valid_path.include?(path) }
+            }
+            .map(&:first)
 
           return if invalid_keys.empty?
 
@@ -192,6 +208,7 @@ module Dry
             #{name}.rule specifies keys that are not defined by the schema: #{invalid_keys.inspect}
           STR
         end
+        # rubocop:enable Metrics/AbcSize
 
         # @api private
         def key_map
