@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'dry-equalizer', '~> 0.2'
   spec.add_runtime_dependency 'dry-container', '~> 0.7', '>= 0.7.1'
   spec.add_runtime_dependency 'dry-initializer', '~> 3.0'
-  spec.add_runtime_dependency 'dry-schema', '~> 1.0', '>= 1.2.0'
+  spec.add_runtime_dependency 'dry-schema', '~> 1.0', '>= 1.3.1'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
