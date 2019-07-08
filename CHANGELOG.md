@@ -1,3 +1,19 @@
+# v1.2.0 2019-07-08
+
+### Added
+
+* New extension `:predicates_as_macros` (@waiting-for-dev)
+
+### Fixed
+
+* Guarding rules for nested keys works correctly (issue #560) (@solnic)
+
+### Changed
+
+* `dry-schema` dependency was bumped to `>= 1.3.1` (@solnic)
+
+[Compare v1.1.1...v1.2.0](https://github.com/dry-rb/dry-validation/compare/v1.1.1...v1.2.0)
+
 # v1.1.1 2019-06-24
 
 ### Fixed
