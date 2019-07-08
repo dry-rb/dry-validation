@@ -7,34 +7,9 @@ require 'dry/schema/key_map'
 
 require 'dry/validation/constants'
 require 'dry/validation/macros'
+require 'dry/validation/schema_ext'
 
 module Dry
-  module Schema
-    # @api private
-    class Key
-      # @api private
-      def to_dot_notation
-        [name.to_s]
-      end
-
-      # @api private
-      class Hash < Key
-        # @api private
-        def to_dot_notation
-          [name].product(members.map(&:to_dot_notation).flatten(1)).map { |e| e.join(DOT) }
-        end
-      end
-    end
-
-    # @api private
-    class KeyMap
-      # @api private
-      def to_dot_notation
-        @to_dot_notation ||= map(&:to_dot_notation).flatten
-      end
-    end
-  end
-
   module Validation
     class Contract
       # Contract's class interface
@@ -179,12 +154,29 @@ module Dry
         private
 
         # @api private
+        # rubocop:disable Metrics/AbcSize
         def ensure_valid_keys(*keys)
           valid_paths = key_map.to_dot_notation.map { |value| Schema::Path[value] }
 
-          invalid_keys = Schema::KeyMap[*keys]
-            .map(&:dump)
-            .reject { |spec| valid_paths.any? { |path| path.include?(Schema::Path[spec]) } }
+          invalid_keys = keys
+            .map { |key|
+              [key, Schema::Path[key]]
+            }
+            .map { |(key, path)|
+              if (last = path.last).is_a?(Array)
+                last.map { |last_key|
+                  path_key = [*path.to_a[0..-2], last_key]
+                  [path_key, Schema::Path[path_key]]
+                }
+              else
+                [[key, path]]
+              end
+            }
+            .flatten(1)
+            .reject { |(_, path)|
+              valid_paths.any? { |valid_path| valid_path.include?(path) }
+            }
+            .map(&:first)
 
           return if invalid_keys.empty?
 
@@ -192,6 +184,7 @@ module Dry
             #{name}.rule specifies keys that are not defined by the schema: #{invalid_keys.inspect}
           STR
         end
+        # rubocop:enable Metrics/AbcSize
 
         # @api private
         def key_map
