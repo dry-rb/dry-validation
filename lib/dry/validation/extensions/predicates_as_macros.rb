@@ -35,8 +35,7 @@ module Dry
 
     # Extension to use dry-logic predicates as macros.
     #
-    # @see Dry::Validation::PredicateRegistry::WHITELIST Available
-    # predicates
+    # @see Dry::Validation::PredicateRegistry::WHITELIST Available predicates
     #
     # @example
     #   Dry::Validation.load_extensions(:predicates_as_macros)
@@ -55,6 +54,8 @@ module Dry
     #
     #   AgeContract.new.(age: 17).errors.first.text
     #   # => 'must be greater than or equal to 18'
+    #
+    # @api public
     class Contract
       # Make macros available for self and its descendants.
       def self.import_predicates_as_macros
