@@ -47,7 +47,7 @@ module Dry
     #
     #   class AgeContract < ApplicationContract
     #     schema do
-    #       required(:name).filled(:integer)
+    #       required(:age).filled(:integer)
     #     end
     #
     #     rule(:age).validate(gteq?: 18)
