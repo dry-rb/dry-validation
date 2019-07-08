@@ -59,12 +59,13 @@ module Dry
       # Make macros available for self and its descendants.
       def self.import_predicates_as_macros
         registry = PredicateRegistry.new
+
         PredicateRegistry::WHITELIST.each do |name|
           register_macro(name) do |macro:|
             predicate_args = [*macro.args, value]
-            key.failure(
-              name, registry.message_opts(name, predicate_args)
-            ) unless registry.(name, predicate_args)
+            message_opts = registry.message_opts(name, predicate_args)
+
+            key.failure(name, message_opts) unless registry.(name, predicate_args)
           end
         end
       end
