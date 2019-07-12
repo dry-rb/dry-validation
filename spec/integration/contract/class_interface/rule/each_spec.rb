@@ -47,6 +47,11 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
     it 'passes block options' do
       expect(contract.(nums: [10, 20]).context[:sum]).to eql(30)
     end
+
+    it 'does not fail if nums is not an array' do
+      expect(contract.(nums: 42).errors.to_h)
+        .to eql(nums: ['must be an array'])
+    end
   end
 
   context 'using a simple macro' do
