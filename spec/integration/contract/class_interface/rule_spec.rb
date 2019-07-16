@@ -166,4 +166,28 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
         )
     end
   end
+
+  describe 'abstract contract' do
+    let(:abstract_contract) do
+      Class.new(Dry::Validation::Contract) do
+        rule do
+          base.failure('error from abstract contract')
+        end
+      end
+    end
+
+    let(:contract_class) do
+      Class.new(abstract_contract) do
+        params do
+          required(:name).filled(:string)
+        end
+      end
+    end
+
+    it 'applies rules from the parent abstract contract' do
+      expect(contract.(name: '').errors.to_h).to eql(
+        nil => ['error from abstract contract'], name: ['must be filled']
+      )
+    end
+  end
 end
