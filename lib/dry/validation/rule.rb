@@ -82,14 +82,16 @@ module Dry
         @keys = []
 
         @block = proc do
-          (values[root] || []).each_with_index do |_, idx|
-            path = [*Schema::Path[root].to_a, idx]
+          unless result.base_error?(root) || !values.key?(root)
+            values[root].each_with_index do |_, idx|
+              path = [*Schema::Path[root].to_a, idx]
 
-            next if result.error?(path)
+              next if result.error?(path)
 
-            evaluator = with(macros: macros, keys: [path], &block)
+              evaluator = with(macros: macros, keys: [path], &block)
 
-            failures.concat(evaluator.failures)
+              failures.concat(evaluator.failures)
+            end
           end
         end
 
