@@ -1,3 +1,14 @@
+# v1.2.1 2019-07-16
+
+### Fixed
+
+* Defining an abstract contract class that has no schema no longer crashes (issue #565) (@solnic)
+* Fixed an issue where `Rule#each` would crash when the value is not an array (issue #567) (@solnic)
+* Fixed an issue where guarding a rule would crash when keys are missing in the input (issue #569) (@solnic)
+* Added missing "pathname" require (issue #570) (@solnic)
+
+[Compare v1.2.0...v1.2.1](https://github.com/dry-rb/dry-validation/compare/v1.2.0...v1.2.1)
+
 # v1.2.0 2019-07-08
 
 ### Added
