@@ -128,7 +128,9 @@ module Dry
 
             return false unless result.error?(curr_path)
 
-            result.errors.any? { |err| Schema::Path[err.path] == curr_path }
+            result.errors.any? { |err|
+              (other = Schema::Path[err.path]).same_root?(curr_path) && other == curr_path
+            }
           }
       end
 
