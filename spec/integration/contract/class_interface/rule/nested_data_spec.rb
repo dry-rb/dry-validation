@@ -33,6 +33,12 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
           .to eql(address: { street: ['is missing'], zipcode: ['bad format'] })
       end
     end
+
+    context 'when empty hash is provided' do
+      it 'produces missing-key errors' do
+        expect(contract.({}).errors.to_h).to eql(email: ['is missing'], address: ['is missing'])
+      end
+    end
   end
 
   context 'with a nested array' do
