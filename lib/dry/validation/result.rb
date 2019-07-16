@@ -106,6 +106,22 @@ module Dry
         schema_result.error?(key)
       end
 
+      # Check if there's any error for the provided key
+      #
+      # This does not consider errors from the nested values
+      #
+      # @api private
+      def base_error?(key)
+        schema_result.errors.any? { |error|
+          key_path = Schema::Path[key]
+          err_path = Schema::Path[error.path]
+
+          return false unless key_path.same_root?(err_path)
+
+          key_path == err_path
+        }
+      end
+
       # Add a new error for the provided key
       #
       # @api private
