@@ -101,7 +101,7 @@ module Dry
         #
         # @api public
         def rule(*keys, &block)
-          ensure_valid_keys(*keys)
+          ensure_valid_keys(*keys) if __schema__
 
           Rule.new(keys: keys, block: block).tap do |rule|
             rules << rule
