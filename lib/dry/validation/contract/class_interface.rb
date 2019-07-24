@@ -53,7 +53,7 @@ module Dry
         #
         # This type of schema is suitable for HTTP parameters
         #
-        # @return [Dry::Schema::Params]
+        # @return [Dry::Schema::Params,NilClass]
         # @see https://dry-rb.org/gems/dry-schema/params/
         #
         # @api public
@@ -65,7 +65,7 @@ module Dry
         #
         # This type of schema is suitable for JSON data
         #
-        # @return [Dry::Schema::JSON]
+        # @return [Dry::Schema::JSON,NilClass]
         # @see https://dry-rb.org/gems/dry-schema/json/
         #
         # @api public
@@ -77,7 +77,7 @@ module Dry
         #
         # This type of schema does not offer coercion out of the box
         #
-        # @return [Dry::Schema::Processor]
+        # @return [Dry::Schema::Processor,NilClass]
         # @see https://dry-rb.org/gems/dry-schema/
         #
         # @api public
@@ -198,7 +198,9 @@ module Dry
 
         # @api private
         def define(method_name, &block)
-          if defined?(@__schema__)
+          return __schema__ if block.nil?
+
+          unless __schema__.nil?
             raise ::Dry::Validation::DuplicateSchemaError, 'Schema has already been defined'
           end
 
