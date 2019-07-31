@@ -51,7 +51,7 @@ module Dry
 
           last = keys.pop
           vals = self.class.new(data.dig(*keys))
-          vals.fetch_values(*last)
+          vals.fetch_values(*last) { nil }
         else
           raise ArgumentError, '+key+ must be a valid path specification'
         end
