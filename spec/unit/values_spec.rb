@@ -42,6 +42,10 @@ RSpec.describe Dry::Validation::Values do
           ArgumentError, '+key+ must be a valid path specification'
         )
     end
+
+    it 'accepts missing keys returning nil' do
+      expect(values[address: { geo: [:population, :lon] }]).to eql([nil, 2])
+    end
   end
 
   describe '#key?' do
