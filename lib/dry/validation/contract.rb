@@ -120,7 +120,7 @@ module Dry
         path = Schema::Path[spec]
 
         if path.multi_value?
-          return path.expand.map { |nested_path| error?(result, nested_path) }.any?
+          return path.expand.any? { |nested_path| error?(result, nested_path) }
         end
 
         return true if result.error?(path)
