@@ -119,6 +119,10 @@ module Dry
       def error?(result, spec)
         path = Schema::Path[spec]
 
+        if path.multi_value?
+          return path.expand.map { |nested_path| error?(result, nested_path) }.any?
+        end
+
         return true if result.error?(path)
 
         path

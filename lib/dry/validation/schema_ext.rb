@@ -5,6 +5,18 @@ require 'dry/schema/key_map'
 
 module Dry
   module Schema
+    class Path
+      # @api private
+      def multi_value?
+        last.is_a?(Array)
+      end
+
+      # @api private
+      def expand
+        to_a[0..-2].product(last).map { |spec| self.class[spec] }
+      end
+    end
+
     # @api private
     #
     # TODO: this should be moved to dry-schema at some point

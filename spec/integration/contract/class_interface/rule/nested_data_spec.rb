@@ -41,6 +41,29 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
     end
   end
 
+  context 'with a rule that depends on two nested values' do
+    let(:contract_class) do
+      Class.new(Dry::Validation::Contract) do
+        params do
+          required(:event).schema do
+            required(:active_from).value(:date)
+            required(:active_until).value(:date)
+          end
+        end
+
+        rule(event: %i[active_from active_until]) do
+          key.failure('invalid dates') if value[0] < value[1]
+        end
+      end
+    end
+
+    it 'does not execute rule when the schema checks failed' do
+      result = contract.(event: { active_from: Date.today, active_until: nil })
+
+      expect(result.errors.to_h).to eql(event: { active_until: ['must be a date'] })
+    end
+  end
+
   context 'with a nested array' do
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
