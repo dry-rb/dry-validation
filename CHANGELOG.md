@@ -1,3 +1,19 @@
+# v1.3.0 2019-08-14
+
+### Added
+
+* Support for setting an external schema (that can be extended too) (fixed #574) (@solnic)
+
+### Fixed
+
+* Using a hash spec to define rule keys with more than one value is properly handled by rule guard now (fixed #576) (@solnic)
+
+### Changed
+
+* `values` within rules uses `Hash#fetch_values` internally now, which improves performance (@esparta)
+
+[Compare v1.2.1...v1.3.0](https://github.com/dry-rb/dry-validation/compare/v1.2.1...v1.3.0)
+
 # v1.2.1 2019-07-16
 
 ### Fixed
