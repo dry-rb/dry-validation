@@ -1,3 +1,11 @@
+# v1.3.1 2019-08-16
+
+### Changed
+
+* You can now set an external schema without providing a block (alassek)
+
+[Compare v1.3.0...v1.3.1](https://github.com/dry-rb/dry-validation/compare/v1.3.0...v1.3.1)
+
 # v1.3.0 2019-08-14
 
 ### Added
