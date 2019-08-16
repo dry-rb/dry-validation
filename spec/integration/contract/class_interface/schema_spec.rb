@@ -55,5 +55,17 @@ RSpec.describe Dry::Validation::Contract, '.schema' do
       expect(contract.(email: '', name: '').errors.to_h)
         .to eql(email: ['must be filled'], name: ['must be filled'])
     end
+
+    context 'schema without block argument' do
+      subject(:contract_class) do
+        Class.new(Dry::Validation::Contract) do
+          schema Test::UserSchema
+        end
+      end
+
+      it 'uses the external schema' do
+        expect(contract_class.schema).to be_a(Dry::Schema::Processor)
+      end
+    end
   end
 end

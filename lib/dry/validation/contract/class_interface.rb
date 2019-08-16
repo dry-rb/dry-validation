@@ -198,7 +198,7 @@ module Dry
 
         # @api private
         def define(method_name, external_schema, &block)
-          return __schema__ if block.nil?
+          return __schema__ if external_schema.nil? && block.nil?
 
           unless __schema__.nil?
             raise ::Dry::Validation::DuplicateSchemaError, 'Schema has already been defined'
