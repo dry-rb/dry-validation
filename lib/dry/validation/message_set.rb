@@ -54,6 +54,7 @@ module Dry
       #
       # @api private
       def add(message)
+        @empty = nil
         source_messages << message
         messages << message
         initialize_placeholders!
