@@ -67,5 +67,29 @@ RSpec.describe Dry::Validation::Contract, '.schema' do
         expect(contract_class.schema).to be_a(Dry::Schema::Processor)
       end
     end
+
+    context 'setting multiple external schemas' do
+      subject(:contract_class) do
+        Class.new(Dry::Validation::Contract) do
+          schema(Test::UserSchema, Test::CompanySchema) do
+            required(:name).filled(:string)
+          end
+        end
+      end
+
+      before do
+        Test::CompanySchema = Dry::Schema.Params do
+          required(:company).filled(:string)
+        end
+      end
+
+      it 'extends the schemas' do
+        contract = contract_class.new
+        expect(contract.(email: '', name: '', company: '').errors.to_h)
+          .to eql(email: ['must be filled'],
+                  name: ['must be filled'],
+                  company: ['must be filled'])
+      end
+    end
   end
 end

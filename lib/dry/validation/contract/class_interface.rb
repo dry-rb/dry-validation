@@ -57,8 +57,8 @@ module Dry
         # @see https://dry-rb.org/gems/dry-schema/params/
         #
         # @api public
-        def params(external_schema = nil, &block)
-          define(:Params, external_schema, &block)
+        def params(*external_schemas, &block)
+          define(:Params, external_schemas, &block)
         end
 
         # Define a JSON schema for your contract
@@ -69,8 +69,8 @@ module Dry
         # @see https://dry-rb.org/gems/dry-schema/json/
         #
         # @api public
-        def json(external_schema = nil, &block)
-          define(:JSON, external_schema, &block)
+        def json(*external_schemas, &block)
+          define(:JSON, external_schemas, &block)
         end
 
         # Define a plain schema for your contract
@@ -81,8 +81,8 @@ module Dry
         # @see https://dry-rb.org/gems/dry-schema/
         #
         # @api public
-        def schema(external_schema = nil, &block)
-          define(:schema, external_schema, &block)
+        def schema(*external_schemas, &block)
+          define(:schema, external_schemas, &block)
         end
 
         # Define a rule for your contract
@@ -197,8 +197,8 @@ module Dry
         end
 
         # @api private
-        def define(method_name, external_schema, &block)
-          return __schema__ if external_schema.nil? && block.nil?
+        def define(method_name, external_schemas, &block)
+          return __schema__ if external_schemas.empty? && block.nil?
 
           unless __schema__.nil?
             raise ::Dry::Validation::DuplicateSchemaError, 'Schema has already been defined'
@@ -206,7 +206,7 @@ module Dry
 
           schema_opts = core_schema_opts
 
-          schema_opts.update(parent: external_schema) if external_schema
+          schema_opts.update(parent: external_schemas) if external_schemas.any?
 
           case method_name
           when :schema
