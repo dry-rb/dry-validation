@@ -38,6 +38,16 @@ RSpec.describe Dry::Validation::Result do
         expect(errors[nil]).to eql(['root error'])
       end
     end
+
+    describe '#empty?' do
+      let(:result) { Dry::Validation::Result.new(params) }
+
+      it 'should return the correct value whilst adding errors' do
+        expect(result.errors).to be_empty
+        result.add_error(Dry::Validation::Message.new('root error', path: [nil]))
+        expect(result.errors).not_to be_empty
+      end
+    end
   end
 
   describe '#inspect' do
