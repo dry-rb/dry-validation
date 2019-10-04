@@ -100,7 +100,9 @@ RSpec.describe Dry::Validation::Evaluator do
       end
 
       it 'raises argument error if no text key provided' do
-        expect { contract.(email: 'foo').errors }.to raise_error(ArgumentError, /Hash must contain :text key/)
+        expect {
+          contract.(email: 'foo').errors
+        }.to raise_error(ArgumentError, /Hash must contain :text key/)
       end
     end
   end
