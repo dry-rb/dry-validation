@@ -45,6 +45,13 @@ module Dry
       #   @example
       #     failure(:taken)
       #
+      # @overload failure(meta_hash)
+      #   Use meta_hash[:text] as a message (either explicitely or as an identifier),
+      #   setting the rest of the hash as error meta attribute
+      #   @param meta [Hash] The hash containing the message as value for the :text key
+      #   @example
+      #     failure({text: :invalid, key: value})
+      #
       # @see Evaluator#key
       # @see Evaluator#base
       #

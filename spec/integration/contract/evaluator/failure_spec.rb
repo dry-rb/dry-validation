@@ -91,6 +91,18 @@ RSpec.describe Dry::Validation::Evaluator do
       expect(errors.to_h).to eql(email: [text: 'is invalid', code: 102])
       expect(errors.first.meta).to eql(code: 102)
     end
+
+    context 'without :text key' do
+      before do
+        contract_class.rule(:email) do
+          key.failure(code: 102)
+        end
+      end
+
+      it 'raises argument error if no text key provided' do
+        expect { contract.(email: 'foo').errors }.to raise_error(ArgumentError, /Hash must contain :text key/)
+      end
+    end
   end
 
   context 'when localized message id is invalid' do
