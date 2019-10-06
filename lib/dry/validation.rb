@@ -27,6 +27,10 @@ module Dry
       require 'dry/validation/extensions/predicates_as_macros'
     end
 
+    register_extension(:composable) do
+      require 'dry/validation/extensions/composable'
+    end
+
     # Define a contract and build its instance
     #
     # @example

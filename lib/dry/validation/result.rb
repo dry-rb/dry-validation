@@ -6,13 +6,18 @@ require 'dry/equalizer'
 require 'dry/validation/constants'
 require 'dry/validation/message_set'
 require 'dry/validation/values'
+require 'dry/validation/result_interface'
 
 module Dry
   module Validation
     # Result objects are returned by contracts
     #
+    # @see ResultInterface
+    #
     # @api public
     class Result
+      include ResultInterface
+
       include Dry::Equalizer(:schema_result, :context, :errors, inspect: false)
 
       # Build a new result
@@ -81,24 +86,6 @@ module Dry
         new_options.empty? ? @errors : @errors.with(schema_errors(new_options), new_options)
       end
 
-      # Check if result is successful
-      #
-      # @return [Bool]
-      #
-      # @api public
-      def success?
-        @errors.empty?
-      end
-
-      # Check if result is not successful
-      #
-      # @return [Bool]
-      #
-      # @api public
-      def failure?
-        !success?
-      end
-
       # Check if values include an error for the provided key
       #
       # @api private
@@ -128,46 +115,6 @@ module Dry
       def add_error(error)
         @errors.add(error)
         self
-      end
-
-      # Read a value under provided key
-      #
-      # @param [Symbol] key
-      #
-      # @return [Object]
-      #
-      # @api public
-      def [](key)
-        values[key]
-      end
-
-      # Check if a key was set
-      #
-      # @param [Symbol] key
-      #
-      # @return [Bool]
-      #
-      # @api public
-      def key?(key)
-        values.key?(key)
-      end
-
-      # Coerce to a hash
-      #
-      # @api public
-      def to_h
-        values.to_h
-      end
-
-      # Return a string representation
-      #
-      # @api public
-      def inspect
-        if context.empty?
-          "#<#{self.class}#{to_h} errors=#{errors.to_h}>"
-        else
-          "#<#{self.class}#{to_h} errors=#{errors.to_h} context=#{context.each.to_h}>"
-        end
       end
 
       # Freeze result and its error set

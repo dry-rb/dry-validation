@@ -91,17 +91,7 @@ module Dry
       #
       # @api public
       def call(input)
-        Result.new(schema.(input), Concurrent::Map.new) do |result|
-          rules.each do |rule|
-            next if rule.keys.any? { |key| error?(result, key) }
-
-            rule_result = rule.(self, result)
-
-            rule_result.failures.each do |failure|
-              result.add_error(message_resolver[failure])
-            end
-          end
-        end
+        contract_result(input)
       end
 
       # Return a nice string representation
@@ -154,6 +144,32 @@ module Dry
       # @api private
       def messages
         self.class.messages
+      end
+
+      # Return the result of schema on input with the rules applied
+      #
+      # @return [Result]
+      #
+      # @api private
+      def contract_result(input)
+        Result.new(schema.(input), Concurrent::Map.new) do |result|
+          apply_rules(result, rules)
+        end
+      end
+
+      # Iterate rules and add errors to the result
+      #
+      # @api private
+      def apply_rules(result, rules)
+        rules.each do |rule|
+          next if rule.keys.any? { |key| error?(result, key) }
+
+          rule_result = rule.(self, result)
+
+          rule_result.failures.each do |failure|
+            result.add_error(message_resolver[failure])
+          end
+        end
       end
     end
   end
