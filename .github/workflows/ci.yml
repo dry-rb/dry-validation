@@ -18,7 +18,7 @@ jobs:
           ruby-version: ${{matrix.ruby}}
       - name: Run all tests
         env:
-          DRY_SCHEMA_FROM_MASTER: ${{matrix.dry_SCHEMA_from_master}}
+          DRY_SCHEMA_FROM_MASTER: ${{matrix.dry_schema_from_master}}
           DRY_TYPES_FROM_MASTER: ${{matrix.dry_types_from_master}}
         run: |
           gem install bundler
@@ -40,7 +40,7 @@ jobs:
           apt-get install -y --no-install-recommends git
       - name: Run all tests
         env:
-          DRY_SCHEMA_FROM_MASTER: ${{matrix.dry_SCHEMA_from_master}}
+          DRY_SCHEMA_FROM_MASTER: ${{matrix.dry_schema_from_master}}
           DRY_TYPES_FROM_MASTER: ${{matrix.dry_types_from_master}}
         run: |
           gem install bundler
