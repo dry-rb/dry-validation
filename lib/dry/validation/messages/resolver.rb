@@ -22,6 +22,8 @@ module Dry
         # Resolve Message object from provided args and path
         #
         # This is used internally by contracts when rules are applied
+        # If message argument is a Hash, then it MUST have a :text key,
+        # which value will be used as the message value
         #
         # @return [Message, Message::Localized]
         #
@@ -34,7 +36,12 @@ module Dry
             Message[message, path, meta]
           when Hash
             meta = message.dup
-            text = meta.delete(:text)
+            text = meta.delete(:text) { |key|
+              raise ArgumentError, <<~STR
+                +message+ Hash must contain :#{key} key (#{message.inspect} given)
+              STR
+            }
+
             call(message: text, tokens: tokens, path: path, meta: meta)
           else
             raise ArgumentError, <<~STR
