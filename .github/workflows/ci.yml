@@ -22,7 +22,7 @@ jobs:
           DRY_TYPES_FROM_MASTER: ${{matrix.dry_types_from_master}}
         run: |
           gem install bundler
-          bundle install --jobs 4 --retry 3
+          bundle install --jobs 4 --retry 3 --without benchmarks tools
           bundle exec rake
   tests-jruby:
     runs-on: ubuntu-latest
