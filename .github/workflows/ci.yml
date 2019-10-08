@@ -1,0 +1,48 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  tests-mri:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: ["2.6.x", "2.5.x", "2.4.x"]
+        dry_schema_from_master: ["false", "true"]
+        dry_types_from_master: ["false", "true"]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{matrix.ruby}}
+      - name: Run all tests
+        env:
+          DRY_SCHEMA_FROM_MASTER: ${{matrix.dry_SCHEMA_from_master}}
+          DRY_TYPES_FROM_MASTER: ${{matrix.dry_types_from_master}}
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+          bundle exec rake
+  tests-jruby:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dry_schema_from_master: ["false", "true"]
+        dry_types_from_master: ["false", "true"]
+    container:
+      image: jruby:9.2.8
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install git
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git
+      - name: Run all tests
+        env:
+          DRY_SCHEMA_FROM_MASTER: ${{matrix.dry_SCHEMA_from_master}}
+          DRY_TYPES_FROM_MASTER: ${{matrix.dry_types_from_master}}
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+          bundle exec rspec
