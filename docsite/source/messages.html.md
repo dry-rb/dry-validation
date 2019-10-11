@@ -56,7 +56,7 @@ contract.call(age: 17).errors.to_h
 
 ### Using localized messages backend
 
-If you enable the `:i18n` or `:yaml` messages backend in the [configuration](/gems/dry-validation/configuration), you can define messages in a yaml file and use their identifiers instead of plain strings. Here's a sample yaml with a message for our `age` error:
+If you enable the `:i18n` or `:yaml` messages backend in the [configuration](docs::configuration), you can define messages in a yaml file and use their identifiers instead of plain strings. Here's a sample yaml with a message for our `age` error:
 
 ```yaml
 en:
@@ -67,7 +67,7 @@ en:
           invalid: 'must be greater than 18'
 ```
 
-Provided we [configure our contract to use a custom messages file](/gems/dry-validation/1.0/configuration#example), we can now write this:
+Provided we [configure our contract to use a custom messages file](docs::configuration#example), we can now write this:
 
 ```ruby
 class NewUserContract < Dry::Validation::Contract
@@ -90,4 +90,4 @@ contract.call(age: 17).errors.to_h
 
 ### Learn more
 
-- [Rules with key and base failures](/gems/dry-validation/1.0/rules#key-failures)
+- [Rules with key and base failures](docs::rules#key-failures)
