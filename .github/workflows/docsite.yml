@@ -3,11 +3,12 @@ name: docsite
 on:
   push:
     paths:
-      - 'docsite/**'
+      - docsite/**
+      - .github/workflows/docsite.yml
     branches:
-      - 'master'
-      - 'release-*.*'
-      - 'docsite-*.*'
+      - master
+      - release-**
+      - docsite-**
     tags:
 
 jobs:
