@@ -4,7 +4,7 @@ layout: gem-single
 name: dry-validation
 ---
 
-Schemas are a crucial part of `dry-validation`, they pre-process the data before it's validated by [the rules](/gems/dry-validation/rules) and can provide detailed error messages. By default, the exposed DSL for defining schemas uses [`dry-schema`](/gems/dry-schema) under the hood.
+Schemas are a crucial part of `dry-validation`, they pre-process the data before it's validated by [the rules](docs::rules) and can provide detailed error messages. By default, the exposed DSL for defining schemas uses [`dry-schema`](/gems/dry-schema) under the hood.
 
 ### Defining a schema without coercion
 
@@ -115,4 +115,4 @@ contract.call(email: '   jane@doe   ', age: 21)
 
 - [dry-schema](/gems/dry-schema) learn how to fully leverage schemas!
 - [dry-types](/gems/dry-types) learn more about the coercion backend used in the schemas
-- [rules](/gems/dry-validation/rules) learn how to define validation rules in addition to schemas
+- [rules](docs::rules) learn how to define validation rules in addition to schemas
