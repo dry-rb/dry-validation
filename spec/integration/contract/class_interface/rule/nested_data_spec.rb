@@ -85,5 +85,51 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
           .to eql(address: { phones: { 1 => ['invalid phone'], 2 => ['must be a string'] } })
       end
     end
+
+    context 'with a path intersection' do
+      context 'when the longest path is a first' do
+        let(:contract_class) do
+          Class.new(Dry::Validation::Contract) do
+            params do
+              required(:addresses).array do
+                required(:phone).value(:string)
+              end
+            end
+
+            rule(:addresses).each do
+              key(path.keys + [:phone]).failure('invalid phone')
+              key.failure('invalid list')
+            end
+          end
+
+          it 'produces an error for all paths' do
+            expect(contract.(addresses: [{ phone: '+48123' }]).errors.to_h)
+              .to eql(addresses: { 0 => [['invalid list'], [{ phone: 'invalid phone' }]] })
+          end
+        end
+      end
+
+      context 'when the longest path is a last' do
+        let(:contract_class) do
+          Class.new(Dry::Validation::Contract) do
+            params do
+              required(:addresses).array do
+                required(:phone).value(:string)
+              end
+            end
+
+            rule(:addresses).each do
+              key.failure('invalid list')
+              key(path.keys + [:phone]).failure('invalid phone')
+            end
+          end
+
+          it 'produces an error for all paths' do
+            expect(contract.(addresses: [{ phone: '+48123' }]).errors.to_h)
+              .to eql(addresses: { 0 => [['invalid list'], [{ phone: 'invalid phone' }]] })
+          end
+        end
+      end
+    end
   end
 end

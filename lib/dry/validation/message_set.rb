@@ -115,7 +115,7 @@ module Dry
       # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/PerceivedComplexity
       def initialize_placeholders!
-        @placeholders = unique_paths.each_with_object(EMPTY_HASH.dup) { |path, hash|
+        @placeholders = unique_paths.sort_by(&:size).each_with_object(EMPTY_HASH.dup) { |path, hash|
           curr_idx = 0
           last_idx = path.size - 1
           node = hash
