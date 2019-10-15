@@ -5,7 +5,7 @@ on:
 
 jobs:
   sync-configs:
-    if: (github.event.event_type == github.workflow) && (github.ref == 'master')
+    # if: (github.event.event_type == github.workflow) && (github.ref == 'master')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
