@@ -5,9 +5,11 @@ on:
 
 jobs:
   sync-configs:
-    # if: (github.event.event_type == github.workflow) && (github.ref == 'master')
+    if: (github.event.event_type == 'sync_configs') && (github.ref == 'master')
     runs-on: ubuntu-latest
     steps:
+      - name: Debug
+        run: echo ${{toJSON(github.event)}}
       - uses: actions/checkout@v1
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
