@@ -1,6 +1,12 @@
 name: ci
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - lib/**
+      - spec/**
+      - .github/workflows/ci.yml
+  pull_request:
 
 jobs:
   tests-mri:
