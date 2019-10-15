@@ -2,6 +2,8 @@ name: sync_configs
 
 on:
   repository_dispatch:
+  branches:
+    - sync-config-test-2
 
 jobs:
   sync-configs:
