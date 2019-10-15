@@ -6,6 +6,7 @@ on:
 jobs:
   sync-configs:
     runs-on: ubuntu-latest
+    if: github.event.action == 'sync_configs'
     steps:
       - name: "Debug"
         run: echo "${{toJson(github.event)}}"
@@ -21,7 +22,6 @@ jobs:
       - name: Symlink ossy
         run: ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
       - name: Update configuration files from devtools
-        if: github.event.action == 'sync_configs'
         env:
           GITHUB_LOGIN: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
