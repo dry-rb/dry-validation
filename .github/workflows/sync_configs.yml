@@ -5,7 +5,7 @@ on:
 
 jobs:
   sync-configs:
-    if: (github.event.event_type == 'sync_configs') && (github.ref == 'master')
+    # if: (github.event.event_type == 'sync_configs') && (github.ref == 'master')
     runs-on: ubuntu-latest
     steps:
       - name: Debug
