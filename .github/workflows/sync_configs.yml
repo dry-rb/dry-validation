@@ -26,8 +26,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-
-          for file in `git diff-tree --no-commit-id --name-only -r ${{github.sha}}`; do bin/ossy github update_file dry-rb/devtools $file; done
+          bin/ossy github update_file dry-rb/devtools .github/workflows/docsite.yml
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
