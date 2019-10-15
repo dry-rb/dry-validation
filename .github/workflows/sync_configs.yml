@@ -13,20 +13,15 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.6.x"
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3 --without benchmarks sql
-      - name: Symlink ossy
-        run: ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
-      - name: Update configuration files from devtools
-        env:
-          GITHUB_LOGIN: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          bin/ossy github update_file dry-rb/devtools .github/workflows/docsite.yml
+
+          mkdir tmp
+          git clone https://github.com/dry-rb/devtools.git tmp/devtools
+          for file in `find shared -type f`; do echo "cp -v $file $(echo $file | sed -e "s/shared\///")"; done
+          git add -A
+          git commit -m "[devtools] config sync"
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
