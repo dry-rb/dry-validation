@@ -1,0 +1,26 @@
+name: sync_configs
+
+on:
+  repository_dispatch:
+
+jobs:
+  sync-configs:
+    if: github.event.event_type == github.workflow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: "2.6.x"
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3 --without benchmarks sql
+      - name: Symlink ossy
+        run: ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
+      - name: Update configuration files from devtools
+        env:
+          GITHUB_LOGIN: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: bin/ossy github update_file dry-rb/devtools .github/workflows/docsite.yml
