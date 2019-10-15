@@ -14,12 +14,15 @@ jobs:
           GITHUB_LOGIN: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-
           mkdir tmp
           git clone https://github.com/dry-rb/devtools.git tmp/devtools
-          for file in `find shared -type f`; do echo "cp -v $file $(echo $file | sed -e "s/shared\///")"; done
+          cd tmp/devtools
+          for file in `find shared -type f`; do cp -v $file ../../$(echo $file | sed -e "s/shared\///"); done
+
+          cd ../..
+
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add -A
           git commit -m "[devtools] config sync"
       - name: Push changes
