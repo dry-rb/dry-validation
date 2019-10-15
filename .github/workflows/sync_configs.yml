@@ -8,8 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.action == 'sync_configs'
     steps:
-      - name: "Debug"
-        run: echo "${{toJson(github.event)}}"
       - uses: actions/checkout@v1
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
@@ -25,4 +23,11 @@ jobs:
         env:
           GITHUB_LOGIN: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: bin/ossy github update_file dry-rb/devtools .github/workflows/docsite.yml
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          bin/ossy github update_file dry-rb/devtools .github/workflows/docsite.yml
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GH_PAT }}
