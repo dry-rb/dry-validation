@@ -6,7 +6,7 @@ If you found a bug, report an issue and describe what's the expected behavior ve
 
 ## Reporting feature requests
 
-Report a feature request **only after discussing it first on [discourse.dry-rb.org](https://discuss.dry-rb.org)** where it was accepted. Please provide a concise description of the feature, don't link to a discussion thread, and instead summarize what was discussed.
+Report a feature request **only after discussing it first on [discourse.dry-rb.org](https://discourse.dry-rb.org)** where it was accepted. Please provide a concise description of the feature, don't link to a discussion thread, and instead summarize what was discussed.
 
 ## Reporting questions, support requests, ideas, concerns etc.
 

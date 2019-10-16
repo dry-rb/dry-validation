@@ -24,7 +24,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          git commit -m "[devtools] config sync"
+          git commit -m "[devtools] config sync" || echo "nothing changed"
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
