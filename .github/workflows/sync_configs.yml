@@ -14,12 +14,9 @@ jobs:
           GITHUB_LOGIN: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
-          mkdir tmp
           git clone https://github.com/dry-rb/devtools.git tmp/devtools
-          cd tmp/devtools
-          for file in `find shared -type f`; do cp -v $file ../../$(echo $file | sed -e "s/shared\///"); done
 
-          cd ../..
+          rsync -av tmp/devtools/shared/ .
 
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
