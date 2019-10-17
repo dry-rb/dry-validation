@@ -17,33 +17,33 @@ RSpec.describe Messages::I18n do
       end
 
       it 'returns a message for a predicate' do
-        message = messages[:filled?, rule: :name]
+        message = messages[:filled?, rule: :name].text
 
         expect(message).to eql("nie może być pusty")
       end
 
       it 'returns a message for a specific rule' do
-        message = messages[:filled?, rule: :email]
+        message = messages[:filled?, rule: :email].text
 
         expect(message).to eql("Proszę podać adres email")
       end
 
       it 'returns a message for a specific val type' do
-        message = messages[:size?, rule: :pages, val_type: String]
+        message = messages[:size?, rule: :pages, val_type: String].text
 
-        expect(message).to eql("wielkość musi być równa %{size}")
+        expect(message).to eql("wielkość musi być równa \#{size}")
       end
 
       it 'returns a message for a specific rule and its default arg type' do
-        message = messages[:size?, rule: :pages]
+        message = messages[:size?, rule: :pages].text
 
-        expect(message).to eql("wielkość musi być równa %{size}")
+        expect(message).to eql("wielkość musi być równa \#{size}")
       end
 
       it 'returns a message for a specific rule and its arg type' do
-        message = messages[:size?, rule: :pages, arg_type: Range]
+        message = messages[:size?, rule: :pages, arg_type: Range].text
 
-        expect(message).to eql("wielkość musi być między %{size_left} a %{size_right}")
+        expect(message).to eql("wielkość musi być między \#{size_left} a \#{size_right}")
       end
     end
 
@@ -57,27 +57,27 @@ RSpec.describe Messages::I18n do
 
     context 'with a different locale' do
       it 'returns a message for a predicate' do
-        message = messages[:filled?, rule: :name, locale: :en]
+        message = messages[:filled?, rule: :name, locale: :en].text
 
         expect(message).to eql("must be filled")
       end
 
       it 'returns a message for a specific rule' do
-        message = messages[:filled?, rule: :email, locale: :en]
+        message = messages[:filled?, rule: :email, locale: :en].text
 
         expect(message).to eql("Please provide your email")
       end
 
       it 'returns a message for a specific rule and its default arg type' do
-        message = messages[:size?, rule: :pages, locale: :en]
+        message = messages[:size?, rule: :pages, locale: :en].text
 
-        expect(message).to eql("size must be %{size}")
+        expect(message).to eql("size must be \#{size}")
       end
 
       it 'returns a message for a specific rule and its arg type' do
-        message = messages[:size?, rule: :pages, arg_type: Range, locale: :en]
+        message = messages[:size?, rule: :pages, arg_type: Range, locale: :en].text
 
-        expect(message).to eql("size must be within %{size_left} - %{size_right}")
+        expect(message).to eql("size must be within \#{size_left} - \#{size_right}")
       end
     end
 
@@ -90,7 +90,7 @@ RSpec.describe Messages::I18n do
       it 'returns a message for a predicate in the default_locale' do
         pending 'FIXME: this got broken for some reason, probably an I18n issue'
 
-        message = messages[:even?, rule: :some_number]
+        message = messages[:even?, rule: :some_number].text
 
         expect(I18n.locale).to eql(:pl)
         expect(message).to eql("must be even")

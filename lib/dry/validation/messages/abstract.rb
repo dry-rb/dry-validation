@@ -1,7 +1,10 @@
 require 'pathname'
 require 'concurrent/map'
+
 require 'dry/equalizer'
 require 'dry/configurable'
+
+require 'dry/validation/template'
 
 module Dry
   module Validation
@@ -40,6 +43,8 @@ module Dry
           String => 'string'
         )
 
+        CACHE_KEYS = %i[path message_type val_type arg_type locale].freeze
+
         def self.cache
           @cache ||= Concurrent::Map.new { |h, k| h[k] = Concurrent::Map.new }
         end
@@ -59,10 +64,12 @@ module Dry
           get(path, options) if key?(path, options)
         end
 
-        def call(*args)
-          cache.fetch_or_store(args.hash) do
-            path, opts = lookup(*args)
-            get(path, opts) if path
+        def call(predicate, options = EMPTY_HASH)
+          cache.fetch_or_store([predicate, options.reject { |k,| k.equal?(:input) }]) do
+            path, opts = lookup(predicate, options)
+            return unless path
+            text = yield(path, opts)
+            Template[text]
           end
         end
         alias_method :[], :call

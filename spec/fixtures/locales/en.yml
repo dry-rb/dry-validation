@@ -3,4 +3,6 @@ en:
     rules:
       email:
         filled?: "Please provide your email"
+      age:
+        gt?: "%{input} must be greater than %{num}"
     email?: "must be an email"

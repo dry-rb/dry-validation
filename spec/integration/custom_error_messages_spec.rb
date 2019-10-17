@@ -4,8 +4,12 @@ RSpec.describe Dry::Validation do
   shared_context 'schema with customized messages' do
     describe '#messages' do
       it 'returns compiled error messages' do
-        expect(schema.(email: '').messages).to eql(
-          email: ['Please provide your email']
+        expect(schema.(email: '', age: 12).messages).to eql(
+          email: ['Please provide your email'], age: ['12 must be greater than 18']
+        )
+
+        expect(schema.(email: '', age: 14).messages).to eql(
+          email: ['Please provide your email'], age: ['14 must be greater than 18']
         )
       end
     end
@@ -18,7 +22,8 @@ RSpec.describe Dry::Validation do
           config.messages_file = SPEC_ROOT.join('fixtures/locales/en.yml')
         end
 
-        required(:email, &:filled?)
+        required(:email).filled
+        required(:age).value(gt?: 18)
       end
     end
 
@@ -38,7 +43,8 @@ RSpec.describe Dry::Validation do
             config.messages = :i18n
           end
 
-          required(:email, &:filled?)
+          required(:email).filled
+          required(:age).value(gt?: 18)
         end
       end
 

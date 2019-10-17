@@ -1,3 +1,32 @@
+# v0.13.3 2019-05-21
+
+### Fixed
+
+* Fixed regression with caching templates that rely on predicate arguments (solnic)
+* Removed ugly workaround for template evaluation with extra tokens (solnic)
+
+### Changed
+
+* [internal] `Messages::Abstract#call` returns a `Template` object now, this was backported from dry-schema (solnic)
+
+[Compare v0.13.2...v0.13.3](https://github.com/dry-rb/dry-validation/compare/v0.13.2...v0.13.3)
+
+# v0.13.2 2019-05-12
+
+### Fixed
+
+* Caching message templates uses restricted set of known keys to calculate cache keys (solnic)
+
+[Compare v0.13.1...v0.13.2](https://github.com/dry-rb/dry-validation/compare/v0.13.1...v0.13.2)
+
+# v0.13.1 2019-03-22
+
+### Changed
+
+- `dry-types` was locked to `~> 0.14.0` (flash-gordon)
+
+[Compare v0.13.0...v0.13.1](https://github.com/dry-rb/dry-validation/compare/v0.13.0...v0.13.1)
+
 # v0.13.0 2019-01-29
 
 ### Changed

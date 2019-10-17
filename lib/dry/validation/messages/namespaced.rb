@@ -11,6 +11,13 @@ module Dry
           @root = messages.root
         end
 
+        def call(predicate, options = EMPTY_HASH)
+          super do |path, opts|
+            messages.get(path, opts)
+          end
+        end
+        alias_method :[], :call
+
         def key?(key, *args)
           messages.key?(key, *args)
         end

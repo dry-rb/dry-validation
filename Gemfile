@@ -8,17 +8,12 @@ group :test do
     gem 'simplecov', require: false
   end
   gem 'dry-monads', '>= 0.4.0', require: false
-  gem 'dry-struct', git: 'https://github.com/dry-rb/dry-struct', branch: 'master'
+  gem 'dry-struct'
 end
 
 group :tools do
   gem 'pry-byebug', platform: :mri
   gem 'pry', platform: :jruby
-
-  unless ENV['TRAVIS']
-    gem 'mutant', git: 'https://github.com/mbj/mutant'
-    gem 'mutant-rspec', git: 'https://github.com/mbj/mutant'
-  end
 end
 
 group :benchmarks do
