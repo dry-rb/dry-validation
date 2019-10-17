@@ -10,7 +10,6 @@ on:
     branches:
       - master
       - release-**
-      - docsite-**
     tags:
 
 jobs:
@@ -27,7 +26,7 @@ jobs:
           gem install bundler
           bundle install --jobs 4 --retry 3 --without benchmarks sql
       - name: Symlink ossy
-        run: ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
+        run: mkdir -p bin && ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
       - name: Trigger dry-rb.org deploy
         env:
           GITHUB_LOGIN: ${{ github.actor }}
