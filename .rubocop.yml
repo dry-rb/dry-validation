@@ -1,3 +1,5 @@
+# this file is managed by dry-rb/devtools project
+
 AllCops:
   TargetRubyVersion: 2.4
 
@@ -43,9 +45,7 @@ Metrics/AbcSize:
   Max: 20
 
 Metrics/BlockLength:
-  Enabled: true
-  Exclude:
-    - "spec/**/*_spec.rb"
+  Enabled: false
 
 Metrics/CyclomaticComplexity:
   Enabled: true
@@ -79,5 +79,8 @@ Style/SymbolArray:
   Exclude:
     - "spec/**/*_spec.rb"
 
-Rubocop/Style/ConditionalAssignment:
-  enabled: false
+Style/ConditionalAssignment:
+  Enabled: false
+
+Naming/MethodName:
+  Enabled: false
