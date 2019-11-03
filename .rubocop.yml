@@ -84,3 +84,6 @@ Style/ConditionalAssignment:
 
 Naming/MethodName:
   Enabled: false
+
+Style/AsciiComments:
+  Enabled: false

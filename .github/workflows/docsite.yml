@@ -29,6 +29,6 @@ jobs:
         run: mkdir -p bin && ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
       - name: Trigger dry-rb.org deploy
         env:
-          GITHUB_LOGIN: ${{ github.actor }}
+          GITHUB_LOGIN: dry-bot
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: bin/ossy github workflow dry-rb/dry-rb.org ci
