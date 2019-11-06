@@ -18,7 +18,7 @@ jobs:
         run: |
           git clone https://github.com/dry-rb/devtools.git tmp/devtools
 
-          rsync -av tmp/devtools/shared/ .
+          rsync --ignore-existing -av tmp/devtools/shared/ .
 
           git config --local user.email "dry-bot@dry-rb.org"
           git config --local user.name "dry-bot"
