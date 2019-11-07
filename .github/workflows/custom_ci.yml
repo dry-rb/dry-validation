@@ -3,9 +3,11 @@ name: ci
 on:
   push:
     paths:
+      - .github/workflows/custom_ci.yml
       - lib/**
       - spec/**
-      - .github/workflows/ci.yml
+      - Gemfile
+      - "*.gemspec"
   pull_request:
 
 jobs:
@@ -16,6 +18,11 @@ jobs:
         ruby: ["2.6.x", "2.5.x", "2.4.x"]
         dry_schema_from_master: ["false", "true"]
         dry_types_from_master: ["false", "true"]
+        include:
+          - ruby: "2.6.x"
+            dry_schema_from_master: "false"
+            dry_types_from_master: "false"
+            coverage: "true"
     steps:
       - uses: actions/checkout@v1
       - name: Set up Ruby
@@ -26,9 +33,11 @@ jobs:
         env:
           DRY_SCHEMA_FROM_MASTER: ${{matrix.dry_schema_from_master}}
           DRY_TYPES_FROM_MASTER: ${{matrix.dry_types_from_master}}
+          COVERAGE: ${{matrix.coverage}}
         run: |
           gem install bundler
-          bundle install --jobs 4 --retry 3 --without benchmarks tools
+          bundle config set without 'tools docs benchmarks'
+          bundle install --jobs 4 --retry 3
           bundle exec rake
   tests-jruby:
     runs-on: ubuntu-latest
@@ -50,5 +59,6 @@ jobs:
           DRY_TYPES_FROM_MASTER: ${{matrix.dry_types_from_master}}
         run: |
           gem install bundler
-          bundle install --jobs 4 --retry 3 --without benchmarks tools
+          bundle config set without 'tools docs benchmarks'
+          bundle install --jobs 4 --retry 3
           bundle exec rspec
