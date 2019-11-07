@@ -44,8 +44,7 @@ jobs:
           COVERAGE: ${{matrix.coverage}}
         run: |
           gem install bundler
-          bundle config set without 'tools docs benchmarks'
-          bundle install --jobs 4 --retry 3
+          bundle install --jobs 4 --retry 3 --without tools docs benchmarks
           bundle exec rake
       - name: Send coverage results
         if: "matrix.coverage == 'true'"
@@ -79,6 +78,5 @@ jobs:
           DRY_TYPES_FROM_MASTER: ${{matrix.dry_types_from_master}}
         run: |
           gem install bundler
-          bundle config set without 'tools docs benchmarks'
-          bundle install --jobs 4 --retry 3
+          bundle install --jobs 4 --retry 3 --without tools docs benchmarks
           bundle exec rspec
