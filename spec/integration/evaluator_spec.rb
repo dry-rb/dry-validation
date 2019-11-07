@@ -4,7 +4,7 @@ require 'dry/validation/evaluator'
 
 RSpec.describe Dry::Validation::Evaluator do
   subject(:evaluator) do
-    Dry::Validation::Evaluator.new(contract, options, &block)
+    Dry::Validation::Evaluator.new(contract, **options, &block)
   end
 
   let(:contract) do

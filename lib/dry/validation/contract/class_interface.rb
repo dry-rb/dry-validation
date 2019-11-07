@@ -123,7 +123,7 @@ module Dry
         #
         # @api public
         def build(options = EMPTY_HASH, &block)
-          Class.new(self, &block).new(options)
+          Class.new(self, &block).new(**options)
         end
 
         # @api private
@@ -209,11 +209,11 @@ module Dry
 
           case method_name
           when :schema
-            @__schema__ = Schema.define(schema_opts, &block)
+            @__schema__ = Schema.define(**schema_opts, &block)
           when :Params
-            @__schema__ = Schema.Params(schema_opts, &block)
+            @__schema__ = Schema.Params(**schema_opts, &block)
           when :JSON
-            @__schema__ = Schema.JSON(schema_opts, &block)
+            @__schema__ = Schema.JSON(**schema_opts, &block)
           end
         end
       end
