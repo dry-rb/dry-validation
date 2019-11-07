@@ -29,6 +29,13 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{matrix.ruby}}
+      - name: Download test reporter
+        if: "matrix.coverage == 'true'"
+        run: |
+          mkdir -p tmp/
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./tmp/cc-test-reporter
+          chmod +x ./tmp/cc-test-reporter
+          ./tmp/cc-test-reporter before-build
       - name: Run all tests
         env:
           DRY_SCHEMA_FROM_MASTER: ${{matrix.dry_schema_from_master}}
@@ -39,6 +46,17 @@ jobs:
           bundle config set without 'tools docs benchmarks'
           bundle install --jobs 4 --retry 3
           bundle exec rake
+      - name: Send coverage results
+        if: "matrix.coverage == 'true'"
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+          GIT_COMMIT_SHA: ${{github.sha}}
+          GIT_BRANCH: ${{github.ref}}
+          GIT_COMMITTED_AT: ${{github.event.head_commit.timestamp}}
+        run: |
+          GIT_BRANCH=`ruby -e "puts ENV['GITHUB_REF'].split('/', 3).last"` \
+          GIT_COMMITTED_AT=`ruby -r time -e "puts Time.iso8601(ENV['GIT_COMMITTED_AT']).to_i"` \
+          ./tmp/cc-test-reporter after-build
   tests-jruby:
     runs-on: ubuntu-latest
     strategy:
