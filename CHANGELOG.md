@@ -1,8 +1,16 @@
+# unreleased
+
+### Fixed
+
+- Keyword warnings reported by Ruby 2.7 (@flash-gordon)
+
+[Compare v1.3.1...master](https://github.com/dry-rb/dry-validation/compare/v1.3.1...master)
+
 # v1.3.1 2019-08-16
 
 ### Changed
 
-* You can now set an external schema without providing a block (alassek)
+- You can now set an external schema without providing a block (@alassek)
 
 [Compare v1.3.0...v1.3.1](https://github.com/dry-rb/dry-validation/compare/v1.3.0...v1.3.1)
 
@@ -10,15 +18,15 @@
 
 ### Added
 
-* Support for setting an external schema (that can be extended too) (fixed #574) (@solnic)
+- Support for setting an external schema (that can be extended too) (fixed #574) (@solnic)
 
 ### Fixed
 
-* Using a hash spec to define rule keys with more than one value is properly handled by rule guard now (fixed #576) (@solnic)
+- Using a hash spec to define rule keys with more than one value is properly handled by rule guard now (fixed #576) (@solnic)
 
 ### Changed
 
-* `values` within rules uses `Hash#fetch_values` internally now, which improves performance (@esparta)
+- `values` within rules uses `Hash#fetch_values` internally now, which improves performance (@esparta)
 
 [Compare v1.2.1...v1.3.0](https://github.com/dry-rb/dry-validation/compare/v1.2.1...v1.3.0)
 
@@ -26,10 +34,10 @@
 
 ### Fixed
 
-* Defining an abstract contract class that has no schema no longer crashes (issue #565) (@solnic)
-* Fixed an issue where `Rule#each` would crash when the value is not an array (issue #567) (@solnic)
-* Fixed an issue where guarding a rule would crash when keys are missing in the input (issue #569) (@solnic)
-* Added missing "pathname" require (issue #570) (@solnic)
+- Defining an abstract contract class that has no schema no longer crashes (issue #565) (@solnic)
+- Fixed an issue where `Rule#each` would crash when the value is not an array (issue #567) (@solnic)
+- Fixed an issue where guarding a rule would crash when keys are missing in the input (issue #569) (@solnic)
+- Added missing "pathname" require (issue #570) (@solnic)
 
 [Compare v1.2.0...v1.2.1](https://github.com/dry-rb/dry-validation/compare/v1.2.0...v1.2.1)
 
@@ -37,15 +45,15 @@
 
 ### Added
 
-* New extension `:predicates_as_macros` (@waiting-for-dev)
+- New extension `:predicates_as_macros` (@waiting-for-dev)
 
 ### Fixed
 
-* Guarding rules for nested keys works correctly (issue #560) (@solnic)
+- Guarding rules for nested keys works correctly (issue #560) (@solnic)
 
 ### Changed
 
-* `dry-schema` dependency was bumped to `>= 1.3.1` (@solnic)
+- `dry-schema` dependency was bumped to `>= 1.3.1` (@solnic)
 
 [Compare v1.1.1...v1.2.0](https://github.com/dry-rb/dry-validation/compare/v1.1.1...v1.2.0)
 
@@ -53,7 +61,7 @@
 
 ### Fixed
 
-* `Rule#each` works with array values from nested hashes (@mustardnoise)
+- `Rule#each` works with array values from nested hashes (@mustardnoise)
 
 [Compare v1.1.0...v1.1.1](https://github.com/dry-rb/dry-validation/compare/v1.1.0...v1.1.1)
 
@@ -61,13 +69,13 @@
 
 ### Added
 
-* `key?` method available within rules, that can be used to check if there's a value under the rule's default key (refs #540) (@solnic)
-* `value` supports hash-based path specifications now (refs #547) (@solnic)
-* `value` can read multiple values when the key points to them, ie in case of `rule(geo: [:lat, :lon])` it would return an array with `lat` and `lon` (@solnic)
+- `key?` method available within rules, that can be used to check if there's a value under the rule's default key (refs #540) (@solnic)
+- `value` supports hash-based path specifications now (refs #547) (@solnic)
+- `value` can read multiple values when the key points to them, ie in case of `rule(geo: [:lat, :lon])` it would return an array with `lat` and `lon` (@solnic)
 
 ### Fixed
 
-* Passing multiple macro names to `validate` or `each` works correctly (fixed #538 #541) (@jandudulski)
+- Passing multiple macro names to `validate` or `each` works correctly (fixed #538 #541) (@jandudulski)
 
 [Compare v1.0.0...v1.1.0](https://github.com/dry-rb/dry-validation/compare/v1.0.0...v1.1.0)
 
@@ -114,14 +122,14 @@ See [the list of all addressed issues](https://github.com/dry-rb/dry-validation/
 
 ### Added
 
-* [EXPERIMENTAL] `Validation.register_macro` for registering global macros (solnic)
-* [EXPERIMENTAL] `Contract.register_macro` for registering macros available to specific contract classes (solnic)
-* `Dry::Validation.Contract` shortcut for quickly defining a contract and getting its instance back (solnic)
-* New configuration option `config.locale` for setting the default locale (solnic)
+- [EXPERIMENTAL] `Validation.register_macro` for registering global macros (solnic)
+- [EXPERIMENTAL] `Contract.register_macro` for registering macros available to specific contract classes (solnic)
+- `Dry::Validation.Contract` shortcut for quickly defining a contract and getting its instance back (solnic)
+- New configuration option `config.locale` for setting the default locale (solnic)
 
 ### Fixed
 
-* `config/errors.yml` are now bundled with the gem, **`rc2` was broken because of this** (solnic)
+- `config/errors.yml` are now bundled with the gem, **`rc2` was broken because of this** (solnic)
 
 [Compare v1.0.0.rc2...v1.0.0.rc3](https://github.com/dry-rb/dry-validation/compare/v1.0.0.rc2...v1.0.0.rc3)
 
@@ -131,17 +139,17 @@ This was **yanked** on rubygems.org because the bundled gem was missing `config`
 
 ### Added
 
-* [EXPERIMENTAL] support for registering macros via `Dry::Validation::Macros.register(:your_macro, &block)` (solnic)
-* [EXPERIMENTAL] `:acceptance` as the first built-in macro (issue #157) (solnic)
+- [EXPERIMENTAL] support for registering macros via `Dry::Validation::Macros.register(:your_macro, &block)` (solnic)
+- [EXPERIMENTAL] `:acceptance` as the first built-in macro (issue #157) (solnic)
 
 ### Fixed
 
-* Passing invalid argument to `failure` will raise a meaningful error instead of crashing (solnic)
+- Passing invalid argument to `failure` will raise a meaningful error instead of crashing (solnic)
 
 ### Changed
 
-* In rule validation blocks, `values` is now an instance of a hash-like `Dry::Validation::Values` class, rather than `Dry::Schema::Result`. This gives more convenient access to data within rules (solnic)
-* Dependency on `dry-schema` was updated to `~> 1.0` (solnic)
+- In rule validation blocks, `values` is now an instance of a hash-like `Dry::Validation::Values` class, rather than `Dry::Schema::Result`. This gives more convenient access to data within rules (solnic)
+- Dependency on `dry-schema` was updated to `~> 1.0` (solnic)
 
 [Compare v1.0.0.rc1...v1.0.0.rc2](https://github.com/dry-rb/dry-validation/compare/v1.0.0.rc1...v1.0.0.rc2)
 
@@ -149,18 +157,18 @@ This was **yanked** on rubygems.org because the bundled gem was missing `config`
 
 ### Added
 
-* `:hints` extension is back (solnic)
-* `Result` objects have access to the context object which is shared between rules (flash-gordon)
+- `:hints` extension is back (solnic)
+- `Result` objects have access to the context object which is shared between rules (flash-gordon)
 
 ### Fixed
 
-* Multiple hint messages no longer crash message set (flash-gordon)
-* `Contract#inspect` no longer crashes (solnic)
+- Multiple hint messages no longer crash message set (flash-gordon)
+- `Contract#inspect` no longer crashes (solnic)
 
 ### Changed
 
-* Dependency on `dry-schema` was bumped to `~> 0.6` - this pulls in `dry-types 1.0.0` and `dry-logic 1.0.0` (solnic)
-* Dependency on `dry-initializer` was bumped to `~> 3.0` (solnic)
+- Dependency on `dry-schema` was bumped to `~> 0.6` - this pulls in `dry-types 1.0.0` and `dry-logic 1.0.0` (solnic)
+- Dependency on `dry-initializer` was bumped to `~> 3.0` (solnic)
 
 [Compare v1.0.0.beta2...v1.0.0.rc1](https://github.com/dry-rb/dry-validation/compare/v1.0.0.beta2...v1.0.0.rc1)
 
@@ -168,7 +176,7 @@ This was **yanked** on rubygems.org because the bundled gem was missing `config`
 
 ### Added
 
-* Support for arbitrary meta-data in failures, ie:
+- Support for arbitrary meta-data in failures, ie:
 
   ```ruby
   class NewUserContract < Dry::Validation::Contract
@@ -186,9 +194,9 @@ This was **yanked** on rubygems.org because the bundled gem was missing `config`
 
 ### Changed
 
-* [BREAKING] `Error` was renamed to `Message` as it is a more generic concept (solnic)
-* [BREAKING] `ErrorSet` was renamed to `MessageSet` for consistency (solnic)
-* [BREAKING] `:monads` extension wraps entire result objects in `Success` or `Failure` (flash-gordon)
+- [BREAKING] `Error` was renamed to `Message` as it is a more generic concept (solnic)
+- [BREAKING] `ErrorSet` was renamed to `MessageSet` for consistency (solnic)
+- [BREAKING] `:monads` extension wraps entire result objects in `Success` or `Failure` (flash-gordon)
 
 [Compare v1.0.0.beta1...v1.0.0.beta2](https://github.com/dry-rb/dry-validation/compare/v1.0.0.beta1...v1.0.0.beta2)
 
@@ -196,20 +204,20 @@ This was **yanked** on rubygems.org because the bundled gem was missing `config`
 
 ### Added
 
-* New API for setting failures `base.failure` for base errors and `key.failure` for key errors (solnic)
-* Support for `base` errors associated with a key even when child keys have errors too (solnic)
-* Support for `base` errors not associated with any key (solnic)
-* Result objects use `ErrorSet` object now for managing messages (solnic)
-* Nested keys are properly handled when generating messages hash (issue #489) (flash-gordon + solnic)
-* Result objects support `locale` and `full` options now (solnic)
-* Ability to configure `top_namespace` for messages, which will be used for both schema and rule localization (solnic)
-* Rule blocks receive a context object that you can use to share data between rules (solnic)
+- New API for setting failures `base.failure` for base errors and `key.failure` for key errors (solnic)
+- Support for `base` errors associated with a key even when child keys have errors too (solnic)
+- Support for `base` errors not associated with any key (solnic)
+- Result objects use `ErrorSet` object now for managing messages (solnic)
+- Nested keys are properly handled when generating messages hash (issue #489) (flash-gordon + solnic)
+- Result objects support `locale` and `full` options now (solnic)
+- Ability to configure `top_namespace` for messages, which will be used for both schema and rule localization (solnic)
+- Rule blocks receive a context object that you can use to share data between rules (solnic)
 
 ### Changed
 
-* [BREAKING] `Result#errors` returns an instance of `ErrorSet` now, it's an enumerable, coerible to a hash (solnic)
-* [BREAKING] `failure` was removed in favor of `key.failure` or `key(:foo).failure` (solnic)
-* [BREAKING] `Result#to_hash` was removed (flash-gordon)
+- [BREAKING] `Result#errors` returns an instance of `ErrorSet` now, it's an enumerable, coerible to a hash (solnic)
+- [BREAKING] `failure` was removed in favor of `key.failure` or `key(:foo).failure` (solnic)
+- [BREAKING] `Result#to_hash` was removed (flash-gordon)
 
 [Compare v1.0.0.alpha2...v1.0.0.beta1](https://github.com/dry-rb/dry-validation/compare/v1.0.0.alpha2...v1.0.0.beta1)
 
@@ -219,13 +227,13 @@ First round of bug fixes. Thanks for testing <3!
 
 ### Fixed
 
-* Errors with nested messages are correctly built (flash-gordon)
-* Messages for nested keys are correctly resolved (solnic)
-* A message for a nested key is resolved when it's defined under `errors.rule.%{key}` too, but a message under nested key will override it (solnic)
+- Errors with nested messages are correctly built (flash-gordon)
+- Messages for nested keys are correctly resolved (solnic)
+- A message for a nested key is resolved when it's defined under `errors.rule.%{key}` too, but a message under nested key will override it (solnic)
 
 ### Changed
 
-* When a message template is not found a more meaningful error is raised that includes both rule identifier and key path (solnic)
+- When a message template is not found a more meaningful error is raised that includes both rule identifier and key path (solnic)
 
 [Compare v1.0.0.alpha1...v1.0.0.alpha2](https://github.com/dry-rb/dry-validation/compare/v1.0.0.alpha1...v1.0.0.alpha2)
 
@@ -235,8 +243,8 @@ Complete rewrite on top of `dry-schema`.
 
 ### Added
 
-* [BREAKING] `Dry::Validation::Contract` as a replacement for validation schemas (solnic)
-* [BREAKING] New `rule` DSL with an improved API for setting error messages (solnic)
+- [BREAKING] `Dry::Validation::Contract` as a replacement for validation schemas (solnic)
+- [BREAKING] New `rule` DSL with an improved API for setting error messages (solnic)
 
 [Compare v0.13.0...v1.0.0.alpha1](https://github.com/dry-rb/dry-validation/compare/v0.13.0...v1.0.0.alpha1)
 
@@ -257,7 +265,7 @@ Complete rewrite on top of `dry-schema`.
 
 ### Changed
 
-* [internal] dry-logic was pinned to `~> 0.4.2` (flash-gordon)
+- [internal] dry-logic was pinned to `~> 0.4.2` (flash-gordon)
 
 [Compare v0.12.2...v0.12.3](https://github.com/dry-rb/dry-validation/compare/v0.12.2...v0.12.3)
 
