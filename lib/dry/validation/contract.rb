@@ -98,7 +98,7 @@ module Dry
             rule_result = rule.(self, result)
 
             rule_result.failures.each do |failure|
-              result.add_error(message_resolver[failure])
+              result.add_error(message_resolver.(**failure))
             end
           end
         end

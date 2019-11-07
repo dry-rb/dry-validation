@@ -52,7 +52,7 @@ module Dry
         #
         # @api public
         def evaluate(**opts)
-          evaluated_text, rest = text.(opts)
+          evaluated_text, rest = text.(**opts)
           Message.new(evaluated_text, path: path, meta: rest.merge(meta))
         end
       end

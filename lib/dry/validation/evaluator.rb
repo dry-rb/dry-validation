@@ -63,19 +63,19 @@ module Dry
       # Initialize a new evaluator
       #
       # @api private
-      def initialize(contract, options, &block)
-        super(contract, options)
+      def initialize(contract, **options, &block)
+        super(contract, **options)
 
         @_options = options
 
         if block
           exec_opts = block_options.map { |key, value| [key, _options[value]] }.to_h
-          instance_exec(exec_opts, &block)
+          instance_exec(**exec_opts, &block)
         end
 
         macros.each do |args|
           macro = macro(*args.flatten(1))
-          instance_exec(macro.extract_block_options(_options.merge(macro: macro)), &macro.block)
+          instance_exec(**macro.extract_block_options(_options.merge(macro: macro)), &macro.block)
         end
       end
 
@@ -117,7 +117,7 @@ module Dry
 
       # @api private
       def with(new_opts, &block)
-        self.class.new(_contract, _options.merge(new_opts), &block)
+        self.class.new(_contract, **_options, **new_opts, &block)
       end
 
       # Return default (first) key name
