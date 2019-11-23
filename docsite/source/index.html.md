@@ -45,7 +45,7 @@ class NewUserContract < Dry::Validation::Contract
   end
 
   rule(:age) do
-    key.failure('must be greater than 18') if value < 18
+    key.failure('must be greater than 18') if value <= 18
   end
 end
 
