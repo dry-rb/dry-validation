@@ -1,8 +1,20 @@
-# unreleased
+# v1.4.0 2019-12-12
+
+### Added
+
+- Support for multi-schema inheritance (@ianwhite)
 
 ### Fixed
 
 - Keyword warnings reported by Ruby 2.7 (@flash-gordon)
+- Fixed an issue where `MessageSet` would be marked as empty too early (@ianwhite)
+- Messages are correctly generated when there are errors for both an array and one or more of its elements (see #599) (@Bugagazavr)
+
+### Changed
+
+- A meaningful exception is raised when failure options are not valid (@MatElGran)
+- [internal] improved performance in `Contract.ensure_valid_keys` (@grzegorz-jakubiak)
+- [internal] fixed keyword warnings on MRI 2.7.0 (@flash-gordon)
 
 [Compare v1.3.1...master](https://github.com/dry-rb/dry-validation/compare/v1.3.1...master)
 
