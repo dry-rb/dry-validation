@@ -83,6 +83,50 @@ result.to_h
 # => {:email=>"jane@doe.org", :age=>21}
 ```
 
+### Re-using schemas
+
+You can re-use an existing schema, or even multiple schemas, by simply passing them to schema definition method. All schema types support this feature.
+
+``` ruby
+require "dry/validation"
+
+AddressSchema = Dry::Schema.Params do
+  required(:country).value(:string)
+  required(:zipcode).value(:string)
+  required(:street).value(:string)
+end
+
+ContactSchema = Dry::Schema.Params do
+  required(:email).value(:string) 
+  required(:mobile).value(:string)
+end
+
+class NewUserContract < Dry::Validation::Contract
+  params(AddressSchema, ContactSchema) do
+    required(:name).value(:string)
+    required(:age).value(:integer) 
+  end
+end
+
+contract = NewUserContract.new
+
+contract.(name: "Jane", age: "31", email: "jane@doe.org", country: "foo")# #<Dry::Validation::Result{:name=>"Jane", :age=>31, :email=>"jane@doe.org",
+#   :country=>"foo"} errors={:zipcode=>["is missing"], :street=>["is missing"],#   :mobile=>["is missing"]}>
+```
+
+The coercion logic is different to `params`. For example, since JSON natively supports integers, it will not coerce them from strings:
+
+``` ruby
+result = contract.call('email' => 'jane@doe.org', 'age' => '21')
+# => #<Dry::Validation::Result{:email=>"jane@doe.org", :age=>"21"} errors={:age=>["must be an integer"]}>
+
+result = contract.call('email' => 'jane@doe.org', 'age' => 21)
+# => #<Dry::Validation::Result{:email=>"jane@doe.org", :age=>"21"} errors={}>
+
+result.to_h
+# => {:email=>"jane@doe.org", :age=>21}
+```
+
 ### Using custom types
 
 When you define a schema using `params` or `json`, the coercion logic is handled by type objects that are resolved from the type specifications within  the schema. For example, when you use `params` and define the type to be an `:integer`, then the resolved type will be `Dry::Schema::Types::Params::Integer`. This is just a convenience to make schema definition more concise.
