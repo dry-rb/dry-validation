@@ -90,3 +90,6 @@ Style/AsciiComments:
 
 Style/DateTime:
   Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
