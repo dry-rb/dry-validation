@@ -87,3 +87,6 @@ Naming/MethodName:
 
 Style/AsciiComments:
   Enabled: false
+
+Style/DateTime:
+  Enabled: false
