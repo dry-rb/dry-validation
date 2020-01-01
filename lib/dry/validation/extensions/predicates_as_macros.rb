@@ -12,7 +12,7 @@ module Dry
       #
       # @see Dry::Validation::Contract
       WHITELIST = %i[
-        filled? gt? gteq? included_in? includes? inclusion? is? lt?
+        filled? format? gt? gteq? included_in? includes? inclusion? is? lt?
         lteq? max_size? min_size? not_eql? odd? respond_to? size? true?
         uuid_v4?
       ].freeze
