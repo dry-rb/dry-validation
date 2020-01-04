@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: |
           gem install bundler
-          bundle install --jobs 4 --retry 3
+          bundle install --jobs 4 --retry 3 --without test benchmarks docs
       - name: Symlink ossy
         run: ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
       - name: Clone devtools
