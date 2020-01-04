@@ -1,7 +1,7 @@
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 group :tools do
-  gem "ossy", github: "solnic/ossy", branch: "master"
+  gem "ossy", github: "solnic/ossy", branch: "master", platforms: :ruby
 end
 
 group :test do
