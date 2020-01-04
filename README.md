@@ -19,7 +19,7 @@
 
 ## Supported Ruby versions
 
-This library officially supports following Ruby versions:
+This library officially supports the following Ruby versions:
 
 * MRI >= `2.4`
 * jruby >= `9.2`
