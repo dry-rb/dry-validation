@@ -26,9 +26,9 @@ jobs:
       - name: Update configuration files from devtools
         run: |
           if [ -f ".github/workflows/custom_ci.yml" ]; then
-            rsync -arv --delete --exclude '.github/workflows/ci.yml' tmp/devtools/shared/ . ;
+            rsync -arv --exclude '.github/workflows/ci.yml' tmp/devtools/shared/ . ;
           else
-            rsync -arv --delete tmp/devtools/shared/ . ;
+            rsync -arv tmp/devtools/shared/ . ;
           fi
       - name: Compile file templates
         env:
