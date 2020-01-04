@@ -1,0 +1,8 @@
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+
+gem "ossy", github: "solnic/ossy", branch: "master"
+
+group :test do
+  gem 'codacy-coverage', require: false, platforms: :ruby
+  gem 'simplecov', require: false, platforms: :ruby
+end

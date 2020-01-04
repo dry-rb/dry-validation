@@ -19,9 +19,9 @@ jobs:
           git clone https://github.com/dry-rb/devtools.git tmp/devtools
 
           if [ -f ".github/workflows/custom_ci.yml" ]; then
-            rsync -av --exclude '.github/workflows/ci.yml' tmp/devtools/shared/ . ;
+            rsync -arv --exclude '.github/workflows/ci.yml' tmp/devtools/shared/ . ;
           else
-            rsync -av tmp/devtools/shared/ . ;
+            rsync -arv tmp/devtools/shared/ . ;
           fi
 
           git config --local user.email "dry-bot@dry-rb.org"
