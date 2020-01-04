@@ -33,9 +33,9 @@ jobs:
 
             ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
 
-            for t in `ls templates`
+            for t in `ls tmp/devtools/templates`
             do
-              bundle exec bin/ossy t c templates/$t $(basename $t .erb) project.yml
+              bundle exec bin/ossy t c tmp/devtools/templates/$t $(basename $t .erb) project.yml
             done
           fi
 
