@@ -2,9 +2,9 @@
 
 source 'https://rubygems.org'
 
-gemspec
+eval_gemfile 'Gemfile.devtools'
 
-git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+gemspec
 
 if ENV['USE_SCHEMA_MASTER'].eql?('true')
   gem 'dry-schema', github: 'dry-rb/dry-schema', branch: 'master'
@@ -17,13 +17,11 @@ end
 group :test do
   gem 'dry-monads', '~> 1.0'
   gem 'i18n', require: false
-  gem 'simplecov', require: false, platform: :mri
 end
 
 group :tools do
   gem 'pry', platform: :jruby
   gem 'pry-byebug', platform: :mri
-  gem 'ossy', github: 'solnic/ossy', branch: 'master'
 end
 
 group :benchmarks do
