@@ -11,6 +11,10 @@ jobs:
     if: github.event.action == 'sync_configs'
     steps:
       - uses: actions/checkout@v1
+      - name: Set up Ruby
+        uses: eregon/use-ruby-action@master
+        with:
+          ruby-version: 2.6
       - name: Update configuration files from devtools
         env:
           GITHUB_LOGIN: dry-bot
@@ -22,6 +26,17 @@ jobs:
             rsync -arv --exclude '.github/workflows/ci.yml' tmp/devtools/shared/ . ;
           else
             rsync -arv tmp/devtools/shared/ . ;
+          fi
+
+          if [ -f "project.yml" ]; then
+            bundle --without benchmarks docs
+
+            ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
+
+            for t in `ls templates`
+            do
+              bundle exec bin/ossy t c templates/$t $(basename $t .erb) project.yml
+            done
           fi
 
           git config --local user.email "dry-bot@dry-rb.org"
