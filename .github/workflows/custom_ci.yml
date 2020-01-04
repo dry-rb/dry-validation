@@ -7,76 +7,38 @@ on:
       - lib/**
       - spec/**
       - Gemfile
+      - Gemfile.devtools
       - "*.gemspec"
   pull_request:
 
 jobs:
-  tests-mri:
+  tests:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["2.6.x", "2.5.x", "2.4.x"]
+        ruby: ["2.6", "2.5", "2.4"]
         dry_schema_from_master: ["false", "true"]
         dry_types_from_master: ["false", "true"]
         include:
-          - ruby: "2.6.x"
+          - ruby: "2.6"
             dry_schema_from_master: "false"
             dry_types_from_master: "false"
             coverage: "true"
     steps:
       - uses: actions/checkout@v1
       - name: Set up Ruby
-        uses: actions/setup-ruby@v1
+        uses: eregon/use-ruby-action@master
         with:
           ruby-version: ${{matrix.ruby}}
-      - name: Download test reporter
-        if: "matrix.coverage == 'true'"
-        run: |
-          mkdir -p tmp/
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./tmp/cc-test-reporter
-          chmod +x ./tmp/cc-test-reporter
-          ./tmp/cc-test-reporter before-build
       - name: Run all tests
         env:
           DRY_SCHEMA_FROM_MASTER: ${{matrix.dry_schema_from_master}}
           DRY_TYPES_FROM_MASTER: ${{matrix.dry_types_from_master}}
           COVERAGE: ${{matrix.coverage}}
+          CODACY_RUN_LOCAL: true
+          CODACY_PROJECT_TOKEN: ${{secrets.CODACY_PROJECT_TOKEN}}
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3 --without tools docs benchmarks
           bundle exec rake
-      - name: Send coverage results
-        if: "matrix.coverage == 'true'"
-        env:
-          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
-          GIT_COMMIT_SHA: ${{github.sha}}
-          GIT_BRANCH: ${{github.ref}}
-          GIT_COMMITTED_AT: ${{github.event.head_commit.timestamp}}
-        run: |
-          GIT_BRANCH=`ruby -e "puts ENV['GITHUB_REF'].split('/', 3).last"` \
-          GIT_COMMITTED_AT=`ruby -r time -e "puts Time.iso8601(ENV['GIT_COMMITTED_AT']).to_i"` \
-          ./tmp/cc-test-reporter after-build
-  tests-jruby:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        dry_schema_from_master: ["false", "true"]
-        dry_types_from_master: ["false", "true"]
-    container:
-      image: jruby:9.2.8
-    steps:
-      - uses: actions/checkout@v1
-      - name: Install git
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends git
-      - name: Run all tests
-        env:
-          DRY_SCHEMA_FROM_MASTER: ${{matrix.dry_schema_from_master}}
-          DRY_TYPES_FROM_MASTER: ${{matrix.dry_types_from_master}}
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3 --without tools docs benchmarks
-          bundle exec rspec
