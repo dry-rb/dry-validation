@@ -16,9 +16,7 @@ jobs:
         with:
           ruby-version: 2.6
       - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3 --without test benchmarks docs
+        run: bundle install --jobs 4 --retry 3 --without tools test benchmarks docs
       - name: Symlink ossy
         run: ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
       - name: Clone devtools

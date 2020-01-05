@@ -1,8 +1,6 @@
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-group :tools do
-  gem "ossy", github: "solnic/ossy", branch: "master", platforms: :ruby
-end
+gem "ossy", github: "solnic/ossy", branch: "master", platforms: :ruby
 
 group :test do
   gem 'codacy-coverage', require: false, platforms: :ruby
