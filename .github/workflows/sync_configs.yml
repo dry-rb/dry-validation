@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: bundle install --jobs 4 --retry 3 --without tools test benchmarks docs
       - name: Symlink ossy
-        run: ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
+        run: ln -sf "$(bundle info ossy --path)/bin/ossy" bin/ossy
       - name: Clone devtools
         run: git clone https://github.com/dry-rb/devtools.git tmp/devtools
       - name: Update configuration files from devtools
