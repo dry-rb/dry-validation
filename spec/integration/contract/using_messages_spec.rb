@@ -86,4 +86,21 @@ RSpec.describe Dry::Validation::Contract do
       expect(contract.call(email: 'foo').errors.to_h).to eql(email: ['oh noez bad email'])
     end
   end
+
+  it 'parses array tokens as a comma separated list' do
+    contract = Class.new(Dry::Validation::Contract) do
+      config.messages.load_paths << SPEC_ROOT.join('fixtures/messages/errors.en.yml').realpath
+
+      params do
+        required(:age).filled(:integer)
+      end
+
+      rule(:age) do
+        list = [1, 2, 3]
+        key.failure(:toddler, list: list) unless list.include?(value)
+      end
+    end
+
+    expect(contract.new.call(age: 4).errors.to_h).to eql(age: ['should be included in 1, 2, 3'])
+  end
 end
