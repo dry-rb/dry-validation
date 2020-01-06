@@ -75,11 +75,31 @@ module Dry
             STR
           end
 
-          text = template.(template.data(tokens))
+          parsed_tokens = parse_tokens(tokens)
+          text = template.(template.data(parsed_tokens))
 
           [full ? "#{messages.rule(keys.last, msg_opts)} #{text}" : text, meta]
         end
         # rubocop:enable Metrics/AbcSize
+
+        private
+
+        def parse_tokens(tokens)
+          Hash[
+            tokens.map do |key, token|
+              [key, parse_token(token)]
+            end
+          ]
+        end
+
+        def parse_token(token)
+          case token
+          when Array
+            token.join(', ')
+          else
+            token
+          end
+        end
       end
     end
   end
