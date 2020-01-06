@@ -3,13 +3,13 @@
 RSpec.describe Dry::Validation::Contract, '.macros' do
   subject!(:contract_class) do
     Class.new(parent_class) do
-      register_macro(:other_macro) { }
+      register_macro(:other_macro) {}
     end
   end
 
   let(:parent_class) do
     Class.new(Dry::Validation::Contract) do
-      register_macro(:check_things) { }
+      register_macro(:check_things) {}
     end
   end
 

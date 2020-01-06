@@ -90,7 +90,7 @@ RSpec.describe Dry::Validation::Contract, '#call' do
     )
 
     expect(result).to be_failure
-    expect(result.errors.to_h).to eql(address: { geolocation: { lon: ['invalid']} })
+    expect(result.errors.to_h).to eql(address: { geolocation: { lon: ['invalid'] } })
   end
 
   it 'returns rule errors' do
