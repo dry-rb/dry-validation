@@ -5,4 +5,5 @@ gem "ossy", github: "solnic/ossy", branch: "master", platforms: :ruby
 group :test do
   gem 'codacy-coverage', require: false, platforms: :ruby
   gem 'simplecov', require: false, platforms: :ruby
+  gem 'warning'
 end
