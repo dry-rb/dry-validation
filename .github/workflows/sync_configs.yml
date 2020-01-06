@@ -25,13 +25,6 @@ jobs:
         run: ln -sf "$(bundle info ossy --path)/bin/ossy" bin/ossy
       - name: Clone devtools
         run: git clone https://github.com/dry-rb/devtools.git tmp/devtools
-      - name: Update configuration files from devtools
-        run: |
-          if [ -f ".github/workflows/custom_ci.yml" ]; then
-            rsync -arv --exclude '.github/workflows/ci.yml' tmp/devtools/shared/ . ;
-          else
-            rsync -arv tmp/devtools/shared/ . ;
-          fi
       - name: Compile file templates
         env:
           GITHUB_LOGIN: dry-bot
@@ -42,6 +35,13 @@ jobs:
             do
               bin/ossy t c tmp/devtools/templates/$t $(basename $t .erb) project.yml
             done
+          fi
+      - name: Update configuration files from devtools
+        run: |
+          if [ -f ".github/workflows/custom_ci.yml" ]; then
+            rsync -arv --exclude '.github/workflows/ci.yml' tmp/devtools/shared/ . ;
+          else
+            rsync -arv tmp/devtools/shared/ . ;
           fi
       - name: Commit changes
         run: |
