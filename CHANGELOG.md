@@ -1,3 +1,9 @@
+# Unreleased
+
+### Fixed
+
+- List tokens are correctly parsed as a comma separated list in rule messages (see #611) (@waiting-for-dev)
+
 # v1.4.0 2019-12-12
 
 ### Added
