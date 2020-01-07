@@ -3,6 +3,9 @@
 ### Fixed
 
 - List tokens are correctly parsed as a comma separated list in rule messages (see #611) (@waiting-for-dev)
+- Warnings about delegated keywords (@flash-gordon)
+
+[Compare v1.4.0...master](https://github.com/dry-rb/dry-validation/compare/v1.4.0...master)
 
 # v1.4.0 2019-12-12
 
@@ -22,7 +25,7 @@
 - [internal] improved performance in `Contract.ensure_valid_keys` (@grzegorz-jakubiak)
 - [internal] fixed keyword warnings on MRI 2.7.0 (@flash-gordon)
 
-[Compare v1.3.1...master](https://github.com/dry-rb/dry-validation/compare/v1.3.1...master)
+[Compare v1.3.1...v1.4.0](https://github.com/dry-rb/dry-validation/compare/v1.3.1...v1.4.0)
 
 # v1.3.1 2019-08-16
 
