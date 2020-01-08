@@ -22,10 +22,6 @@ jobs:
           - ruby: "2.7"
             dry_schema_from_master: "true"
             dry_types_from_master: "true"
-            coverage: "false"
-          - ruby: "2.7"
-            dry_schema_from_master: "false"
-            dry_types_from_master: "false"
             coverage: "true"
     steps:
       - uses: actions/checkout@v1
