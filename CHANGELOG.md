@@ -8,7 +8,6 @@
 
 - List tokens are correctly interpolated as a comma separated list in rule messages (see #611) (@waiting-for-dev)
 - Warnings about delegated keywords (@flash-gordon)
-- A few delegation warnings about keyword arguments (@flash-gordon)
 
 [Compare v1.4.0...v1.4.1](https://github.com/dry-rb/dry-validation/compare/v1.4.0...v1.4.1)
 
