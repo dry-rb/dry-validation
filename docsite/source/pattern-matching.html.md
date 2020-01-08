@@ -9,8 +9,8 @@ Ruby 2.7 added experimental support for pattern matching. dry-validation support
 ```ruby
 class PersonContract < Dry::Validation::Contract
   params do
-    required(:first_name).filled
-    required(:last_name).filled
+    required(:first_name).filled(:string)
+    required(:last_name).filled(:string)
   end
 end
 
@@ -31,7 +31,7 @@ class AddressContract < Dry::Validation::Contract
   option :address_repo
 
   params do
-    required(:address).filled
+    required(:address).filled(:string)
   end
 
   rule(:address) do |context:|
@@ -67,8 +67,8 @@ class CreatePerson
 
   class Contract < Dry::Validation::Contract
     params do
-      required(:first_name).filled
-      required(:last_name).filled
+      required(:first_name).filled(:string)
+      required(:last_name).filled(:string)
     end
   end
 
