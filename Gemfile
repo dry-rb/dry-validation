@@ -6,11 +6,11 @@ eval_gemfile 'Gemfile.devtools'
 
 gemspec
 
-if ENV['USE_SCHEMA_MASTER'].eql?('true')
+if ENV['DRY_SCHEMA_FROM_MASTER'].eql?('true')
   gem 'dry-schema', github: 'dry-rb/dry-schema', branch: 'master'
 end
 
-if ENV['USE_TYPES_MASTER'].eql?('true')
+if ENV['DRY_TYPES_FROM_MASTER'].eql?('true')
   gem 'dry-types', github: 'dry-rb/dry-types', branch: 'master'
 end
 
