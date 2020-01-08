@@ -12,6 +12,7 @@ sections:
   - macros
   - external-dependencies
   - extensions
+  - pattern-matching
 ---
 
 dry-validation is a data validation library that provides a powerful DSL for defining schemas and validation rules.
@@ -31,7 +32,7 @@ There are a couple of unique features that make `dry-validation` stand out from 
 
 Here's an example contract:
 
-``` ruby
+```ruby
 class NewUserContract < Dry::Validation::Contract
   params do
     required(:email).filled(:string)

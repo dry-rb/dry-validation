@@ -17,13 +17,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["2.6", "2.5", "2.4"]
-        dry_schema_from_master: ["false", "true"]
-        dry_types_from_master: ["false", "true"]
+        ruby: ["2.7", "2.6", "2.5", "2.4"]
         include:
-          - ruby: "2.6"
-            dry_schema_from_master: "false"
-            dry_types_from_master: "false"
+          - ruby: "2.7"
+            dry_schema_from_master: "true"
+            dry_types_from_master: "true"
             coverage: "true"
     steps:
       - uses: actions/checkout@v1
