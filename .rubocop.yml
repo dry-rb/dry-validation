@@ -14,7 +14,8 @@ Style/ParallelAssignment:
   Enabled: false
 
 Style/Alias:
-  Enabled: false
+  Enabled: true
+  EnforcedStyle: prefer_alias_method
 
 Style/LambdaCall:
   Enabled: false
