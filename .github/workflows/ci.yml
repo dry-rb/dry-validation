@@ -46,6 +46,7 @@ jobs:
       run: bundle install --jobs 4 --retry 3
     - name: Run all tests
       env:
+        CLASSPATH: ''
         COVERAGE: "${{matrix.coverage}}"
         CODACY_RUN_LOCAL: true
         CODACY_PROJECT_TOKEN: "${{secrets.CODACY_PROJECT_TOKEN}}"
