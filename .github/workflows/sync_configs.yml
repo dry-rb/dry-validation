@@ -31,7 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           if [ -f "project.yml" ]; then
-            for t in `find tmp/devtools/templates -type f`
+            for t in `ls tmp/devtools/templates`
             do
               bin/ossy t c $t $(echo $t | sed -e 's/^tmp\/devtools\/templates\///g' | sed -e 's/\.erb$//g') project.yml
             done
