@@ -32,6 +32,13 @@ jobs:
         - ruby: '2.7'
           dry_schema_from_master: 'true'
           dry_types_from_master: 'true'
+    env:
+      CLASSPATH: ''
+      COVERAGE: "${{matrix.coverage}}"
+      CODACY_RUN_LOCAL: true
+      CODACY_PROJECT_TOKEN: "${{secrets.CODACY_PROJECT_TOKEN}}"
+      DRY_SCHEMA_FROM_MASTER: "${{matrix.dry_schema_from_master}}"
+      DRY_TYPES_FROM_MASTER: "${{matrix.dry_types_from_master}}"
     steps:
     - uses: actions/checkout@v1
     - name: Set up Ruby
@@ -45,12 +52,4 @@ jobs:
     - name: Bundle install
       run: bundle install --jobs 4 --retry 3
     - name: Run all tests
-      env:
-        CLASSPATH: ''
-        COVERAGE: "${{matrix.coverage}}"
-        CODACY_RUN_LOCAL: true
-        CODACY_PROJECT_TOKEN: "${{secrets.CODACY_PROJECT_TOKEN}}"
       run: bundle exec rake
-    env:
-      DRY_SCHEMA_FROM_MASTER: "${{matrix.dry_schema_from_master}}"
-      DRY_TYPES_FROM_MASTER: "${{matrix.dry_types_from_master}}"
