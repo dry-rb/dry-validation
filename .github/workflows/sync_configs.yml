@@ -36,13 +36,18 @@ jobs:
               bin/ossy t c tmp/devtools/templates/$t $(basename $t .erb) project.yml
             done
           fi
-      - name: Merge configuration files from devtools
+      - name: Update workflow files from devtools
         run: |
           for f in `ls tmp/devtools/workflows/*.yml`
           do
             n="$(basename $f)";
             c=".github/workflows/custom/$n";
-            [ -f $c ] && bin/ossy c m $f $c .github/workflows/$n || echo "no custom config found for $f"
+
+            if [ -f $c ]; then
+              bin/ossy c m $f $c .github/workflows/$n
+            else
+              cp -v $f .github/workflows
+            fi
           done
       - name: Update configuration files from devtools
         run: |
