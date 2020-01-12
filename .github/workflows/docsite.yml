@@ -54,6 +54,8 @@ jobs:
             done
 
             git push --all "https://dry-bot:${{secrets.GH_PAT}}@github.com/$GITHUB_REPOSITORY.git"
+
+            git checkout master
           else
             echo "no need to update branches"
           fi
