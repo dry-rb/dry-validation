@@ -9,8 +9,8 @@ name: ci
     - Rakefile
     - Gemfile
     - Gemfile.devtools
-    - "*.gemspec"
     - ".rubocop.yml"
+    - project.yml
   pull_request:
     branches:
     - master
