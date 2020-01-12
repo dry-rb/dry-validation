@@ -61,4 +61,4 @@ jobs:
         env:
           GITHUB_LOGIN: dry-bot
           GITHUB_TOKEN: ${{secrets.GH_PAT}}
-        run: bin/ossy github workflow dry-rb/dry-rb.org ci
+        run: bundle exec bin/ossy github workflow dry-rb/dry-rb.org ci
