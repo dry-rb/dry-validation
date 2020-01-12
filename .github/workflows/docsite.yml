@@ -29,17 +29,11 @@ jobs:
         run: |
           git config --local user.email "dry-bot@dry-rb.org"
           git config --local user.name "dry-bot"
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3 --without benchmarks sql
-      - name: Symlink ossy
-        run: mkdir -p bin && ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
       - name: Update release branches
         run: |
-          branches=`git log --format=%B -n 1 $GITHUB_SHA | grep "docsite:release-"`
+          branches=`git log --format=%B -n 1 $GITHUB_SHA | grep "docsite:release-" || echo "nothing"`
 
-          if [ ! -z "$branches" ]; then
+          if [[ ! $branches -eq "nothing" ]]; then
             for b in $branches
             do
               name=`echo $b | ruby -e 'puts gets[/:(.+)/, 1].gsub(/\s+/, "")'`
@@ -57,6 +51,12 @@ jobs:
           else
             echo "no need to update branches"
           fi
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3 --without benchmarks sql
+      - name: Symlink ossy
+        run: mkdir -p bin && ln -sf "$(bundle show ossy)/bin/ossy" bin/ossy
       - name: Trigger dry-rb.org deploy
         env:
           GITHUB_LOGIN: dry-bot
