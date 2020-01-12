@@ -1,2 +1,17 @@
 name: dry-validation
 codacy_id: f30e3ff5ec304c55a73868cdbf055c67
+gemspec:
+  authors: ["Piotr Solnica"]
+  email: ["piotr.solnica@gmail.com"]
+  summary: "Validation library"
+  development_dependencies:
+    - bundler
+    - rake
+    - rspec
+  runtime_dependencies:
+    - [concurrent-ruby, "~> 1.0"]
+    - [dry-core, "~> 0.4"]
+    - [dry-container, "~> 0.7", ">= 0.7.1"]
+    - [dry-equalizer, "~> 0.2"]
+    - [dry-initializer, "~> 3.0"]
+    - [dry-schema, "~> 1.4", ">= 1.4.3"]
