@@ -1,0 +1,43 @@
+# this file is managed by dry-rb/devtools project
+
+name: changelog
+
+on:
+  push:
+    paths:
+      - changelog.yml
+
+jobs:
+  sync-configs:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_LOGIN: dry-bot
+      GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Ruby
+        uses: eregon/use-ruby-action@master
+        with:
+          ruby-version: 2.6
+      - name: Install latest bundler
+        run: |
+          gem install bundler
+          bundle config set without 'tools benchmarks docs'
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
+      - name: Symlink ossy
+        run: ln -sf "$(bundle info ossy --path)/bin/ossy" bin/ossy
+      - name: Update CHANGELOG.md
+        run: |
+          [ -f "changelog.yml" ] && bin/ossy ch g changelog.yml CHANGELOG.md
+      - name: Commit changes
+        run: |
+          rm bin/ossy
+          git config --local user.email "dry-bot@dry-rb.org"
+          git config --local user.name "dry-bot"
+          git add -A
+          git commit -m "[devtools] update CHANGELOG.md" || echo "nothing changed"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GH_PAT }}
