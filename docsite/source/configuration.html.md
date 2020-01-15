@@ -52,7 +52,7 @@ If you want your contract classes to use `my_app` as your own top-level namespac
 
 ``` ruby
 class ApplicationContract < Dry::Validation::Contract
-  config.messages.top_namespace = :my_app
+  config.messages.top_namespace = 'my_app'
   config.messages.load_paths << 'config/errors.yml'
 end
 ```
