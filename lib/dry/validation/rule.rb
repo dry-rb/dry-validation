@@ -118,10 +118,16 @@ module Dry
         args.each_with_object([]) do |spec, macros|
           case spec
           when Hash
-            spec.each { |k, v| macros << [k, Array(v)] }
+            add_macro_from_hash(macros, spec)
           else
             macros << Array(spec)
           end
+        end
+      end
+
+      def add_macro_from_hash(macros, spec)
+        spec.each do |k, v|
+          macros << [k, v.is_a?(Array) ? v : [v]]
         end
       end
     end
