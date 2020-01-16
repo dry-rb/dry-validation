@@ -79,4 +79,29 @@ RSpec.describe 'Defining custom macros' do
         .to eql(numbers: ['must have at least 3 items'])
     end
   end
+
+  context 'using a macro with a range option' do
+    before do
+      Test::BaseContract.register_macro(:in_range) do |macro:|
+        range = macro.args[0]
+
+        all_included_in_range = value.all? { |elem| range.include?(elem) }
+        key.failure("every item must be included in #{range}") unless all_included_in_range
+      end
+
+      contract_class.rule(:numbers).validate(in_range: 1..3)
+    end
+
+    after do
+      Test::BaseContract.macros._container.delete('in_range')
+    end
+
+    it 'succeeds with valid input' do
+      expect(contract.(numbers: [1, 2, 3])).to be_success
+    end
+
+    it 'fails with invalid input' do
+      expect(contract.(numbers: [1, 2, 6])).to be_failure
+    end
+  end
 end
