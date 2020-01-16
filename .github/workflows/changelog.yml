@@ -1,6 +1,6 @@
 # this file is managed by dry-rb/devtools project
 
-name: changelog
+name: update CHANGELOG.md
 
 on:
   push:
