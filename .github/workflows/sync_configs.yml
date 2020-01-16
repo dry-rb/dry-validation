@@ -24,7 +24,7 @@ jobs:
       - name: Install latest bundler
         run: |
           gem install bundler
-          bundle config set without 'tools benchmarks docs'
+          bundle config set without 'test tools benchmarks docs'
       - name: Install dependencies
         run: bundle install --jobs 4 --retry 3
       - name: Symlink ossy

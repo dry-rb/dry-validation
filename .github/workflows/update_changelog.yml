@@ -1,0 +1,52 @@
+# this file is managed by dry-rb/devtools project
+
+name: update changelog
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  update-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: "2.6.x"
+      - name: Set up git user
+        run: |
+          git config --local user.email "dry-bot@dry-rb.org"
+          git config --local user.name "dry-bot"
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3 --without benchmarks sql
+      - name: Symlink ossy
+        run: mkdir -p bin && ln -sf "$(bundle info --path ossy)/bin/ossy" bin/ossy
+      - name: Update changelog
+        env:
+          GITHUB_LOGIN: dry-bot
+          GITHUB_TOKEN: ${{secrets.GH_PAT}}
+        run: |
+          msg=`git log --format=%B -n 1`
+
+          if [[ "$msg" == *"Merge pull request"* && "$msg" == *"[changelog]"* ]]; then
+            changelog=`echo "$msg" | grep -v 'Merge pull request' | grep -ve '^$' | grep -v "\[changelog\]"`
+
+            echo "Adding the follow entries:"
+            echo "$changelog"
+
+            bundle exec bin/ossy ch u changelog.yml "$changelog"
+
+            git add changelog.yml
+            git commit -m "[devtools] update changelog.yml from $GITHUB_SHA"
+          else
+            echo "no need to update changelog"
+          fi
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GH_PAT }}
