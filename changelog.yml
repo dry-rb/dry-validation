@@ -1,4 +1,6 @@
 ---
+- version: 1.4.2
+  date: 'unreleased'
 - version: 1.4.1
   date: '2020-01-08'
   added:
