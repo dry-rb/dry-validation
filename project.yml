@@ -4,6 +4,7 @@ gemspec:
   authors: ["Piotr Solnica"]
   email: ["piotr.solnica@gmail.com"]
   summary: "Validation library"
+  files: ["config/*.yml"]
   development_dependencies:
     - bundler
     - rake
