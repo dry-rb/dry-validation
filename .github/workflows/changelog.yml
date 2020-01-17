@@ -6,6 +6,7 @@ on:
   push:
     paths:
       - changelog.yml
+      - templates/changelog.erb
 
 jobs:
   sync-configs:
