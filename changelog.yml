@@ -1,6 +1,6 @@
 ---
 - version: 1.4.2
-  date: 'unreleased'
+  date: unreleased
 - version: 1.4.1
   date: '2020-01-08'
   added:
@@ -206,11 +206,11 @@
   - "[BREAKING] New `rule` DSL with an improved API for setting error messages (solnic)"
 - version: 0.13.0
   date: '2019-01-29'
+  fixed:
+  - Warning about method redefined (amatsuda)
   changed:
   - "`dry-logic` was bumped to `~> 0.5` (solnic)"
   - "`dry-types` was bumped to `~> 0.14` (solnic)"
-  fixed:
-  - Warning about method redefined (amatsuda)
 - version: 0.12.3
   date: '2019-01-29'
   changed:
@@ -348,9 +348,6 @@
   - Support for message token transformations in custom predicates (fran-worley)
   - "[EXPERIMENTAL] Ability to compose predicates that accept dynamic args provided
     by the schema (solnic)"
-  changed:
-  - Tokens for `size?` were renamed `left` => `size_left` and `right` => `size_right`
-    (fran-worley)
   fixed:
   - Duped key names in nested schemas no longer result in invalid error messages structure
     (solnic)
@@ -361,6 +358,9 @@
   - Hints for elements are no longer provided for an array when the value is not an
     array (solnic)
   - "`input` macro no longer messes up error messages for nested structures (solnic)"
+  changed:
+  - Tokens for `size?` were renamed `left` => `size_left` and `right` => `size_right`
+    (fran-worley)
 - version: 0.8.0
   date: '2016-07-01'
   added:
@@ -474,6 +474,10 @@
   - |-
     `Validation::Result` responds to `#[]` and `#each` (delegating to its output)
       and it's an enumerable (solnic)
+  fixed:
+  - Qualified rule names properly use last node by default for error messages (solnic)
+  - Validation hints only include relevant messages (solnic)
+  - "`:yaml` messages respect `:locale` option in `Result#messages` (solnic)"
   changed:
   - "`schema` was **removed** from the DSL, just use `key(:name).schema` instead (solnic)"
   - "`confirmation` is now a macro that you can call on a key rule (solnic)"
@@ -484,10 +488,6 @@
   - |-
     `Schema::Result` is now `Validation::Result` and it no longer has success and
       failure results, only error results are provided (solnic)
-  fixed:
-  - Qualified rule names properly use last node by default for error messages (solnic)
-  - Validation hints only include relevant messages (solnic)
-  - "`:yaml` messages respect `:locale` option in `Result#messages` (solnic)"
 - version: 0.6.0
   date: '2016-01-20'
   added:
@@ -510,12 +510,12 @@
       default when no block is passed (solnic)
 - version: 0.5.0
   date: '2016-01-11'
+  fixed:
+  - "`Schema::Form` uses safe `form.array` and `form.hash` types which fixes #42 (solnic)"
   changed:
   - Now depends on [dry-logic](https://github.com/dry-rb/dry-logic) for predicates
     and rules (solnic)
   - "`dry/validation/schema/form` is now required by default (solnic)"
-  fixed:
-  - "`Schema::Form` uses safe `form.array` and `form.hash` types which fixes #42 (solnic)"
 - version: 0.4.1
   date: '2015-12-27'
   added:
