@@ -28,9 +28,11 @@ jobs:
         run: bundle install --jobs 4 --retry 3
       - name: Symlink ossy
         run: ln -sf "$(bundle info ossy --path)/bin/ossy" bin/ossy
+      - name: Clone devtools
+        run: git clone https://github.com/dry-rb/devtools.git tmp/devtools
       - name: Update CHANGELOG.md
         run: |
-          [ -f "changelog.yml" ] && bin/ossy ch g changelog.yml CHANGELOG.md templates/changelog.erb
+          [ -f "changelog.yml" ] && bin/ossy ch g changelog.yml CHANGELOG.md tmp/devtools/templates/changelog.erb
       - name: Commit changes
         run: |
           rm bin/ossy
