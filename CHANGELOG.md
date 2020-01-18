@@ -2,7 +2,7 @@
 
 
 
-[Compare v1.4.1...master](https://github.com/dry-rb/dry-validation/compare/v1.4.1...master)
+[Compare v1.4.1...v1.4.2](https://github.com/dry-rb/dry-validation/compare/v1.4.1...v1.4.2)
 
 ## 1.4.1 2020-01-08
 
