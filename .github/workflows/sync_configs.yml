@@ -11,7 +11,7 @@ on:
 jobs:
   sync-configs:
     runs-on: ubuntu-latest
-    if: github.event_name != 'repository_dispatch' || github.event.action == 'sync_configs'
+    if: (github.event_name == 'repository_dispatch' && github.event.action == 'sync_configs') || github.event_name != 'repository_dispatch'
     env:
       GITHUB_LOGIN: dry-bot
       GITHUB_TOKEN: ${{ secrets.GH_PAT }}
