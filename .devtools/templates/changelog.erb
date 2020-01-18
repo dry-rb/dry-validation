@@ -29,7 +29,7 @@
 - <%= log %>
 <% end %>
 <% end %>
-<% curr_ver = r.date.eql?('unreleased') ? 'master' : "v#{r.version}" %>
+<% curr_ver = r.date ? "v#{r.version}" : 'master' %>
 <% prev_rel = releases[idx + 1] %>
 <% if prev_rel %>
 <% ver_range = "v#{prev_rel.version}...#{curr_ver}" %>
