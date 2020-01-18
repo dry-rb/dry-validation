@@ -33,6 +33,7 @@
 <% prev_rel = releases[idx + 1] %>
 <% if prev_rel %>
 <% ver_range = "v#{prev_rel.version}...#{curr_ver}" %>
+
 [Compare <%=ver_range%>](https://github.com/dry-rb/<%= project.name %>/compare/<%=ver_range%>)
 <% end %>
 
