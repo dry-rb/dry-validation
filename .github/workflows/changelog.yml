@@ -32,7 +32,9 @@ jobs:
         run: git clone https://github.com/dry-rb/devtools.git tmp/devtools
       - name: Update CHANGELOG.md
         run: |
-          [ -f "changelog.yml" ] && bin/ossy ch g changelog.yml CHANGELOG.md tmp/devtools/templates/changelog.erb
+          if [ -f "changelog.yml" ];then
+            bin/ossy ch g changelog.yml CHANGELOG.md tmp/devtools/templates/changelog.erb --data-path project.yml
+          fi
       - name: Commit changes
         run: |
           rm bin/ossy
