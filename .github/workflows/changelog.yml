@@ -6,7 +6,7 @@ on:
   push:
     paths:
       - changelog.yml
-      - templates/changelog.erb
+      - .devtools/templates/changelog.erb
 
 jobs:
   sync-configs:
@@ -28,12 +28,10 @@ jobs:
         run: bundle install --jobs 4 --retry 3
       - name: Symlink ossy
         run: ln -sf "$(bundle info ossy --path)/bin/ossy" bin/ossy
-      - name: Clone devtools
-        run: git clone https://github.com/dry-rb/devtools.git tmp/devtools
       - name: Update CHANGELOG.md
         run: |
           if [ -f "changelog.yml" ];then
-            bin/ossy ch g changelog.yml CHANGELOG.md tmp/devtools/templates/changelog.erb --data-path project.yml
+            bin/ossy ch g changelog.yml CHANGELOG.md .devtools/templates/changelog.erb --data-path project.yml
           fi
       - name: Commit changes
         run: |

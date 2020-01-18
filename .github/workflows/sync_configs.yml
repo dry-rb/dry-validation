@@ -34,7 +34,7 @@ jobs:
       - name: Compile file templates
         run: |
           if [ -f "project.yml" ]; then
-            for t in `ls tmp/devtools/templates | grep -v changelog.erb`
+            for t in `ls tmp/devtools/templates`
             do
               bin/ossy t c tmp/devtools/templates/$t $(basename $t .erb) project.yml
             done
