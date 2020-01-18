@@ -1,5 +1,9 @@
-## 1.4.2 unreleased
+## 1.4.2 2020-01-18
 
+
+### Fixed
+
+- Macros using predicates that accept a range argument work as expected (no need to wrap the argument in an array) (@waiting-for-dev)
 
 
 [Compare v1.4.1...v1.4.2](https://github.com/dry-rb/dry-validation/compare/v1.4.1...v1.4.2)
