@@ -3,8 +3,8 @@
 name: update CHANGELOG.md
 
 on:
-  branches:
-    paths:
+  push:
+    branches:
       - "master"
 
 jobs:
