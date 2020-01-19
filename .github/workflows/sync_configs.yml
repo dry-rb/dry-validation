@@ -4,8 +4,9 @@ name: sync_configs
 
 on:
   repository_dispatch:
-  branches:
-    - "master"
+  push:
+    branches:
+      - "master"
 
 jobs:
   sync-configs:
