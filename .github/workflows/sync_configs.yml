@@ -1,6 +1,6 @@
 # this file is managed by dry-rb/devtools project
 
-name: sync_configs
+name: Sync shared files from devtools
 
 on:
   repository_dispatch:
@@ -9,7 +9,7 @@ on:
       - "master"
 
 jobs:
-  sync-configs:
+  sync-files:
     runs-on: ubuntu-latest
     if: (github.event_name == 'repository_dispatch' && github.event.action == 'sync_configs') || github.event_name != 'repository_dispatch'
     env:
