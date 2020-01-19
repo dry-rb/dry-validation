@@ -4,9 +4,8 @@ name: sync_configs
 
 on:
   repository_dispatch:
-  push:
-    paths:
-      - project.yml
+  branches:
+    - "master"
 
 jobs:
   sync-configs:

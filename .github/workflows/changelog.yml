@@ -3,10 +3,9 @@
 name: update CHANGELOG.md
 
 on:
-  push:
+  branches:
     paths:
-      - changelog.yml
-      - .devtools/templates/changelog.erb
+      - "master"
 
 jobs:
   sync-configs:

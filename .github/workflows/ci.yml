@@ -67,6 +67,10 @@ jobs:
       uses: eregon/use-ruby-action@master
       with:
         ruby-version: 2.6
+    - name: Install latest bundler
+      run: 'gem install bundler
+
+'
     - name: Bundle
       run: 'bundle install
 
@@ -78,4 +82,4 @@ jobs:
     - name: Trigger release workflow
       run: |
         tag=$(echo $GITHUB_REF | cut -d / -f 3)
-        bundle exec bin/ossy gh w $GITHUB_REPOSITORY release --payload "{\"tag\":\"$tag\"}"
+        bundle exec bin/ossy gh w $GITHUB_REPOSITORY release --payload "{\"tag\":\"$tag\",\"tag_creator\":\"$GITHUB_ACTOR\",\"repo\":\"$GITHUB_REPOSITORY\"}"
