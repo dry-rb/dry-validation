@@ -1,6 +1,6 @@
 # this file is managed by dry-rb/devtools project
 
-name: update CHANGELOG.md
+name: update CHANGELOG.md from changelog.yml
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - "master"
 
 jobs:
-  sync-configs:
+  update-changelog:
     runs-on: ubuntu-latest
     env:
       GITHUB_LOGIN: dry-bot
@@ -39,6 +39,7 @@ jobs:
           git config --local user.name "dry-bot"
           git add -A
           git commit -m "[devtools] update CHANGELOG.md" || echo "nothing changed"
+          git pull --rebase origin master
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:

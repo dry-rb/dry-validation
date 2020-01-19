@@ -67,6 +67,7 @@ jobs:
           git config --local user.name "dry-bot"
           git add -A
           git commit -m "[devtools] sync configs" || echo "nothing changed"
+          git pull --rebase origin master
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
