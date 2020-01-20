@@ -1,5 +1,5 @@
 ---
-name: ci
+name: Tests
 'on':
   push:
     paths:
