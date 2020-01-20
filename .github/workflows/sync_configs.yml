@@ -23,6 +23,10 @@ jobs:
         with:
           repository: dry-rb/devtools
           path: tmp/devtools
+      - name: Setup git user
+        run: |
+          git config --local user.email "dry-bot@dry-rb.org"
+          git config --local user.name "dry-bot"
       - name: Set up Ruby
         uses: eregon/use-ruby-action@master
         with:
@@ -45,10 +49,6 @@ jobs:
         run: tmp/devtools/bin/update-changelog-from-commit $GITHUB_SHA
       - name: Compile CHANGELOG.md
         run: tmp/devtools/bin/compile-changelog
-      - name: Setup git user
-        run: |
-          git config --local user.email "dry-bot@dry-rb.org"
-          git config --local user.name "dry-bot"
       - name: Commit
         run: |
           rm bin/ossy
