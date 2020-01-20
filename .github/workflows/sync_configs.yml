@@ -1,6 +1,6 @@
 # this file is managed by dry-rb/devtools project
 
-name: sync_configs
+name: Sync files
 
 on:
   repository_dispatch:
