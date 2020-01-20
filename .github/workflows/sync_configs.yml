@@ -13,11 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     if: (github.event_name == 'repository_dispatch' && github.event.action == 'sync_configs') || github.event_name != 'repository_dispatch'
     env:
-      PATH: "tmp/devtools/bin:$PATH"
       GITHUB_LOGIN: dry-bot
       GITHUB_TOKEN: ${{ secrets.GH_PAT }}
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout ${{github.repository}}
+        uses: actions/checkout@v2
+      - name: Checkout devtools
+        uses: actions/checkout@v2
+        with:
+          repository: dry-rb/devtools
+          path: tmp/devtools
       - name: Set up Ruby
         uses: eregon/use-ruby-action@master
         with:
@@ -29,15 +34,17 @@ jobs:
       - name: Install dependencies
         run: bundle install --jobs 4 --retry 3
       - name: Symlink ossy
-        run: ln -sf "$(bundle info ossy --path)/bin/ossy" bin/ossy
-      - name: Clone devtools
-        run: git clone https://github.com/dry-rb/devtools.git tmp/devtools
+        run: bundle binstubs ossy
       - name: Compile file templates
-        run: compile-templates
+        run: tmp/devtools/bin/compile-templates $GITHUB_REPOSITORY
       - name: Update workflow files from devtools
-        run: sync-workflows
+        run: tmp/devtools/bin/sync-workflows
       - name: Update configuration files from devtools
-        run: sync-shared-files
+        run: tmp/devtools/bin/sync-shared-files
+      - name: Update changelog.yml from commit
+        run: tmp/devtools/bin/update-changelog-from-commit $GITHUB_SHA
+      - name: Compile CHANGELOG.md
+        run: tmp/devtools/bin/compile-changelog
       - name: Commit changes
         run: |
           rm bin/ossy
