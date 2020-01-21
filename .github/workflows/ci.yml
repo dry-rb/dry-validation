@@ -56,7 +56,7 @@ jobs:
       run: bundle exec rake
   release:
     runs-on: ubuntu-latest
-    if: contains(github.ref, 'tags')
+    if: contains(github.ref, 'tags') && github.event_name == 'create'
     needs: tests
     env:
       GITHUB_LOGIN: dry-bot
@@ -68,18 +68,14 @@ jobs:
       with:
         ruby-version: 2.6
     - name: Install latest bundler
-      run: 'gem install bundler
-
-'
+      run: |
+        bundle install --jobs 4 --retry 3
+        bundle config set without 'tools benchmarks docs sql'
     - name: Bundle
-      run: 'bundle install
-
-'
+      run: bundle install
     - name: Symlink ossy
-      run: 'ln -sf "$(bundle info ossy --path)/bin/ossy" bin/ossy
-
-'
+      run: bundle binstubs ossy
     - name: Trigger release workflow
       run: |
         tag=$(echo $GITHUB_REF | cut -d / -f 3)
-        bundle exec bin/ossy gh w $GITHUB_REPOSITORY release --payload "{\"tag\":\"$tag\",\"tag_creator\":\"$GITHUB_ACTOR\",\"repo\":\"$GITHUB_REPOSITORY\"}"
+        bundle exec bin/ossy gh w dry-rb/devtools release --payload "{\"tag\":\"$tag\",\"tag_creator\":\"$GITHUB_ACTOR\",\"repo\":\"$GITHUB_REPOSITORY\"}"
