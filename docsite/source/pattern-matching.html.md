@@ -36,7 +36,7 @@ class AddressContract < Dry::Validation::Contract
 
   rule(:address) do |context:|
     address = address_repo.find(value)
-    contex[:address] = address if address
+    context[:address] = address if address
   end
 end
 
