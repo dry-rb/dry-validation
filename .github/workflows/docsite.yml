@@ -30,7 +30,7 @@ jobs:
           git config --local user.email "dry-bot@dry-rb.org"
           git config --local user.name "dry-bot"
       - name: Install dependencies
-        run: gem install ossy
+        run: gem install ossy --no-document
       - name: Update release branches
         run: |
           branches=`git log --format=%B -n 1 $GITHUB_SHA | grep "docsite:release-" || echo "nothing"`

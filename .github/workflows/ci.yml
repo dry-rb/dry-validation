@@ -48,7 +48,7 @@ jobs:
         ruby-version: "${{matrix.ruby}}"
     - name: Install latest bundler
       run: |
-        gem install bundler
+        gem install bundler --no-document
         bundle config set without 'tools benchmarks docs'
     - name: Bundle install
       run: bundle install --jobs 4 --retry 3
@@ -68,7 +68,7 @@ jobs:
       with:
         ruby-version: 2.6
     - name: Install dependencies
-      run: gem install ossy
+      run: gem install ossy --no-document
     - name: Trigger release workflow
       run: |
         tag=$(echo $GITHUB_REF | cut -d / -f 3)

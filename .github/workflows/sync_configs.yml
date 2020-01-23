@@ -31,12 +31,8 @@ jobs:
         uses: eregon/use-ruby-action@master
         with:
           ruby-version: 2.6
-      - name: Install latest bundler
-        run: |
-          gem install bundler
-          bundle config set without 'test tools benchmarks docs'
       - name: Install dependencies
-        run: gem install ossy
+        run: gem install ossy --no-document
       - name: Compile file templates
         run: tmp/devtools/bin/compile-templates $GITHUB_REPOSITORY
       - name: Update workflow files from devtools
@@ -50,7 +46,7 @@ jobs:
       - name: Commit
         run: |
           git add -A
-          git commit -m "[devtools] sync configs" || echo "nothing to commit"
+          git commit -m "[devtools] sync" || echo "nothing to commit"
       - name: Push changes
         run: |
           git pull --rebase origin master
