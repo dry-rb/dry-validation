@@ -5,6 +5,7 @@ name: ci
     paths:
     - ".github/workflows/ci.yml"
     - lib/**
+    - "*.gemspec"
     - spec/**
     - Rakefile
     - Gemfile
