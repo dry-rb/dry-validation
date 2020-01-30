@@ -22,4 +22,25 @@ RSpec.describe Dry::Validation::Evaluator do
       })
     end
   end
+
+  describe '#rule_error?' do
+    let(:contract) do
+      Class.new(Dry::Validation::Contract) do
+        schema do
+          required(:foo).filled(:string)
+        end
+
+        rule(:foo) do
+          key.failure('failure added')
+          key.failure('failure added after checking') if rule_error?
+        end
+      end
+    end
+
+    it 'checks for errors in current rule' do
+      expect(contract.new.(foo: 'some@email.com').errors.to_h).to eql({
+        foo: ['failure added', 'failure added after checking'],
+      })
+    end
+  end
 end

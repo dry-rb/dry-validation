@@ -178,6 +178,15 @@ module Dry
         result.error?(path)
       end
 
+      # Check if there are any errors on the current rule
+      #
+      # @return [Boolean]
+      #
+      # @api public
+      def rule_error?
+        key(path).opts.any?
+      end
+
       # @api private
       def respond_to_missing?(meth, include_private = false)
         super || _contract.respond_to?(meth, true)
