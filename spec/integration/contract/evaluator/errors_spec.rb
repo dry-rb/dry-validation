@@ -16,10 +16,10 @@ RSpec.describe Dry::Validation::Evaluator do
     end
 
     it 'checks for errors in given key' do
-      expect(contract.new.(email: nil, name: 'foo').errors.to_h).to eql({
+      expect(contract.new.(email: nil, name: 'foo').errors.to_h).to eql(
         email: ['must be a string'],
         name: ['first introduce a valid email']
-      })
+      )
     end
   end
 
@@ -38,9 +38,9 @@ RSpec.describe Dry::Validation::Evaluator do
     end
 
     it 'checks for errors in current rule' do
-      expect(contract.new.(foo: 'some@email.com').errors.to_h).to eql({
-        foo: ['failure added', 'failure added after checking'],
-      })
+      expect(contract.new.(foo: 'some@email.com').errors.to_h).to eql(
+        foo: ['failure added', 'failure added after checking']
+      )
     end
   end
 end
