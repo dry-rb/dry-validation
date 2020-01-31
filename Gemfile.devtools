@@ -3,8 +3,11 @@
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 group :test do
+  # 0.18.x breaks codacy result parser
+  gem 'simplecov', '0.17.1', require: false, platforms: :ruby
+
   gem 'codacy-coverage', require: false, platforms: :ruby
-  gem 'simplecov', require: false, platforms: :ruby
+
   gem 'warning' if RUBY_VERSION >= '2.4.0'
 end
 
