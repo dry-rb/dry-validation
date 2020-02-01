@@ -24,7 +24,7 @@ When using ActiveModel validation, validations are declared in the model in the 
 
 `validates :name, :email, presence: true`
 
-You then update the model's state and call `valid?` on the model to see if the state is correct.  (In the opinion of the dry-rb team, this is a design flaw of ActiveModel. See [this blog post](http://solnic.eu/2015/12/28/invalid-object-is-an-anti-pattern.html) for more information).
+You then update the model's state and call `valid?` on the model to see if the state is correct.  (In the opinion of the dry-rb team, this is a design flaw of ActiveModel. See [this blog post](https://solnic.codes/2015/12/28/invalid-object-is-an-anti-pattern/) for more information).
 
 When using dry-validation, you declare your validation in a separate schema class using predicates to build up rules.
 
