@@ -58,6 +58,9 @@ Style/IfUnlessModifier:
 Style/EachWithObject:
   Enabled: false
 
+Style/TrailingUnderscoreVariable:
+  Enabled: false
+
 Lint/HandleExceptions:
   Exclude:
     - "spec/spec_helper.rb"
