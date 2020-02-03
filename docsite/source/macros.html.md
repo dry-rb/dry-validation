@@ -71,6 +71,6 @@ class NewUserContract < ApplicationContract
     required(:phone_numbers).value(:array)
   end
 
-  rule(:email).validate(min_size: 1)
+  rule(:phone_numbers).validate(min_size: 1)
 end
 ```
