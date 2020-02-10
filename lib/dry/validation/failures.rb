@@ -60,6 +60,11 @@ module Dry
         opts << { message: message, tokens: tokens, path: path }
         self
       end
+
+      # @api private
+      def empty?
+        opts.empty?
+      end
     end
   end
 end

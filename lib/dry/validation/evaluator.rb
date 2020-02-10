@@ -184,7 +184,7 @@ module Dry
       #
       # @api public
       def rule_error?
-        key(path).opts.any?
+        !key(path).empty?
       end
 
       # @api private
