@@ -1,3 +1,14 @@
+## unreleased 
+
+
+### Added
+
+- `schema_error?` rule helper (@waiting-for-dev)
+- `rule_error?` rule helper (@waiting-for-dev)
+
+
+[Compare v1.4.2...master](https://github.com/dry-rb/dry-validation/compare/v1.4.2...master)
+
 ## 1.4.2 2020-01-18
 
 
