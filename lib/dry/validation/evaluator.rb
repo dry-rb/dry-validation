@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'dry/initializer'
+require 'dry/core/deprecations'
 
 require 'dry/validation/constants'
 require 'dry/validation/failures'
@@ -16,6 +17,9 @@ module Dry
     # @api public
     class Evaluator
       extend Dry::Initializer
+      extend Dry::Core::Deprecations[:'dry-validation']
+
+      deprecate :error?, :schema_error?
 
       # @!attribute [r] _contract
       #   @return [Contract]
@@ -163,15 +167,24 @@ module Dry
         values.key?(key_name)
       end
 
-      # Check if there are any errors under the provided path
+      # Check if there are any errors on the schema under the provided path
       #
       # @param [Symbol, String, Array] A Path-compatible spec
       #
       # @return [Boolean]
       #
       # @api public
-      def error?(path)
+      def schema_error?(path)
         result.error?(path)
+      end
+
+      # Check if there are any errors on the current rule
+      #
+      # @return [Boolean]
+      #
+      # @api public
+      def rule_error?
+        !key(path).empty?
       end
 
       # @api private

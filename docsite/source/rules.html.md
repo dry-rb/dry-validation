@@ -181,6 +181,46 @@ contract.call(email: 'jane@doe.org', login: 'jane', password: "").errors.to_h
 # => {:password=>["password is required"]}
 ```
 
+### Checking for previous errors
+
+Sometimes you may be interested in adding an error when some other error has happened.
+
+With `#schema_error?(key)` you can check whether the schema has an error for a given key:
+
+```ruby
+class PersonContract < Dry::Validation::Contract
+  schema do
+    required(:email).filled(:string)
+    required(:name).filled(:string)
+  end
+
+  rule(:name) do
+    key.failure('first introduce a valid email') if schema_error?(:email)
+  end
+end
+
+PersonContract.new.(email: nil, name: 'foo').errors.to_h
+# { email: ['must be a string'], name: ['first introduce a valid email'] }
+```
+
+In complex rules you may be interested to know whether the current rule already had an error. For that, you can use `#rule_error?`
+
+```ruby
+class FooContract < Dry::Validation::Contract
+  schema do
+    required(:foo).filled(:string)
+  end
+
+  rule(:foo) do
+    key.failure('failure added')
+    key.failure('failure added after checking') if rule_error?
+  end
+end
+
+FooContract.new.(foo: 'foo').errors.to_h
+# { foo: ['failure added', 'failure added after checking'] }
+```
+
 ### Defining a rule for each element of an array
 
 To check each element of an array you can simply use `Rule#each` shortcut. It works just like a normal rule, which means it's only applied when a value passed schema checks and supports setting failure messages in the standard way.
