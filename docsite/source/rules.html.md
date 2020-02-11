@@ -203,8 +203,7 @@ PersonContract.new.(email: nil, name: 'foo').errors.to_h
 # { email: ['must be a string'], name: ['first introduce a valid email'] }
 ```
 
-In complex rules you may be interested to know whether the current rule already
-had an error. For that, you can use `#rule_error?`
+In complex rules you may be interested to know whether the current rule already had an error. For that, you can use `#rule_error?`
 
 ```ruby
 class FooContract < Dry::Validation::Contract
