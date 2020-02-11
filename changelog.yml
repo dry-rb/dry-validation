@@ -1,8 +1,17 @@
 ---
+- version: unreleased
+  summary: 
+  date: 
+  fixed: 
+  added:
+  - "`schema_error?` rule helper (@waiting-for-dev)"
+  - "`rule_error?` rule helper (@waiting-for-dev)"
+  changed: 
 - version: 1.4.2
   date: '2020-01-18'
   fixed:
-    - Macros using predicates that accept a range argument work as expected (no need to wrap the argument in an array) (@waiting-for-dev)
+  - Macros using predicates that accept a range argument work as expected (no need
+    to wrap the argument in an array) (@waiting-for-dev)
 - version: 1.4.1
   date: '2020-01-08'
   added:
