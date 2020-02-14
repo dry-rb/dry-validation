@@ -61,6 +61,9 @@ Style/EachWithObject:
 Style/TrailingUnderscoreVariable:
   Enabled: false
 
+Style/GuardClause:
+  Enabled: false
+
 Lint/HandleExceptions:
   Exclude:
     - "spec/spec_helper.rb"
