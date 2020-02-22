@@ -62,23 +62,25 @@ module Dry
           keys = path.to_a.compact
           msg_opts = tokens.merge(path: keys, locale: locale || messages.default_locale)
 
-          if keys.empty?
-            template, meta = messages["rules.#{rule}", msg_opts]
-          else
-            template, meta = messages[rule, msg_opts.merge(path: keys.join(DOT))]
-            template, meta = messages[rule, msg_opts.merge(path: keys.last)] unless template
-          end
+          options = msg_opts.merge(parse_tokens(tokens))
 
-          unless template
+          message =
+            if keys.empty?
+              messages["rules.#{rule}", options]
+            else
+              messages[rule, options.merge(path: keys.join(DOT))] ||
+                messages[rule, options.merge(path: keys.last)]
+            end
+
+          unless message
             raise MissingMessageError, <<~STR
               Message template for #{rule.inspect} under #{keys.join(DOT).inspect} was not found
             STR
           end
 
-          parsed_tokens = parse_tokens(tokens)
-          text = template.(template.data(parsed_tokens))
+          text, meta = message.values_at(:text, :meta)
 
-          [full ? "#{messages.rule(keys.last, msg_opts)} #{text}" : text, meta]
+          [full ? "#{messages.rule(keys.last, options)} #{text}" : text, meta]
         end
         # rubocop:enable Metrics/AbcSize
 
