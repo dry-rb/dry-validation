@@ -6,6 +6,9 @@
 - `schema_error?` rule helper (@waiting-for-dev)
 - `rule_error?` rule helper (@waiting-for-dev)
 
+### Changed
+
+- [internal] resolving messages uses the new API from dry-schema (@solnic)
 
 [Compare v1.4.2...master](https://github.com/dry-rb/dry-validation/compare/v1.4.2...master)
 
