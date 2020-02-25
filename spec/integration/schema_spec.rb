@@ -8,49 +8,71 @@ RSpec.describe Dry::Schema do
 
   before do
     module Test
-      EmailSchema = Dry::Schema.Params { required(:email).filled(:string) }
-      NameSchema = Dry::Schema.Params { required(:name).filled(:string) }
+      EmailSchema = Dry::Schema.Params do
+        required(:email).filled(:string)
+      end
+
+      AgeSchema = Dry::Schema.Params do
+        required(:age).filled(:integer, gt?: 17)
+      end
     end
   end
 
   describe 'composed schema' do
     before do
       Test::Schema = Dry::Schema.Params do
-        compose Test::EmailSchema, Test::NameSchema
+        compose Test::EmailSchema, Test::AgeSchema
       end
     end
 
     it 'validates input' do
-      result = subject.call(name: 'Jim')
+      result = subject.call(age: '17')
       expect(result).to be_failure
-      expect(result.errors.to_h).to eq(email: ['is missing'])
+      expect(result.errors.to_h).to eq(age: ["must be greater than 17"],
+                                       email: ["is missing"])
 
-      result = subject.call(name: 'Jim', email: 'jim@email.com')
+      result = subject.call(age: '18', email: 'jim@email.com')
       expect(result).to be_success
     end
   end
 
-  describe 'composed + own rules' do
+  describe 'compose schemas at nested locations' do
     before do
       Test::Schema = Dry::Schema.Params do
-        compose Test::EmailSchema
-        compose Test::NameSchema
-        required(:city).filled(:string)
+        required(:account).hash do
+          required(:primary).hash do
+            compose Test::EmailSchema, Test::AgeSchema
+          end
+
+          required(:secondary).array(:hash) do
+            compose Test::EmailSchema, Test::AgeSchema
+          end
+        end
       end
     end
 
     it 'validates input' do
-      result = subject.call(name: 'Jim')
+      result = subject.call({})
       expect(result).to be_failure
-      expect(result.errors.to_h).to eq(city: ['is missing'],
-                                       email: ['is missing'])
+      expect(result.errors.to_h).to eq(account: ["is missing"])
 
-      result = subject.call(city: 'Ham', name: 'Jim', email: 'jim@email.com')
+      result = subject.call(account: {
+        primary: { age: '19' },
+        secondary: [{ age: '17', email: 'nik@email.com' }] })
+      expect(result).to be_failure
+      expect(result.errors.to_h).to \
+        eq(account: {
+            primary: { email: ["is missing"] },
+            secondary: { 0 => { age: ["must be greater than 17"] } } })
+
+      result = subject.call(account: {
+        primary: { age: '19', email: 'jon@email.com' },
+        secondary: [{ age: '18', email: 'nik@email.com' }] })
       expect(result).to be_success
     end
   end
 
-  describe 'composed of incompatible schemas' do
+  describe 'composed of schemas with different processor types' do
     it 'raises Dry::Schema::InvalidSchemaError with a useful message' do
       expect do
         Dry::Schema.JSON do
@@ -62,50 +84,6 @@ RSpec.describe Dry::Schema do
           composing schema (Dry::Schema::JSON), but they were
           [Dry::Schema::Params]
         STR
-    end
-  end
-
-  describe 'composed at a path' do
-    before do
-      Test::Schema = Dry::Schema.Params do
-        required(:contact).hash do
-          compose Test::EmailSchema
-          compose Test::NameSchema
-        end
-      end
-    end
-
-    it 'validates input' do
-      result = subject.call(contact: { name: 'Jim' })
-      expect(result).to be_failure
-      expect(result.errors.to_h).to eq(contact: { email: ['is missing'] })
-
-      result = subject.call(contact: { name: 'Jim', email: 'jim@email.com' })
-      expect(result).to be_success
-    end
-  end
-
-  describe 'composed in array' do
-    before do
-      Test::Schema = Dry::Schema.Params do
-        required(:contacts).array(:hash) do
-          compose Test::EmailSchema
-          compose Test::NameSchema
-        end
-      end
-    end
-
-    it 'validates input' do
-      result = subject.call(contacts: [{ name: 'Jim', email: 'jim@email.com' },
-                                       { name: 'Nik' }])
-
-      expect(result).to be_failure
-      expect(result.errors.to_h)
-        .to eq(contacts: { 1 => { email: ["is missing"] } })
-
-      result = subject.call(contacts: [{ name: 'Jim', email: 'jim@email.com' },
-                                       { name: 'Nik', email: 'nik@email.com' }])
-      expect(result).to be_success
     end
   end
 end
