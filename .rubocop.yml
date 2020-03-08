@@ -60,9 +60,6 @@ Style/DateTime:
 Style/IfUnlessModifier:
   Enabled: false
 
-Style/EachWithObject:
-  Enabled: false
-
 Style/TrailingUnderscoreVariable:
   Enabled: false
 

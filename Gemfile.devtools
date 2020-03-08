@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # this file is managed by dry-rb/devtools project
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
