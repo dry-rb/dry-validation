@@ -154,7 +154,6 @@ module Dry
         private
 
         # @api private
-        # rubocop:disable Metrics/AbcSize
         def ensure_valid_keys(*keys)
           valid_paths = key_map.to_dot_notation.map { |value| Schema::Path[value] }
 
@@ -183,7 +182,6 @@ module Dry
             #{name}.rule specifies keys that are not defined by the schema: #{invalid_keys.inspect}
           STR
         end
-        # rubocop:enable Metrics/AbcSize
 
         # @api private
         def key_map
