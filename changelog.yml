@@ -6,8 +6,6 @@
   added:
   - "`schema_error?` rule helper (@waiting-for-dev)"
   - "`rule_error?` rule helper (@waiting-for-dev)"
-  changed:
-  - "[internal] resolving messages uses the new API from dry-schema (@solnic)"
 - version: 1.4.2
   date: '2020-01-18'
   fixed:
