@@ -6,6 +6,10 @@
 - `schema_error?` rule helper (@waiting-for-dev)
 - `rule_error?` rule helper (@waiting-for-dev)
 
+### Changed
+
+- dry-schema dependency was bumped to `~> 1.5` (@solnic)
+- [internal] `KeyMap` patches have been removed since dry-schema now provides required functionality (@solnic)
 
 [Compare v1.4.2...master](https://github.com/dry-rb/dry-validation/compare/v1.4.2...master)
 
