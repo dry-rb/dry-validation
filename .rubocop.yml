@@ -8,71 +8,6 @@ AllCops:
     - Gemfile.devtools
     - "*.gemspec"
 
-Style/StringLiterals:
-  Enabled: true
-  EnforcedStyle: single_quotes
-
-Style/AccessModifierDeclarations:
-  Enabled: false
-
-Style/BlockDelimiters:
-  Enabled: false
-
-Style/SymbolArray:
-  Exclude:
-    - "spec/**/*_spec.rb"
-
-Style/ConditionalAssignment:
-  Enabled: false
-
-Style/ClassAndModuleChildren:
-  Exclude:
-    - "spec/**/*_spec.rb"
-
-Style/EachWithObject:
-  Enabled: false
-
-Style/ParallelAssignment:
-  Enabled: false
-
-Style/Alias:
-  Enabled: true
-  EnforcedStyle: prefer_alias_method
-
-Style/LambdaCall:
-  Enabled: false
-
-Style/StabbyLambdaParentheses:
-  Enabled: false
-
-Style/FormatString:
-  Enabled: false
-
-Style/Documentation:
-  Enabled: false
-
-Style/AsciiComments:
-  Enabled: false
-
-Style/DateTime:
-  Enabled: false
-
-Style/IfUnlessModifier:
-  Enabled: false
-
-Style/TrailingUnderscoreVariable:
-  Enabled: false
-
-Style/GuardClause:
-  Enabled: false
-
-Lint/HandleExceptions:
-  Exclude:
-    - "spec/spec_helper.rb"
-
-Lint/BooleanSymbol:
-  Enabled: false
-
 Layout/SpaceInLambdaLiteral:
   Enabled: false
 
@@ -82,6 +17,13 @@ Layout/MultilineMethodCallIndentation:
 
 Layout/IndentFirstArrayElement:
   EnforcedStyle: consistent
+
+Lint/HandleExceptions:
+  Exclude:
+    - "spec/spec_helper.rb"
+
+Lint/BooleanSymbol:
+  Enabled: false
 
 Naming/PredicateName:
   Enabled: false
@@ -114,3 +56,61 @@ Metrics/AbcSize:
 Metrics/CyclomaticComplexity:
   Enabled: true
   Max: 12
+
+Style/AccessModifierDeclarations:
+  Enabled: false
+
+Style/Alias:
+  Enabled: true
+  EnforcedStyle: prefer_alias_method
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - "spec/**/*_spec.rb"
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+Style/DateTime:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EachWithObject:
+  Enabled: false
+
+Style/FormatString:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/LambdaCall:
+  Enabled: false
+
+Style/ParallelAssignment:
+  Enabled: false
+
+Style/StabbyLambdaParentheses:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: single_quotes
+
+Style/SymbolArray:
+  Exclude:
+    - "spec/**/*_spec.rb"
+
+Style/TrailingUnderscoreVariable:
+  Enabled: false
