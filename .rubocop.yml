@@ -18,6 +18,11 @@ Layout/MultilineMethodCallIndentation:
 Layout/IndentFirstArrayElement:
   EnforcedStyle: consistent
 
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+  EnforcedStyle: no_space
+  EnforcedStyleForEmptyBraces: no_space
+
 Lint/HandleExceptions:
   Exclude:
     - "spec/spec_helper.rb"
@@ -30,7 +35,7 @@ Naming/PredicateName:
 
 Naming/FileName:
   Exclude:
-    - "lib/dry-*.rb"
+    - "lib/*-*.rb"
 
 Naming/MethodName:
   Enabled: false
@@ -40,6 +45,8 @@ Naming/MemoizedInstanceVariableName:
 
 Metrics/LineLength:
   Max: 100
+  Exclude:
+    - "spec/**/*_spec.rb"
 
 Metrics/MethodLength:
   Enabled: false
@@ -76,6 +83,15 @@ Style/ClassAndModuleChildren:
 
 Style/ConditionalAssignment:
   Enabled: false
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+  ConsistentQuotesInMultiline: false
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: double_quotes
 
 Style/DateTime:
   Enabled: false
