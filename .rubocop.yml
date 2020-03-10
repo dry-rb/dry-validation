@@ -84,15 +84,6 @@ Style/ClassAndModuleChildren:
 Style/ConditionalAssignment:
   Enabled: false
 
-Style/StringLiterals:
-  Enabled: true
-  EnforcedStyle: double_quotes
-  ConsistentQuotesInMultiline: false
-
-Style/StringLiteralsInInterpolation:
-  Enabled: true
-  EnforcedStyle: double_quotes
-
 Style/DateTime:
   Enabled: false
 
@@ -122,7 +113,12 @@ Style/StabbyLambdaParentheses:
 
 Style/StringLiterals:
   Enabled: true
-  EnforcedStyle: single_quotes
+  EnforcedStyle: double_quotes
+  ConsistentQuotesInMultiline: false
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: double_quotes
 
 Style/SymbolArray:
   Exclude:
