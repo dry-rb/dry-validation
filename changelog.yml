@@ -1,11 +1,14 @@
 ---
 - version: unreleased
-  summary: 
-  date: 
-  fixed: 
+  summary:
+  date:
+  fixed:
   added:
   - "`schema_error?` rule helper (@waiting-for-dev)"
   - "`rule_error?` rule helper (@waiting-for-dev)"
+  changed:
+  - "dry-schema dependency was bumped to `~> 1.5` (@solnic)"
+  - "[internal] `KeyMap` patches have been removed since dry-schema now provides required functionality (@solnic)"
 - version: 1.4.2
   date: '2020-01-18'
   fixed:
