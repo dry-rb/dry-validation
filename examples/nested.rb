@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry-validation'
+require "dry-validation"
 
 schema = Dry::Validation.Schema do
   required(:address).schema do
@@ -19,6 +19,6 @@ errors = schema.call({}).messages
 
 puts errors.inspect
 
-errors = schema.call(address: { city: 'NYC' }).messages
+errors = schema.call(address: {city: "NYC"}).messages
 
 puts errors.inspect

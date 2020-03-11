@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'dry/equalizer'
-require 'dry/schema/path'
-require 'dry/validation/constants'
+require "dry/equalizer"
+require "dry/schema/path"
+require "dry/validation/constants"
 
 module Dry
   module Validation
@@ -53,7 +53,7 @@ module Dry
           vals = self.class.new(data.dig(*keys))
           vals.fetch_values(*last) { nil }
         else
-          raise ArgumentError, '+key+ must be a valid path specification'
+          raise ArgumentError, "+key+ must be a valid path specification"
         end
       end
 

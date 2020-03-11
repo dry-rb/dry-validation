@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/schema/path'
-require 'dry/validation/constants'
+require "dry/schema/path"
+require "dry/validation/constants"
 
 module Dry
   module Validation
@@ -57,7 +57,7 @@ module Dry
       #
       # @api public
       def failure(message, tokens = EMPTY_HASH)
-        opts << { message: message, tokens: tokens, path: path }
+        opts << {message: message, tokens: tokens, path: path}
         self
       end
 

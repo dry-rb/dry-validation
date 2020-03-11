@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require_relative 'suite'
-require 'hotch'
+require_relative "suite"
+require "hotch"
 
-require 'dry-validation'
+require "dry-validation"
 
 I18n.locale = :en
 I18n.backend.load_translations
 
-COUNT = ENV['COUNT'].to_i
+COUNT = ENV["COUNT"].to_i
 FIELDS = COUNT.times.map { |i| :"field_#{i}" }
 
 schema = Dry::Validation.Schema do

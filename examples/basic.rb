@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry-validation'
+require "dry-validation"
 
 schema = Dry::Validation.Schema do
   required(:email).filled
@@ -8,7 +8,7 @@ schema = Dry::Validation.Schema do
   required(:age).filled(:int?, gt?: 18)
 end
 
-errors = schema.call(email: 'jane@doe.org', age: 19).messages
+errors = schema.call(email: "jane@doe.org", age: 19).messages
 
 puts errors.inspect
 

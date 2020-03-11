@@ -1,30 +1,30 @@
 # frozen_string_literal: true
 
-require_relative 'support/coverage'
-require_relative 'support/warnings'
+require_relative "support/coverage"
+require_relative "support/warnings"
 
 begin
-  require 'pry'
-  require 'pry-byebug'
+  require "pry"
+  require "pry-byebug"
 rescue LoadError
 end
 
-require 'i18n'
-require 'dry/validation'
+require "i18n"
+require "dry/validation"
 
 SPEC_ROOT = Pathname(__dir__)
 
-Dir[SPEC_ROOT.join('support/**/*.rb')].each(&method(:require))
+Dir[SPEC_ROOT.join("support/**/*.rb")].each(&method(:require))
 
 RSpec.configure do |config|
-  unless RUBY_VERSION >= '2.7'
-    config.exclude_pattern = '**/pattern_matching_spec.rb'
+  unless RUBY_VERSION >= "2.7"
+    config.exclude_pattern = "**/pattern_matching_spec.rb"
   end
 
   config.disable_monkey_patching!
 
   config.before do
-    stub_const('Test', Module.new)
+    stub_const("Test", Module.new)
   end
 
   config.after do

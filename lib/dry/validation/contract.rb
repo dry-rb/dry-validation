@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require 'concurrent/map'
+require "concurrent/map"
 
-require 'dry/equalizer'
-require 'dry/initializer'
-require 'dry/schema/path'
+require "dry/equalizer"
+require "dry/initializer"
+require "dry/schema/path"
 
-require 'dry/validation/config'
-require 'dry/validation/constants'
-require 'dry/validation/rule'
-require 'dry/validation/evaluator'
-require 'dry/validation/messages/resolver'
-require 'dry/validation/result'
-require 'dry/validation/contract/class_interface'
+require "dry/validation/config"
+require "dry/validation/constants"
+require "dry/validation/rule"
+require "dry/validation/evaluator"
+require "dry/validation/messages/resolver"
+require "dry/validation/result"
+require "dry/validation/contract/class_interface"
 
 module Dry
   module Validation

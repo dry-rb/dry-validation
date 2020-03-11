@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'dry/validation/contract'
+require "dry/validation/contract"
 
-RSpec.describe Dry::Validation::Contract, '.option' do
+RSpec.describe Dry::Validation::Contract, ".option" do
   subject(:contract_class) do
     Class.new(Dry::Validation::Contract) do
       option :db
@@ -12,18 +12,18 @@ RSpec.describe Dry::Validation::Contract, '.option' do
       end
 
       rule(:email) do
-        key.failure('is taken') unless db.unique?(values[:email])
+        key.failure("is taken") unless db.unique?(values[:email])
       end
     end
   end
 
   let(:db) { double(:db) }
 
-  it 'allows injecting objects to the constructor' do
-    expect(db).to receive(:unique?).with('jane@doe.org').and_return(false)
+  it "allows injecting objects to the constructor" do
+    expect(db).to receive(:unique?).with("jane@doe.org").and_return(false)
 
     contract = contract_class.new(db: db)
 
-    expect(contract.(email: 'jane@doe.org').errors.to_h).to eql(email: ['is taken'])
+    expect(contract.(email: "jane@doe.org").errors.to_h).to eql(email: ["is taken"])
   end
 end

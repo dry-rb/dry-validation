@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'Defining custom macros' do
+RSpec.describe "Defining custom macros" do
   subject(:contract) do
     contract_class.new
   end
@@ -17,49 +17,49 @@ RSpec.describe 'Defining custom macros' do
     class Test::BaseContract < Dry::Validation::Contract; end
   end
 
-  context 'using a macro without options' do
-    shared_context 'a contract with a custom macro' do
+  context "using a macro without options" do
+    shared_context "a contract with a custom macro" do
       before do
         contract_class.rule(:numbers).validate(:even_numbers)
       end
 
-      it 'succeeds with valid input' do
+      it "succeeds with valid input" do
         expect(contract.(numbers: [2, 4, 6])).to be_success
       end
 
-      it 'fails with invalid input' do
-        expect(contract.(numbers: [1, 2, 3]).errors.to_h).to eql(numbers: ['all numbers must be even'])
+      it "fails with invalid input" do
+        expect(contract.(numbers: [1, 2, 3]).errors.to_h).to eql(numbers: ["all numbers must be even"])
       end
     end
 
-    context 'using macro from the global registry' do
+    context "using macro from the global registry" do
       before do
         Dry::Validation.register_macro(:even_numbers) do
-          key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
+          key.failure("all numbers must be even") unless values[key_name].all?(&:even?)
         end
       end
 
       after do
-        Dry::Validation::Macros.container._container.delete('even_numbers')
+        Dry::Validation::Macros.container._container.delete("even_numbers")
       end
 
-      include_context 'a contract with a custom macro'
+      include_context "a contract with a custom macro"
     end
 
-    context 'using macro from contract itself' do
+    context "using macro from contract itself" do
       before do
         Test::BaseContract.register_macro(:even_numbers) do
-          key.failure('all numbers must be even') unless values[key_name].all?(&:even?)
+          key.failure("all numbers must be even") unless values[key_name].all?(&:even?)
         end
       end
 
       after do
-        Test::BaseContract.macros._container.delete('even_numbers')
+        Test::BaseContract.macros._container.delete("even_numbers")
       end
     end
   end
 
-  context 'using a macro with options' do
+  context "using a macro with options" do
     before do
       Test::BaseContract.register_macro(:min) do |context:, macro:|
         num = macro.args[0]
@@ -71,16 +71,16 @@ RSpec.describe 'Defining custom macros' do
     end
 
     after do
-      Test::BaseContract.macros._container.delete('min')
+      Test::BaseContract.macros._container.delete("min")
     end
 
-    it 'fails with invalid input' do
+    it "fails with invalid input" do
       expect(contract.(numbers: [1]).errors.to_h)
-        .to eql(numbers: ['must have at least 3 items'])
+        .to eql(numbers: ["must have at least 3 items"])
     end
   end
 
-  context 'using a macro with a range option' do
+  context "using a macro with a range option" do
     before do
       Test::BaseContract.register_macro(:in_range) do |macro:|
         range = macro.args[0]
@@ -93,14 +93,14 @@ RSpec.describe 'Defining custom macros' do
     end
 
     after do
-      Test::BaseContract.macros._container.delete('in_range')
+      Test::BaseContract.macros._container.delete("in_range")
     end
 
-    it 'succeeds with valid input' do
+    it "succeeds with valid input" do
       expect(contract.(numbers: [1, 2, 3])).to be_success
     end
 
-    it 'fails with invalid input' do
+    it "fails with invalid input" do
       expect(contract.(numbers: [1, 2, 6])).to be_failure
     end
   end

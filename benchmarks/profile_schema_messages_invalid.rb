@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'suite'
-require 'hotch'
+require_relative "suite"
+require "hotch"
 
 schema = Dry::Validation.Schema do
   configure { config.messages = :i18n }
@@ -11,7 +11,7 @@ schema = Dry::Validation.Schema do
   required(:address).filled(:hash?)
 end
 
-input = { email: '', age: 18, address: {} }
+input = {email: "", age: 18, address: {}}
 
 puts schema.(input).inspect
 

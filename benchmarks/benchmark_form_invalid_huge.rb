@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require 'benchmark/ips'
-require 'active_model'
+require "benchmark/ips"
+require "active_model"
 
-require 'i18n'
-require 'dry-validation'
-require 'byebug'
+require "i18n"
+require "dry-validation"
+require "byebug"
 
-COUNT = (ENV['COUNT'] || 100).to_i
+COUNT = (ENV["COUNT"] || 100).to_i
 FIELDS = COUNT.times.map { |i| :"field_#{i}" }
 
 class User
   include ActiveModel::Validations
 
   attr_reader(*FIELDS)
-  validates(*FIELDS, presence: true, numericality: { greater_than: FIELDS.size / 2 })
+  validates(*FIELDS, presence: true, numericality: {greater_than: FIELDS.size / 2})
 
   def initialize(attrs)
     attrs.each do |field, value|
@@ -39,13 +39,13 @@ puts contract.(params).inspect
 puts User.new(params).validate
 
 Benchmark.ips do |x|
-  x.report('ActiveModel::Validations') do
+  x.report("ActiveModel::Validations") do
     user = User.new(params)
     user.validate
     user.errors
   end
 
-  x.report('dry-validation / schema') do
+  x.report("dry-validation / schema") do
     contract.(params).errors
   end
 

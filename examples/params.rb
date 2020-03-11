@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry-validation'
+require "dry-validation"
 
 contract = Class.new(Dry::Validation::Contract) do
   params do
@@ -9,6 +9,6 @@ contract = Class.new(Dry::Validation::Contract) do
   end
 end.new
 
-result = contract.('email' => '', 'age' => '19')
+result = contract.("email" => "", "age" => "19")
 
 puts result.inspect

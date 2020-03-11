@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/validation/message'
+require "dry/validation/message"
 
 module Dry
   module Validation
@@ -95,7 +95,7 @@ module Dry
         def parse_token(token)
           case token
           when Array
-            token.join(', ')
+            token.join(", ")
           else
             token
           end

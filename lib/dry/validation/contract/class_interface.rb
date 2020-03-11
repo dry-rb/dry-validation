@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'dry/schema'
-require 'dry/schema/messages'
-require 'dry/schema/path'
-require 'dry/schema/key_map'
+require "dry/schema"
+require "dry/schema/messages"
+require "dry/schema/path"
+require "dry/schema/key_map"
 
-require 'dry/validation/constants'
-require 'dry/validation/macros'
-require 'dry/validation/schema_ext'
+require "dry/validation/constants"
+require "dry/validation/macros"
+require "dry/validation/schema_ext"
 
 module Dry
   module Validation
@@ -23,7 +23,7 @@ module Dry
         # @api private
         def inherited(klass)
           super
-          klass.instance_variable_set('@config', config.dup)
+          klass.instance_variable_set("@config", config.dup)
         end
 
         # Configuration
@@ -190,7 +190,7 @@ module Dry
 
         # @api private
         def core_schema_opts
-          { parent: superclass&.__schema__, config: config }
+          {parent: superclass&.__schema__, config: config}
         end
 
         # @api private
@@ -198,7 +198,7 @@ module Dry
           return __schema__ if external_schemas.empty? && block.nil?
 
           unless __schema__.nil?
-            raise ::Dry::Validation::DuplicateSchemaError, 'Schema has already been defined'
+            raise ::Dry::Validation::DuplicateSchemaError, "Schema has already been defined"
           end
 
           schema_opts = core_schema_opts

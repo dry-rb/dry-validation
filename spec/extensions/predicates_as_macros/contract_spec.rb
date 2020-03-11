@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'dry/validation/extensions/predicates_as_macros'
+require "dry/validation/extensions/predicates_as_macros"
 
 RSpec.describe Dry::Validation::Contract do
-  context 'with predicates_as_macros extension' do
+  context "with predicates_as_macros extension" do
     before { Dry::Validation.load_extensions(:predicates_as_macros) }
 
     subject(:contract) do
@@ -26,7 +26,7 @@ RSpec.describe Dry::Validation::Contract do
       end
     end
 
-    it 'macros succeed on predicate success' do
+    it "macros succeed on predicate success" do
       age_contract = Class.new(contract) do
         schema do
           required(:age).filled(:integer)
@@ -38,7 +38,7 @@ RSpec.describe Dry::Validation::Contract do
       expect(age_contract.(age: 19)).to be_success
     end
 
-    it 'macros fail on predicate failure' do
+    it "macros fail on predicate failure" do
       age_contract = Class.new(contract) do
         schema do
           required(:age).filled(:integer)
@@ -50,7 +50,7 @@ RSpec.describe Dry::Validation::Contract do
       expect(age_contract.(age: 17)).to be_failure
     end
 
-    it 'failure message is built from predicate name and arguments' do
+    it "failure message is built from predicate name and arguments" do
       age_contract = Class.new(contract) do
         schema do
           required(:age).filled(:integer)
@@ -63,7 +63,7 @@ RSpec.describe Dry::Validation::Contract do
 
       expect(
         result.errors.first.text
-      ).to eq('must be greater than or equal to 18')
+      ).to eq("must be greater than or equal to 18")
     end
   end
 end

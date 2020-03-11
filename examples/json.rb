@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'dry-validation'
+require "json"
+require "dry-validation"
 
 contract = Class.new(Dry::Validation::Contract) do
   json do

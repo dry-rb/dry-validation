@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'dry/validation/contract'
+require "dry/validation/contract"
 
-RSpec.describe Dry::Validation::Contract, '.rule' do
+RSpec.describe Dry::Validation::Contract, ".rule" do
   subject(:contract) { contract_class.new }
 
-  context 'with a nested hash' do
+  context "with a nested hash" do
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
         params do
@@ -18,30 +18,30 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
         end
 
         rule(:email) do
-          key.failure('invalid email') unless value.include?('@')
+          key.failure("invalid email") unless value.include?("@")
         end
 
-        rule('address.zipcode') do
-          key.failure('bad format') unless value.include?('-')
+        rule("address.zipcode") do
+          key.failure("bad format") unless value.include?("-")
         end
       end
     end
 
-    context 'when nested values fail both schema and rule checks' do
-      it 'produces schema and rule errors' do
-        expect(contract.(email: 'jane@doe.org', address: { city: 'NYC', zipcode: '123' }).errors.to_h)
-          .to eql(address: { street: ['is missing'], zipcode: ['bad format'] })
+    context "when nested values fail both schema and rule checks" do
+      it "produces schema and rule errors" do
+        expect(contract.(email: "jane@doe.org", address: {city: "NYC", zipcode: "123"}).errors.to_h)
+          .to eql(address: {street: ["is missing"], zipcode: ["bad format"]})
       end
     end
 
-    context 'when empty hash is provided' do
-      it 'produces missing-key errors' do
-        expect(contract.({}).errors.to_h).to eql(email: ['is missing'], address: ['is missing'])
+    context "when empty hash is provided" do
+      it "produces missing-key errors" do
+        expect(contract.({}).errors.to_h).to eql(email: ["is missing"], address: ["is missing"])
       end
     end
   end
 
-  context 'with a rule that depends on two nested values' do
+  context "with a rule that depends on two nested values" do
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
         params do
@@ -52,19 +52,19 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
         end
 
         rule(event: %i[active_from active_until]) do
-          key.failure('invalid dates') if value[0] < value[1]
+          key.failure("invalid dates") if value[0] < value[1]
         end
       end
     end
 
-    it 'does not execute rule when the schema checks failed' do
-      result = contract.(event: { active_from: Date.today, active_until: nil })
+    it "does not execute rule when the schema checks failed" do
+      result = contract.(event: {active_from: Date.today, active_until: nil})
 
-      expect(result.errors.to_h).to eql(event: { active_until: ['must be a date'] })
+      expect(result.errors.to_h).to eql(event: {active_until: ["must be a date"]})
     end
   end
 
-  context 'with a nested array' do
+  context "with a nested array" do
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
         params do
@@ -73,21 +73,21 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
           end
         end
 
-        rule('address.phones').each do
-          key.failure('invalid phone') unless value.start_with?('+48')
+        rule("address.phones").each do
+          key.failure("invalid phone") unless value.start_with?("+48")
         end
       end
     end
 
-    context 'when one of the values fails' do
-      it 'produces an error for the invalid value' do
-        expect(contract.(address: { phones: ['+48123', '+47412', nil] }).errors.to_h)
-          .to eql(address: { phones: { 1 => ['invalid phone'], 2 => ['must be a string'] } })
+    context "when one of the values fails" do
+      it "produces an error for the invalid value" do
+        expect(contract.(address: {phones: ["+48123", "+47412", nil]}).errors.to_h)
+          .to eql(address: {phones: {1 => ["invalid phone"], 2 => ["must be a string"]}})
       end
     end
 
-    context 'with a path intersection' do
-      context 'when the longest path is a first' do
+    context "with a path intersection" do
+      context "when the longest path is a first" do
         let(:contract_class) do
           Class.new(Dry::Validation::Contract) do
             params do
@@ -97,19 +97,19 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
             end
 
             rule(:addresses).each do
-              key(path.keys + [:phone]).failure('invalid phone')
-              key.failure('invalid list')
+              key(path.keys + [:phone]).failure("invalid phone")
+              key.failure("invalid list")
             end
           end
 
-          it 'produces an error for all paths' do
-            expect(contract.(addresses: [{ phone: '+48123' }]).errors.to_h)
-              .to eql(addresses: { 0 => [['invalid list'], [{ phone: 'invalid phone' }]] })
+          it "produces an error for all paths" do
+            expect(contract.(addresses: [{phone: "+48123"}]).errors.to_h)
+              .to eql(addresses: {0 => [["invalid list"], [{phone: "invalid phone"}]]})
           end
         end
       end
 
-      context 'when the longest path is a last' do
+      context "when the longest path is a last" do
         let(:contract_class) do
           Class.new(Dry::Validation::Contract) do
             params do
@@ -119,14 +119,14 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
             end
 
             rule(:addresses).each do
-              key.failure('invalid list')
-              key(path.keys + [:phone]).failure('invalid phone')
+              key.failure("invalid list")
+              key(path.keys + [:phone]).failure("invalid phone")
             end
           end
 
-          it 'produces an error for all paths' do
-            expect(contract.(addresses: [{ phone: '+48123' }]).errors.to_h)
-              .to eql(addresses: { 0 => [['invalid list'], [{ phone: 'invalid phone' }]] })
+          it "produces an error for all paths" do
+            expect(contract.(addresses: [{phone: "+48123"}]).errors.to_h)
+              .to eql(addresses: {0 => [["invalid list"], [{phone: "invalid phone"}]]})
           end
         end
       end
