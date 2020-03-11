@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'dry/schema/message_set'
+require "dry/schema/message_set"
 
-require 'dry/validation/constants'
-require 'dry/validation/message'
+require "dry/validation/constants"
+require "dry/validation/message"
 
 module Dry
   module Validation

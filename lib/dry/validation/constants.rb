@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require 'pathname'
-require 'dry/core/constants'
+require "pathname"
+require "dry/core/constants"
 
 module Dry
   module Validation
     include Dry::Core::Constants
 
-    DOT = '.'
+    DOT = "."
 
     # Root path is used for base errors in hash representation of error messages
     ROOT_PATH = [nil].freeze
 
     # Path to the default errors locale file
-    DEFAULT_ERRORS_NAMESPACE = 'dry_validation'
+    DEFAULT_ERRORS_NAMESPACE = "dry_validation"
 
     # Path to the default errors locale file
-    DEFAULT_ERRORS_PATH = Pathname(__FILE__).join('../../../../config/errors.yml').realpath.freeze
+    DEFAULT_ERRORS_PATH = Pathname(__FILE__).join("../../../../config/errors.yml").realpath.freeze
 
     # Mapping for block kwarg options used by block_options
     #

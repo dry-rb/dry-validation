@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'concurrent/map'
-require 'dry/equalizer'
+require "concurrent/map"
+require "dry/equalizer"
 
-require 'dry/validation/constants'
-require 'dry/validation/message_set'
-require 'dry/validation/values'
+require "dry/validation/constants"
+require "dry/validation/message_set"
+require "dry/validation/values"
 
 module Dry
   module Validation
@@ -179,7 +179,7 @@ module Dry
         super
       end
 
-      if RUBY_VERSION >= '2.7'
+      if RUBY_VERSION >= "2.7"
         # Pattern matching
         #
         # @api private

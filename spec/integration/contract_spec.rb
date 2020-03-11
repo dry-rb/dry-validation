@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dry/validation/contract'
+require "dry/validation/contract"
 
 RSpec.describe Dry::Validation::Contract do
   subject(:contract) do
@@ -14,27 +14,27 @@ RSpec.describe Dry::Validation::Contract do
       end
 
       rule(:email) do
-        key.failure('must be unique')
+        key.failure("must be unique")
       end
     end
   end
 
-  describe '#inspect' do
-    it 'returns a string representation' do
+  describe "#inspect" do
+    it "returns a string representation" do
       expect(contract.inspect).to eql(
         %(#<Test::NewUserContract schema=#<Dry::Schema::Params keys=["email"] rules={:email=>"key?(:email) AND key[email](filled? AND str?)"}> rules=[#<Dry::Validation::Rule keys=[:email]>]>)
       )
     end
   end
 
-  describe '.new' do
-    it 'raises error when schema is not defined' do
-      Test::NewUserContract.instance_variable_set('@__schema__', nil)
+  describe ".new" do
+    it "raises error when schema is not defined" do
+      Test::NewUserContract.instance_variable_set("@__schema__", nil)
 
       expect { Test::NewUserContract.new }
         .to raise_error(
           Dry::Validation::SchemaMissingError,
-          'Test::NewUserContract cannot be instantiated without a schema defined'
+          "Test::NewUserContract cannot be instantiated without a schema defined"
         )
     end
   end

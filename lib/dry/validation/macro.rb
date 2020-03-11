@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/validation/constants'
-require 'dry/validation/function'
+require "dry/validation/constants"
+require "dry/validation/function"
 
 module Dry
   module Validation

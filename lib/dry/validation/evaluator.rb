@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'dry/initializer'
-require 'dry/core/deprecations'
+require "dry/initializer"
+require "dry/core/deprecations"
 
-require 'dry/validation/constants'
-require 'dry/validation/failures'
+require "dry/validation/constants"
+require "dry/validation/failures"
 
 module Dry
   module Validation

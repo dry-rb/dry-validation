@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'dry/validation/contract'
+require "dry/validation/contract"
 
-RSpec.describe Dry::Validation::Contract, 'Rule#each' do
+RSpec.describe Dry::Validation::Contract, "Rule#each" do
   subject(:contract) { contract_class.new }
 
-  context 'using a block' do
+  context "using a block" do
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
         def self.name
-          'TestContract'
+          "TestContract"
         end
 
         params do
@@ -20,11 +20,11 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
         end
 
         rule(:nums).each do
-          key.failure('invalid') if value < 3
+          key.failure("invalid") if value < 3
         end
 
         rule(hash: :another_nums).each do
-          key.failure('invalid') if value < 3
+          key.failure("invalid") if value < 3
         end
 
         rule(:nums).each do |context:|
@@ -34,34 +34,34 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
       end
     end
 
-    it 'applies rule only when the value is an array' do
-      expect(contract.(nums: 'oops').errors.to_h).to eql(nums: ['must be an array'])
+    it "applies rule only when the value is an array" do
+      expect(contract.(nums: "oops").errors.to_h).to eql(nums: ["must be an array"])
     end
 
-    it 'applies rule when an item passed schema checks' do
-      expect(contract.(nums: ['oops', 1, 4, 0]).errors.to_h)
-        .to eql(nums: { 0 => ['must be an integer'], 1 => ['invalid'], 3 => ['invalid'] })
+    it "applies rule when an item passed schema checks" do
+      expect(contract.(nums: ["oops", 1, 4, 0]).errors.to_h)
+        .to eql(nums: {0 => ["must be an integer"], 1 => ["invalid"], 3 => ["invalid"]})
     end
 
-    it 'applies rule to nested values when an item passed schema checks' do
-      expect(contract.(nums: [4], hash: { another_nums: ['oops', 1, 4] }).errors.to_h)
-        .to eql(hash: { another_nums: { 0 => ['must be an integer'], 1 => ['invalid'] } })
+    it "applies rule to nested values when an item passed schema checks" do
+      expect(contract.(nums: [4], hash: {another_nums: ["oops", 1, 4]}).errors.to_h)
+        .to eql(hash: {another_nums: {0 => ["must be an integer"], 1 => ["invalid"]}})
     end
 
-    it 'passes block options' do
+    it "passes block options" do
       expect(contract.(nums: [10, 20]).context[:sum]).to eql(30)
     end
   end
 
-  context 'using a simple macro' do
+  context "using a simple macro" do
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
         def self.name
-          'TestContract'
+          "TestContract"
         end
 
         register_macro(:even?) do
-          key.failure('invalid') unless value.even?
+          key.failure("invalid") unless value.even?
         end
 
         params do
@@ -72,34 +72,34 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
         end
 
         rule(:nums).each(:even?)
-        rule('hash.another_nums').each(:even?)
+        rule("hash.another_nums").each(:even?)
       end
     end
 
-    it 'applies rule when an item passed schema checks' do
+    it "applies rule when an item passed schema checks" do
       expect(contract.(nums: [2, 3]).errors.to_h)
-        .to eql(nums: { 1 => ['invalid'] })
+        .to eql(nums: {1 => ["invalid"]})
     end
 
-    it 'applies rule to nested values when an item passed schema checks' do
-      expect(contract.(nums: [4], hash: { another_nums: [2, 3] }).errors.to_h)
-        .to eql(hash: { another_nums: { 1 => ['invalid'] } })
+    it "applies rule to nested values when an item passed schema checks" do
+      expect(contract.(nums: [4], hash: {another_nums: [2, 3]}).errors.to_h)
+        .to eql(hash: {another_nums: {1 => ["invalid"]}})
     end
   end
 
-  context 'using multiple macros' do
+  context "using multiple macros" do
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
         def self.name
-          'TestContract'
+          "TestContract"
         end
 
         register_macro(:even?) do
-          key.failure('invalid') unless value.even?
+          key.failure("invalid") unless value.even?
         end
 
         register_macro(:below_ten?) do
-          key.failure('too big') unless value < 10
+          key.failure("too big") unless value < 10
         end
 
         params do
@@ -114,27 +114,27 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
       end
     end
 
-    it 'applies rules when an item passed schema checks' do
+    it "applies rules when an item passed schema checks" do
       expect(contract.(nums: [2, 15]).errors.to_h)
-        .to eql(nums: { 1 => ['invalid', 'too big'] })
+        .to eql(nums: {1 => ["invalid", "too big"]})
     end
 
-    it 'applies rules for nested values when an item passed schema checks' do
-      expect(contract.(nums: [2], hash: { another_nums: [2, 15] }).errors.to_h)
-        .to eql(hash: { another_nums: { 1 => ['invalid', 'too big'] } })
+    it "applies rules for nested values when an item passed schema checks" do
+      expect(contract.(nums: [2], hash: {another_nums: [2, 15]}).errors.to_h)
+        .to eql(hash: {another_nums: {1 => ["invalid", "too big"]}})
     end
   end
 
-  context 'using a macro with args' do
+  context "using a macro with args" do
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
         def self.name
-          'TestContract'
+          "TestContract"
         end
 
         register_macro(:min) do |macro:|
           min = macro.args[0]
-          key.failure('invalid') if value < min
+          key.failure("invalid") if value < min
         end
 
         params do
@@ -149,27 +149,27 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
       end
     end
 
-    it 'applies rule when an item passed schema checks' do
-      expect(contract.(nums: ['oops', 1, 4, 0]).errors.to_h)
-        .to eql(nums: { 0 => ['must be an integer'], 1 => ['invalid'], 3 => ['invalid'] })
+    it "applies rule when an item passed schema checks" do
+      expect(contract.(nums: ["oops", 1, 4, 0]).errors.to_h)
+        .to eql(nums: {0 => ["must be an integer"], 1 => ["invalid"], 3 => ["invalid"]})
     end
 
-    it 'applies rule to nested values when an item passed schema checks' do
-      expect(contract.(nums: [4], hash: { another_nums: ['oops', 1, 4] }).errors.to_h)
-        .to eql(hash: { another_nums: { 0 => ['must be an integer'], 1 => ['invalid'] } })
+    it "applies rule to nested values when an item passed schema checks" do
+      expect(contract.(nums: [4], hash: {another_nums: ["oops", 1, 4]}).errors.to_h)
+        .to eql(hash: {another_nums: {0 => ["must be an integer"], 1 => ["invalid"]}})
     end
   end
 
-  context 'using a macro with multiple args' do
+  context "using a macro with multiple args" do
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
         def self.name
-          'TestContract'
+          "TestContract"
         end
 
         register_macro(:between) do |macro:|
           min, max = macro.args[0..1]
-          key.failure('invalid') unless (min..max).cover?(value)
+          key.failure("invalid") unless (min..max).cover?(value)
         end
 
         params do
@@ -184,32 +184,32 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
       end
     end
 
-    it 'applies rule when an item passed schema checks' do
-      expect(contract.(nums: ['oops', 4, 0, 6]).errors.to_h)
-        .to eql(nums: { 0 => ['must be an integer'], 2 => ['invalid'], 3 => ['invalid'] })
+    it "applies rule when an item passed schema checks" do
+      expect(contract.(nums: ["oops", 4, 0, 6]).errors.to_h)
+        .to eql(nums: {0 => ["must be an integer"], 2 => ["invalid"], 3 => ["invalid"]})
     end
 
-    it 'applies rule with nested values when an item passed schema checks' do
-      expect(contract.(nums: [4], hash: { another_nums: ['oops', 4, 0] }).errors.to_h)
-        .to eql(hash: { another_nums: { 0 => ['must be an integer'], 2 => ['invalid'] } })
+    it "applies rule with nested values when an item passed schema checks" do
+      expect(contract.(nums: [4], hash: {another_nums: ["oops", 4, 0]}).errors.to_h)
+        .to eql(hash: {another_nums: {0 => ["must be an integer"], 2 => ["invalid"]}})
     end
   end
 
-  context 'using multiple macros with args' do
+  context "using multiple macros with args" do
     let(:contract_class) do
       Class.new(Dry::Validation::Contract) do
         def self.name
-          'TestContract'
+          "TestContract"
         end
 
         register_macro(:min) do |macro:|
           min = macro.args[0]
-          key.failure('invalid') if value < min
+          key.failure("invalid") if value < min
         end
 
         register_macro(:max) do |macro:|
           max = macro.args[0]
-          key.failure('invalid') if value > max
+          key.failure("invalid") if value > max
         end
 
         params do
@@ -224,14 +224,14 @@ RSpec.describe Dry::Validation::Contract, 'Rule#each' do
       end
     end
 
-    it 'applies rules when an item passed schema checks' do
-      expect(contract.(nums: ['oops', 4, 0, 6]).errors.to_h)
-        .to eql(nums: { 0 => ['must be an integer'], 2 => ['invalid'], 3 => ['invalid'] })
+    it "applies rules when an item passed schema checks" do
+      expect(contract.(nums: ["oops", 4, 0, 6]).errors.to_h)
+        .to eql(nums: {0 => ["must be an integer"], 2 => ["invalid"], 3 => ["invalid"]})
     end
 
-    it 'applies rules for nested values when an item passed schema checks' do
-      expect(contract.(nums: [4], hash: { another_nums: ['oops', 4, 0] }).errors.to_h)
-        .to eql(hash: { another_nums: { 0 => ['must be an integer'], 2 => ['invalid'] } })
+    it "applies rules for nested values when an item passed schema checks" do
+      expect(contract.(nums: [4], hash: {another_nums: ["oops", 4, 0]}).errors.to_h)
+        .to eql(hash: {another_nums: {0 => ["must be an integer"], 2 => ["invalid"]}})
     end
   end
 end

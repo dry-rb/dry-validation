@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'suite'
-require 'hotch'
+require_relative "suite"
+require "hotch"
 
 Hotch() do
   1000.times do

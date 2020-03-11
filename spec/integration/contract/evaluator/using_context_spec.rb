@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-RSpec.describe Dry::Validation::Evaluator, 'using context' do
+RSpec.describe Dry::Validation::Evaluator, "using context" do
   before(:all) do
     Dry::Validation.load_extensions(:hints)
   end
 
-  context 'when key does not exist' do
+  context "when key does not exist" do
     subject(:contract) do
       Dry::Validation.Contract do
         schema do
@@ -15,25 +15,25 @@ RSpec.describe Dry::Validation::Evaluator, 'using context' do
 
         rule(:user_id) do |context:|
           if values[:user_id].equal?(312)
-            context[:user] = 'jane'
+            context[:user] = "jane"
           else
-            key(:user).failure('must be jane')
+            key(:user).failure("must be jane")
           end
         end
 
         rule(:email) do |context:|
-          key.failure('is invalid') if context[:user] == 'jane' && values[:email] != 'jane@doe.org'
+          key.failure("is invalid") if context[:user] == "jane" && values[:email] != "jane@doe.org"
         end
       end
     end
 
-    it 'stores new values between rule execution' do
-      expect(contract.(user_id: 3, email: 'john@doe.org').errors.to_h).to eql(user: ['must be jane'])
-      expect(contract.(user_id: 312, email: 'john@doe.org').errors.to_h).to eql(email: ['is invalid'])
+    it "stores new values between rule execution" do
+      expect(contract.(user_id: 3, email: "john@doe.org").errors.to_h).to eql(user: ["must be jane"])
+      expect(contract.(user_id: 312, email: "john@doe.org").errors.to_h).to eql(email: ["is invalid"])
     end
 
-    it 'exposes context in result' do
-      expect(contract.(user_id: 312, email: 'jane@doe.org').context[:user]).to eql('jane')
+    it "exposes context in result" do
+      expect(contract.(user_id: 312, email: "jane@doe.org").context[:user]).to eql("jane")
     end
   end
 end

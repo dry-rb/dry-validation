@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'dry/equalizer'
+require "dry/equalizer"
 
-require 'dry/schema/constants'
-require 'dry/schema/message'
+require "dry/schema/constants"
+require "dry/schema/message"
 
 module Dry
   module Validation

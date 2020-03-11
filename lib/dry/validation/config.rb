@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/schema/config'
-require 'dry/validation/macros'
+require "dry/schema/config"
+require "dry/validation/macros"
 
 module Dry
   module Validation

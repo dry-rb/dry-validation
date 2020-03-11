@@ -13,109 +13,109 @@ RSpec.describe Dry::Validation::Evaluator do
     end
   end
 
-  context 'setting key failures using default rule path' do
+  context "setting key failures using default rule path" do
     before do
       contract_class.rule(:email) do
-        key.failure('is invalid')
+        key.failure("is invalid")
       end
     end
 
-    it 'sets error under specified key' do
-      expect(contract.(email: 'foo').errors.to_h).to eql(email: ['is invalid'])
+    it "sets error under specified key" do
+      expect(contract.(email: "foo").errors.to_h).to eql(email: ["is invalid"])
     end
   end
 
-  context 'setting key failures using via explicit path' do
-    context 'with a string message' do
+  context "setting key failures using via explicit path" do
+    context "with a string message" do
       before do
         contract_class.rule(:email) do
-          key(:contact).failure('is invalid')
+          key(:contact).failure("is invalid")
         end
       end
 
-      it 'sets error under specified key' do
-        expect(contract.(email: 'foo').errors.to_h).to eql(contact: ['is invalid'])
+      it "sets error under specified key" do
+        expect(contract.(email: "foo").errors.to_h).to eql(contact: ["is invalid"])
       end
     end
 
-    context 'with a nested key as a hash and a string message' do
+    context "with a nested key as a hash and a string message" do
       before do
         contract_class.rule(:email) do
-          key(contact: :details).failure('is invalid')
+          key(contact: :details).failure("is invalid")
         end
       end
 
-      it 'sets error under specified key' do
-        expect(contract.(email: 'foo').errors.to_h).to eql(contact: { details: ['is invalid'] })
+      it "sets error under specified key" do
+        expect(contract.(email: "foo").errors.to_h).to eql(contact: {details: ["is invalid"]})
       end
     end
 
-    context 'with a symbol' do
+    context "with a symbol" do
       before do
         contract_class.config.messages.load_paths << SPEC_ROOT
-          .join('fixtures/messages/errors.en.yml').realpath
+          .join("fixtures/messages/errors.en.yml").realpath
 
         contract_class.rule(:email) do
           key(:contact).failure(:wrong)
         end
       end
 
-      it 'sets error under specified key' do
-        expect(contract.(email: 'foo').errors.to_h).to eql(contact: ['not right'])
+      it "sets error under specified key" do
+        expect(contract.(email: "foo").errors.to_h).to eql(contact: ["not right"])
       end
     end
   end
 
-  context 'setting base failures' do
+  context "setting base failures" do
     before do
       contract_class.rule(:email) do
-        base.failure('is invalid')
+        base.failure("is invalid")
       end
     end
 
-    it 'sets error under specified key' do
-      expect(contract.(email: 'foo').errors.to_h).to eql(nil => ['is invalid'])
+    it "sets error under specified key" do
+      expect(contract.(email: "foo").errors.to_h).to eql(nil => ["is invalid"])
     end
   end
 
-  context 'setting failures with meta data' do
+  context "setting failures with meta data" do
     before do
       contract_class.rule(:email) do
-        key.failure(text: 'is invalid', code: 102)
+        key.failure(text: "is invalid", code: 102)
       end
     end
 
-    it 'sets error under specified key' do
-      errors = contract.(email: 'foo').errors
+    it "sets error under specified key" do
+      errors = contract.(email: "foo").errors
 
-      expect(errors.to_h).to eql(email: [text: 'is invalid', code: 102])
+      expect(errors.to_h).to eql(email: [text: "is invalid", code: 102])
       expect(errors.first.meta).to eql(code: 102)
     end
 
-    context 'without :text key' do
+    context "without :text key" do
       before do
         contract_class.rule(:email) do
           key.failure(code: 102)
         end
       end
 
-      it 'raises argument error if no text key provided' do
+      it "raises argument error if no text key provided" do
         expect {
-          contract.(email: 'foo').errors
+          contract.(email: "foo").errors
         }.to raise_error(ArgumentError, /Hash must contain :text key/)
       end
     end
   end
 
-  context 'when localized message id is invalid' do
+  context "when localized message id is invalid" do
     before do
       contract_class.rule(:email) do
         key.failure([:oops_bad_id])
       end
     end
 
-    it 'raises a meaningful error' do
-      expect { contract.(email: 'foo') }.to raise_error(ArgumentError, /oops_bad_id/)
+    it "raises a meaningful error" do
+      expect { contract.(email: "foo") }.to raise_error(ArgumentError, /oops_bad_id/)
     end
   end
 end

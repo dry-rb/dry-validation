@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'dry/container'
-require 'dry/validation/macro'
+require "dry/container"
+require "dry/validation/macro"
 
 module Dry
   module Validation

@@ -13,11 +13,11 @@ RSpec.describe Dry::Validation::Result do
 
   let(:result) { schema.(input) }
 
-  context 'with valid input' do
-    let(:input) { { name: 'Jane' } }
+  context "with valid input" do
+    let(:input) { {name: "Jane"} }
 
-    describe '#to_monad' do
-      it 'returns a Success value' do
+    describe "#to_monad" do
+      it "returns a Success value" do
         monad = result.to_monad
 
         expect(monad).to be_a Dry::Monads::Result
@@ -27,11 +27,11 @@ RSpec.describe Dry::Validation::Result do
     end
   end
 
-  context 'with invalid input' do
-    let(:input) { { name: '' } }
+  context "with invalid input" do
+    let(:input) { {name: ""} }
 
-    describe '#to_monad' do
-      it 'returns a Failure value' do
+    describe "#to_monad" do
+      it "returns a Failure value" do
         monad = result.to_monad
 
         expect(monad).to be_a_failure
