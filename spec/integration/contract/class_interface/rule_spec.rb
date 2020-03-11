@@ -162,7 +162,7 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
       expect { contract_class.rule(invalid: %i[wrong not_here]) }
         .to raise_error(
           Dry::Validation::InvalidKeysError,
-          "TestContract.rule specifies keys that are not defined by the schema: [[:invalid, :wrong], [:invalid, :not_here]]"
+          'TestContract.rule specifies keys that are not defined by the schema: [{:invalid=>[:wrong, :not_here]}]'
         )
     end
   end

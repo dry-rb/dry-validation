@@ -155,32 +155,42 @@ module Dry
 
         # @api private
         def ensure_valid_keys(*keys)
-          valid_paths = key_map.to_dot_notation.map { |value| Schema::Path[value] }
+          valid_paths = key_map.to_dot_notation
+          key_paths = key_paths(keys)
 
-          invalid_keys = keys
-            .map { |key|
-              [key, Schema::Path[key]]
-            }
-            .flat_map { |(key, path)|
-              if (last = path.last).is_a?(Array)
-                last.map { |last_key|
-                  path_key = [*path.to_a[0..-2], last_key]
-                  [path_key, Schema::Path[path_key]]
-                }
-              else
-                [[key, path]]
-              end
-            }
-            .reject { |(_, path)|
-              valid_paths.any? { |valid_path| valid_path.include?(path) }
-            }
-            .map(&:first)
+          invalid_keys = key_paths.map { |(key, path)|
+            unless valid_paths.any? { |vp| vp.include?(path) || vp.include?("#{path}[]") }
+              key
+            end
+          }.compact.uniq
 
           return if invalid_keys.empty?
 
           raise InvalidKeysError, <<~STR.strip
             #{name}.rule specifies keys that are not defined by the schema: #{invalid_keys.inspect}
           STR
+        end
+
+        # @api private
+        def key_paths(keys)
+          keys.map { |key|
+            case key
+            when Hash
+              path = Schema::Path[key]
+              if path.multi_value?
+                *head, tail = Array(path)
+                [key].product(
+                  tail.map { |el| [*head, *el] }.map { |parts| parts.join(DOT) }
+                )
+              else
+                [[key, path.to_a.join(DOT)]]
+              end
+            when Array
+              [[key, Schema::Path[key].to_a.join(DOT)]]
+            else
+              [[key, key.to_s]]
+            end
+          }.flatten(1)
         end
 
         # @api private
