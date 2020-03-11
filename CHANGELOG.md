@@ -1,4 +1,4 @@
-## unreleased 
+## 1.5.0 2020-03-11
 
 
 ### Added
@@ -11,7 +11,7 @@
 - dry-schema dependency was bumped to `~> 1.5` (@solnic)
 - [internal] `KeyMap` patches have been removed since dry-schema now provides required functionality (@solnic)
 
-[Compare v1.4.2...master](https://github.com/dry-rb/dry-validation/compare/v1.4.2...master)
+[Compare v1.4.2...v1.5.0](https://github.com/dry-rb/dry-validation/compare/v1.4.2...v1.5.0)
 
 ## 1.4.2 2020-01-18
 
