@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: gem install ossy --no-document
       - name: Compile file templates
-        run: tmp/devtools/bin/compile-templates $GITHUB_REPOSITORY
+        run: tmp/devtools/bin/compile-templates
       - name: Update workflow files from devtools
         run: tmp/devtools/bin/sync-workflows
       - name: Update configuration files from devtools
