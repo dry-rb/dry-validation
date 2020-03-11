@@ -2,7 +2,7 @@
 
 # this file is managed by dry-rb/devtools project
 
-require 'warning'
+require "warning"
 
 Warning.ignore(%r{rspec/core})
 Warning.ignore(%r{rspec/mocks})
