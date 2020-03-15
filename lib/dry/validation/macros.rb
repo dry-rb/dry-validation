@@ -25,7 +25,7 @@ module Dry
         #   end
         #
         # @param [Symbol] name The name of the macro
-        # @param [Array] *args Optional default arguments for the macro
+        # @param [Array] args Optional default positional arguments for the macro
         #
         # @return [self]
         #

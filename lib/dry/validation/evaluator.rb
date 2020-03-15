@@ -146,7 +146,7 @@ module Dry
       #
       # @return [Object]
       #
-      # @public
+      # @api public
       def value
         values[key_name]
       end
@@ -169,7 +169,7 @@ module Dry
 
       # Check if there are any errors on the schema under the provided path
       #
-      # @param [Symbol, String, Array] A Path-compatible spec
+      # @param path [Symbol, String, Array] A Path-compatible spec
       #
       # @return [Boolean]
       #
