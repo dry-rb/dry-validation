@@ -10,4 +10,4 @@ Gemfile.lock
 *.gem
 doc
 .yardoc/
-
+.vscode
