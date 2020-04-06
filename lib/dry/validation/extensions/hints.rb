@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/monads/result"
-
 module Dry
   module Validation
     # Hints extension
