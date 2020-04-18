@@ -77,7 +77,7 @@ result = contract.call('email' => 'jane@doe.org', 'age' => '21')
 # => #<Dry::Validation::Result{:email=>"jane@doe.org", :age=>"21"} errors={:age=>["must be an integer"]}>
 
 result = contract.call('email' => 'jane@doe.org', 'age' => 21)
-# => #<Dry::Validation::Result{:email=>"jane@doe.org", :age=>"21"} errors={}>
+# => #<Dry::Validation::Result{:email=>"jane@doe.org", :age=>21} errors={}>
 
 result.to_h
 # => {:email=>"jane@doe.org", :age=>21}
@@ -110,8 +110,10 @@ end
 
 contract = NewUserContract.new
 
-contract.(name: "Jane", age: "31", email: "jane@doe.org", country: "foo")# #<Dry::Validation::Result{:name=>"Jane", :age=>31, :email=>"jane@doe.org",
-#   :country=>"foo"} errors={:zipcode=>["is missing"], :street=>["is missing"],#   :mobile=>["is missing"]}>
+contract.(name: "Jane", age: "31", email: "jane@doe.org", country: "foo")
+# => #<Dry::Validation::Result{:name=>"Jane", :age=>31, :email=>"jane@doe.org",
+#   :country=>"foo"} errors={:zipcode=>["is missing"], :street=>["is missing"],
+#   :mobile=>["is missing"]}>
 ```
 
 The coercion logic is different to `params`. For example, since JSON natively supports integers, it will not coerce them from strings:
@@ -121,7 +123,7 @@ result = contract.call('email' => 'jane@doe.org', 'age' => '21')
 # => #<Dry::Validation::Result{:email=>"jane@doe.org", :age=>"21"} errors={:age=>["must be an integer"]}>
 
 result = contract.call('email' => 'jane@doe.org', 'age' => 21)
-# => #<Dry::Validation::Result{:email=>"jane@doe.org", :age=>"21"} errors={}>
+# => #<Dry::Validation::Result{:email=>"jane@doe.org", :age=>21} errors={}>
 
 result.to_h
 # => {:email=>"jane@doe.org", :age=>21}
