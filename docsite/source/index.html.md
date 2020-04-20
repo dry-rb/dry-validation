@@ -22,7 +22,7 @@ Validations are expressed through contract objects. A contract specifies a schem
 
 There are a couple of unique features that make `dry-validation` stand out from the crowd:
 
-- Strict, explicit data schemas are separated from the domain validation logic - this allows you define validation rules that are **type safe** and focus exclusively on validation logic. This in turn makes rule code much simpler and easier to understand
+- Strict, explicit data schemas are separated from the domain validation logic - this allows you to define validation rules that are **type safe** and focus exclusively on validation logic. This in turn makes rule code much simpler and easier to understand
 - Schemas are powered by [`dry-schema`](/gems/dry-schema) which **sanitizes, coerces and type-checks** the input for you
 - Contracts support defining macros, which can **significantly reduce code duplication** in your rules
 - Plays nice with dependency injection, using either `option` API or automated approach via `dry-auto_inject`
