@@ -47,7 +47,7 @@ class NewUserContract < Dry::Validation::Contract
 end
 ```
 
-The major difference between `params` and the plain `schema` is that `params` latter will perform params-specific coercions before applying the contract's rules. For example, it will coerce strings into integers:
+The major difference between `params` and the plain `schema` is that `params` will perform params-specific coercions before applying the contract's rules. For example, it will coerce strings into integers:
 
 ``` ruby
 result = contract.call('email' => 'jane@doe.org', 'age' => '21')
