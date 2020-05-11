@@ -6,6 +6,8 @@ name: dry-validation
 
 It's common to use external services that are needed for various validation rules. A good example is using objects that give you access to the database. Whenever you need to access such services, you can levarage `Dry::Validation::Contract.option`.
 
+> The `option` method is provided by [dry-initializer](/gems/dry-initializer).
+
 Let's say you use an API client object that can perform address validation - we can define it as an external dependency that will be injected to the contract's constructor:
 
 ```ruby
