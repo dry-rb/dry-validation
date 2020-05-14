@@ -132,4 +132,34 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
       end
     end
   end
+
+  context "with a double nested array of hashes" do
+    let(:contract_class) do
+      Class.new(Dry::Validation::Contract) do
+        params do
+          required(:outer).array(:hash) do
+            required(:inner).array(:hash) do
+              required(:attr).filled(:integer)
+            end
+          end
+        end
+
+        rule(:outer).each do
+          value[:inner].each_with_index do |inner, idx|
+            inner_nested_key = key(key.path.keys + [:inner, idx])
+            inner_nested_key.failure("Inner specific failure")
+          end
+
+          inner_key = key(key.path.keys + [:inner])
+          inner_key.failure('Inner generic failure')
+        end
+      end
+    end
+
+    it "allows setting errors on both attribute itself and its children" do
+      expect(contract.(outer: [{ inner: [{ attr: 123 }] }]).errors.to_h).to eql(
+        outer: { 0 => { inner: [['Inner generic failure'], { 0 => ['Inner specific failure'] }] } }
+      )
+    end
+  end
 end
