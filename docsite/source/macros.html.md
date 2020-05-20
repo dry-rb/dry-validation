@@ -48,6 +48,31 @@ class NewUserContract < ApplicationContract
 end
 ```
 
+### Using `i18n` backend with macros
+
+If you want to provide a message for your macro, you need to set it under `errors.%{your_macro}` path in the messages yaml file. Using our example with `:email_format` macro, here's how it would look like:
+
+```yaml
+en:
+  dry_validation:
+    errors:
+      email_format: "not a valid email format"
+```
+
+Then the macro definition needs to use the same identifier when setting a failure message:
+
+```ruby
+class ApplicationContract < Dry::Validation::Contract
+  config.messages.backend = :i18n
+
+  register_macro(:email_format) do
+    unless /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i.match?(value)
+      key.failure(:email_format)
+    end
+  end
+end
+```
+
 ### Macro with options
 
 If you want a macro to be parameterized, you can achieve that by passing a hash with options where the keys are macro identifiers. This way you will have access to macro arguments in the rule block. Here's an example how we could define a macro that checks a minimum size of an array, where we pass the minimum size as an option.
