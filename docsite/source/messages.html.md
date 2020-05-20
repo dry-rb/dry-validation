@@ -112,7 +112,9 @@ contract.call(name: "").errors(full: true).to_h
 # => {:name=>["First name must be filled"]}
 ```
 
-> Schema messages **use the same top-level namespace** as rule messages, remember about this if you want to customize messages for schema predicate failures.
+^INFO
+Schema messages **use the same top-level namespace** as rule messages, remember about this if you want to customize messages for schema predicate failures.
+^
 
 ### Learn more
 
