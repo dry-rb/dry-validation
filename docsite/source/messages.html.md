@@ -86,7 +86,35 @@ contract.call(age: 17).errors.to_h
 # => {:age=>["must be greater than 18"]}
 ```
 
-> Schema messages **use the same top-level namespace** as rule messages, remember about this if you want to customize messages for schema predicate failures.
+#### Using `:full` option with a translated key
+
+If you want to have key names included in the generated messages, you can use `full` option. It requires you to include localized key names in your messages yaml config. Let's say you have a key called `:name` and you want it to appear as `"First name"`:
+
+```yaml
+en:
+  dry_validation:
+    rules:
+      name: "First name"
+```
+
+Then, you can simply use the `full` option to get the key translated and included in error messages:
+
+```ruby
+class NewUserContract < Dry::Validation::Contract
+  params do
+    required(:name).filled(:string)
+  end
+end
+
+contract = NewUserContract.new
+
+contract.call(name: "").errors(full: true).to_h
+# => {:name=>["First name must be filled"]}
+```
+
+^INFO
+Schema messages **use the same top-level namespace** as rule messages, remember about this if you want to customize messages for schema predicate failures.
+^
 
 ### Learn more
 
