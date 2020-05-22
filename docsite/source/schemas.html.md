@@ -116,19 +116,6 @@ contract.(name: "Jane", age: "31", email: "jane@doe.org", country: "foo")
 #   :mobile=>["is missing"]}>
 ```
 
-The coercion logic is different to `params`. For example, since JSON natively supports integers, it will not coerce them from strings:
-
-``` ruby
-result = contract.call('email' => 'jane@doe.org', 'age' => '21')
-# => #<Dry::Validation::Result{:email=>"jane@doe.org", :age=>"21"} errors={:age=>["must be an integer"]}>
-
-result = contract.call('email' => 'jane@doe.org', 'age' => 21)
-# => #<Dry::Validation::Result{:email=>"jane@doe.org", :age=>21} errors={}>
-
-result.to_h
-# => {:email=>"jane@doe.org", :age=>21}
-```
-
 ### Using custom types
 
 When you define a schema using `params` or `json`, the coercion logic is handled by type objects that are resolved from the type specifications within  the schema. For example, when you use `params` and define the type to be an `:integer`, then the resolved type will be `Dry::Schema::Types::Params::Integer`. This is just a convenience to make schema definition more concise.
