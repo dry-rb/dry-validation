@@ -41,8 +41,7 @@ module Dry
         return self if new_options.empty? && other.eql?(messages)
 
         self.class.new(
-          other | select { |err| err.is_a?(Message) }
-                  .map {|err| new_options.fetch(:full, false) ? err.full_message : err },
+          other | select { |err| err.is_a?(Message) },
           options.merge(source: source_messages, **new_options)
         ).freeze
       end

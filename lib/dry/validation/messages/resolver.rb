@@ -33,7 +33,7 @@ module Dry
           when Symbol
             Message[->(**opts) { message(message, path: path, tokens: tokens, **opts) }, path, meta]
           when String
-            Message[message, path, meta]
+            Message[->(**opts) { [message_text(message, path, **opts), meta] }, path, meta]
           when Hash
             meta = message.dup
             text = meta.delete(:text) { |key|
@@ -50,6 +50,18 @@ module Dry
           end
         end
         alias_method :[], :call
+
+        # Resolve a message
+        #
+        # @return String
+        #
+        # @api public
+        def message_text(message, path, locale: nil, full: false, **opts)
+          keys = path.to_a.compact
+          msg_opts = EMPTY_HASH.merge(path: keys, locale: locale || messages.default_locale)
+
+          full ? "#{messages.rule(keys.last, msg_opts) || keys.last} #{message}" : message
+        end
 
         # Resolve a message
         #

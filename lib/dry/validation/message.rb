@@ -85,19 +85,6 @@ module Dry
         @base ||= path.compact.empty?
       end
 
-      # Build full message
-      #
-      # @return [Message]
-      #
-      # @api public
-      def full_message
-        if base?
-          self
-        else
-          Message["#{path.compact.join(',')} #{text}", path, meta]
-        end
-      end
-
       # Dump error to a string
       #
       # @return [String]
