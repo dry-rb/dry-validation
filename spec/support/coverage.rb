@@ -3,7 +3,12 @@
 # this file is managed by dry-rb/devtools
 
 if ENV["COVERAGE"] == "true"
-  require "codacy-coverage"
+  require "simplecov"
+  require "simplecov-cobertura"
 
-  Codacy::Reporter.start
+  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
+
+  SimpleCov.start do
+    add_filter "/spec/"
+  end
 end
