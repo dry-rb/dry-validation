@@ -4,6 +4,7 @@
 ### Fixed
 
 - dry-monads no longer required for the `:hints` extension (@schokomarie)
+- Usign `full: true` option works as expected with custom rule messages (issue #618 fixed via #651) (@sirfilip)
 
 
 [Compare v1.5.0...master](https://github.com/dry-rb/dry-validation/compare/v1.5.0...master)
