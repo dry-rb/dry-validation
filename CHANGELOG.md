@@ -1,4 +1,4 @@
-## 1.5.1 unreleased
+## unreleased 
 
 
 ### Fixed
@@ -6,7 +6,7 @@
 - dry-monads no longer required for the `:hints` extension (@schokomarie)
 
 
-[Compare v1.5.0...v1.5.1](https://github.com/dry-rb/dry-validation/compare/v1.5.0...v1.5.1)
+[Compare v1.5.0...master](https://github.com/dry-rb/dry-validation/compare/v1.5.0...master)
 
 ## 1.5.0 2020-03-11
 
