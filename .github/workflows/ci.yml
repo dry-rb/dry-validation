@@ -62,7 +62,7 @@ jobs:
       if: env.COVERAGE == 'true'
       with:
         project-token: "${{secrets.CODACY_PROJECT_TOKEN}}"
-        coverage-reports: coverage/coverage.xm
+        coverage-reports: coverage/coverage.xml
   release:
     runs-on: ubuntu-latest
     if: contains(github.ref, 'tags') && github.event_name == 'create'
