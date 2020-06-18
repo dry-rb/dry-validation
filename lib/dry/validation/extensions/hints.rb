@@ -44,7 +44,7 @@ module Dry
         #
         # @api public
         def messages(new_options = EMPTY_HASH)
-          errors.with(hints.to_a, options.merge(**new_options))
+          errors.with(hints(new_options).to_a, options.merge(**new_options))
         end
 
         # Return hint messages

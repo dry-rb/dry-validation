@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'stringio'
 
 RSpec.describe Dry::Validation::Result do
   before { Dry::Validation.load_extensions(:hints) }
@@ -51,6 +52,32 @@ RSpec.describe Dry::Validation::Result do
     describe "#messages" do
       it "returns hints + error messages" do
         expect(result.messages.to_h).to eql(name: ["must be filled", "length must be within 2 - 4"])
+      end
+
+      describe 'yaml translations backend' do
+        let (:yaml_messages) do
+          <<~HEREDOC
+          en:
+            dry_validation:
+              errors:
+                filled?: "must be filled"
+                size?: "length must be within 2 - 4"
+
+          de:
+            dry_validation:
+              errors:
+                filled?: "de - must be filled"
+                size?: "de - length must be within 2 - 4"
+          HEREDOC
+        end
+
+        it 'returns the correct translations' do
+          allow(YAML).to receive(:load_file).and_return(YAML.load(StringIO.new(yaml_messages)))
+          expect(result.errors(locale: :de).to_h).to eql(name: ['de - must be filled'])
+          expect(result.messages(locale: :de).to_h).to eql(name: ["de - must be filled", "de - length must be within 2 - 4"])
+          expect(result.errors(locale: :en).to_h).to eql(name: ['must be filled'])
+          expect(result.messages(locale: :en).to_h).to eql(name: ["must be filled", "length must be within 2 - 4"])
+        end
       end
     end
 
