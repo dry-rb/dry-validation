@@ -1,8 +1,9 @@
 ---
 - version: unreleased
   fixed:
-  - dry-monads no longer required for the `:hints` extension (@schokomarie)
+  - "dry-monads no longer required for the `:hints` extension (@schokomarie)"
   - "Using `full: true` option works as expected with custom rule messages (issue #618 fixed via #651) (@sirfilip)"
+  - "Using `locale: ...` option works as expected with hints (issue #589 fixed via #652) (@sirfilip)"
 - version: 1.5.0
   summary:
   date: '2020-03-11'
