@@ -5,6 +5,7 @@
 
 - dry-monads no longer required for the `:hints` extension (@schokomarie)
 - Using `full: true` option works as expected with custom rule messages (issue #618 fixed via #651) (@sirfilip)
+- Using `locale: ...` option works as expected with hints (issue #589 fixed via #652) (@sirfilip)
 
 
 [Compare v1.5.0...master](https://github.com/dry-rb/dry-validation/compare/v1.5.0...master)
