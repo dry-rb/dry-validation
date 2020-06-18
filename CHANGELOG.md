@@ -1,4 +1,4 @@
-## unreleased 
+## 1.5.1 2020-06-18
 
 
 ### Fixed
@@ -8,7 +8,7 @@
 - Using `locale: ...` option works as expected with hints (issue #589 fixed via #652) (@sirfilip)
 
 
-[Compare v1.5.0...master](https://github.com/dry-rb/dry-validation/compare/v1.5.0...master)
+[Compare v1.5.0...v1.5.1](https://github.com/dry-rb/dry-validation/compare/v1.5.0...v1.5.1)
 
 ## 1.5.0 2020-03-11
 
