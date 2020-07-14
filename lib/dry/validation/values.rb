@@ -68,6 +68,8 @@ module Dry
           if e.is_a?(Array)
             result = e.all? { |k| key?(k, a) }
             return result
+          elsif e.is_a?(Symbol) && a.is_a?(Array)
+            return false
           else
             return false unless a.is_a?(Array) ? (e >= 0 && e < a.size) : a.key?(e)
           end
