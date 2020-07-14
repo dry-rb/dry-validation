@@ -80,6 +80,10 @@ RSpec.describe Dry::Validation::Values do
     it "returns false when a path to an array element is not present" do
       expect(values.key?([:phones, 5])).to be(false)
     end
+
+    it "returns false when a path to an array is a symbol as its last segment" do
+      expect(values.key?([:phones, :foo])).to be(false)
+    end
   end
 
   describe "#dig" do
