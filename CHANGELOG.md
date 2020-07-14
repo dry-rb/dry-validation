@@ -1,3 +1,13 @@
+## 1.5.2 2020-07-14
+
+
+### Fixed
+
+- `key?` predicate in rules no longer crashes when the rule path points to a non-existent array value (issue #653 fixed via #654) (@solnic)
+
+
+[Compare v1.5.1...v1.5.2](https://github.com/dry-rb/dry-validation/compare/v1.5.1...v1.5.2)
+
 ## 1.5.1 2020-06-18
 
 
@@ -5,21 +15,7 @@
 
 - dry-monads no longer required for the `:hints` extension (@schokomarie)
 - Using `full: true` option works as expected with custom rule messages (issue #618 fixed via #651) (@sirfilip)
-- Using `locale: ...` option works as expected with hints (issue #589 fixed via #652) (@sirfilip)
-- `key?` predicate in rules no longer crashes when the rule path points to a non-existent array value (issue #653 fixed via #654) (@solnic)
-
-
-[Compare v1.5.1...v1.5.1](https://github.com/dry-rb/dry-validation/compare/v1.5.1...v1.5.1)
-
-## 1.5.1 2020-06-18
-
-
-### Fixed
-
-- dry-monads no longer required for the `:hints` extension (@schokomarie)
-- Using `full: true` option works as expected with custom rule messages (issue #618 fixed via #651) (@sirfilip)
-- Using `locale: ...` option works as expected with hints (issue #589 fixed via #652) (@sirfilip)
-- `key?` predicate in rules no longer crashes when the rule path points to a non-existent array value (issue #653 fixed via #654) (@solnic)
+- Using `locale: ...` option works as expected with hints (issue #589 fixed via 652) (@sirfilip)
 
 
 [Compare v1.5.0...v1.5.1](https://github.com/dry-rb/dry-validation/compare/v1.5.0...v1.5.1)
