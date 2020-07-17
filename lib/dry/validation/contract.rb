@@ -123,14 +123,14 @@ module Dry
           return path.expand.any? { |nested_path| error?(result, nested_path) }
         end
 
-        return true if result.error?(path)
+        return true if result.schema_error?(path)
 
         path
           .to_a[0..-2]
           .any? { |key|
             curr_path = Schema::Path[path.keys[0..path.keys.index(key)]]
 
-            return false unless result.error?(curr_path)
+            return false unless result.schema_error?(curr_path)
 
             result.errors.any? { |err|
               (other = Schema::Path[err.path]).same_root?(curr_path) && other == curr_path

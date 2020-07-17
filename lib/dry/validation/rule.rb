@@ -86,7 +86,7 @@ module Dry
             values[root].each_with_index do |_, idx|
               path = [*Schema::Path[root].to_a, idx]
 
-              next if result.error?(path)
+              next if result.schema_error?(path)
 
               evaluator = with(macros: macros, keys: [path], &block)
 

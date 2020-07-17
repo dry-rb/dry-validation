@@ -50,6 +50,33 @@ RSpec.describe Dry::Validation::Result do
     end
   end
 
+  describe "#error?" do
+    subject { result }
+
+    let(:schema_result) do
+      double(:schema_result, message_set: [], to_h: {email: "jane@doe.org"})
+    end
+
+    let(:result) do
+      Dry::Validation::Result.new(schema_result) do |r|
+        r.add_error(Dry::Validation::Message.new("root error", path: [nil]))
+        r.add_error(Dry::Validation::Message.new("email error", path: [:email]))
+      end
+    end
+
+    it "reports an error on email" do
+      expect(subject.error?(:email)).to eq true
+    end
+
+    it "reports an error on 'root' when asked for [nil]" do
+      expect(subject.error?([nil])).to eq true
+    end
+
+    it "doesn't report errors on non existing keys" do
+      expect(subject.error?(:nonexistant)).to eq false
+    end
+  end
+
   describe "#inspect" do
     let(:params) do
       double(:params, message_set: [], to_h: {})

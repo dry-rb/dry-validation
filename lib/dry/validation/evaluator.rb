@@ -175,7 +175,7 @@ module Dry
       #
       # @api public
       def schema_error?(path)
-        result.error?(path)
+        result.schema_error?(path)
       end
 
       # Check if there are any errors on the current rule
