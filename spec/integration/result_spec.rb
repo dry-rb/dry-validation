@@ -51,8 +51,6 @@ RSpec.describe Dry::Validation::Result do
   end
 
   describe "#error?" do
-    subject { result }
-
     let(:schema_result) do
       double(:schema_result, message_set: [], to_h: {email: "jane@doe.org"})
     end
@@ -65,15 +63,15 @@ RSpec.describe Dry::Validation::Result do
     end
 
     it "reports an error on email" do
-      expect(subject.error?(:email)).to eq true
+      expect(result.error?(:email)).to be(true)
     end
 
-    it "reports an error on 'root' when asked for [nil]" do
-      expect(subject.error?([nil])).to eq true
+    it "reports an error on 'root' when asked for nil" do
+      expect(result.error?([nil])).to be(true)
     end
 
     it "doesn't report errors on non existing keys" do
-      expect(subject.error?(:nonexistant)).to eq false
+      expect(result.error?(:nonexistant)).to be(false)
     end
   end
 
