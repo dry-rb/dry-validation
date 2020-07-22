@@ -1,3 +1,12 @@
+## unreleased 
+
+
+### Changed
+
+- `Result#error?` is now a public API and it takes into consideration both schema and rule errors (issue #655 fixed via #656) (@PragTob)
+
+[Compare v1.5.2...master](https://github.com/dry-rb/dry-validation/compare/v1.5.2...master)
+
 ## 1.5.2 2020-07-14
 
 
