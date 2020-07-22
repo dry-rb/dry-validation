@@ -101,8 +101,15 @@ module Dry
 
       # Check if values include an error for the provided key
       #
-      # @api private
+      # @api public
       def error?(key)
+        errors.any? { |msg| Schema::Path[msg.path].include?(Schema::Path[key]) }
+      end
+
+      # Check if the base schema (without rules) includes an error for the provided key
+      #
+      # @api private
+      def schema_error?(key)
         schema_result.error?(key)
       end
 
