@@ -91,7 +91,7 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
         let(:contract_class) do
           Class.new(Dry::Validation::Contract) do
             params do
-              required(:addresses).array do
+              required(:addresses).array(:hash) do
                 required(:phone).value(:string)
               end
             end
@@ -101,11 +101,11 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
               key.failure("invalid list")
             end
           end
+        end
 
-          it "produces an error for all paths" do
-            expect(contract.(addresses: [{phone: "+48123"}]).errors.to_h)
-              .to eql(addresses: {0 => [["invalid list"], [{phone: "invalid phone"}]]})
-          end
+        it "produces an error for all paths" do
+          expect(contract.(addresses: [{phone: "+48123"}]).errors.to_h)
+            .to eql(addresses: {0 => [["invalid list"], {phone: ["invalid phone"]}]})
         end
       end
 
