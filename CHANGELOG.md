@@ -1,6 +1,10 @@
 ## unreleased 
 
 
+### Added
+
+- You can now access current value's index via `rule(:foo).each do |index:|` (issue #657 done via #657) (@mrbongiolo)
+
 ### Changed
 
 - `Result#error?` is now a public API and it takes into consideration both schema and rule errors (issue #655 fixed via #656) (@PragTob)
