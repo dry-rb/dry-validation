@@ -5,6 +5,10 @@
 
 - You can now access current value's index via `rule(:foo).each do |index:|` (issue #606 done via #657) (@mrbongiolo)
 
+### Fixed
+
+- Using `.each(:foo)` works as expected when there are errors related to other keys (issue #659 fixed via #660) (@solnic)
+
 ### Changed
 
 - `Result#error?` is now a public API and it takes into consideration both schema and rule errors (issue #655 fixed via #656) (@PragTob)
