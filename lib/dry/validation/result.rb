@@ -123,7 +123,7 @@ module Dry
           key_path = Schema::Path[key]
           err_path = Schema::Path[error.path]
 
-          return false unless key_path.same_root?(err_path)
+          next unless key_path.same_root?(err_path)
 
           key_path == err_path
         }
