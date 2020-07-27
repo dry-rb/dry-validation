@@ -3,7 +3,7 @@
 
 ### Added
 
-- You can now access current value's index via `rule(:foo).each do |index:|` (issue #657 done via #657) (@mrbongiolo)
+- You can now access current value's index via `rule(:foo).each do |index:|` (issue #606 done via #657) (@mrbongiolo)
 
 ### Changed
 
