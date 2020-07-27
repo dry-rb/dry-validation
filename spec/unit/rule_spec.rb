@@ -37,5 +37,17 @@ RSpec.describe Dry::Validation::Contract, '.rule' do
         tags: ['tags must have at least 1 element']
       )
     end
+
+    context "when using .each macro" do
+      it "allows access to index of each member" do
+        contract_class.rule(:tags).each do |index:|
+          key([:tags, index, :name]).failure("must be Bilbo Bolseiro") unless value[:name] == "Bilbo Bolseiro"
+        end
+
+        expect(contract.(tags: [{name: "Parker Peter"}]).errors.to_h).to eql(
+          tags: {0 => {name: ["must be Bilbo Bolseiro"]}}
+        )
+      end
+    end
   end
 end
