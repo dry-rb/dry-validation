@@ -46,6 +46,28 @@ RSpec.describe Dry::Validation::Messages::Resolver, "#message" do
             Message template for :not_here under "email" was not found
           STR
       end
+
+      context "with full: true option" do
+        it "returns full message text for base rule" do
+          expect(resolver.message(:not_weekend, path: [nil], locale: locale, full: true))
+            .to eql(["this only works on weekends", {}])
+        end
+
+        it "returns message text with translated key name" do
+          expect(resolver.message(:format, path: [:email], locale: locale, full: true))
+            .to eql(["E-mail has invalid format", {}])
+        end
+
+        it "supports untranslated key names" do
+          expect(resolver.message(:format, path: [:non_translated_key], locale: locale, full: true))
+            .to eql(["non_translated_key has invalid format", {}])
+        end
+
+        it "returns full message text for nested rule" do
+          expect(resolver.message(:invalid, path: %i[address street], locale: locale, full: true))
+            .to eql(["street doesn't look good", {}])
+        end
+      end
     end
 
     context ":pl" do
@@ -69,6 +91,39 @@ RSpec.describe Dry::Validation::Messages::Resolver, "#message" do
       it "returns message text for nested rule" do
         expect(resolver.message(:invalid, path: %i[address street], locale: locale))
           .to eql(["nie wygląda dobrze", {}])
+      end
+
+      context "with full: true option" do
+        it "returns full message text for base rule" do
+          expect(resolver.message(:not_weekend, path: [nil], locale: locale, full: true))
+            .to eql(["to działa tylko w weekendy", {}])
+        end
+
+        it "returns message text with translated key name" do
+          expect(resolver.message(:format, path: [:email], locale: locale, full: true))
+            .to eql(["E-mail ma nieprawidłowy format", {}])
+        end
+
+        it "supports untranslated key names" do
+          expect(resolver.message(:format, path: [:non_translated_key], locale: locale, full: true))
+            .to eql(["non_translated_key ma nieprawidłowy format", {}])
+        end
+
+        it "returns full message text for nested rule" do
+          expect(resolver.message(:invalid, path: %i[address street], locale: locale, full: true))
+            .to eql(["street nie wygląda dobrze", {}])
+        end
+      end
+    end
+
+    context ":ja" do
+      let(:locale) { :ja }
+
+      context "with full: true option" do
+        it "returns full message text with defined whitespace character" do
+          expect(resolver.message(:filled?, path: [:email], locale: locale, full: true))
+            .to eql(["Eメールは必須入力です", {}])
+        end
       end
     end
   end

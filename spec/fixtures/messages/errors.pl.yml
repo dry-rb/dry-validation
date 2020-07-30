@@ -1,6 +1,9 @@
 pl:
   dry_validation:
+    rules:
+      email: "E-mail"
     errors:
+      format: "ma nieprawidłowy format"
       rules:
         not_weekend: "to działa tylko w weekendy"
         email:
