@@ -3,6 +3,7 @@ en:
     rules:
       email: "E-mail"
     errors:
+      format: "has invalid format"
       rules:
         not_weekend: "this only works on weekends"
         email:
