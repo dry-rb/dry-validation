@@ -8,6 +8,7 @@
 ### Fixed
 
 - Using `.each(:foo)` works as expected when there are errors related to other keys (issue #659 fixed via #660) (@solnic)
+- Full messages work correctly with rule failures now (issue #661 fixed via #662) (@stind)
 
 ### Changed
 
