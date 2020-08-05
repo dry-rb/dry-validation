@@ -1,12 +1,14 @@
 ---
+- version: unreleased
+  fixed:
+  - 'Full messages work correctly with rule failures now (issue #661 fixed via #662)
+    (@stind)'
 - version: 1.5.3
-  summary: 
+  summary:
   date: '2020-07-27'
   fixed:
   - 'Using `.each(:foo)` works as expected when there are errors related to other
     keys (issue #659 fixed via #660) (@solnic)'
-  - 'Full messages work correctly with rule failures now (issue #661 fixed via #662)
-    (@stind)'
   added:
   - 'You can now access current value''s index via `rule(:foo).each do |index:|` (issue
     #606 done via #657) (@mrbongiolo)'
@@ -14,7 +16,7 @@
   - "`Result#error?` is now a public API and it takes into consideration both schema
     and rule errors (issue #655 fixed via #656) (@PragTob)"
 - version: 1.5.2
-  summary: 
+  summary:
   date: '2020-07-14'
   fixed:
   - "`key?` predicate in rules no longer crashes when the rule path points to a non-existent
@@ -28,9 +30,9 @@
   - 'Using `locale: ...` option works as expected with hints (issue #589 fixed via
     652) (@sirfilip)'
 - version: 1.5.0
-  summary: 
+  summary:
   date: '2020-03-11'
-  fixed: 
+  fixed:
   added:
   - "`schema_error?` rule helper (@waiting-for-dev)"
   - "`rule_error?` rule helper (@waiting-for-dev)"
