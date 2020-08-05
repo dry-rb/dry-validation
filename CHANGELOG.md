@@ -1,3 +1,13 @@
+## unreleased 
+
+
+### Fixed
+
+- Full messages work correctly with rule failures now (issue #661 fixed via #662) (@stind)
+
+
+[Compare v1.5.3...master](https://github.com/dry-rb/dry-validation/compare/v1.5.3...master)
+
 ## 1.5.3 2020-07-27
 
 
@@ -8,7 +18,6 @@
 ### Fixed
 
 - Using `.each(:foo)` works as expected when there are errors related to other keys (issue #659 fixed via #660) (@solnic)
-- Full messages work correctly with rule failures now (issue #661 fixed via #662) (@stind)
 
 ### Changed
 
