@@ -12,7 +12,7 @@ RSpec.describe Dry::Validation::Evaluator do
   end
 
   let(:options) do
-    {keys: [:email], result: {}, values: values, _context: {}}
+    {keys: [:email, :name], result: {}, values: values, _context: {}}
   end
 
   let(:values) do
@@ -44,6 +44,22 @@ RSpec.describe Dry::Validation::Evaluator do
       it "forwards to the contract" do
         expect(evaluator.failures[0][:message]).to eql("message with my_contract")
       end
+    end
+  end
+
+  describe "#key?" do
+    subject(:evaluator) do
+      Dry::Validation::Evaluator.new(contract, **options)
+    end
+
+    it "delegates to #values" do
+      expect(values).to receive(:key?).with(:name)
+      evaluator.key?(:name)
+    end
+
+    it "uses #key_name as the default argument" do
+      expect(values).to receive(:key?).with(:email)
+      evaluator.key?
     end
   end
 end
