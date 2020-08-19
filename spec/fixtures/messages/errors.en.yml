@@ -17,3 +17,5 @@ en:
           wrong: "not right"
         age:
           toddler: "should be included in %{list}"
+        small_integers:
+          too_big: "is too big!"
