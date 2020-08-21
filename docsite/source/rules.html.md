@@ -181,6 +181,23 @@ contract.call(email: 'jane@doe.org', login: 'jane', password: "").errors.to_h
 # => {:password=>["password is required"]}
 ```
 
+The `key?` method supports passing an explicit key name for rules that have multiple keys.
+
+```ruby
+class DistanceContract < Dry::Validation::Contract
+  schema do
+    optional(:kilometers).filled(:integer)
+    optional(:miles).filled(:integer)
+  end
+
+  rule(:kilometers, :miles) do
+    if key?(:kilometers) ^ key?(:miles)
+      base.failure("must only contain one of: kilometers, miles")
+    end
+  end
+end
+```
+
 ### Checking for previous errors
 
 Sometimes you may be interested in adding an error when some other error has happened.
