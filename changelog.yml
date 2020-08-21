@@ -8,6 +8,7 @@
   - 'Providing a custom message template for array errors works correctly (issue #663
     fixed via #665) (@tadeusz-niemiec)'
   added:
+  - "You can now pass any key or a path to the rule's `key?` helper (see #664 for more info) (@alassek)"
   changed:
 - version: 1.5.3
   summary:
