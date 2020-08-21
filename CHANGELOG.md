@@ -1,4 +1,4 @@
-## unreleased 
+## 1.5.4 2020-08-21
 
 
 ### Fixed
@@ -7,18 +7,7 @@
 - Providing a custom message template for array errors works correctly (issue #663 fixed via #665) (@tadeusz-niemiec)
 
 
-[Compare vunreleased...master](https://github.com/dry-rb/dry-validation/compare/vunreleased...master)
-
-## unreleased 
-
-
-### Fixed
-
-- Full messages work correctly with rule failures now (issue #661 fixed via #662) (@stind)
-- Providing a custom message template for array errors works correctly (issue #663 fixed via #665) (@tadeusz-niemiec)
-
-
-[Compare v1.5.3...master](https://github.com/dry-rb/dry-validation/compare/v1.5.3...master)
+[Compare v1.5.3...v1.5.4](https://github.com/dry-rb/dry-validation/compare/v1.5.3...v1.5.4)
 
 ## 1.5.3 2020-07-27
 
