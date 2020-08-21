@@ -1,6 +1,10 @@
 ## 1.5.4 2020-08-21
 
 
+### Added
+
+- You can now pass any key or a path to the rule's `key?` helper (see #664 for more info) (@alassek)
+
 ### Fixed
 
 - Full messages work correctly with rule failures now (issue #661 fixed via #662) (@stind)
