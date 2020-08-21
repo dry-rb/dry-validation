@@ -186,8 +186,8 @@ The `key?` method supports passing an explicit key name for rules that have mult
 ```ruby
 class DistanceContract < Dry::Validation::Contract
   schema do
-    optional(:kilometers).filled(:integer)
-    optional(:miles).filled(:integer)
+    optional(:kilometers).value(:integer)
+    optional(:miles).value(:integer)
   end
 
   rule(:kilometers, :miles) do
