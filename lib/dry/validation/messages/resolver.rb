@@ -72,6 +72,11 @@ module Dry
             template, meta = messages[rule, msg_opts.merge(path: keys.last)] unless template
           end
 
+          if !template && keys.size > 1
+            non_index_keys = keys.reject { |k| k.is_a?(Integer) }
+            template, meta = messages[rule, msg_opts.merge(path: non_index_keys.join(DOT))]
+          end
+
           unless template
             raise MissingMessageError, <<~STR
               Message template for #{rule.inspect} under #{keys.join(DOT).inspect} was not found
