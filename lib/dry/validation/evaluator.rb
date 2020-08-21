@@ -146,7 +146,7 @@ module Dry
       #
       # @return [Object]
       #
-      # @public
+      # @api public
       def value
         values[key_name]
       end
@@ -155,27 +155,34 @@ module Dry
       #
       # This is useful when dealing with rules for optional keys
       #
-      # @example
+      # @example use the default key name
       #   rule(:age) do
       #     key.failure(:invalid) if key? && value < 18
+      #   end
+      #
+      # @example specify the key name
+      #   rule(:start_date, :end_date) do
+      #     if key?(:start_date) && !key?(:end_date)
+      #       key(:end_date).failure("must provide an end_date with start_date")
+      #     end
       #   end
       #
       # @return [Boolean]
       #
       # @api public
-      def key?
-        values.key?(key_name)
+      def key?(name = key_name)
+        values.key?(name)
       end
 
       # Check if there are any errors on the schema under the provided path
       #
-      # @param [Symbol, String, Array] A Path-compatible spec
+      # @param path [Symbol, String, Array] A Path-compatible spec
       #
       # @return [Boolean]
       #
       # @api public
       def schema_error?(path)
-        result.error?(path)
+        result.schema_error?(path)
       end
 
       # Check if there are any errors on the current rule

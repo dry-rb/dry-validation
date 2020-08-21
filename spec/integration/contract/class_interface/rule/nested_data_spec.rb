@@ -91,7 +91,8 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
         let(:contract_class) do
           Class.new(Dry::Validation::Contract) do
             params do
-              required(:addresses).array do
+              required(:name).filled(:string)
+              required(:addresses).array(:hash) do
                 required(:phone).value(:string)
               end
             end
@@ -101,11 +102,21 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
               key.failure("invalid list")
             end
           end
+        end
 
-          it "produces an error for all paths" do
-            expect(contract.(addresses: [{phone: "+48123"}]).errors.to_h)
-              .to eql(addresses: {0 => [["invalid list"], [{phone: "invalid phone"}]]})
-          end
+        it "produces an error for base array value and another value" do
+          expect(contract.(name: "", addresses: "not an array").errors.to_h)
+            .to eql(name: ["must be filled"], addresses: ["must be an array"])
+        end
+
+        it "produces an error for base array value" do
+          expect(contract.(name: "foo", addresses: "not an array").errors.to_h)
+            .to eql(addresses: ["must be an array"])
+        end
+
+        it "produces an error for all paths" do
+          expect(contract.(name: "foo", addresses: [{phone: "+48123"}]).errors.to_h)
+            .to eql(addresses: {0 => [["invalid list"], {phone: ["invalid phone"]}]})
         end
       end
 
@@ -130,6 +141,36 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
           end
         end
       end
+    end
+  end
+
+  context "with a double nested array of hashes" do
+    let(:contract_class) do
+      Class.new(Dry::Validation::Contract) do
+        params do
+          required(:outer).array(:hash) do
+            required(:inner).array(:hash) do
+              required(:attr).filled(:integer)
+            end
+          end
+        end
+
+        rule(:outer).each do
+          value[:inner].each_with_index do |inner, idx|
+            inner_nested_key = key(key.path.keys + [:inner, idx])
+            inner_nested_key.failure("Inner specific failure")
+          end
+
+          inner_key = key(key.path.keys + [:inner])
+          inner_key.failure('Inner generic failure')
+        end
+      end
+    end
+
+    it "allows setting errors on both attribute itself and its children" do
+      expect(contract.(outer: [{ inner: [{ attr: 123 }] }]).errors.to_h).to eql(
+        outer: { 0 => { inner: [['Inner generic failure'], { 0 => ['Inner specific failure'] }] } }
+      )
     end
   end
 end

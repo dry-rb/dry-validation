@@ -181,6 +181,23 @@ contract.call(email: 'jane@doe.org', login: 'jane', password: "").errors.to_h
 # => {:password=>["password is required"]}
 ```
 
+The `key?` method supports passing an explicit key name for rules that have multiple keys.
+
+```ruby
+class DistanceContract < Dry::Validation::Contract
+  schema do
+    optional(:kilometers).value(:integer)
+    optional(:miles).value(:integer)
+  end
+
+  rule(:kilometers, :miles) do
+    if key?(:kilometers) ^ key?(:miles)
+      base.failure("must only contain one of: kilometers, miles")
+    end
+  end
+end
+```
+
 ### Checking for previous errors
 
 Sometimes you may be interested in adding an error when some other error has happened.
@@ -249,4 +266,34 @@ contract.call(email: 'jane@doe.org', phone_numbers: ['00-123-456-789', nil]).err
 
 contract.call(email: 'jane@doe.org', phone_numbers: ['00-123-456-789', '987-654-321']).errors.to_h
 # => {:phone_numbers=>{1=>["is not valid"]}}
+```
+
+When using `Rule#each` you have access to the `index` of each member, it is useful if you want to change the key of the returned errors, here's an example:
+
+```ruby
+class PropsContract < Dry::Validation::Contract
+  params do
+    required(:contacts).value(:array, min_size?: 1).each do
+      hash do
+        required(:name).filled(:string)
+        required(:email).filled(:string)
+        required(:phone).filled(:string)
+      end
+    end
+  end
+
+  rule(:contacts).each do |index:|
+    key([:contacts, :email, index]).failure('email not valid') unless value[:email].include?('@')
+  end
+end
+
+contract = PropsContract.new
+
+contract.call(
+  contacts: [
+    { name: 'Jane', email: 'jane@doe.org', phone: '123' },
+    { name: 'John', email: 'oops', phone: '123' }
+  ]
+).errors.to_h
+# => {:contacts=>{:email=>{1=>["email not valid"]}}}
 ```

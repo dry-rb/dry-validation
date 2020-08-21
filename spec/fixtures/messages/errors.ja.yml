@@ -1,0 +1,8 @@
+ja:
+  dry_validation:
+    rules:
+      email: "Eメール"
+    errors:
+      rules:
+        email:
+          filled?: "は必須入力です"

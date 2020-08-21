@@ -3,7 +3,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - ruby: "2.7"
+          - ruby: "2.7.0"
             dry_schema_from_master: "true"
             dry_types_from_master: "true"
             dry_configurable_from_master: "true"

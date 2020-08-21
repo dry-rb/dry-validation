@@ -85,7 +85,7 @@ module Dry
       # @api private
       def freeze
         source_messages.select { |err| err.respond_to?(:evaluate) }.each do |err|
-          idx = source_messages.index(err)
+          idx = messages.index(err) || source_messages.index(err)
           msg = err.evaluate(locale: locale, full: options[:full])
           messages[idx] = msg
         end

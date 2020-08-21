@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 require "dry/validation/message"
+require "dry/schema/message_compiler"
 
 module Dry
   module Validation
     module Messages
+      FULL_MESSAGE_WHITESPACE = Dry::Schema::MessageCompiler::FULL_MESSAGE_WHITESPACE
+
       # Resolve translated messages from failure arguments
       #
       # @api public
@@ -33,7 +36,7 @@ module Dry
           when Symbol
             Message[->(**opts) { message(message, path: path, tokens: tokens, **opts) }, path, meta]
           when String
-            Message[message, path, meta]
+            Message[->(**opts) { [message_text(message, path: path, **opts), meta] }, path, meta]
           when Hash
             meta = message.dup
             text = meta.delete(:text) { |key|
@@ -69,6 +72,11 @@ module Dry
             template, meta = messages[rule, msg_opts.merge(path: keys.last)] unless template
           end
 
+          if !template && keys.size > 1
+            non_index_keys = keys.reject { |k| k.is_a?(Integer) }
+            template, meta = messages[rule, msg_opts.merge(path: non_index_keys.join(DOT))]
+          end
+
           unless template
             raise MissingMessageError, <<~STR
               Message template for #{rule.inspect} under #{keys.join(DOT).inspect} was not found
@@ -78,11 +86,28 @@ module Dry
           parsed_tokens = parse_tokens(tokens)
           text = template.(template.data(parsed_tokens))
 
-          [full ? "#{messages.rule(keys.last, msg_opts)} #{text}" : text, meta]
+          [message_text(text, path: path, locale: locale, full: full), meta]
         end
         # rubocop:enable Metrics/AbcSize
 
         private
+
+        def message_text(text, path:, locale: nil, full: false)
+          return text unless full
+
+          key = key_text(path: path, locale: locale)
+
+          [key, text].compact.join(FULL_MESSAGE_WHITESPACE[locale])
+        end
+
+        def key_text(path:, locale: nil)
+          locale ||= messages.default_locale
+
+          keys = path.to_a.compact
+          msg_opts = {path: keys, locale: locale}
+
+          messages.rule(keys.last, msg_opts) || keys.last
+        end
 
         def parse_tokens(tokens)
           Hash[

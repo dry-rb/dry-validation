@@ -14,6 +14,7 @@ RSpec.describe Dry::Validation::Contract, "Rule#each" do
 
         params do
           required(:nums).array(:integer)
+          optional(:small_integers).array(:integer)
           optional(:hash).hash do
             optional(:another_nums).array(:integer)
           end
@@ -21,6 +22,10 @@ RSpec.describe Dry::Validation::Contract, "Rule#each" do
 
         rule(:nums).each do
           key.failure("invalid") if value < 3
+        end
+
+        rule(:small_integers).each do
+          key.failure(:too_big) if value > 9
         end
 
         rule(hash: :another_nums).each do
@@ -50,6 +55,14 @@ RSpec.describe Dry::Validation::Contract, "Rule#each" do
 
     it "passes block options" do
       expect(contract.(nums: [10, 20]).context[:sum]).to eql(30)
+    end
+
+    it "returns error from the rule namespace without an index" do
+      contract_class.config.messages.load_paths << SPEC_ROOT.join("fixtures/messages/errors.en.yml").realpath
+      expect(contract.(small_integers: [11, 12], nums: [1]).errors.to_h)
+          .to eql(small_integers: { 0 => ["is too big!"],
+                                    1 => ["is too big!"]},
+                  nums: { 0 => ["invalid"] })
     end
   end
 

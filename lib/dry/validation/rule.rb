@@ -65,8 +65,8 @@ module Dry
       # for a given array item.
       #
       # @example
-      #   rule(:nums).each do
-      #     key.failure("must be greater than 0") if value < 0
+      #   rule(:nums).each do |index:|
+      #     key([:number, index]).failure("must be greater than 0") if value < 0
       #   end
       #   rule(:nums).each(min: 3)
       #   rule(address: :city) do
@@ -86,9 +86,9 @@ module Dry
             values[root].each_with_index do |_, idx|
               path = [*Schema::Path[root].to_a, idx]
 
-              next if result.error?(path)
+              next if result.schema_error?(path)
 
-              evaluator = with(macros: macros, keys: [path], &block)
+              evaluator = with(macros: macros, keys: [path], index: idx, &block)
 
               failures.concat(evaluator.failures)
             end

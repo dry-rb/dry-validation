@@ -1,4 +1,54 @@
-## unreleased 
+## 1.5.4 2020-08-21
+
+
+### Fixed
+
+- Full messages work correctly with rule failures now (issue #661 fixed via #662) (@stind)
+- Providing a custom message template for array errors works correctly (issue #663 fixed via #665) (@tadeusz-niemiec)
+
+
+[Compare v1.5.3...v1.5.4](https://github.com/dry-rb/dry-validation/compare/v1.5.3...v1.5.4)
+
+## 1.5.3 2020-07-27
+
+
+### Added
+
+- You can now access current value's index via `rule(:foo).each do |index:|` (issue #606 done via #657) (@mrbongiolo)
+
+### Fixed
+
+- Using `.each(:foo)` works as expected when there are errors related to other keys (issue #659 fixed via #660) (@solnic)
+
+### Changed
+
+- `Result#error?` is now a public API and it takes into consideration both schema and rule errors (issue #655 fixed via #656) (@PragTob)
+
+[Compare v1.5.2...v1.5.3](https://github.com/dry-rb/dry-validation/compare/v1.5.2...v1.5.3)
+
+## 1.5.2 2020-07-14
+
+
+### Fixed
+
+- `key?` predicate in rules no longer crashes when the rule path points to a non-existent array value (issue #653 fixed via #654) (@solnic)
+
+
+[Compare v1.5.1...v1.5.2](https://github.com/dry-rb/dry-validation/compare/v1.5.1...v1.5.2)
+
+## 1.5.1 2020-06-18
+
+
+### Fixed
+
+- dry-monads no longer required for the `:hints` extension (@schokomarie)
+- Using `full: true` option works as expected with custom rule messages (issue #618 fixed via #651) (@sirfilip)
+- Using `locale: ...` option works as expected with hints (issue #589 fixed via 652) (@sirfilip)
+
+
+[Compare v1.5.0...v1.5.1](https://github.com/dry-rb/dry-validation/compare/v1.5.0...v1.5.1)
+
+## 1.5.0 2020-03-11
 
 
 ### Added
@@ -11,7 +61,7 @@
 - dry-schema dependency was bumped to `~> 1.5` (@solnic)
 - [internal] `KeyMap` patches have been removed since dry-schema now provides required functionality (@solnic)
 
-[Compare v1.4.2...master](https://github.com/dry-rb/dry-validation/compare/v1.4.2...master)
+[Compare v1.4.2...v1.5.0](https://github.com/dry-rb/dry-validation/compare/v1.4.2...v1.5.0)
 
 ## 1.4.2 2020-01-18
 

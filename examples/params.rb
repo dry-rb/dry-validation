@@ -4,8 +4,8 @@ require "dry-validation"
 
 contract = Class.new(Dry::Validation::Contract) do
   params do
-    required(:email).filled
-    required(:age).filled(:int?, gt?: 18)
+    required(:email).filled(:string)
+    required(:age).filled(:integer, gt?: 18)
   end
 end.new
 

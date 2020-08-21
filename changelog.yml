@@ -1,14 +1,52 @@
 ---
-- version: unreleased
+- version: 1.5.4
   summary:
-  date:
+  date: '2020-08-21'
+  fixed:
+  - 'Full messages work correctly with rule failures now (issue #661 fixed via #662)
+    (@stind)'
+  - 'Providing a custom message template for array errors works correctly (issue #663
+    fixed via #665) (@tadeusz-niemiec)'
+  added:
+  - "You can now pass any key or a path to the rule's `key?` helper (see #664 for more info) (@alassek)"
+  changed:
+- version: 1.5.3
+  summary:
+  date: '2020-07-27'
+  fixed:
+  - 'Using `.each(:foo)` works as expected when there are errors related to other
+    keys (issue #659 fixed via #660) (@solnic)'
+  added:
+  - 'You can now access current value''s index via `rule(:foo).each do |index:|` (issue
+    #606 done via #657) (@mrbongiolo)'
+  changed:
+  - "`Result#error?` is now a public API and it takes into consideration both schema
+    and rule errors (issue #655 fixed via #656) (@PragTob)"
+- version: 1.5.2
+  summary:
+  date: '2020-07-14'
+  fixed:
+  - "`key?` predicate in rules no longer crashes when the rule path points to a non-existent
+    array value (issue #653 fixed via #654) (@solnic)"
+- version: 1.5.1
+  date: '2020-06-18'
+  fixed:
+  - dry-monads no longer required for the `:hints` extension (@schokomarie)
+  - 'Using `full: true` option works as expected with custom rule messages (issue
+    #618 fixed via #651) (@sirfilip)'
+  - 'Using `locale: ...` option works as expected with hints (issue #589 fixed via
+    652) (@sirfilip)'
+- version: 1.5.0
+  summary:
+  date: '2020-03-11'
   fixed:
   added:
   - "`schema_error?` rule helper (@waiting-for-dev)"
   - "`rule_error?` rule helper (@waiting-for-dev)"
   changed:
-  - "dry-schema dependency was bumped to `~> 1.5` (@solnic)"
-  - "[internal] `KeyMap` patches have been removed since dry-schema now provides required functionality (@solnic)"
+  - dry-schema dependency was bumped to `~> 1.5` (@solnic)
+  - "[internal] `KeyMap` patches have been removed since dry-schema now provides required
+    functionality (@solnic)"
 - version: 1.4.2
   date: '2020-01-18'
   fixed:

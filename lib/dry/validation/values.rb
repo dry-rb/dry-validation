@@ -35,7 +35,10 @@ module Dry
       #     key.failure('must be > 18') if values[:age] <= 18
       #   end
       #
-      # @param [Symbol] key
+      # @param args [Symbol, String, Hash, Array<Symbol>] If given as a single
+      #   Symbol, String, Array or Hash, build a key array using
+      #   {Dry::Schema::Path} digging for data. If given as positional
+      #   arguments, use these with Hash#dig on the data directly.
       #
       # @return [Object]
       #
@@ -65,6 +68,8 @@ module Dry
           if e.is_a?(Array)
             result = e.all? { |k| key?(k, a) }
             return result
+          elsif e.is_a?(Symbol) && a.is_a?(Array)
+            return false
           else
             return false unless a.is_a?(Array) ? (e >= 0 && e < a.size) : a.key?(e)
           end

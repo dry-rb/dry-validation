@@ -1,6 +1,6 @@
 # this file is managed by dry-rb/devtools project
 
-name: Update docs on dry-rb.org
+name: docsite
 
 on:
   push:
