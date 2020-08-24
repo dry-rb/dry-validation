@@ -1,3 +1,13 @@
+## unreleased 
+
+
+### Fixed
+
+- Dependency on dry-schema was bumped to >= 1.5.2 (see #666 for more info) (@artofhuman)
+
+
+[Compare v1.5.4...master](https://github.com/dry-rb/dry-validation/compare/v1.5.4...master)
+
 ## 1.5.4 2020-08-21
 
 
