@@ -1,5 +1,16 @@
 ## 1.5.5 
 
+2020-09-04
+
+### Fixed
+
+- Dependency on dry-schema was bumped to >= 1.5.1. This time for real (@solnic)
+
+
+[Compare v1.5.5...master](https://github.com/dry-rb/dry-validation/compare/v1.5.5...master)
+
+## 1.5.5 
+
 2020-09-03
 
 ### Fixed
