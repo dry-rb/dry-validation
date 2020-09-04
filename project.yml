@@ -15,4 +15,4 @@ gemspec:
     - [dry-container, "~> 0.7", ">= 0.7.1"]
     - [dry-equalizer, "~> 0.2"]
     - [dry-initializer, "~> 3.0"]
-    - [dry-schema, "~> 1.5"]
+    - [dry-schema, "~> 1.5", ">= 1.5.2"]
