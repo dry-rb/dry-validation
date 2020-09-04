@@ -191,7 +191,7 @@ class DistanceContract < Dry::Validation::Contract
   end
 
   rule(:kilometers, :miles) do
-    if key?(:kilometers) ^ key?(:miles)
+    if key?(:kilometers) && key?(:miles)
       base.failure("must only contain one of: kilometers, miles")
     end
   end
