@@ -1,11 +1,12 @@
 ---
 - version: 1.5.6
-  summary: '2020-09-04'
+  date: '2020-09-04'
+  summary:
   fixed:
   - 'Dependency on dry-schema was bumped to >= 1.5.1. This time for real (@solnic)'
 - version: 1.5.5
-  summary: '2020-09-03'
-  date:
+  date: '2020-09-03'
+  summary:
   fixed:
   - 'Dependency on dry-schema was bumped to >= 1.5.2 (see #666 for more info) (@artofhuman)'
   added:
