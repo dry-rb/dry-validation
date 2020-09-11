@@ -150,3 +150,7 @@ Style/SymbolArray:
 
 Style/TrailingUnderscoreVariable:
   Enabled: false
+
+Style/MultipleComparison:
+  Enabled: false
+
