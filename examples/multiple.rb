@@ -2,29 +2,34 @@
 
 require "dry-validation"
 
-schema = Dry::Validation.Schema do
-  configure do
-    def self.messages
-      super.merge(en: {
+
+contract = Class.new(Dry::Validation::Contract) do
+  schema do
+    required(:email).filled
+  end
+
+  def self.messages
+    super.merge(en: {
+                  dry_validation: {
                     errors: {
-                      john_email?: "%{value} is not a john email",
-                      example_email?: "%{value} is not a example email"
+                      rules: {
+                        email: {
+                          john?: "%{value} is not a john email",
+                          example?: "%{value} is not an example email"
+                        }
+                      }
                     }
-                  })
-    end
+                  }
+                })
   end
 
-  required(:email).filled
+  rule(:email) do
+    key.failure(:example?, value: value) unless value.end_with?("@example.com")
 
-  validate(example_email?: :email) do |value|
-    value.end_with?("@example.com")
+    key.failure(:john?, value: value) unless value.start_with?("john")
   end
+end.new
 
-  validate(john_email?: :email) do |value|
-    value.start_with?("john")
-  end
-end
+result = contract.call(email: "jane@doe.org")
 
-errors = schema.call(email: "jane@doe.org").messages
-
-puts errors.inspect
+puts result.inspect
