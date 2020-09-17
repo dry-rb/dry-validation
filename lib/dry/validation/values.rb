@@ -70,6 +70,8 @@ module Dry
             return result
           elsif e.is_a?(Symbol) && a.is_a?(Array)
             return false
+          elsif a.is_a?(String) || a.nil?
+            return false
           else
             return false unless a.is_a?(Array) ? (e >= 0 && e < a.size) : a.key?(e)
           end
