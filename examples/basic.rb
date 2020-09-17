@@ -2,16 +2,18 @@
 
 require "dry-validation"
 
-schema = Dry::Validation.Schema do
-  required(:email).filled
+contract = Class.new(Dry::Validation::Contract) do
+  schema do
+    required(:email).filled
 
-  required(:age).filled(:int?, gt?: 18)
-end
+    required(:age).filled(:int?, gt?: 18)
+  end
+end.new
 
-errors = schema.call(email: "jane@doe.org", age: 19).messages
+errors = contract.call(email: "jane@doe.org", age: 19)
 
 puts errors.inspect
 
-errors = schema.call(email: nil, age: 19).messages
+errors = contract.call(email: nil, age: 19)
 
 puts errors.inspect

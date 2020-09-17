@@ -3,14 +3,16 @@
 require "byebug"
 require "dry-validation"
 
-schema = Dry::Validation.Schema do
-  key(:phone_numbers).each(:str?)
-end
+contract = Class.new(Dry::Validation::Contract) do
+  schema do
+    required(:phone_numbers).value(:array).each(:string)
+  end
+end.new
 
-errors = schema.call(phone_numbers: "").messages
+errors = contract.call(phone_numbers: "")
 
 puts errors.inspect
 
-errors = schema.call(phone_numbers: ["123456789", 123_456_789]).messages
+errors = contract.call(phone_numbers: ["123456789", 123_456_789])
 
 puts errors.inspect
