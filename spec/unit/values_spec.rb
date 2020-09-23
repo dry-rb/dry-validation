@@ -8,7 +8,13 @@ RSpec.describe Dry::Validation::Values do
   end
 
   let(:data) do
-    {name: "Jane", address: {city: "Paris", geo: {lat: 1, lon: 2}}, phones: [123, 431]}
+    {
+      name: "Jane",
+      address: {city: "Paris", geo: {lat: 1, lon: 2}},
+      phones: [123, 431],
+      billing_address: nil,
+      card: ""
+    }
   end
 
   describe "#[]" do
@@ -83,6 +89,14 @@ RSpec.describe Dry::Validation::Values do
 
     it "returns false when a path to an array is a symbol as its last segment" do
       expect(values.key?([:phones, :foo])).to be(false)
+    end
+
+    it "returns false when a nested key is not present and root key is nil" do
+      expect(values.key?([:billing_address, :not_here])).to be(false)
+    end
+
+    it "returns false when a nested key is not present and root key is string" do
+      expect(values.key?([:card, :not_here])).to be(false)
     end
   end
 
