@@ -1,3 +1,13 @@
+## unreleased 
+
+
+### Fixed
+
+- Checking `key?` within a rule no longer crashes when value is `nil` or an empty string (issue #670 fixed via #672) (@alexxty7)
+
+
+[Compare v1.5.6...master](https://github.com/dry-rb/dry-validation/compare/v1.5.6...master)
+
 ## 1.5.6 2020-09-04
 
 
