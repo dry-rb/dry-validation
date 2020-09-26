@@ -5,6 +5,7 @@ AllCops:
   Exclude:
     - spec/support/coverage.rb
     - spec/support/warnings.rb
+    - spec/support/rspec_options.rb
     - Gemfile.devtools
     - "*.gemspec"
 
@@ -153,4 +154,3 @@ Style/TrailingUnderscoreVariable:
 
 Style/MultipleComparison:
   Enabled: false
-
