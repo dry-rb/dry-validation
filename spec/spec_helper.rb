@@ -2,6 +2,7 @@
 
 require_relative "support/coverage"
 require_relative "support/warnings"
+require_relative "support/rspec_options"
 
 begin
   require "pry"
@@ -20,8 +21,6 @@ RSpec.configure do |config|
   unless RUBY_VERSION >= "2.7"
     config.exclude_pattern = "**/pattern_matching_spec.rb"
   end
-
-  config.disable_monkey_patching!
 
   config.before do
     stub_const("Test", Module.new)
