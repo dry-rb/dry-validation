@@ -23,13 +23,14 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
+        - head
         - 2.7.0
         - '2.6'
         - '2.5'
         - '2.4'
         - jruby
         include:
-        - ruby: '2.6'
+        - ruby: 2.7.0
           coverage: 'true'
         - ruby: 2.7.0
           dry_schema_from_master: 'true'
