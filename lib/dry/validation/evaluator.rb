@@ -187,11 +187,17 @@ module Dry
 
       # Check if there are any errors on the current rule
       #
+      # @param path [Symbol, String, Array] A Path-compatible spec
+      #
       # @return [Boolean]
       #
       # @api public
-      def rule_error?
-        !key(path).empty?
+      def rule_error?(path = nil)
+        if path.nil?
+          !key(self.path).empty?
+        else
+          result.error?(path)
+        end
       end
 
       # @api private

@@ -238,6 +238,28 @@ FooContract.new.(foo: 'foo').errors.to_h
 # { foo: ['failure added', 'failure added after checking'] }
 ```
 
+Also it is possible for checking other rule error by passing explicit argument to `rule_error?` method
+
+```ruby
+class PersonContract < Dry::Validation::Contract
+  schema do
+    required(:email).filled(:string)
+    required(:name).filled(:string)
+  end
+
+  rule(:name) do
+    key.failure('name rule error')
+  end
+
+  rule(:email) do
+    key.failure('email rule error') if rule_error?(:name)
+  end
+end
+
+PersonContract.new.call(email: 'bar', name: 'foo').errors.to_h
+# {name: ['name rule error'], email: ['email rule error']}
+```
+
 ### Defining a rule for each element of an array
 
 To check each element of an array you can simply use `Rule#each` shortcut. It works just like a normal rule, which means it's only applied when a value passed schema checks and supports setting failure messages in the standard way.
