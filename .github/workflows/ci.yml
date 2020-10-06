@@ -47,7 +47,7 @@ jobs:
     - name: Install package dependencies
       run: "[ -e $APT_DEPS ] || sudo apt-get install -y --no-install-recommends $APT_DEPS"
     - name: Set up Ruby
-      uses: ruby/setup-ruby@master
+      uses: ruby/setup-ruby@v1
       with:
         ruby-version: "${{matrix.ruby}}"
     - name: Install latest bundler
