@@ -196,7 +196,7 @@ module Dry
         if path.nil?
           !key(self.path).empty?
         else
-          result.error?(path)
+          result.rule_error?(path)
         end
       end
 

@@ -113,6 +113,13 @@ module Dry
         schema_result.error?(key)
       end
 
+      # Check if the rules includes an error for the provided key
+      #
+      # @api private
+      def rule_error?(key)
+        !schema_error?(key) && error?(key)
+      end
+
       # Check if there's any error for the provided key
       #
       # This does not consider errors from the nested values

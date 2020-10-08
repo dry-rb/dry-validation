@@ -68,6 +68,12 @@ RSpec.describe Dry::Validation::Evaluator do
           {name: ["expected"], email: ["also expected"]}
         )
       end
+
+      it "does not evaluate if schema with provided key is falling down" do
+        expect(contract.new.(name: nil, email: "some@email.com").errors.to_h).to eql(
+          {name: ["must be a string"]}
+        )
+      end
     end
   end
 end
