@@ -2,7 +2,6 @@
 coverage
 /.bundle
 vendor/bundle
-bin/
 log/
 tmp/
 .idea/
