@@ -68,6 +68,11 @@ module Dry
       #   @api public
       option :macros, default: -> { config.macros }
 
+      # @!attribute [r] default_context
+      #   @return [Hash] Default context for rules
+      #   @api public
+      option :default_context, default: -> { EMPTY_HASH }
+
       # @!attribute [r] schema
       #   @return [Dry::Schema::Params, Dry::Schema::JSON, Dry::Schema::Processor]
       #   @api private
@@ -86,12 +91,18 @@ module Dry
       # Apply the contract to an input
       #
       # @param [Hash] input The input to validate
+      # @param [Hash] context Initial context for rules
       #
       # @return [Result]
       #
       # @api public
-      def call(input)
-        Result.new(schema.(input), Concurrent::Map.new) do |result|
+      def call(input, context: EMPTY_HASH)
+        context_map = Concurrent::Map.new.tap do |map|
+          default_context.each { |key, value| map[key] = value }
+          context.each { |key, value| map[key] = value }
+        end
+
+        Result.new(schema.(input), context_map) do |result|
           rules.each do |rule|
             next if rule.keys.any? { |key| error?(result, key) }
 
