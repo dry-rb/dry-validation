@@ -1,6 +1,24 @@
 ## unreleased 
 
 
+### Added
+
+- You can now pass a key name or path to `rule_error?` predicate (issue #658 closed via #673) (@moofkit)
+
+### Fixed
+
+- Checking `key?` within a rule no longer crashes when value is `nil` or an empty string (issue #670 fixed via #672) (@alexxty7)
+
+
+[Compare vunreleased...master](https://github.com/dry-rb/dry-validation/compare/vunreleased...master)
+
+## unreleased 
+
+
+### Added
+
+- You can now pass a key name or path to `rule_error?` predicate (issue #658 closed via #673) (@moofkit)
+
 ### Fixed
 
 - Checking `key?` within a rule no longer crashes when value is `nil` or an empty string (issue #670 fixed via #672) (@alexxty7)
