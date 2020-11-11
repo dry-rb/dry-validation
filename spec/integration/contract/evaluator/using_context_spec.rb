@@ -39,7 +39,7 @@ RSpec.describe Dry::Validation::Evaluator, "using context" do
     end
 
     it "uses the initial context" do
-      expect(contract.({user_id: 312}, context: {name: "John"}).context.each.to_h)
+      expect(contract.({user_id: 312}, {name: "John"}).context.each.to_h)
         .to eql(user: "jane", name: "John")
     end
 
@@ -49,7 +49,7 @@ RSpec.describe Dry::Validation::Evaluator, "using context" do
       end
 
       it "initial context redefines it" do
-        expect(contract.({user_id: 312}, context: {name: "John"}).context.each.to_h)
+        expect(contract.({user_id: 312}, {name: "John"}).context.each.to_h)
           .to eql(user: "jane", name: "John", details: "Present")
       end
     end

@@ -96,7 +96,7 @@ module Dry
       # @return [Result]
       #
       # @api public
-      def call(input, context: EMPTY_HASH)
+      def call(input, context = EMPTY_HASH)
         context_map = Concurrent::Map.new.tap do |map|
           default_context.each { |key, value| map[key] = value }
           context.each { |key, value| map[key] = value }
