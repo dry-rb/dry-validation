@@ -2,9 +2,11 @@
 
 # frozen_string_literal: true
 
-require "pry"
 require "bundler/setup"
-require "dry-validation"
+
+require "pry"
+require "dry/validation"
+require "dry/types"
 
 module Types
   include Dry::Types()
@@ -28,4 +30,8 @@ class Context
   end
 end
 
-Pry.start(Context.new, prompt: [proc { "dry-validation> " }, proc { "dry-validation*> " }])
+prompt = Pry::Prompt.new(
+  :dry_validation, "dry-validation", [proc { "dry-validation> " }, proc { "dry-validation*> " }]
+)
+
+Pry.start(Context.new, prompt: prompt)
