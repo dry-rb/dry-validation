@@ -260,6 +260,51 @@ PersonContract.new.call(email: 'bar', name: 'foo').errors.to_h
 # {name: ['name rule error'], email: ['email rule error']}
 ```
 
+### Rules context
+
+Rules context is convenient for sharing data between rules or return data in the validation result. It can be used, for example, to return the data that was fetched from DB.
+
+For example:
+
+```ruby
+class UpdateUserContract < Dry::Validation::Contract
+  option :user_repo
+
+  params do
+    required(:user_id).filled(:string)
+  end
+
+  rule(:user_id) do |context:|
+    context[:user] ||= user_repo.find(value)
+    key.failure(:not_found) unless context[:user]
+  end
+end
+
+contract = UserContract.new(address_repo: UserRepo.new)
+contract.call(user_id: 42).context.each.to_h
+# => {user: #<User id: 42>}
+```
+
+Initial context can be passed to the contract and in this case, the contract is not going to fetch user from the repo (we don't even need to pass the repo instance as a dependency because this code will not be executed here):
+
+```ruby
+user = UserRepo.new.find(42)
+contract = UserContract.new
+contract.call({user_id: 42}, context: {user: user}).context.each.to_h
+# => {user: #<User id: 42>}
+```
+
+Also, defualt context can be provided on contract initialization:
+
+```ruby
+user = UserRepo.new.find(42)
+contract = UserContract.new(default_context: {user: user})
+contract.call(user_id: 42).context.each.to_h
+# => {user: #<User id: 42>}
+```
+
+Context passed to the `call` method overrides keys from `default_context`.
+
 ### Defining a rule for each element of an array
 
 To check each element of an array you can simply use `Rule#each` shortcut. It works just like a normal rule, which means it's only applied when a value passed schema checks and supports setting failure messages in the standard way.

@@ -10,3 +10,5 @@ Gemfile.lock
 doc
 .yardoc/
 .vscode
+.ruby-version
+.ruby-gemset
