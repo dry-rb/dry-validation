@@ -4,6 +4,7 @@
 ### Added
 
 - You can now pass a key name or path to `rule_error?` predicate (issue #658 closed via #673) (@moofkit)
+- You can now pass initial context object to `Contract#call` (issue #674 via #675) (@pyromaniac)
 
 ### Fixed
 
@@ -18,6 +19,7 @@
 ### Added
 
 - You can now pass a key name or path to `rule_error?` predicate (issue #658 closed via #673) (@moofkit)
+- You can now pass initial context object to `Contract#call` (issue #674 via #675) (@pyromaniac)
 
 ### Fixed
 
