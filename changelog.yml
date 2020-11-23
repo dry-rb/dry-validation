@@ -8,6 +8,8 @@
   added: &2
   - 'You can now pass a key name or path to `rule_error?` predicate (issue #658 closed
     via #673) (@moofkit)'
+  - 'You can now pass initial context object to `Contract#call` (issue #674 via #675)
+    (@pyromaniac)'
   changed: 
 - version: unreleased
   fixed: *1
