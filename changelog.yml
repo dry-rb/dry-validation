@@ -1,7 +1,7 @@
 ---
 - version: 1.6.0
   summary:
-  date:
+  date: '2020-12-05'
   fixed:
   - 'Checking `key?` within a rule no longer crashes when value is `nil` or an empty
     string (issue #670 fixed via #672) (@alexxty7)'
