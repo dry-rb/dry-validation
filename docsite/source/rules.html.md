@@ -268,7 +268,7 @@ For example:
 
 ```ruby
 class UpdateUserContract < Dry::Validation::Contract
-  option :user_repo
+  option :user_repo, optional: true
 
   params do
     required(:user_id).filled(:string)
@@ -280,17 +280,17 @@ class UpdateUserContract < Dry::Validation::Contract
   end
 end
 
-contract = UserContract.new(address_repo: UserRepo.new)
+contract = UpdateUserContract.new(user_repo: UserRepo.new)
 contract.call(user_id: 42).context.each.to_h
 # => {user: #<User id: 42>}
 ```
 
-Initial context can be passed to the contract and in this case, the contract is not going to fetch user from the repo (we don't even need to pass the repo instance as a dependency because this code will not be executed here):
+Initial context can be passed as the second argument to the contract and in this case, the contract is not going to fetch user from the repo (we don't even need to pass the repo instance as a dependency because this code will not be executed here):
 
 ```ruby
 user = UserRepo.new.find(42)
-contract = UserContract.new
-contract.call({user_id: 42}, context: {user: user}).context.each.to_h
+contract = UpdateUserContract.new
+contract.call({user_id: 42}, user: user).context.each.to_h
 # => {user: #<User id: 42>}
 ```
 
@@ -298,7 +298,7 @@ Also, defualt context can be provided on contract initialization:
 
 ```ruby
 user = UserRepo.new.find(42)
-contract = UserContract.new(default_context: {user: user})
+contract = UpdateUserContract.new(default_context: {user: user})
 contract.call(user_id: 42).context.each.to_h
 # => {user: #<User id: 42>}
 ```
