@@ -7,10 +7,6 @@ assignees: ''
 
 ---
 
-**Before you submit this: WE ONLY ACCEPT BUG REPORTS**
-
-For more information see `CONTRIBUTING.md`.
-
 **Describe the bug**
 
 A clear and concise description of what the bug is.
