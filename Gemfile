@@ -10,8 +10,8 @@ if ENV["DRY_CONFIGURABLE_FROM_MASTER"].eql?("true")
   gem "dry-configurable", github: "dry-rb/dry-configurable", branch: "master"
 end
 
-if ENV['DRY_SCHEMA_FROM_MASTER'].eql?('true')
-  gem 'dry-schema', github: 'dry-rb/dry-schema', branch: 'master'
+if ENV["DRY_SCHEMA_FROM_MASTER"].eql?("true")
+  gem "dry-schema", github: "dry-rb/dry-schema", branch: "master"
 end
 
 if ENV["DRY_TYPES_FROM_MASTER"].eql?("true")
