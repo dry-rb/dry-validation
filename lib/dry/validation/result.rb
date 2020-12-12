@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "concurrent/map"
-require "dry/equalizer"
+require "dry/core/equalizer"
 
 require "dry/validation/constants"
 require "dry/validation/message_set"
