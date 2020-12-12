@@ -11,8 +11,7 @@ gemspec:
     - rspec
   runtime_dependencies:
     - [concurrent-ruby, "~> 1.0"]
-    - [dry-core, "~> 0.4"]
+    - [dry-core, "~> 0.5", ">= 0.5"]
     - [dry-container, "~> 0.7", ">= 0.7.1"]
-    - [dry-equalizer, "~> 0.2"]
     - [dry-initializer, "~> 3.0"]
     - [dry-schema, "~> 1.5", ">= 1.5.2"]
