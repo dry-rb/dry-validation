@@ -35,6 +35,10 @@ Layout/LineLength:
 Lint/BooleanSymbol:
   Enabled: false
 
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - "spec/**/*_spec.rb"
+
 Lint/RaiseException:
   Enabled: false
 
