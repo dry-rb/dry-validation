@@ -14,5 +14,5 @@ end
 
 group :tools do
   # this is the same version that we use on codacy
-  gem "rubocop", "0.82.0"
+  gem "rubocop", "~> 1.12"
 end
