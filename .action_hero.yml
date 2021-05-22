@@ -1,0 +1,14 @@
+# This is a config that other dry-rb repositories use
+
+sources:
+  - repo: dry-rb/template-gem
+    sync:
+      - "!config.yml" 
+      - "config.yml:.action_hero.yml"
+      - ".devtools/templates/*.sync:${{dir}}/${{name}}"
+      - ".github/**/*.*"
+      - "spec/*"
+      - "*"
+  - repo: action-hero/workflows
+    sync:
+      - ".github/workflows/*.yml"
