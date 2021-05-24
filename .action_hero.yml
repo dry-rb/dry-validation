@@ -3,8 +3,8 @@
 sources:
   - repo: dry-rb/template-gem
     sync:
-      - "!config.yml"
-      - ".github/workflows/ci.yml.erb"
+      - "!.github/workflows/ci.yml.erb"
+      - ".action_hero.yml.erb"
       - ".devtools/templates/*.sync:${{dir}}/${{name}}"
       - ".github/**/*.*"
       - "spec/*"
