@@ -2,6 +2,7 @@
 
 require "dry/schema/config"
 require "dry/validation/macros"
+require "dry/configurable/version"
 
 module Dry
   module Validation
@@ -11,7 +12,11 @@ module Dry
     #
     # @api public
     class Config < Schema::Config
-      setting :macros, default: Macros::Container.new, constructor: :dup.to_proc
+      if Dry::Configurable::VERSION < "0.13"
+        setting :macros, Macros::Container.new, constructor: :dup.to_proc
+      else
+        setting :macros, default: Macros::Container.new, constructor: :dup.to_proc
+      end
 
       # @api private
       def dup
