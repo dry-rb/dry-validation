@@ -12,11 +12,14 @@ module Dry
     #
     # @api public
     class Config < Schema::Config
-      if Dry::Configurable::VERSION < "0.13"
-        setting :macros, Macros::Container.new, constructor: :dup.to_proc
-      else
-        setting :macros, default: Macros::Container.new, constructor: :dup.to_proc
+      unless Dry::Configurable::VERSION < "0.13"
+        def self.setting(name, default = Undefined, **opts, &block)
+          return super if default.equal?(Undefined)
+          super(name, **opts.merge(default: default), &block)
+        end
       end
+
+      setting :macros, Macros::Container.new, constructor: :dup.to_proc
 
       # @api private
       def dup
