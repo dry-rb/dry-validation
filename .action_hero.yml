@@ -1,4 +1,4 @@
-# This is a config that other dry-rb repositories use
+# This is a config synced from dry-rb/template-gem repo
 
 sources:
   - repo: dry-rb/template-gem
@@ -8,6 +8,7 @@ sources:
       - ".devtools/templates/*.sync:${{dir}}/${{name}}"
       - ".github/**/*.*"
       - "spec/*"
+      - ".*"
       - "*"
   - repo: action-hero/workflows
     sync:
