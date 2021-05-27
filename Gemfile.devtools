@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-# this file is managed by dry-rb/devtools project
+# This file is synced from dry-rb/template-gem repo
+
+gem "rake", ">= 12.3.3"
 
 group :test do
   gem "simplecov", require: false, platforms: :ruby
@@ -12,5 +14,5 @@ end
 
 group :tools do
   # this is the same version that we use on codacy
-  gem "rubocop", "~> 1.12"
+  gem "rubocop", "1.15.0"
 end
