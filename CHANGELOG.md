@@ -13,7 +13,7 @@
 - Checking `key?` within a rule no longer crashes when value is `nil` or an empty string (issue #670 fixed via #672) (@alexxty7)
 
 
-[Compare v1.5.6...v1.6.0](https://github.com/dry-rb//compare/v1.5.6...v1.6.0)
+[Compare v1.5.6...v1.6.0](https://github.com/dry-rb/dry-validation/compare/v1.5.6...v1.6.0)
 
 ## 1.5.6 2020-09-04
 
@@ -23,7 +23,7 @@
 - Dependency on dry-schema was bumped to >= 1.5.1. This time for real (@solnic)
 
 
-[Compare v1.5.5...v1.5.6](https://github.com/dry-rb//compare/v1.5.5...v1.5.6)
+[Compare v1.5.5...v1.5.6](https://github.com/dry-rb/dry-validation/compare/v1.5.5...v1.5.6)
 
 ## 1.5.5 2020-09-03
 
@@ -33,7 +33,7 @@
 - Dependency on dry-schema was bumped to >= 1.5.2 (see #666 for more info) (@artofhuman)
 
 
-[Compare v1.5.4...v1.5.5](https://github.com/dry-rb//compare/v1.5.4...v1.5.5)
+[Compare v1.5.4...v1.5.5](https://github.com/dry-rb/dry-validation/compare/v1.5.4...v1.5.5)
 
 ## 1.5.4 2020-08-21
 
@@ -48,7 +48,7 @@
 - Providing a custom message template for array errors works correctly (issue #663 fixed via #665) (@tadeusz-niemiec)
 
 
-[Compare v1.5.3...v1.5.4](https://github.com/dry-rb//compare/v1.5.3...v1.5.4)
+[Compare v1.5.3...v1.5.4](https://github.com/dry-rb/dry-validation/compare/v1.5.3...v1.5.4)
 
 ## 1.5.3 2020-07-27
 
@@ -65,7 +65,7 @@
 
 - `Result#error?` is now a public API and it takes into consideration both schema and rule errors (issue #655 fixed via #656) (@PragTob)
 
-[Compare v1.5.2...v1.5.3](https://github.com/dry-rb//compare/v1.5.2...v1.5.3)
+[Compare v1.5.2...v1.5.3](https://github.com/dry-rb/dry-validation/compare/v1.5.2...v1.5.3)
 
 ## 1.5.2 2020-07-14
 
@@ -75,7 +75,7 @@
 - `key?` predicate in rules no longer crashes when the rule path points to a non-existent array value (issue #653 fixed via #654) (@solnic)
 
 
-[Compare v1.5.1...v1.5.2](https://github.com/dry-rb//compare/v1.5.1...v1.5.2)
+[Compare v1.5.1...v1.5.2](https://github.com/dry-rb/dry-validation/compare/v1.5.1...v1.5.2)
 
 ## 1.5.1 2020-06-18
 
@@ -87,7 +87,7 @@
 - Using `locale: ...` option works as expected with hints (issue #589 fixed via 652) (@sirfilip)
 
 
-[Compare v1.5.0...v1.5.1](https://github.com/dry-rb//compare/v1.5.0...v1.5.1)
+[Compare v1.5.0...v1.5.1](https://github.com/dry-rb/dry-validation/compare/v1.5.0...v1.5.1)
 
 ## 1.5.0 2020-03-11
 
@@ -102,7 +102,7 @@
 - dry-schema dependency was bumped to `~> 1.5` (@solnic)
 - [internal] `KeyMap` patches have been removed since dry-schema now provides required functionality (@solnic)
 
-[Compare v1.4.2...v1.5.0](https://github.com/dry-rb//compare/v1.4.2...v1.5.0)
+[Compare v1.4.2...v1.5.0](https://github.com/dry-rb/dry-validation/compare/v1.4.2...v1.5.0)
 
 ## 1.4.2 2020-01-18
 
@@ -112,7 +112,7 @@
 - Macros using predicates that accept a range argument work as expected (no need to wrap the argument in an array) (@waiting-for-dev)
 
 
-[Compare v1.4.1...v1.4.2](https://github.com/dry-rb//compare/v1.4.1...v1.4.2)
+[Compare v1.4.1...v1.4.2](https://github.com/dry-rb/dry-validation/compare/v1.4.1...v1.4.2)
 
 ## 1.4.1 2020-01-08
 
@@ -127,7 +127,7 @@
 - Warnings about delegated keywords (@flash-gordon)
 
 
-[Compare v1.4.0...v1.4.1](https://github.com/dry-rb//compare/v1.4.0...v1.4.1)
+[Compare v1.4.0...v1.4.1](https://github.com/dry-rb/dry-validation/compare/v1.4.0...v1.4.1)
 
 ## 1.4.0 2019-12-12
 
@@ -148,7 +148,7 @@
 - [internal] improved performance in `Contract.ensure_valid_keys` (@grzegorz-jakubiak)
 - [internal] fixed keyword warnings on MRI 2.7.0 (@flash-gordon)
 
-[Compare v1.3.1...v1.4.0](https://github.com/dry-rb//compare/v1.3.1...v1.4.0)
+[Compare v1.3.1...v1.4.0](https://github.com/dry-rb/dry-validation/compare/v1.3.1...v1.4.0)
 
 ## 1.3.1 2019-08-16
 
@@ -157,7 +157,7 @@
 
 - You can now set an external schema without providing a block (@alassek)
 
-[Compare v1.3.0...v1.3.1](https://github.com/dry-rb//compare/v1.3.0...v1.3.1)
+[Compare v1.3.0...v1.3.1](https://github.com/dry-rb/dry-validation/compare/v1.3.0...v1.3.1)
 
 ## 1.3.0 2019-08-14
 
@@ -174,7 +174,7 @@
 
 - `values` within rules uses `Hash#fetch_values` internally now, which improves performance (@esparta)
 
-[Compare v1.2.1...v1.3.0](https://github.com/dry-rb//compare/v1.2.1...v1.3.0)
+[Compare v1.2.1...v1.3.0](https://github.com/dry-rb/dry-validation/compare/v1.2.1...v1.3.0)
 
 ## 1.2.1 2019-07-16
 
@@ -187,7 +187,7 @@
 - Added missing "pathname" require (issue #570) (@solnic)
 
 
-[Compare v1.2.0...v1.2.1](https://github.com/dry-rb//compare/v1.2.0...v1.2.1)
+[Compare v1.2.0...v1.2.1](https://github.com/dry-rb/dry-validation/compare/v1.2.0...v1.2.1)
 
 ## 1.2.0 2019-07-08
 
@@ -204,7 +204,7 @@
 
 - `dry-schema` dependency was bumped to `>= 1.3.1` (@solnic)
 
-[Compare v1.1.1...v1.2.0](https://github.com/dry-rb//compare/v1.1.1...v1.2.0)
+[Compare v1.1.1...v1.2.0](https://github.com/dry-rb/dry-validation/compare/v1.1.1...v1.2.0)
 
 ## 1.1.1 2019-06-24
 
@@ -214,7 +214,7 @@
 - `Rule#each` works with array values from nested hashes (@mustardnoise)
 
 
-[Compare v1.1.0...v1.1.1](https://github.com/dry-rb//compare/v1.1.0...v1.1.1)
+[Compare v1.1.0...v1.1.1](https://github.com/dry-rb/dry-validation/compare/v1.1.0...v1.1.1)
 
 ## 1.1.0 2019-06-14
 
@@ -230,14 +230,14 @@
 - Passing multiple macro names to `validate` or `each` works correctly (fixed #538 #541) (@jandudulski)
 
 
-[Compare v1.0.0...v1.1.0](https://github.com/dry-rb//compare/v1.0.0...v1.1.0)
+[Compare v1.0.0...v1.1.0](https://github.com/dry-rb/dry-validation/compare/v1.0.0...v1.1.0)
 
 ## 1.0.0 2019-06-10
 
 See [the list of all addressed issues](https://github.com/dry-rb/dry-validation/issues?utf8=✓&q=is%3Aissue+is%3Aclosed+closed%3A%3E%3D2019-01-01+) as well as issues that were moved to dry-schema and [addressed there](https://github.com/dry-rb/dry-schema/issues?q=is%3Aissue+is%3Aclosed+dry-validation+milestone%3A1.0.0).
 
 
-[Compare v1.0.0...v1.0.0](https://github.com/dry-rb//compare/v1.0.0...v1.0.0)
+[Compare v1.0.0...v1.0.0](https://github.com/dry-rb/dry-validation/compare/v1.0.0...v1.0.0)
 
 ## 1.0.0 2019-06-10
 
@@ -261,7 +261,7 @@ See [the list of all addressed issues](https://github.com/dry-rb/dry-validation/
 - `Contract.new` will raise `SchemaMissingError` when the class doesn't have schema defined (solnic)
 - Contracts no longer support `:locale` option in the constructor. Use `Result#errors(locale: :pl)` to change locale at run-time (solnic)
 
-[Compare v1.0.0.rc3...v1.0.0](https://github.com/dry-rb//compare/v1.0.0.rc3...v1.0.0)
+[Compare v1.0.0.rc3...v1.0.0](https://github.com/dry-rb/dry-validation/compare/v1.0.0.rc3...v1.0.0)
 
 ## 1.0.0.rc3 2019-05-06
 
@@ -278,7 +278,7 @@ See [the list of all addressed issues](https://github.com/dry-rb/dry-validation/
 - `config/errors.yml` are now bundled with the gem, **`rc2` was broken because of this** (solnic)
 
 
-[Compare v1.0.0.rc2...v1.0.0.rc3](https://github.com/dry-rb//compare/v1.0.0.rc2...v1.0.0.rc3)
+[Compare v1.0.0.rc2...v1.0.0.rc3](https://github.com/dry-rb/dry-validation/compare/v1.0.0.rc2...v1.0.0.rc3)
 
 ## 1.0.0.rc2 2019-05-04
 
@@ -298,7 +298,7 @@ This was **yanked** on rubygems.org because the bundled gem was missing `config`
 - In rule validation blocks, `values` is now an instance of a hash-like `Dry::Validation::Values` class, rather than `Dry::Schema::Result`. This gives more convenient access to data within rules (solnic)
 - Dependency on `dry-schema` was updated to `~> 1.0` (solnic)
 
-[Compare v1.0.0.rc1...v1.0.0.rc2](https://github.com/dry-rb//compare/v1.0.0.rc1...v1.0.0.rc2)
+[Compare v1.0.0.rc1...v1.0.0.rc2](https://github.com/dry-rb/dry-validation/compare/v1.0.0.rc1...v1.0.0.rc2)
 
 ## 1.0.0.rc1 2019-04-26
 
@@ -318,7 +318,7 @@ This was **yanked** on rubygems.org because the bundled gem was missing `config`
 - Dependency on `dry-schema` was bumped to `~> 0.6` - this pulls in `dry-types 1.0.0` and `dry-logic 1.0.0` (solnic)
 - Dependency on `dry-initializer` was bumped to `~> 3.0` (solnic)
 
-[Compare v1.0.0.beta2...v1.0.0.rc1](https://github.com/dry-rb//compare/v1.0.0.beta2...v1.0.0.rc1)
+[Compare v1.0.0.beta2...v1.0.0.rc1](https://github.com/dry-rb/dry-validation/compare/v1.0.0.beta2...v1.0.0.rc1)
 
 ## 1.0.0.beta2 2019-04-04
 
@@ -347,7 +347,7 @@ This was **yanked** on rubygems.org because the bundled gem was missing `config`
 - [BREAKING] `ErrorSet` was renamed to `MessageSet` for consistency (solnic)
 - [BREAKING] `:monads` extension wraps entire result objects in `Success` or `Failure` (flash-gordon)
 
-[Compare v1.0.0.beta1...v1.0.0.beta2](https://github.com/dry-rb//compare/v1.0.0.beta1...v1.0.0.beta2)
+[Compare v1.0.0.beta1...v1.0.0.beta2](https://github.com/dry-rb/dry-validation/compare/v1.0.0.beta1...v1.0.0.beta2)
 
 ## 1.0.0.beta1 2019-03-26
 
@@ -369,7 +369,7 @@ This was **yanked** on rubygems.org because the bundled gem was missing `config`
 - [BREAKING] `failure` was removed in favor of `key.failure` or `key(:foo).failure` (solnic)
 - [BREAKING] `Result#to_hash` was removed (flash-gordon)
 
-[Compare v1.0.0.alpha2...v1.0.0.beta1](https://github.com/dry-rb//compare/v1.0.0.alpha2...v1.0.0.beta1)
+[Compare v1.0.0.alpha2...v1.0.0.beta1](https://github.com/dry-rb/dry-validation/compare/v1.0.0.alpha2...v1.0.0.beta1)
 
 ## 1.0.0.alpha2 2019-03-05
 
@@ -385,7 +385,7 @@ First round of bug fixes. Thanks for testing <3!
 
 - When a message template is not found a more meaningful error is raised that includes both rule identifier and key path (solnic)
 
-[Compare v1.0.0.alpha1...v1.0.0.alpha2](https://github.com/dry-rb//compare/v1.0.0.alpha1...v1.0.0.alpha2)
+[Compare v1.0.0.alpha1...v1.0.0.alpha2](https://github.com/dry-rb/dry-validation/compare/v1.0.0.alpha1...v1.0.0.alpha2)
 
 ## 1.0.0.alpha1 2019-03-04
 
@@ -397,7 +397,7 @@ Complete rewrite on top of `dry-schema`.
 - [BREAKING] New `rule` DSL with an improved API for setting error messages (solnic)
 
 
-[Compare v0.13.0...v1.0.0.alpha1](https://github.com/dry-rb//compare/v0.13.0...v1.0.0.alpha1)
+[Compare v0.13.0...v1.0.0.alpha1](https://github.com/dry-rb/dry-validation/compare/v0.13.0...v1.0.0.alpha1)
 
 ## 0.13.0 2019-01-29
 
@@ -411,7 +411,7 @@ Complete rewrite on top of `dry-schema`.
 - `dry-logic` was bumped to `~> 0.5` (solnic)
 - `dry-types` was bumped to `~> 0.14` (solnic)
 
-[Compare v0.12.3...v0.13.0](https://github.com/dry-rb//compare/v0.12.3...v0.13.0)
+[Compare v0.12.3...v0.13.0](https://github.com/dry-rb/dry-validation/compare/v0.12.3...v0.13.0)
 
 ## 0.12.3 2019-01-29
 
@@ -420,7 +420,7 @@ Complete rewrite on top of `dry-schema`.
 
 - [internal] dry-logic was pinned to `~> 0.4.2` (flash-gordon)
 
-[Compare v0.12.2...v0.12.3](https://github.com/dry-rb//compare/v0.12.2...v0.12.3)
+[Compare v0.12.2...v0.12.3](https://github.com/dry-rb/dry-validation/compare/v0.12.2...v0.12.3)
 
 ## 0.12.2 2018-08-29
 
@@ -430,7 +430,7 @@ Complete rewrite on top of `dry-schema`.
 - Use correct key names for rule messages when using i18n (jozzi05)
 
 
-[Compare v0.12.1...v0.12.2](https://github.com/dry-rb//compare/v0.12.1...v0.12.2)
+[Compare v0.12.1...v0.12.2](https://github.com/dry-rb/dry-validation/compare/v0.12.1...v0.12.2)
 
 ## 0.12.1 2018-07-06
 
@@ -440,7 +440,7 @@ Complete rewrite on top of `dry-schema`.
 - [internal] fixed deprecation warnings (flash-gordon)
 
 
-[Compare v0.12.0...v0.12.1](https://github.com/dry-rb//compare/v0.12.0...v0.12.1)
+[Compare v0.12.0...v0.12.1](https://github.com/dry-rb/dry-validation/compare/v0.12.0...v0.12.1)
 
 ## 0.12.0 2018-05-31
 
@@ -450,7 +450,7 @@ Complete rewrite on top of `dry-schema`.
 - Code updated to work with `dry-types` 0.13.1 and `dry-struct` 0.5.0, these are now minimal supported versions (flash-gordon)
 - [BREAKING] `Form` was renamed to `Params` to be consistent with the latest changes from `dry-types`. You can `require 'dry/validation/compat/form'` to use the previous names but it will be removed in the next version (flash-gordon)
 
-[Compare v0.11.1...v0.12.0](https://github.com/dry-rb//compare/v0.11.1...v0.12.0)
+[Compare v0.11.1...v0.12.0](https://github.com/dry-rb/dry-validation/compare/v0.11.1...v0.12.0)
 
 ## 0.11.1 2017-09-15
 
@@ -460,7 +460,7 @@ Complete rewrite on top of `dry-schema`.
 - `Result#to_either` was renamed to `#to_monad`, the previous name is kept for backward compatibility (flash-gordon)
 - [internal] fix warnings from dry-types v0.12.0
 
-[Compare v0.11.0...v0.11.1](https://github.com/dry-rb//compare/v0.11.0...v0.11.1)
+[Compare v0.11.0...v0.11.1](https://github.com/dry-rb/dry-validation/compare/v0.11.0...v0.11.1)
 
 ## 0.11.0 2017-05-30
 
@@ -469,7 +469,7 @@ Complete rewrite on top of `dry-schema`.
 
 - [internal] input processor compilers have been updated to work with new dry-types' AST (GustavoCaso)
 
-[Compare v0.10.7...v0.11.0](https://github.com/dry-rb//compare/v0.10.7...v0.11.0)
+[Compare v0.10.7...v0.11.0](https://github.com/dry-rb/dry-validation/compare/v0.10.7...v0.11.0)
 
 ## 0.10.7 2017-05-15
 
@@ -480,7 +480,7 @@ Complete rewrite on top of `dry-schema`.
 - Re-using rules between schemas no longer mutates original rule set (pabloh)
 
 
-[Compare v0.10.6...v0.10.7](https://github.com/dry-rb//compare/v0.10.6...v0.10.7)
+[Compare v0.10.6...v0.10.7](https://github.com/dry-rb/dry-validation/compare/v0.10.6...v0.10.7)
 
 ## 0.10.6 2017-04-26
 
@@ -490,7 +490,7 @@ Complete rewrite on top of `dry-schema`.
 - Fixes issue with wrong localized error messages when namespaced messages are used (kbredemeier)
 
 
-[Compare v0.10.5...v0.10.6](https://github.com/dry-rb//compare/v0.10.5...v0.10.6)
+[Compare v0.10.5...v0.10.6](https://github.com/dry-rb/dry-validation/compare/v0.10.5...v0.10.6)
 
 ## 0.10.5 2017-01-12
 
@@ -500,7 +500,7 @@ Complete rewrite on top of `dry-schema`.
 - Warnings under MRI 2.4.0 are gone (koic)
 
 
-[Compare v0.10.4...v0.10.5](https://github.com/dry-rb//compare/v0.10.4...v0.10.5)
+[Compare v0.10.4...v0.10.5](https://github.com/dry-rb/dry-validation/compare/v0.10.4...v0.10.5)
 
 ## 0.10.4 2016-12-03
 
@@ -514,7 +514,7 @@ Complete rewrite on top of `dry-schema`.
 
 - `version` file is now required by default (georgemillo)
 
-[Compare v0.10.3...v0.10.4](https://github.com/dry-rb//compare/v0.10.3...v0.10.4)
+[Compare v0.10.3...v0.10.4](https://github.com/dry-rb/dry-validation/compare/v0.10.3...v0.10.4)
 
 ## 0.10.3 2016-09-27
 
@@ -524,7 +524,7 @@ Complete rewrite on top of `dry-schema`.
 - Custom predicates work correctly with `each` macro (solnic)
 
 
-[Compare v0.10.2...v0.10.3](https://github.com/dry-rb//compare/v0.10.2...v0.10.3)
+[Compare v0.10.2...v0.10.3](https://github.com/dry-rb/dry-validation/compare/v0.10.2...v0.10.3)
 
 ## 0.10.2 2016-09-23
 
@@ -534,7 +534,7 @@ Complete rewrite on top of `dry-schema`.
 - Constrained types + hints work again (solnic)
 
 
-[Compare v0.10.1...v0.10.2](https://github.com/dry-rb//compare/v0.10.1...v0.10.2)
+[Compare v0.10.1...v0.10.2](https://github.com/dry-rb/dry-validation/compare/v0.10.1...v0.10.2)
 
 ## 0.10.1 2016-09-22
 
@@ -544,7 +544,7 @@ Complete rewrite on top of `dry-schema`.
 - Remove obsolete require of `dry/struct` which is now an optional extension (flash-gordon)
 
 
-[Compare v0.10.0...v0.10.1](https://github.com/dry-rb//compare/v0.10.0...v0.10.1)
+[Compare v0.10.0...v0.10.1](https://github.com/dry-rb/dry-validation/compare/v0.10.0...v0.10.1)
 
 ## 0.10.0 2016-09-21
 
@@ -570,7 +570,7 @@ Complete rewrite on top of `dry-schema`.
 - [BREAKING] `when` macro no longer supports multiple disconnected rules in its block, whatever the block returns will be used for the implication (solnic)
 - [BREAKING] `rule(some_name: %i(some keys))` will _always_ use `:some_name` as the key for failure messages (solnic)
 
-[Compare v0.9.5...v0.10.0](https://github.com/dry-rb//compare/v0.9.5...v0.10.0)
+[Compare v0.9.5...v0.10.0](https://github.com/dry-rb/dry-validation/compare/v0.9.5...v0.10.0)
 
 ## 0.9.5 2016-08-16
 
@@ -581,7 +581,7 @@ Complete rewrite on top of `dry-schema`.
 - Default `locale` configured in `I18n` is now respected by the messages compiler (agustin + cavi21)
 
 
-[Compare v0.9.4...v0.9.5](https://github.com/dry-rb//compare/v0.9.4...v0.9.5)
+[Compare v0.9.4...v0.9.5](https://github.com/dry-rb/dry-validation/compare/v0.9.4...v0.9.5)
 
 ## 0.9.4 2016-08-11
 
@@ -591,7 +591,7 @@ Complete rewrite on top of `dry-schema`.
 - Error messages for sibling deeply nested schemas are nested correctly (timriley)
 
 
-[Compare v0.9.3...v0.9.4](https://github.com/dry-rb//compare/v0.9.3...v0.9.4)
+[Compare v0.9.3...v0.9.4](https://github.com/dry-rb/dry-validation/compare/v0.9.3...v0.9.4)
 
 ## 0.9.3 2016-07-22
 
@@ -610,7 +610,7 @@ Complete rewrite on top of `dry-schema`.
 
 - `#messages` is no longer memoized (solnic)
 
-[Compare v0.9.2...v0.9.3](https://github.com/dry-rb//compare/v0.9.2...v0.9.3)
+[Compare v0.9.2...v0.9.3](https://github.com/dry-rb/dry-validation/compare/v0.9.2...v0.9.3)
 
 ## 0.9.2 2016-07-13
 
@@ -621,7 +621,7 @@ Complete rewrite on top of `dry-schema`.
 - Array coercion without member type works now ie `required(:arr).maybe(:array?)` (solnic)
 
 
-[Compare v0.9.1...v0.9.2](https://github.com/dry-rb//compare/v0.9.1...v0.9.2)
+[Compare v0.9.1...v0.9.2](https://github.com/dry-rb/dry-validation/compare/v0.9.1...v0.9.2)
 
 ## 0.9.1 2016-07-11
 
@@ -631,7 +631,7 @@ Complete rewrite on top of `dry-schema`.
 - `I18n` backend is no longer required and set by default (solnic)
 
 
-[Compare v0.9.0...v0.9.1](https://github.com/dry-rb//compare/v0.9.0...v0.9.1)
+[Compare v0.9.0...v0.9.1](https://github.com/dry-rb/dry-validation/compare/v0.9.0...v0.9.1)
 
 ## 0.9.0 2016-07-08
 
@@ -660,7 +660,7 @@ Complete rewrite on top of `dry-schema`.
 
 - Tokens for `size?` were renamed `left` => `size_left` and `right` => `size_right` (fran-worley)
 
-[Compare v0.8.0...v0.9.0](https://github.com/dry-rb//compare/v0.8.0...v0.9.0)
+[Compare v0.8.0...v0.9.0](https://github.com/dry-rb/dry-validation/compare/v0.8.0...v0.9.0)
 
 ## 0.8.0 2016-07-01
 
@@ -709,7 +709,7 @@ Complete rewrite on top of `dry-schema`.
 - Deprecate key in favor of required (coop)
 - Remove nested key syntax (solnic)
 
-[Compare v0.7.4...v0.8.0](https://github.com/dry-rb//compare/v0.7.4...v0.8.0)
+[Compare v0.7.4...v0.8.0](https://github.com/dry-rb/dry-validation/compare/v0.7.4...v0.8.0)
 
 ## 0.7.4 2016-04-06
 
@@ -724,7 +724,7 @@ Complete rewrite on top of `dry-schema`.
 - Depending on deeply nested values in high-level rules works now (solnic)
 
 
-[Compare v0.7.3...v0.7.4](https://github.com/dry-rb//compare/v0.7.3...v0.7.4)
+[Compare v0.7.3...v0.7.4](https://github.com/dry-rb/dry-validation/compare/v0.7.3...v0.7.4)
 
 ## 0.7.3 2016-03-30
 
@@ -741,7 +741,7 @@ Complete rewrite on top of `dry-schema`.
 - Error message for `empty?` predicate is now correct (jodosha)
 
 
-[Compare v0.7.2...v0.7.3](https://github.com/dry-rb//compare/v0.7.2...v0.7.3)
+[Compare v0.7.2...v0.7.3](https://github.com/dry-rb/dry-validation/compare/v0.7.2...v0.7.3)
 
 ## 0.7.2 2016-03-28
 
@@ -752,7 +752,7 @@ Complete rewrite on top of `dry-schema`.
 - `Schema#to_proc` so that you can do `data.each(&schema)` (solnic)
 
 
-[Compare v0.7.1...v0.7.2](https://github.com/dry-rb//compare/v0.7.1...v0.7.2)
+[Compare v0.7.1...v0.7.2](https://github.com/dry-rb/dry-validation/compare/v0.7.1...v0.7.2)
 
 ## 0.7.1 2016-03-21
 
@@ -771,7 +771,7 @@ Complete rewrite on top of `dry-schema`.
 
 - Now depends on `dry-logic` >= `0.2.1` (solnic)
 
-[Compare v0.7.0...v0.7.1](https://github.com/dry-rb//compare/v0.7.0...v0.7.1)
+[Compare v0.7.0...v0.7.1](https://github.com/dry-rb/dry-validation/compare/v0.7.0...v0.7.1)
 
 ## 0.7.0 2016-03-16
 
@@ -814,7 +814,7 @@ Complete rewrite on top of `dry-schema`.
 - `Schema::Result` is now `Validation::Result` and it no longer has success and
   failure results, only error results are provided (solnic)
 
-[Compare v0.6.0...v0.7.0](https://github.com/dry-rb//compare/v0.6.0...v0.7.0)
+[Compare v0.6.0...v0.7.0](https://github.com/dry-rb/dry-validation/compare/v0.6.0...v0.7.0)
 
 ## 0.6.0 2016-01-20
 
@@ -835,7 +835,7 @@ Complete rewrite on top of `dry-schema`.
   default when no block is passed (solnic)
 
 
-[Compare v0.5.0...v0.6.0](https://github.com/dry-rb//compare/v0.5.0...v0.6.0)
+[Compare v0.5.0...v0.6.0](https://github.com/dry-rb/dry-validation/compare/v0.5.0...v0.6.0)
 
 ## 0.5.0 2016-01-11
 
@@ -849,7 +849,7 @@ Complete rewrite on top of `dry-schema`.
 - Now depends on [dry-logic](https://github.com/dry-rb/dry-logic) for predicates and rules (solnic)
 - `dry/validation/schema/form` is now required by default (solnic)
 
-[Compare v0.4.1...v0.5.0](https://github.com/dry-rb//compare/v0.4.1...v0.5.0)
+[Compare v0.4.1...v0.5.0](https://github.com/dry-rb/dry-validation/compare/v0.4.1...v0.5.0)
 
 ## 0.4.1 2015-12-27
 
@@ -859,7 +859,7 @@ Complete rewrite on top of `dry-schema`.
 - Support for `each` and type coercion inference in `Schema::Form` (solnic)
 
 
-[Compare v0.4.0...v0.4.1](https://github.com/dry-rb//compare/v0.4.0...v0.4.1)
+[Compare v0.4.0...v0.4.1](https://github.com/dry-rb/dry-validation/compare/v0.4.0...v0.4.1)
 
 ## 0.4.0 2015-12-21
 
@@ -877,7 +877,7 @@ Complete rewrite on top of `dry-schema`.
 - Error messages hash has now consistent structure `rule_name => [msgs_array, input_value]` (solnic)
 
 
-[Compare v0.3.1...v0.4.0](https://github.com/dry-rb//compare/v0.3.1...v0.4.0)
+[Compare v0.3.1...v0.4.0](https://github.com/dry-rb/dry-validation/compare/v0.3.1...v0.4.0)
 
 ## 0.3.1 2015-12-08
 
@@ -891,7 +891,7 @@ Complete rewrite on top of `dry-schema`.
 - Error compiler returns an empty hash rather than a nil when there are no errors (solnic)
 
 
-[Compare v0.3.0...v0.3.1](https://github.com/dry-rb//compare/v0.3.0...v0.3.1)
+[Compare v0.3.0...v0.3.1](https://github.com/dry-rb/dry-validation/compare/v0.3.0...v0.3.1)
 
 ## 0.3.0 2015-12-07
 
@@ -916,7 +916,7 @@ Complete rewrite on top of `dry-schema`.
   errors and messages
 - `Schema::Result#messages` returns a hash with rule names, messages and input values (solnic)
 
-[Compare v0.2.0...v0.3.0](https://github.com/dry-rb//compare/v0.2.0...v0.3.0)
+[Compare v0.2.0...v0.3.0](https://github.com/dry-rb/dry-validation/compare/v0.2.0...v0.3.0)
 
 ## 0.2.0 2015-11-30
 
@@ -941,7 +941,7 @@ Complete rewrite on top of `dry-schema`.
 - Added missing `and` / `or` interfaces to composite rules (solnic)
 
 
-[Compare v0.1.0...v0.2.0](https://github.com/dry-rb//compare/v0.1.0...v0.2.0)
+[Compare v0.1.0...v0.2.0](https://github.com/dry-rb/dry-validation/compare/v0.1.0...v0.2.0)
 
 ## 0.1.0 2015-11-25
 
