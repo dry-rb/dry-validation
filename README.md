@@ -14,7 +14,7 @@
 
 ## Links
 
-* [User documentation](http://dry-rb.org/gems/dry-validation)
+* [User documentation](https://dry-rb.org/gems/dry-validation)
 * [API documentation](http://rubydoc.info/gems/dry-validation)
 
 ## Supported Ruby versions
