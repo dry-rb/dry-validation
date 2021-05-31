@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # this file is synced from dry-rb/template-gem project
 
 lib = File.expand_path("lib", __dir__)
@@ -20,10 +21,10 @@ Gem::Specification.new do |spec|
   spec.executables   = []
   spec.require_paths = ["lib"]
 
-  spec.metadata['allowed_push_host'] = "https://rubygems.org"
-  spec.metadata['changelog_uri']     = "https://github.com/dry-rb/dry-validation/blob/master/CHANGELOG.md"
-  spec.metadata['source_code_uri']   = "https://github.com/dry-rb/dry-validation"
-  spec.metadata['bug_tracker_uri']   = "https://github.com/dry-rb/dry-validation/issues"
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
+  spec.metadata["changelog_uri"]     = "https://github.com/dry-rb/dry-validation/blob/master/CHANGELOG.md"
+  spec.metadata["source_code_uri"]   = "https://github.com/dry-rb/dry-validation"
+  spec.metadata["bug_tracker_uri"]   = "https://github.com/dry-rb/dry-validation/issues"
 
   spec.required_ruby_version = ">= 2.5.0"
 
