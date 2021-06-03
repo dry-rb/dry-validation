@@ -2,6 +2,7 @@
 
 AllCops:
   TargetRubyVersion: 2.5
+  NewCops: enable
   Exclude:
     - spec/support/coverage.rb
     - spec/support/warnings.rb
