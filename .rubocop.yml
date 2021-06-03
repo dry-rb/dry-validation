@@ -32,6 +32,12 @@ Layout/LineLength:
   Exclude:
     - "spec/**/*_spec.rb"
 
+Lint/AmbiguousBlockAssociation:
+  Enabled: true
+  # because 'expect { foo }.to change { bar }' is fine
+  Exclude:
+    - "spec/**/*.rb"
+
 Lint/BooleanSymbol:
   Enabled: false
 
@@ -58,6 +64,11 @@ Naming/FileName:
 
 Naming/MethodName:
   Enabled: false
+
+Naming/MethodParameterName
+  Enabled: true
+  Exclude:
+    - "spec/**/*.rb"
 
 Naming/MemoizedInstanceVariableName:
   Enabled: false
