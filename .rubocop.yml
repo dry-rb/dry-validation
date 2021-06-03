@@ -65,7 +65,7 @@ Naming/FileName:
 Naming/MethodName:
   Enabled: false
 
-Naming/MethodParameterName
+Naming/MethodParameterName:
   Enabled: true
   Exclude:
     - "spec/**/*.rb"
