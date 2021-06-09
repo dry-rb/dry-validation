@@ -1,7 +1,7 @@
 # This is a config synced from dry-rb/template-gem repo
 
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.6
   NewCops: enable
   Exclude:
     - spec/support/coverage.rb
