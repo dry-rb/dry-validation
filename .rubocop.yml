@@ -173,3 +173,11 @@ Style/MultipleComparison:
 
 Style/Next:
   Enabled: false
+
+Lint/UnusedBlockArgument:
+  Exclude:
+    - "spec/**/*_spec.rb"
+
+Metrics/ParameterLists:
+  Exclude:
+    - "spec/**/*_spec.rb"
