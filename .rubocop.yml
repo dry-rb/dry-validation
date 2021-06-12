@@ -31,7 +31,7 @@ Layout/SpaceInsideHashLiteralBraces:
 Layout/LineLength:
   Max: 100
   Exclude:
-    - "spec/**/*_spec.rb"
+    - "spec/**/*.rb"
 
 Lint/AmbiguousBlockAssociation:
   Enabled: true
@@ -44,7 +44,7 @@ Lint/BooleanSymbol:
 
 Lint/ConstantDefinitionInBlock:
   Exclude:
-    - "spec/**/*_spec.rb"
+    - "spec/**/*.rb"
 
 Lint/RaiseException:
   Enabled: false
@@ -117,7 +117,7 @@ Style/BlockDelimiters:
 
 Style/ClassAndModuleChildren:
   Exclude:
-    - "spec/**/*_spec.rb"
+    - "spec/**/*.rb"
 
 Style/ConditionalAssignment:
   Enabled: false
@@ -163,7 +163,7 @@ Style/StringLiteralsInInterpolation:
 
 Style/SymbolArray:
   Exclude:
-    - "spec/**/*_spec.rb"
+    - "spec/**/*.rb"
 
 Style/TrailingUnderscoreVariable:
   Enabled: false
@@ -176,15 +176,15 @@ Style/Next:
 
 Lint/UnusedBlockArgument:
   Exclude:
-    - "spec/**/*_spec.rb"
+    - "spec/**/*.rb"
 
 Metrics/ParameterLists:
   Exclude:
-    - "spec/**/*_spec.rb"
+    - "spec/**/*.rb"
 
 Lint/EmptyBlock:
   Exclude:
-    - "spec/**/*_spec.rb"
+    - "spec/**/*.rb"
 
 Naming/ConstantName:
   Exclude:
