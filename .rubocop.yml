@@ -181,3 +181,11 @@ Lint/UnusedBlockArgument:
 Metrics/ParameterLists:
   Exclude:
     - "spec/**/*_spec.rb"
+
+Lint/EmptyBlock:
+  Exclude:
+    - "spec/**/*_spec.rb"
+
+Naming/ConstantName:
+  Exclude:
+    - "spec/**/*.rb"
