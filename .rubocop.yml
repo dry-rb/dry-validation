@@ -170,3 +170,6 @@ Style/TrailingUnderscoreVariable:
 
 Style/MultipleComparison:
   Enabled: false
+
+Style/Next:
+  Enabled: false
