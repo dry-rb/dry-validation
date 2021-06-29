@@ -24,11 +24,9 @@ class User
 end
 
 contract = Dry::Validation::Contract.build do
-  config.messages.backend = :i18n
-
   params do
     FIELDS.each do |field|
-      required(field).value(:int?, gt?: FIELDS.size / 2)
+      required(field).value(:integer, gt?: FIELDS.size / 2)
     end
   end
 end
@@ -42,7 +40,7 @@ Benchmark.ips do |x|
   x.report("ActiveModel::Validations") do
     user = User.new(params)
     user.validate
-    user.errors
+    user.errors.messages
   end
 
   x.report("dry-validation / schema") do

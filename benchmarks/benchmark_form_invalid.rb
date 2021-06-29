@@ -47,13 +47,13 @@ Benchmark.ips do |x|
   x.report("ActiveModel") do
     user = AM::User.new(params)
     user.validate
-    user.errors
+    user.errors.messages
   end
 
   x.report("ActiveRecord") do
     user = AR::User.new(params)
     user.validate
-    user.errors
+    user.errors.messages
   end
 
   x.report("dry-validation") do
