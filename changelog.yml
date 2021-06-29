@@ -1,4 +1,9 @@
 ---
+- version: unreleased
+  summary:
+  date:
+  changed:
+  - "dry-schema was bumped to 1.7.0 (@solnic)"
 - version: 1.6.0
   summary:
   date: '2020-12-05'
