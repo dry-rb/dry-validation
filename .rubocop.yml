@@ -184,7 +184,7 @@ Style/Semicolon:
 
 Style/CaseEquality:
   Exclude:
-    - "dry/monads/**/*.rb"
+    - "lib/dry/monads/**/*.rb"
 
 Lint/UnusedBlockArgument:
   Exclude:
