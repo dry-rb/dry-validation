@@ -174,6 +174,9 @@ Style/MultipleComparison:
 Style/Next:
   Enabled: false
 
+Style/AccessorGrouping:
+  Enabled: false
+
 Lint/UnusedBlockArgument:
   Exclude:
     - "spec/**/*.rb"
