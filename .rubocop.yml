@@ -67,9 +67,7 @@ Naming/MethodName:
   Enabled: false
 
 Naming/MethodParameterName:
-  Enabled: true
-  Exclude:
-    - "spec/**/*.rb"
+  Enabled: false
 
 Naming/MemoizedInstanceVariableName:
   Enabled: false
@@ -177,7 +175,18 @@ Style/Next:
 Style/AccessorGrouping:
   Enabled: false
 
+Style/EmptyLiteral:
+  Enabled: false
+
 Lint/UnusedBlockArgument:
+  Exclude:
+    - "spec/**/*.rb"
+
+Lint/Debugger:
+  Exclude:
+    - "bin/console"
+
+Lint/BinaryOperatorWithIdenticalOperands:
   Exclude:
     - "spec/**/*.rb"
 
@@ -189,6 +198,14 @@ Lint/EmptyBlock:
   Exclude:
     - "spec/**/*.rb"
 
+Lint/UselessMethodDefinition:
+  Exclude:
+    - "spec/**/*.rb"
+
 Naming/ConstantName:
+  Exclude:
+    - "spec/**/*.rb"
+
+Naming/VariableNumber:
   Exclude:
     - "spec/**/*.rb"
