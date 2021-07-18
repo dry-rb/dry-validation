@@ -178,6 +178,10 @@ Style/AccessorGrouping:
 Style/EmptyLiteral:
   Enabled: false
 
+Style/Semicolon:
+  Exclude:
+    - "spec/**/*.rb"
+
 Lint/UnusedBlockArgument:
   Exclude:
     - "spec/**/*.rb"
