@@ -182,6 +182,10 @@ Style/Semicolon:
   Exclude:
     - "spec/**/*.rb"
 
+Style/CaseEquality:
+  Exclude:
+    - "dry/monads/**/*.rb"
+
 Lint/UnusedBlockArgument:
   Exclude:
     - "spec/**/*.rb"
