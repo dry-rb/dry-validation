@@ -220,3 +220,6 @@ Naming/ConstantName:
 Naming/VariableNumber:
   Exclude:
     - "spec/**/*.rb"
+
+Naming/BinaryOperatorParameterName:
+  Enabled: false
