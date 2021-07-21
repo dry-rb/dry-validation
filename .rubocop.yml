@@ -187,6 +187,7 @@ Style/CaseEquality:
     - "lib/dry/monads/**/*.rb"
     - "lib/dry/struct/**/*.rb"
     - "lib/dry/types/**/*.rb"
+    - "spec/**/*.rb"
 
 Lint/UnusedBlockArgument:
   Exclude:
