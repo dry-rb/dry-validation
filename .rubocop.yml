@@ -182,6 +182,10 @@ Style/Semicolon:
   Exclude:
     - "spec/**/*.rb"
 
+Style/HashAsLastArrayItem:
+  Exclude:
+    - "spec/**/*.rb"
+
 Style/CaseEquality:
   Exclude:
     - "lib/dry/monads/**/*.rb"
