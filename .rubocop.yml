@@ -57,6 +57,10 @@ Lint/SuppressedException:
   Exclude:
     - "spec/spec_helper.rb"
 
+Lint/LiteralAsCondition:
+  Exclude:
+    - "spec/**/*.rb"
+
 Naming/PredicateName:
   Enabled: false
 
