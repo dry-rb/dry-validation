@@ -205,6 +205,9 @@ Style/ExplicitBlockArgument:
 Style/CombinableLoops:
   Enabled: false
 
+Style/EmptyElse:
+  Enabled: false
+
 Lint/UnusedBlockArgument:
   Exclude:
     - "spec/**/*.rb"
