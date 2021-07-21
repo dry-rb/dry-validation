@@ -216,6 +216,9 @@ Lint/UselessMethodDefinition:
 Lint/SelfAssignment:
   Enabled: false
 
+Lint/EmptyClass:
+  Enabled: false
+
 Naming/ConstantName:
   Exclude:
     - "spec/**/*.rb"
