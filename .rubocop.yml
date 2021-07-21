@@ -198,6 +198,13 @@ Style/CaseEquality:
     - "lib/dry/types/**/*.rb"
     - "spec/**/*.rb"
 
+Style/ExplicitBlockArgument:
+  Exclude:
+    - "lib/dry/types/**/*.rb"
+
+Style/CombinableLoops:
+  Enabled: false
+
 Lint/UnusedBlockArgument:
   Exclude:
     - "spec/**/*.rb"
