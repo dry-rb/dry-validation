@@ -4,7 +4,7 @@ AllCops:
   TargetRubyVersion: 2.6
   NewCops: enable
   Exclude:
-    - bechmarks/*.rb
+    - benchmarks/*.rb
     - spec/support/coverage.rb
     - spec/support/warnings.rb
     - spec/support/rspec_options.rb
