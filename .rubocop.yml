@@ -185,6 +185,8 @@ Style/Semicolon:
 Style/CaseEquality:
   Exclude:
     - "lib/dry/monads/**/*.rb"
+    - "lib/dry/struct/**/*.rb"
+    - "lib/dry/types/**/*.rb"
 
 Lint/UnusedBlockArgument:
   Exclude:
