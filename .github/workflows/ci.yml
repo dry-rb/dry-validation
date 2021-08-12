@@ -70,6 +70,7 @@ jobs:
     env:
       GITHUB_LOGIN: dry-bot
       GITHUB_TOKEN: "${{secrets.GH_PAT}}"
+      DRY_CONFIGURABLE_FROM_MASTER: true
     steps:
     - uses: actions/checkout@v1
     - name: Install package dependencies
