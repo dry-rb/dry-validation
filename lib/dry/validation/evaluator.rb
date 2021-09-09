@@ -200,6 +200,15 @@ module Dry
         end
       end
 
+      # Check if there are any base errors
+      #
+      # @return [Boolean]
+      #
+      # @api public
+      def base_error?
+        !base.empty? || result.has_base_error?
+      end
+
       # @api private
       def respond_to_missing?(meth, include_private = false)
         super || _contract.respond_to?(meth, true)
