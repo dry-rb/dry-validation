@@ -78,7 +78,6 @@ RSpec.describe Dry::Validation::Evaluator do
   end
 
   describe "#base_error?" do
-
     let(:contract) do
       Class.new(Dry::Validation::Contract) do
         schema do
