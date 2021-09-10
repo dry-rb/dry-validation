@@ -77,7 +77,7 @@ RSpec.describe Dry::Validation::Evaluator do
     end
   end
 
-  describe "#base_error?" do
+  describe "#base_rule_error?" do
     let(:contract) do
       Class.new(Dry::Validation::Contract) do
         schema do
@@ -86,11 +86,11 @@ RSpec.describe Dry::Validation::Evaluator do
 
         rule do
           base.failure("first base failure")
-          base.failure("base failure added after checking") if base_error?
+          base.failure("base failure added after checking") if base_rule_error?
         end
 
         rule do
-          unless base_error?
+          unless base_rule_error?
             base.failure("rule should be checked only if the first base_rule was kept")
           end
         end

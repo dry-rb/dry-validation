@@ -205,8 +205,8 @@ module Dry
       # @return [Boolean]
       #
       # @api public
-      def base_error?
-        !base.empty? || result.has_base_error?
+      def base_rule_error?
+        !base.empty? || result.base_rule_error?
       end
 
       # @api private

@@ -123,7 +123,7 @@ module Dry
       # Check if the result contains a base_error
       #
       # @api private
-      def has_base_error?
+      def base_rule_error?
         !errors.filter(:base?).empty?
       end
 
