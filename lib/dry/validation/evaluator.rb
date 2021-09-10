@@ -200,7 +200,7 @@ module Dry
         end
       end
 
-      # Check if there are any base errors
+      # Check if there are any base rule errors
       #
       # @return [Boolean]
       #

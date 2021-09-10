@@ -260,6 +260,33 @@ PersonContract.new.call(email: 'bar', name: 'foo').errors.to_h
 # {name: ['name rule error'], email: ['email rule error']}
 ```
 
+If you want to check if any base rule error has already occured, you can use `base_rule_error?`.
+
+``` ruby
+class EventContract < Dry::Validation::Contract
+  option :today, default: Date.method(:today)
+
+  params do
+    required(:start_date).value(:date)
+    required(:end_date).value(:date)
+  end
+
+  rule do
+    if today.saturday? || today.sunday?
+      base.failure('creating events is allowed only on weekdays')
+    end
+  end
+
+  rule do 
+    base.failure('base failure added after checking') if base_rule_error?
+  end
+end
+
+contract = EventContract.new
+contract.call(start_date: Date.today+1, end_date: Date.today+2).errors.to_h
+# => {nil=>["creating events is allowed only on weekdays", "base failure added after checking"]}
+```
+
 ### Rules context
 
 Rules context is convenient for sharing data between rules or return data in the validation result. It can be used, for example, to return the data that was fetched from DB.

@@ -120,7 +120,7 @@ module Dry
         !schema_error?(key) && error?(key)
       end
 
-      # Check if the result contains a base_error
+      # Check if the result contains any base rule errors
       #
       # @api private
       def base_rule_error?
