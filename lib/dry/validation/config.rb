@@ -2,7 +2,6 @@
 
 require "dry/schema/config"
 require "dry/validation/macros"
-require "dry/configurable/version"
 
 module Dry
   module Validation
