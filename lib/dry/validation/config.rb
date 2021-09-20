@@ -11,7 +11,7 @@ module Dry
     #
     # @api public
     class Config < Schema::Config
-      setting :macros, Macros::Container.new, &:dup
+      setting :macros, default: Macros::Container.new, constructor: :dup.to_proc
 
       # @api private
       def dup
