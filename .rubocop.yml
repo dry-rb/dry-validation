@@ -208,6 +208,12 @@ Style/CombinableLoops:
 Style/EmptyElse:
   Enabled: false
 
+Style/DoubleNegation:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
 Lint/UnusedBlockArgument:
   Exclude:
     - "spec/**/*.rb"
