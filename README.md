@@ -23,7 +23,7 @@
 This library officially supports the following Ruby versions:
 
 * MRI `>= 2.6.0`
-* ~~jruby~~ `>= 9.3` (we are waiting for [2.6 support](https://github.com/jruby/jruby/issues/6161))
+* jruby `>= 9.3`
 
 ## License
 
