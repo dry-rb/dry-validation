@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 RSpec.describe Dry::Validation::Result do
+  subject(:dry_validation_result) { described_class }
+
   describe "#inspect" do
     let(:params) do
       double(:params, message_set: [], to_h: {email: "jane@doe.org"})
     end
 
     it "returns a string representation" do
-      result = Dry::Validation::Result.new(params) do |r|
+      result = dry_validation_result.new(params) do |r|
         r.add_error(Dry::Validation::Message.new("not valid", path: :email))
       end
 
@@ -23,7 +25,7 @@ RSpec.describe Dry::Validation::Result do
     end
 
     let(:result) do
-      Dry::Validation::Result.new(params) do |r|
+      dry_validation_result.new(params) do |r|
         r.add_error(Dry::Validation::Message.new("root error", path: [nil]))
         r.add_error(Dry::Validation::Message.new("email error", path: [:email]))
       end
@@ -40,7 +42,7 @@ RSpec.describe Dry::Validation::Result do
     end
 
     describe "#empty?" do
-      let(:result) { Dry::Validation::Result.new(params) }
+      let(:result) { dry_validation_result.new(params) }
 
       it "should return the correct value whilst adding errors" do
         expect(result.errors).to be_empty
@@ -56,7 +58,7 @@ RSpec.describe Dry::Validation::Result do
     end
 
     let(:result) do
-      Dry::Validation::Result.new(schema_result) do |r|
+      dry_validation_result.new(schema_result) do |r|
         r.add_error(Dry::Validation::Message.new("root error", path: [nil]))
         r.add_error(Dry::Validation::Message.new("email error", path: [:email]))
       end
@@ -87,7 +89,7 @@ RSpec.describe Dry::Validation::Result do
     end
 
     let(:result) do
-      Dry::Validation::Result.new(params, context)
+      dry_validation_result.new(params, context)
     end
 
     example "results are inspectable" do
