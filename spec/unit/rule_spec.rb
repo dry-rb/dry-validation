@@ -14,21 +14,19 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
       end
     end
 
-    it "allows specifying a rule for array elements" do
+    before :each do
       contract_class.rule(:tags) do
         key.failure("must have at least 1 element") unless value.size > 0
       end
+    end
 
+    it "allows specifying a rule for array elements" do
       expect(contract.(tags: []).errors.to_h).to eql(
         tags: ["must have at least 1 element"]
       )
     end
 
     it "shows the correct error message" do
-      contract_class.rule(:tags) do
-        key.failure("must have at least 1 element") unless value.size > 0
-      end
-
       expect(contract.(tags: [], name: "").errors.to_h).to eql(
         tags: ["must have at least 1 element"]
       )
