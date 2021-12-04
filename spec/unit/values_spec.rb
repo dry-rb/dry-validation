@@ -3,9 +3,7 @@
 require "dry/validation/values"
 
 RSpec.describe Dry::Validation::Values do
-  subject(:values) do
-    Dry::Validation::Values.new(data)
-  end
+  subject(:values) { described_class.new(data) }
 
   let(:data) do
     {
