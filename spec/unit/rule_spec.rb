@@ -14,7 +14,7 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
       end
     end
 
-    before :each do
+    before do
       contract_class.rule(:tags) do
         key.failure("must have at least 1 element") unless value.size > 0
       end
