@@ -4,7 +4,7 @@ layout: gem-single
 name: dry-validation
 ---
 
-Messages in failure API can be set in 4 different ways:
+Messages in failure API can be set in 3 different ways:
 
 - By passing a message string explicitly - the simplest way; however, using locales is a cleaner solution even if you don't have a multi-language system
 - By passing a message `identifier` that will be used to retrieve a corresponding message template that will be evaluated using provided (optional) data
