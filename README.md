@@ -8,7 +8,7 @@
 # dry-validation [![Join the chat at https://dry-rb.zulipchat.com](https://img.shields.io/badge/dry--rb-join%20chat-%23346b7a.svg)][chat]
 
 [![Gem Version](https://badge.fury.io/rb/dry-validation.svg)][gem]
-[![CI Status](https://github.com/dry-rb/dry-validation/workflows/CI/badge.svg)][actions]
+[![CI Status](https://github.com/dry-rb/dry-validation/workflows/ci/badge.svg)][actions]
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f30e3ff5ec304c55a73868cdbf055c67)][codacy]
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/f30e3ff5ec304c55a73868cdbf055c67)][codacy]
 [![Inline docs](http://inch-ci.org/github/dry-rb/dry-validation.svg?branch=master)][inchpages]
