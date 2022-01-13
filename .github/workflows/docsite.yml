@@ -1,4 +1,4 @@
-# this file is managed by dry-rb/devtools project
+# This file is synced from dry-rb/template-gem repo
 
 name: docsite
 
@@ -24,7 +24,7 @@ jobs:
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: "2.6.x"
+          ruby-version: "2.7.x"
       - name: Set up git user
         run: |
           git config --local user.email "dry-bot@dry-rb.org"
