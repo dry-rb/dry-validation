@@ -257,3 +257,6 @@ Naming/VariableNumber:
 
 Naming/BinaryOperatorParameterName:
   Enabled: false
+
+Style/NumberedParametersLimit:
+  Max: 2
