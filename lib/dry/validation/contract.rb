@@ -96,6 +96,7 @@ module Dry
       # @return [Result]
       #
       # @api public
+      # rubocop: disable Metrics/AbcSize
       def call(input, context = EMPTY_HASH)
         context_map = Concurrent::Map.new.tap do |map|
           default_context.each { |key, value| map[key] = value }
@@ -114,6 +115,7 @@ module Dry
           end
         end
       end
+      # rubocop: enable Metrics/AbcSize
 
       # Return a nice string representation
       #

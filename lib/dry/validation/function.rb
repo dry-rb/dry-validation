@@ -36,8 +36,7 @@ module Dry
         block
           .parameters
           .select { |arg,| arg.equal?(:keyreq) }
-          .map { |_, name| [name, BLOCK_OPTIONS_MAPPINGS[name]] }
-          .to_h
+          .to_h { [_2, BLOCK_OPTIONS_MAPPINGS[_2]] }
       end
     end
   end

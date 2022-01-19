@@ -74,7 +74,7 @@ RSpec.describe Dry::Validation::Result do
 
         # FIXME: this is flaky and passes when run in isolation :(
         xit "returns the correct translations" do
-          allow(YAML).to receive(:load_file).and_return(YAML.load(StringIO.new(yaml_messages)))
+          allow(YAML).to receive(:load_file).and_return(YAML.safe_load(StringIO.new(yaml_messages)))
           expect(result.errors(locale: :de).to_h).to eql(name: ["de - must be filled"])
           expect(result.messages(locale: :de).to_h).to eql(name: ["de - must be filled", "de - length must be within 2 - 4"])
           expect(result.errors(locale: :en).to_h).to eql(name: ["must be filled"])

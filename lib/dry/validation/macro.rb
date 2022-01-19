@@ -31,7 +31,7 @@ module Dry
 
       # @api private
       def extract_block_options(options)
-        block_options.map { |key, value| [key, options[value]] }.to_h
+        block_options.transform_values { options[_1] }
       end
     end
   end

@@ -61,9 +61,11 @@ module Dry
       end
 
       # @api public
+      # rubocop: disable Metrics/PerceivedComplexity
       def key?(key, hash = data)
         return hash.key?(key) if key.is_a?(Symbol)
 
+        # rubocop: disable Lint/DuplicateBranch
         Schema::Path[key].reduce(hash) do |a, e|
           if e.is_a?(Array)
             result = e.all? { |k| key?(k, a) }
@@ -79,9 +81,11 @@ module Dry
           end
           a[e]
         end
+        # rubocop: enable Lint/DuplicateBranch
 
         true
       end
+      # rubocop: enable Metrics/PerceivedComplexity
 
       # @api private
       def respond_to_missing?(meth, include_private = false)

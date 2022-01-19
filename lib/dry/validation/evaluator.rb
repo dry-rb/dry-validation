@@ -73,7 +73,7 @@ module Dry
         @_options = options
 
         if block
-          exec_opts = block_options.map { |key, value| [key, _options[value]] }.to_h
+          exec_opts = block_options.transform_values { _options[_1] }
           instance_exec(**exec_opts, &block)
         end
 

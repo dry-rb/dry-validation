@@ -70,11 +70,13 @@ module Dry
       # Initialize a new error object
       #
       # @api private
+      # rubocop: disable Lint/MissingSuper
       def initialize(text, path:, meta: EMPTY_HASH)
         @text = text
         @path = Array(path)
         @meta = meta
       end
+      # rubocop: enable Lint/MissingSuper
 
       # Check if this is a base error not associated with any key
       #
