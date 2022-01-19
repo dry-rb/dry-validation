@@ -17,7 +17,7 @@ module Dry
     # @api public
     class Evaluator
       extend Dry::Initializer
-      extend Dry::Core::Deprecations[:'dry-validation']
+      extend Dry::Core::Deprecations[:"dry-validation"]
 
       deprecate :error?, :schema_error?
 

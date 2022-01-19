@@ -26,8 +26,8 @@ RSpec.describe Dry::Validation::Contract, "#call" do
       end
 
       rule(:login) do
-        if key?
-          key.failure("too short") if value.length < 3
+        if key? && (value.length < 3)
+          key.failure("too short")
         end
       end
 

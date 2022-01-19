@@ -60,9 +60,9 @@ RSpec.describe Dry::Validation::Contract, "Rule#each" do
     it "returns error from the rule namespace without an index" do
       contract_class.config.messages.load_paths << SPEC_ROOT.join("fixtures/messages/errors.en.yml").realpath
       expect(contract.(small_integers: [11, 12], nums: [1]).errors.to_h)
-          .to eql(small_integers: { 0 => ["is too big!"],
-                                    1 => ["is too big!"]},
-                  nums: { 0 => ["invalid"] })
+        .to eql(small_integers: {0 => ["is too big!"],
+                                 1 => ["is too big!"]},
+                nums: {0 => ["invalid"]})
     end
   end
 

@@ -61,7 +61,7 @@ module Dry
         # @api public
         #
         # rubocop:disable Metrics/AbcSize
-        def message(rule, tokens: EMPTY_HASH, locale: nil, full: false, path:)
+        def message(rule, path:, tokens: EMPTY_HASH, locale: nil, full: false)
           keys = path.to_a.compact
           msg_opts = tokens.merge(path: keys, locale: locale || messages.default_locale)
 
@@ -110,11 +110,9 @@ module Dry
         end
 
         def parse_tokens(tokens)
-          Hash[
-            tokens.map do |key, token|
-              [key, parse_token(token)]
-            end
-          ]
+          tokens.transform_values do
+            parse_token(_1)
+          end
         end
 
         def parse_token(token)

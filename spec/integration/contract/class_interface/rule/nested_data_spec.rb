@@ -162,14 +162,14 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
           end
 
           inner_key = key(key.path.keys + [:inner])
-          inner_key.failure('Inner generic failure')
+          inner_key.failure("Inner generic failure")
         end
       end
     end
 
     it "allows setting errors on both attribute itself and its children" do
-      expect(contract.(outer: [{ inner: [{ attr: 123 }] }]).errors.to_h).to eql(
-        outer: { 0 => { inner: [['Inner generic failure'], { 0 => ['Inner specific failure'] }] } }
+      expect(contract.(outer: [{inner: [{attr: 123}]}]).errors.to_h).to eql(
+        outer: {0 => {inner: [["Inner generic failure"], {0 => ["Inner specific failure"]}]}}
       )
     end
   end

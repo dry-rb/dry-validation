@@ -53,6 +53,5 @@ RSpec.describe Dry::Validation::Evaluator, "using context" do
           .to eql(user: "jane", name: "John", details: "Present")
       end
     end
-
   end
 end

@@ -2,7 +2,7 @@
 
 RSpec.describe Dry::Validation::Result do
   let(:params) do
-    double(:params, message_set: [], to_h: { email: "jane@doe.org" })
+    double(:params, message_set: [], to_h: {email: "jane@doe.org"})
   end
 
   let(:success) do
@@ -18,11 +18,11 @@ RSpec.describe Dry::Validation::Result do
   it "supports pattern matching with keys" do
     case success
     in email:
-      expect(email).to eql('jane@doe.org')
+      expect(email).to eql("jane@doe.org")
     end
   end
 
-  it "supports pattern matching with arrays extracting keys and context"  do
+  it "supports pattern matching with arrays extracting keys and context" do
     case success
     in [{ email: }, { country: }]
       expect(email).to eql("jane@doe.org")
