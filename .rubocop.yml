@@ -217,6 +217,9 @@ Style/DoubleNegation:
 Style/MultilineBlockChain:
   Enabled: false
 
+Style/NumberedParametersLimit:
+  Max: 2
+
 Lint/UnusedBlockArgument:
   Exclude:
     - "spec/**/*.rb"
@@ -257,6 +260,3 @@ Naming/VariableNumber:
 
 Naming/BinaryOperatorParameterName:
   Enabled: false
-
-Style/NumberedParametersLimit:
-  Max: 2
