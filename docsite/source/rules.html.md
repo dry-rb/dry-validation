@@ -294,7 +294,7 @@ contract.call({user_id: 42}, user: user).context.each.to_h
 # => {user: #<User id: 42>}
 ```
 
-Also, defualt context can be provided on contract initialization:
+Also, default context can be provided on contract initialization:
 
 ```ruby
 user = UserRepo.new.find(42)
