@@ -120,6 +120,13 @@ module Dry
         !schema_error?(key) && error?(key)
       end
 
+      # Check if the result contains any base rule errors
+      #
+      # @api private
+      def base_rule_error?
+        !errors.filter(:base?).empty?
+      end
+
       # Check if there's any error for the provided key
       #
       # This does not consider errors from the nested values

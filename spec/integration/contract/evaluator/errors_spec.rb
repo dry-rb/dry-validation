@@ -76,4 +76,31 @@ RSpec.describe Dry::Validation::Evaluator do
       end
     end
   end
+
+  describe "#base_rule_error?" do
+    let(:contract) do
+      Class.new(Dry::Validation::Contract) do
+        schema do
+          required(:foo).filled(:string)
+        end
+
+        rule do
+          base.failure("first base failure")
+          base.failure("base failure added after checking") if base_rule_error?
+        end
+
+        rule do
+          unless base_rule_error?
+            base.failure("rule should be checked only if the first base_rule was kept")
+          end
+        end
+      end
+    end
+
+    it "checks for base errors" do
+      expect(contract.new.(foo: "some@email.com").errors.to_h).to eql(
+        nil => ["first base failure", "base failure added after checking"]
+      )
+    end
+  end
 end

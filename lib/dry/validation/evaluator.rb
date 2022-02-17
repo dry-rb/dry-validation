@@ -200,6 +200,15 @@ module Dry
         end
       end
 
+      # Check if there are any base rule errors
+      #
+      # @return [Boolean]
+      #
+      # @api public
+      def base_rule_error?
+        !base.empty? || result.base_rule_error?
+      end
+
       # @api private
       def respond_to_missing?(meth, include_private = false)
         super || _contract.respond_to?(meth, true)
