@@ -7,6 +7,7 @@
   - 'New rule helper `base_rule_error?` which checks if there''s any base error set
     (via #690) (@wuarmin)'
   changed:
+  - 'Dependency on dry-schema was bumped to 1.9.1 (@solnic)'
 - version: 1.7.0
   date: '2021-09-12'
   changed:
