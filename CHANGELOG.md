@@ -7,6 +7,9 @@
 
 - New rule helper `base_rule_error?` which checks if there's any base error set (via #690) (@wuarmin)
 
+### Changed
+
+- Dependency on dry-schema was bumped to 1.9.1 (@solnic)
 
 [Compare v1.7.0...v1.8.0](https://github.com/dry-rb/dry-validation/compare/v1.7.0...v1.8.0)
 
