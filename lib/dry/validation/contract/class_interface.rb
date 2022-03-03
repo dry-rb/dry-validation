@@ -159,7 +159,9 @@ module Dry
           key_paths = key_paths(keys)
 
           invalid_keys = key_paths.map { |(key, path)|
-            unless valid_paths.any? { |vp| vp.include?(path) || vp.include?("#{path}[]") }
+            unless valid_paths.any? { |vp|
+                     vp == path || vp.include?("#{path}.") || vp.include?("#{path}[]")
+                   }
               key
             end
           }.compact.uniq
