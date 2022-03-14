@@ -167,7 +167,7 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
     end
   end
 
-  context "when keys are substring of valid keys" do
+  context "when keys are prefixes of valid keys" do
     it "raises error with a list of symbol keys" do
       expect { contract_class.rule(:details, :addres) }
         .to raise_error(
@@ -197,6 +197,40 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
         .to raise_error(
           Dry::Validation::InvalidKeysError,
           "TestContract.rule specifies keys that are not defined by the schema: [{:details=>[:addres]}]"
+        )
+    end
+  end
+
+  context "when keys are suffixes of valid keys" do
+    it "raises error with a list of symbol keys" do
+      expect { contract_class.rule(:etails, :address) }
+        .to raise_error(
+          Dry::Validation::InvalidKeysError,
+          "TestContract.rule specifies keys that are not defined by the schema: [:etails, :address]"
+        )
+    end
+
+    it "raises error with a hash path" do
+      expect { contract_class.rule(etails: :address) }
+        .to raise_error(
+          Dry::Validation::InvalidKeysError,
+          "TestContract.rule specifies keys that are not defined by the schema: [{:etails=>:address}]"
+        )
+    end
+
+    it "raises error with a dot notation" do
+      expect { contract_class.rule("etails.address") }
+        .to raise_error(
+          Dry::Validation::InvalidKeysError,
+          'TestContract.rule specifies keys that are not defined by the schema: ["etails.address"]'
+        )
+    end
+
+    it "raises error with a hash path with multiple nested keys" do
+      expect { contract_class.rule(etails: %i[address]) }
+        .to raise_error(
+          Dry::Validation::InvalidKeysError,
+          "TestContract.rule specifies keys that are not defined by the schema: [{:etails=>[:address]}]"
         )
     end
   end

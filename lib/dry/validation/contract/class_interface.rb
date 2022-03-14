@@ -158,13 +158,13 @@ module Dry
           valid_paths = key_map.to_dot_notation
           key_paths = key_paths(keys)
 
-          invalid_keys = key_paths.map { |(key, path)|
+          invalid_keys = key_paths.filter_map { |(key, path)|
             unless valid_paths.any? { |vp|
-                     vp == path || vp.include?("#{path}.") || vp.include?("#{path}[]")
+                     vp == path || vp.start_with?("#{path}.", "#{path}[]")
                    }
               key
             end
-          }.compact.uniq
+          }.uniq
 
           return if invalid_keys.empty?
 
