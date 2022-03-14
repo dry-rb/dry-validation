@@ -159,9 +159,9 @@ module Dry
           key_paths = key_paths(keys)
 
           invalid_keys = key_paths.filter_map { |(key, path)|
-            unless valid_paths.any? { |vp|
-                     vp == path || vp.start_with?("#{path}.", "#{path}[]")
-                   }
+            if valid_paths.none? { |vp|
+                 vp == path || vp.start_with?("#{path}.", "#{path}[]")
+               }
               key
             end
           }.uniq
