@@ -1,13 +1,21 @@
 ---
-- version: 1.8.0
-  summary:
-  date: '2022-02-17'
+- version: unreleased
+  summary: 
+  date: 
   fixed:
+  - 'Raise an InvalidKeyErrors on substring of valid keys (issue #705 fixed via #706)
+    (@MatElGran)'
+  added: 
+  changed: 
+- version: 1.8.0
+  summary: 
+  date: '2022-02-17'
+  fixed: 
   added:
   - 'New rule helper `base_rule_error?` which checks if there''s any base error set
     (via #690) (@wuarmin)'
   changed:
-  - 'Dependency on dry-schema was bumped to 1.9.1 (@solnic)'
+  - Dependency on dry-schema was bumped to 1.9.1 (@solnic)
 - version: 1.7.0
   date: '2021-09-12'
   changed:
@@ -16,7 +24,7 @@
   - Bumped dry-schema dependency to 1.8.0 (in part, to ensure dry-configurable 0.13.0
     is available) (@timriley)
 - version: 1.6.0
-  summary:
+  summary: 
   date: '2020-12-05'
   fixed:
   - 'Checking `key?` within a rule no longer crashes when value is `nil` or an empty
@@ -26,21 +34,21 @@
     via #673) (@moofkit)'
   - 'You can now pass initial context object to `Contract#call` (issue #674 via #675)
     (@pyromaniac)'
-  changed:
+  changed: 
 - version: 1.5.6
   date: '2020-09-04'
-  summary:
+  summary: 
   fixed:
   - Dependency on dry-schema was bumped to >= 1.5.1. This time for real (@solnic)
 - version: 1.5.5
   date: '2020-09-03'
-  summary:
+  summary: 
   fixed:
   - 'Dependency on dry-schema was bumped to >= 1.5.2 (see #666 for more info) (@artofhuman)'
-  added:
-  changed:
+  added: 
+  changed: 
 - version: 1.5.4
-  summary:
+  summary: 
   date: '2020-08-21'
   fixed:
   - 'Full messages work correctly with rule failures now (issue #661 fixed via #662)
@@ -50,9 +58,9 @@
   added:
   - 'You can now pass any key or a path to the rule''s `key?` helper (see #664 for
     more info) (@alassek)'
-  changed:
+  changed: 
 - version: 1.5.3
-  summary:
+  summary: 
   date: '2020-07-27'
   fixed:
   - 'Using `.each(:foo)` works as expected when there are errors related to other
@@ -64,7 +72,7 @@
   - "`Result#error?` is now a public API and it takes into consideration both schema
     and rule errors (issue #655 fixed via #656) (@PragTob)"
 - version: 1.5.2
-  summary:
+  summary: 
   date: '2020-07-14'
   fixed:
   - "`key?` predicate in rules no longer crashes when the rule path points to a non-existent
@@ -78,9 +86,9 @@
   - 'Using `locale: ...` option works as expected with hints (issue #589 fixed via
     652) (@sirfilip)'
 - version: 1.5.0
-  summary:
+  summary: 
   date: '2020-03-11'
-  fixed:
+  fixed: 
   added:
   - "`schema_error?` rule helper (@waiting-for-dev)"
   - "`rule_error?` rule helper (@waiting-for-dev)"
