@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
-  spec.metadata["changelog_uri"]     = "https://github.com/dry-rb/dry-validation/blob/master/CHANGELOG.md"
+  spec.metadata["changelog_uri"]     = "https://github.com/dry-rb/dry-validation/blob/main/CHANGELOG.md"
   spec.metadata["source_code_uri"]   = "https://github.com/dry-rb/dry-validation"
   spec.metadata["bug_tracker_uri"]   = "https://github.com/dry-rb/dry-validation/issues"
 
@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "dry-container", "~> 0.7", ">= 0.7.1"
   spec.add_runtime_dependency "dry-core", "~> 0.5", ">= 0.5"
   spec.add_runtime_dependency "dry-initializer", "~> 3.0"
-  spec.add_runtime_dependency "dry-schema", "~> 1.9", ">= 1.9.1"
+  spec.add_runtime_dependency "dry-schema", "~> 1.8", ">= 1.8.0"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
