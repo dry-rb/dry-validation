@@ -8,7 +8,7 @@ on:
       - docsite/**
       - .github/workflows/docsite.yml
     branches:
-      - master
+      - main
       - release-**
     tags:
 
@@ -51,7 +51,7 @@ jobs:
 
             git push --all "https://dry-bot:${{secrets.GH_PAT}}@github.com/$GITHUB_REPOSITORY.git"
 
-            git checkout master
+            git checkout main
           else
             echo "no need to update branches"
           fi
