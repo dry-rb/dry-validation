@@ -11,7 +11,7 @@
 [![CI Status](https://github.com/dry-rb/dry-validation/workflows/ci/badge.svg)][actions]
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f30e3ff5ec304c55a73868cdbf055c67)][codacy]
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/f30e3ff5ec304c55a73868cdbf055c67)][codacy]
-[![Inline docs](http://inch-ci.org/github/dry-rb/dry-validation.svg?branch=master)][inchpages]
+[![Inline docs](http://inch-ci.org/github/dry-rb/dry-validation.svg?branch=main)][inchpages]
 
 ## Links
 
