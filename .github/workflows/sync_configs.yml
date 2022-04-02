@@ -6,7 +6,7 @@ on:
   repository_dispatch:
   push:
     branches:
-      - "master"
+      - "main"
 
 jobs:
   main:
@@ -43,5 +43,5 @@ jobs:
           git commit -m "[devtools] sync" || echo "nothing to commit"
       - name: Push changes
         run: |
-          git pull --rebase origin master
-          git push https://dry-bot:${{secrets.GH_PAT}}@github.com/${{github.repository}}.git HEAD:master
+          git pull --rebase origin main
+          git push https://dry-bot:${{secrets.GH_PAT}}@github.com/${{github.repository}}.git HEAD:main
