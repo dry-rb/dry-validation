@@ -14,7 +14,7 @@ name: ci
     - project.yml
   pull_request:
     branches:
-    - master
+    - main
   create:
 jobs:
   tests:
@@ -30,15 +30,15 @@ jobs:
         - ruby: '3.1'
           coverage: 'true'
         - ruby: 2.7.0
-          dry_schema_from_master: 'true'
-          dry_types_from_master: 'true'
-          dry_configurable_from_master: 'true'
+          dry_schema_from_main: 'true'
+          dry_types_from_main: 'true'
+          dry_configurable_from_main: 'true'
     env:
       COVERAGE: "${{matrix.coverage}}"
       COVERAGE_TOKEN: "${{secrets.CODACY_PROJECT_TOKEN}}"
-      DRY_SCHEMA_FROM_MASTER: "${{matrix.dry_schema_from_master}}"
-      DRY_TYPES_FROM_MASTER: "${{matrix.dry_types_from_master}}"
-      DRY_CONFIGURABLE_FROM_MASTER: "${{matrix.dry_configurable_from_master}}"
+      DRY_SCHEMA_FROM_MAIN: "${{matrix.dry_schema_from_main}}"
+      DRY_TYPES_FROM_MAIN: "${{matrix.dry_types_from_main}}"
+      DRY_CONFIGURABLE_FROM_MAIN: "${{matrix.dry_configurable_from_main}}"
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -57,7 +57,7 @@ jobs:
     - name: Run all tests
       run: bundle exec rake
     - name: Run codacy-coverage-reporter
-      uses: codacy/codacy-coverage-reporter-action@master
+      uses: codacy/codacy-coverage-reporter-action@main
       if: env.COVERAGE == 'true' && env.COVERAGE_TOKEN != ''
       with:
         project-token: "${{secrets.CODACY_PROJECT_TOKEN}}"

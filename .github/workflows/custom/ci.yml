@@ -4,10 +4,10 @@ jobs:
       matrix:
         include:
           - ruby: "2.7.0"
-            dry_schema_from_master: "true"
-            dry_types_from_master: "true"
-            dry_configurable_from_master: "true"
+            dry_schema_from_main: "true"
+            dry_types_from_main: "true"
+            dry_configurable_from_main: "true"
     env:
-      DRY_SCHEMA_FROM_MASTER: ${{matrix.dry_schema_from_master}}
-      DRY_TYPES_FROM_MASTER: ${{matrix.dry_types_from_master}}
-      DRY_CONFIGURABLE_FROM_MASTER: ${{matrix.dry_configurable_from_master}}
+      DRY_SCHEMA_FROM_MAIN: ${{matrix.dry_schema_from_main}}
+      DRY_TYPES_FROM_MAIN: ${{matrix.dry_types_from_main}}
+      DRY_CONFIGURABLE_FROM_MAIN: ${{matrix.dry_configurable_from_main}}
