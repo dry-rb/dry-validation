@@ -2,7 +2,7 @@
 
 AllCops:
   TargetRubyVersion: 2.7
-  NewCops: enable
+  NewCops: disable
   Exclude:
     - benchmarks/*.rb
     - spec/support/coverage.rb
