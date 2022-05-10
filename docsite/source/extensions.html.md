@@ -59,3 +59,15 @@ end
 AgeContract.new.(age: 17).errors.first.text
 # => 'must be greater than or equal to 18'
 ```
+
+### Hints
+
+The hints extension is implemented in [dry-schema](https://dry-rb.org/gems/dry-schema/main/extensions/hints/). This extension enables hints in Contracts.  
+
+To enable the extension:
+
+```ruby
+require 'dry/validation'
+
+Dry::Validation.load_extensions(:hints)
+```
