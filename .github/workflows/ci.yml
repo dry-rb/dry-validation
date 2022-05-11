@@ -57,7 +57,7 @@ jobs:
     - name: Run all tests
       run: bundle exec rake
     - name: Run codacy-coverage-reporter
-      uses: codacy/codacy-coverage-reporter-action@main
+      uses: codacy/codacy-coverage-reporter-action@master
       if: env.COVERAGE == 'true' && env.COVERAGE_TOKEN != ''
       with:
         project-token: "${{secrets.CODACY_PROJECT_TOKEN}}"
