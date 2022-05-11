@@ -8,9 +8,18 @@ RSpec.describe Dry::Validation::Contract do
       contract_class.new
     end
 
+    let(:locales) { %i[en] }
+
     let(:contract_class) do
+      backend = self.backend
+      locales = self.locales
+
       Class.new(Dry::Validation::Contract) do
-        config.messages.load_paths << SPEC_ROOT.join("fixtures/messages/errors.en.yml").realpath
+        config.messages.backend = backend
+
+        locales.each do |l|
+          config.messages.load_paths << SPEC_ROOT.join("fixtures/messages/errors.#{l}.yml").realpath
+        end
 
         params do
           required(:email).filled(:string, min_size?: 3, max_size?: 100)
@@ -54,36 +63,33 @@ RSpec.describe Dry::Validation::Contract do
   end
 
   context "using :yaml messages" do
-    before do
-      contract_class.config.messages.backend = :yaml
-    end
+    let(:backend) { :yaml }
 
     include_context "translated messages"
   end
 
   context "using :i18n messages" do
-    before do
-      I18n.available_locales = %i[en pl]
+    include_context "translated messages" do
+      let(:backend) { :i18n }
+      let(:locales) { %i[en pl] }
 
-      contract_class.config.messages.backend = :i18n
-      contract_class.config.messages.load_paths << SPEC_ROOT.join("fixtures/messages/errors.pl.yml").realpath
-
-      contract
-    end
-
-    include_context "translated messages"
-
-    it "respects I18n.with_locale" do
-      I18n.with_locale(:pl) do
-        expect(contract.call(email: "foo").errors.to_h).to eql(email: ["oh nie zły email"])
+      before do
+        contract_class
+        I18n.available_locales = locales
       end
 
-      I18n.with_locale(:en) do
+      it "respects I18n.with_locale" do
+        I18n.with_locale(:pl) do
+          expect(contract.call(email: "foo").errors.to_h).to eql(email: ["oh nie zły email"])
+        end
+
+        I18n.with_locale(:en) do
+          expect(contract.call(email: "foo").errors.to_h).to eql(email: ["oh noez bad email"])
+        end
+
+        expect(contract.call(email: "foo").errors(locale: :pl).to_h).to eql(email: ["oh nie zły email"])
         expect(contract.call(email: "foo").errors.to_h).to eql(email: ["oh noez bad email"])
       end
-
-      expect(contract.call(email: "foo").errors(locale: :pl).to_h).to eql(email: ["oh nie zły email"])
-      expect(contract.call(email: "foo").errors.to_h).to eql(email: ["oh noez bad email"])
     end
   end
 
