@@ -50,4 +50,24 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
       end
     end
   end
+
+  context "with an optional value" do
+    let(:contract_class) do
+      Class.new(Dry::Validation::Contract) do
+        schema do
+          required(:tags).maybe(:array)
+        end
+      end
+    end
+
+    context "when using .each macro" do
+      it "does not fail when input is nil" do
+        contract_class.rule(:tags).each do
+          key.failure("should not be called")
+        end
+
+        expect(contract.(tags: nil).errors.to_h).to eq({})
+      end
+    end
+  end
 end

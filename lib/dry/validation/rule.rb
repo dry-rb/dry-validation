@@ -82,7 +82,7 @@ module Dry
         @keys = []
 
         @block = proc do
-          unless result.base_error?(root) || !values.key?(root)
+          unless result.base_error?(root) || !values.key?(root) || values[root].nil?
             values[root].each_with_index do |_, idx|
               path = [*Schema::Path[root].to_a, idx]
 
