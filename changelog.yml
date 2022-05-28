@@ -1,7 +1,7 @@
 ---
-- version: unreleased
+- version: 1.8.1
   summary:
-  date:
+  date: '2022-05-28'
   fixed:
   - "Raise an InvalidKeyErrors on substring of valid keys (issue #705 fixed via #706) (@MatElGran)"
   - "Using `rule(:arr).each { .. }` doesn't crash when `:arr` turns out to be `nil` (issue #708 fixed via #709) (@bautrey37)"
