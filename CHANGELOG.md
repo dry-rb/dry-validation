@@ -6,6 +6,7 @@
 ### Fixed
 
 - Raise an InvalidKeyErrors on substring of valid keys (issue #705 fixed via #706) (@MatElGran)
+- Using `rule(:arr).each { .. }` doesn't crash when `:arr` turns out to be `nil` (issue #708 fixed via #709) (@bautrey37)
 
 
 [Compare v1.8.0...main](https://github.com/dry-rb/dry-validation/compare/v1.8.0...main)
