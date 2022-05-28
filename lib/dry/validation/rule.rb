@@ -76,6 +76,8 @@ module Dry
       # @return [Rule]
       #
       # @api public
+      #
+      # rubocop:disable Metrics/AbcSize
       def each(*macros, &block)
         root = keys[0]
         macros = parse_macros(*macros)
@@ -99,6 +101,7 @@ module Dry
 
         self
       end
+      # rubocop:enable Metrics/AbcSize
 
       # Return a nice string representation
       #
