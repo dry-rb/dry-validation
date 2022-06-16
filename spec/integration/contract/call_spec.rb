@@ -134,4 +134,44 @@ RSpec.describe Dry::Validation::Contract, "#call" do
     expect(result).to be_failure
     expect(result.errors.to_h).to eql(address: {geolocation: {lon: ["invalid longitude"]}})
   end
+
+  context "duplicate key names on nested structures" do
+    subject(:contract) do
+      Class.new(Dry::Validation::Contract) do
+        def self.name
+          "RuleTestContract"
+        end
+
+        schema do
+          required(:data).hash do
+            required(:wrapper).hash do
+              required(:data).hash do
+                required(:id).filled(:string)
+              end
+            end
+          end
+        end
+
+        register_macro(:min_size) do |macro:|
+          min = macro.args[0]
+          key.failure("must have at least #{min} characters") unless value.size >= min
+        end
+
+        rule(%i[data wrapper data id]).validate(min_size: 10)
+      end.new
+    end
+
+    it "only applies the rules to" do
+      expected = {data: {wrapper: {data: ["must be a hash"]}}}
+      result = contract.(
+        data: {
+          wrapper: {
+            data: []
+          }
+        }
+      )
+
+      expect(result.errors.to_h).to eq(expected)
+    end
+  end
 end

@@ -140,8 +140,9 @@ module Dry
 
         path
           .to_a[0..-2]
-          .any? { |key|
-            curr_path = Schema::Path[path.keys[0..path.keys.index(key)]]
+          .each_with_index
+          .any? { |_key, index|
+            curr_path = Schema::Path[path.keys[0..index]]
 
             return false unless result.schema_error?(curr_path)
 
