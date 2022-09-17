@@ -13,5 +13,5 @@ group :test do
 end
 
 group :tools do
-  gem "rubocop", "~> 1.27.0"
+  gem "rubocop", "~> 1.36.0"
 end
