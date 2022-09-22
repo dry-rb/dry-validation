@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "pathname"
-require "dry/core/constants"
+require "dry/core"
 
 module Dry
   module Validation

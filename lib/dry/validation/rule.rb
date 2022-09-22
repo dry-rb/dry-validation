@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "dry/core/equalizer"
+require "dry/core"
 
 require "dry/validation/constants"
 require "dry/validation/function"
