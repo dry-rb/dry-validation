@@ -3,7 +3,9 @@
 require_relative "suite"
 
 class TestContract < Dry::Validation::Contract
-  config.messages.backend = :i18n
+  configure do |config|
+    config.messages.backend = :i18n
+  end
 
   params do
     required(:email).filled(:string)

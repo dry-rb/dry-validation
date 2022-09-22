@@ -16,7 +16,7 @@ RSpec.describe Dry::Validation::Contract, ".inherited" do
 
   let(:parent_class) do
     Class.new(Dry::Validation::Contract) do
-      config.messages.backend = :i18n
+      configure { |c| c.messages.backend = :i18n }
 
       params do
         required(:name).filled(:string)

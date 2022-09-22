@@ -15,7 +15,7 @@ RSpec.describe Dry::Validation::Contract do
       locales = self.locales
 
       Class.new(Dry::Validation::Contract) do
-        config.messages.backend = backend
+        configure { |c| c.messages.backend = backend }
 
         locales.each do |l|
           config.messages.load_paths << SPEC_ROOT.join("fixtures/messages/errors.#{l}.yml").realpath

@@ -54,8 +54,10 @@ module Dry
       extend Dry::Initializer
       extend ClassInterface
 
-      config.messages.top_namespace = DEFAULT_ERRORS_NAMESPACE
-      config.messages.load_paths << DEFAULT_ERRORS_PATH
+      configure do |config|
+        config.messages.top_namespace = DEFAULT_ERRORS_NAMESPACE
+        config.messages.load_paths << DEFAULT_ERRORS_PATH
+      end
 
       # @!attribute [r] config
       #   @return [Config] Contract's configuration object

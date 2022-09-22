@@ -9,11 +9,13 @@ gemspec
 if ENV["DRY_CONFIGURABLE_FROM_MAIN"].eql?("true")
   gem "dry-configurable", github: "dry-rb/dry-configurable", branch: "main"
 end
+gem "dry-configurable", github: "dry-rb/dry-configurable", branch: "write-settings-in-configure-only"
 gem "dry-core", github: "dry-rb/dry-core"
 
 if ENV["DRY_SCHEMA_FROM_MAIN"].eql?("true")
   gem "dry-schema", github: "dry-rb/dry-schema", branch: "main"
 end
+gem "dry-schema", github: "dry-rb/dry-schema", branch: "use-configure-for-all-config-mutations"
 
 if ENV["DRY_TYPES_FROM_MAIN"].eql?("true")
   gem "dry-types", github: "dry-rb/dry-types", branch: "main"

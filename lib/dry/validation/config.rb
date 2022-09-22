@@ -15,9 +15,7 @@ module Dry
 
       # @api private
       def dup
-        config = super
-        config.macros = macros.dup
-        config
+        super.configure { |c| c.macros = macros.dup }
       end
     end
   end

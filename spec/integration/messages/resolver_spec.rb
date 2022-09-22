@@ -130,7 +130,7 @@ RSpec.describe Dry::Validation::Messages::Resolver, "#message" do
 
   context "using :yaml" do
     before do
-      contract_class.config.messages.backend = :yaml
+      contract_class.configure { |c| c.messages.backend = :yaml }
     end
 
     include_context "resolving"
@@ -138,7 +138,7 @@ RSpec.describe Dry::Validation::Messages::Resolver, "#message" do
 
   context "using :i18n" do
     before do
-      contract_class.config.messages.backend = :i18n
+      contract_class.configure { |c| c.messages.backend = :i18n }
     end
 
     include_context "resolving"

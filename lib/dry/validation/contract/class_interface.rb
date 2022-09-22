@@ -40,6 +40,11 @@ module Dry
           @config ||= Validation::Config.new
         end
 
+        # @api public
+        def configure(&block)
+          config.configure(&block)
+        end
+
         # Return macros registered for this class
         #
         # @return [Macros::Container]

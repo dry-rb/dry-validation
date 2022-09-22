@@ -24,7 +24,9 @@ module AM
 end
 
 contract = Dry::Validation::Contract.build {
-  config.messages.backend = :i18n
+  configure do |config|
+    config.messages.backend = :i18n
+  end
 
   params do
     required(:email).filled(:string)

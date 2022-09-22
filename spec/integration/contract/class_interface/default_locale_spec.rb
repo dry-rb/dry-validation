@@ -5,9 +5,11 @@ require "dry/validation/contract"
 RSpec.describe Dry::Validation::Contract, "setting default locale" do
   subject(:contract) do
     Dry::Validation.Contract do
-      config.messages.default_locale = :pl
-      config.messages.backend = :i18n
-      config.messages.load_paths << SPEC_ROOT.join("fixtures/messages/errors.pl.yml")
+      configure do |config|
+        config.messages.default_locale = :pl
+        config.messages.backend = :i18n
+        config.messages.load_paths << SPEC_ROOT.join("fixtures/messages/errors.pl.yml")
+      end
 
       params do
         required(:email).filled(:string)
