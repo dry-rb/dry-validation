@@ -2,7 +2,7 @@
 
 require "concurrent/map"
 
-require "dry/core"
+require "dry/core/equalizer"
 require "dry/initializer"
 require "dry/schema/path"
 
