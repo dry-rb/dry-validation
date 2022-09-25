@@ -155,6 +155,9 @@ Style/LambdaCall:
 Style/ParallelAssignment:
   Enabled: false
 
+Style/RaiseArgs:
+  Enabled: false
+
 Style/StabbyLambdaParentheses:
   Enabled: false
 
