@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/schema/config"
-require "dry/validation/macros"
-
 module Dry
   module Validation
     # Configuration for contracts

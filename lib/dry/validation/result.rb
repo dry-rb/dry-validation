@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 require "concurrent/map"
-require "dry/core/equalizer"
 
 require "dry/validation/constants"
-require "dry/validation/message_set"
-require "dry/validation/values"
 
 module Dry
   module Validation

@@ -10,6 +10,7 @@ begin
 rescue LoadError
 end
 
+require "yaml"
 require "i18n"
 require "dry/validation"
 

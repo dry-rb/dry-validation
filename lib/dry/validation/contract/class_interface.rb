@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 
-require "dry/schema"
-require "dry/schema/messages"
-require "dry/schema/path"
-require "dry/schema/key_map"
-
 require "dry/validation/constants"
-require "dry/validation/macros"
-require "dry/validation/schema_ext"
 
 module Dry
   module Validation
