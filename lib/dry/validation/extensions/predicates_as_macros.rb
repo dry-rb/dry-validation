@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/schema/predicate_registry"
-require "dry/validation/contract"
-
 module Dry
   module Validation
     # Predicate registry with additional needed methods.

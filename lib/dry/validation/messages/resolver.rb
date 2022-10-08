@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/validation/message"
-require "dry/schema/message_compiler"
-
 module Dry
   module Validation
     module Messages

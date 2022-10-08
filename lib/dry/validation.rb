@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require "zeitwerk"
+
+require "dry/core"
+require "dry/schema"
+
 require "dry/validation/constants"
-require "dry/validation/contract"
-require "dry/validation/macros"
 
 # Main namespace
 #
@@ -13,7 +16,21 @@ module Dry
   # @api public
   module Validation
     extend Dry::Core::Extensions
-    extend Macros::Registrar
+
+    def self.loader
+      @loader ||= Zeitwerk::Loader.new.tap do |loader|
+        root = File.expand_path("..", __dir__)
+        loader.tag = "dry-validation"
+        loader.inflector = Zeitwerk::GemInflector.new("#{root}/dry-validation.rb")
+        loader.push_dir(root)
+        loader.ignore(
+          "#{root}/dry-validation.rb",
+          "#{root}/dry/validation/schema_ext.rb",
+          "#{root}/dry/validation/{constants,errors,extensions,version}.rb"
+        )
+        loader.inflector.inflect("dsl" => "DSL")
+      end
+    end
 
     register_extension(:monads) do
       require "dry/validation/extensions/monads"
@@ -56,5 +73,9 @@ module Dry
     def self.macros
       Macros
     end
+
+    loader.setup
+
+    extend Macros::Registrar
   end
 end

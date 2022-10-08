@@ -2,17 +2,9 @@
 
 require "concurrent/map"
 
-require "dry/core/equalizer"
 require "dry/initializer"
-require "dry/schema/path"
-
-require "dry/validation/config"
 require "dry/validation/constants"
-require "dry/validation/rule"
-require "dry/validation/evaluator"
-require "dry/validation/messages/resolver"
-require "dry/validation/result"
-require "dry/validation/contract/class_interface"
+require "dry/validation/schema_ext"
 
 module Dry
   module Validation
