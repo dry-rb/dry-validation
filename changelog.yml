@@ -5,7 +5,8 @@
   fixed:
   - 'Duplicated keys mishandling in rule evaluation (issue #676 fixed via #711) (@mereghost)'
   added: 
-  changed: 
+  changed:
+  - 'Use Zeitwerk for auto-loading (via #715) (@solnic)'
 - version: 1.8.1
   summary: 
   date: '2022-05-28'
