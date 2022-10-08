@@ -7,6 +7,9 @@
 
 - Duplicated keys mishandling in rule evaluation (issue #676 fixed via #711) (@mereghost)
 
+### Changed
+
+- Use Zeitwerk for auto-loading (via #715) (@solnic)
 
 [Compare v1.8.1...main](https://github.com/dry-rb/dry-validation/compare/v1.8.1...main)
 
