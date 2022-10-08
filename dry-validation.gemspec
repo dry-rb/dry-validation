@@ -31,9 +31,9 @@ Gem::Specification.new do |spec|
   # to update dependencies edit project.yml
   spec.add_runtime_dependency "concurrent-ruby", "~> 1.0"
   spec.add_runtime_dependency "dry-container", "~> 0.7", ">= 0.7.1"
-  spec.add_runtime_dependency "dry-core", "~> 0.5", ">= 0.5"
+  spec.add_runtime_dependency "dry-core", "~> 0.9", ">= 0.9"
   spec.add_runtime_dependency "dry-initializer", "~> 3.0"
-  spec.add_runtime_dependency "dry-schema", "~> 1.8", ">= 1.8.0"
+  spec.add_runtime_dependency "dry-schema", "~> 1.11", ">= 1.11.0"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
