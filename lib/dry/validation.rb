@@ -26,7 +26,8 @@ module Dry
         loader.ignore(
           "#{root}/dry-validation.rb",
           "#{root}/dry/validation/schema_ext.rb",
-          "#{root}/dry/validation/{constants,errors,extensions,version}.rb"
+          "#{root}/dry/validation/{constants,errors,version}.rb",
+          "#{root}/dry/validation/extensions"
         )
         loader.inflector.inflect("dsl" => "DSL")
       end
