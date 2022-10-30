@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "dry/container"
-
 module Dry
   module Validation
     # API for registering and accessing Rule macros
@@ -41,7 +39,7 @@ module Dry
       #
       # @api public
       class Container
-        include Dry::Container::Mixin
+        include Core::Container::Mixin
 
         # Register a new macro
         #
@@ -89,7 +87,7 @@ module Dry
 
       # @api private
       def self.container
-        @container ||= Container.new
+        @container ||= Core::Container.new
       end
     end
 

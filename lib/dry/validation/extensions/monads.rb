@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
-require "dry/monads/result"
+require "dry/monads"
+require "dry/monads/version"
+
+if Gem::Version.new(Dry::Monads::VERSION) < Gem::Version.new("1.6.0")
+  raise "dry-validation requires dry-monads >= 1.6.0"
+end
 
 module Dry
   module Validation
