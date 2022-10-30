@@ -87,7 +87,7 @@ module Dry
 
       # @api private
       def self.container
-        @container ||= Core::Container.new
+        @container ||= Container.new
       end
     end
 
