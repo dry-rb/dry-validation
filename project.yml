@@ -13,7 +13,6 @@ gemspec:
   runtime_dependencies:
     - [zeitwerk, "~> 2.6"]
     - [concurrent-ruby, "~> 1.0"]
-    - [dry-core, "~> 0.9", ">= 0.9"]
-    - [dry-container, "~> 0.7", ">= 0.7.1"]
+    - [dry-core, ">= 1.0.0.rc1", "< 2"]
     - [dry-initializer, "~> 3.0"]
     - [dry-schema, "~> 1.11", ">= 1.11.0"]
