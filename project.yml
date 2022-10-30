@@ -15,4 +15,4 @@ gemspec:
     - [concurrent-ruby, "~> 1.0"]
     - [dry-core, ">= 1.0.0.rc1", "< 2"]
     - [dry-initializer, "~> 3.0"]
-    - [dry-schema, "~> 1.11", ">= 1.11.0"]
+    - [dry-schema, "~> 1.12", ">= 1.12.0"]
