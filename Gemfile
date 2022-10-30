@@ -10,6 +10,8 @@ gemspec
 #   gem "dry-configurable", github: "dry-rb/dry-configurable", branch: "main"
 # end
 
+gem "dry-core", github: "dry-rb/dry-core", branch: "main"
+
 if ENV["DRY_SCHEMA_FROM_MAIN"].eql?("true")
   gem "dry-schema", github: "dry-rb/dry-schema", branch: "main"
 end
