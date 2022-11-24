@@ -11,8 +11,7 @@ if ENV["DRY_CONFIGURABLE_FROM_MAIN"].eql?("true")
 end
 
 if ENV["DRY_SCHEMA_FROM_MAIN"].eql?("true")
-  # main targets 2.0
-  gem "dry-schema", github: "dry-rb/dry-schema", branch: "release-1.12"
+  gem "dry-schema", github: "dry-rb/dry-schema", branch: "main"
 end
 
 if ENV["DRY_TYPES_FROM_MAIN"].eql?("true")
