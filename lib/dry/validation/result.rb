@@ -197,20 +197,18 @@ module Dry
         super
       end
 
-      if RUBY_VERSION >= "2.7"
-        # Pattern matching
-        #
-        # @api private
-        def deconstruct_keys(keys)
-          values.deconstruct_keys(keys)
-        end
+      # Pattern matching
+      #
+      # @api private
+      def deconstruct_keys(keys)
+        values.deconstruct_keys(keys)
+      end
 
-        # Pattern matching
-        #
-        # @api private
-        def deconstruct
-          [values, context.each.to_h]
-        end
+      # Pattern matching
+      #
+      # @api private
+      def deconstruct
+        [values, context.each.to_h]
       end
 
       private
