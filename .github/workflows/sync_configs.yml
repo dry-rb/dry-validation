@@ -28,7 +28,7 @@ jobs:
           git config --local user.email "dry-bot@dry-rb.org"
           git config --local user.name "dry-bot"
       - name: Set up Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: "2.7"
       - name: Install dependencies
