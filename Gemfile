@@ -23,11 +23,6 @@ group :test do
   gem "i18n", require: false
 end
 
-group :tools do
-  gem "pry", platform: :jruby
-  gem "pry-byebug", platform: :mri
-end
-
 group :benchmarks do
   gem "actionpack"
   gem "activemodel"
