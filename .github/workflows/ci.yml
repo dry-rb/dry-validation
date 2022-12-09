@@ -23,13 +23,14 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
+        - '3.2'
         - '3.1'
         - '3.0'
         - '2.7'
         include:
-        - ruby: '3.1'
+        - ruby: '3.2'
           coverage: 'true'
-        - ruby: 2.7.0
+        - ruby: 3.1
           dry_schema_from_main: 'true'
           dry_types_from_main: 'true'
           dry_configurable_from_main: 'true'
