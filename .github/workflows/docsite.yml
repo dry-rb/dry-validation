@@ -24,7 +24,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.0.x"
+          ruby-version: "3.0.5"
       - name: Set up git user
         run: |
           git config --local user.email "dry-bot@dry-rb.org"
