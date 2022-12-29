@@ -3,11 +3,10 @@
 sources:
   - repo: dry-rb/template-gem
     sync:
-      - "!.github/workflows/ci.yml.erb"
-      - ".action_hero.yml.erb"
+      - ".repobot.yml.erb"
       - ".devtools/templates/*.sync:${{dir}}/${{name}}"
       - ".github/**/*.*"
-      - "gemspec.erb:dry-validation.gemspec"
+      - "gemspec.erb:dry-auto_inject.gemspec"
       - "spec/support/*"
       - "CODE_OF_CONDUCT.md"
       - "CONTRIBUTING.md"
@@ -16,6 +15,6 @@ sources:
       - "Gemfile.devtools"
       - ".rspec"
       - ".rubocop.yml"
-  - repo: action-hero/workflows
+  - repo: repobot-app/workflows
     sync:
       - ".github/workflows/*.yml"
