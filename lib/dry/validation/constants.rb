@@ -7,8 +7,6 @@ module Dry
   module Validation
     include Dry::Core::Constants
 
-    DOT = "."
-
     # Root path is used for base errors in hash representation of error messages
     ROOT_PATH = [nil].freeze
 
