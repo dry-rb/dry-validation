@@ -1,24 +1,28 @@
----
-name: ci
-'on':
+# This file is synced from dry-rb/template-gem repo
+name: CI
+
+on:
   push:
     paths:
-    - ".github/workflows/ci.yml"
-    - lib/**
-    - "*.gemspec"
-    - spec/**
-    - Rakefile
-    - Gemfile
-    - Gemfile.devtools
-    - ".rubocop.yml"
-    - project.yml
+      - ".github/workflows/ci.yml"
+      - ".devtools"
+      - "lib/**"
+      - "*.gemspec"
+      - "spec/**"
+      - "Rakefile"
+      - "Gemfile"
+      - "Gemfile.devtools"
+      - ".rubocop.yml"
+      - "project.yml"
   pull_request:
     branches:
-    - main
+      - main
   create:
+
 jobs:
   tests:
     runs-on: ubuntu-latest
+    name: Tests
     strategy:
       fail-fast: false
       matrix:
@@ -27,59 +31,41 @@ jobs:
         - '3.1'
         - '3.0'
         include:
-        - ruby: '3.2'
-          coverage: 'true'
-        - ruby: 3.1
-          dry_schema_from_main: 'true'
-          dry_types_from_main: 'true'
-          dry_configurable_from_main: 'true'
+          - ruby: "3.2"
+            coverage: "true"
     env:
-      COVERAGE: "${{matrix.coverage}}"
-      COVERAGE_TOKEN: "${{secrets.CODACY_PROJECT_TOKEN}}"
-      DRY_SCHEMA_FROM_MAIN: "${{matrix.dry_schema_from_main}}"
-      DRY_TYPES_FROM_MAIN: "${{matrix.dry_types_from_main}}"
-      DRY_CONFIGURABLE_FROM_MAIN: "${{matrix.dry_configurable_from_main}}"
+      COVERAGE: ${{matrix.coverage}}
+      COVERAGE_TOKEN: ${{secrets.CODACY_PROJECT_TOKEN}}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Install package dependencies
-      run: "[ -e $APT_DEPS ] || sudo apt-get install -y --no-install-recommends $APT_DEPS"
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: "${{matrix.ruby}}"
-    - name: Install latest bundler
-      run: |
-        gem install bundler --no-document
-        bundle config set without 'tools benchmarks docs'
-    - name: Bundle install
-      run: bundle install --jobs 4 --retry 3
-    - name: Run all tests
-      run: bundle exec rake
-    - name: Run codacy-coverage-reporter
-      uses: codacy/codacy-coverage-reporter-action@master
-      if: env.COVERAGE == 'true' && env.COVERAGE_TOKEN != ''
-      with:
-        project-token: "${{secrets.CODACY_PROJECT_TOKEN}}"
-        coverage-reports: coverage/coverage.xml
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install package dependencies
+        run: "[ -e $APT_DEPS ] || sudo apt-get install -y --no-install-recommends $APT_DEPS"
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{matrix.ruby}}
+          bundler-cache: true
+      - name: Run all tests
+        run: bundle exec rake
   release:
     runs-on: ubuntu-latest
     if: contains(github.ref, 'tags') && github.event_name == 'create'
     needs: tests
     env:
       GITHUB_LOGIN: dry-bot
-      GITHUB_TOKEN: "${{secrets.GH_PAT}}"
+      GITHUB_TOKEN: ${{secrets.GH_PAT}}
     steps:
-    - uses: actions/checkout@v2
-    - name: Install package dependencies
-      run: "[ -e $APT_DEPS ] || sudo apt-get install -y --no-install-recommends $APT_DEPS"
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.0
-    - name: Install dependencies
-      run: gem install ossy --no-document
-    - name: Trigger release workflow
-      run: |
-        tag=$(echo $GITHUB_REF | cut -d / -f 3)
-        ossy gh w dry-rb/devtools release --payload "{\"tag\":\"$tag\",\"sha\":\"${{github.sha}}\",\"tag_creator\":\"$GITHUB_ACTOR\",\"repo\":\"$GITHUB_REPOSITORY\",\"repo_name\":\"${{github.event.repository.name}}\"}"
+      - uses: actions/checkout@v2
+      - name: Install package dependencies
+        run: "[ -e $APT_DEPS ] || sudo apt-get install -y --no-install-recommends $APT_DEPS"
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0
+      - name: Install dependencies
+        run: gem install ossy --no-document
+      - name: Trigger release workflow
+        run: |
+          tag=$(echo $GITHUB_REF | cut -d / -f 3)
+          ossy gh w dry-rb/devtools release --payload "{\"tag\":\"$tag\",\"sha\":\"${{github.sha}}\",\"tag_creator\":\"$GITHUB_ACTOR\",\"repo\":\"$GITHUB_REPOSITORY\",\"repo_name\":\"${{github.event.repository.name}}\"}"
