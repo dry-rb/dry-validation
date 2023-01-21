@@ -7,6 +7,7 @@
 sources:
   - repo: dry-rb/template-gem
     sync:
+      - "!.github/workflows/ci.yml.erb"
       - ".repobot.yml.erb"
       - ".devtools/templates/*.sync:${{dir}}/${{name}}"
       - ".github/**/*.*"
