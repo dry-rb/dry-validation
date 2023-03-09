@@ -19,7 +19,7 @@ if ENV["DRY_TYPES_FROM_MAIN"].eql?("true")
 end
 
 group :test do
-  gem "dry-monads", github: "dry-rb/dry-monads", branch: "main"
+  gem "dry-monads"
   gem "i18n", require: false
 end
 
