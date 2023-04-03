@@ -135,6 +135,22 @@ RSpec.describe Dry::Validation::Contract, "#call" do
     expect(result.errors.to_h).to eql(address: {geolocation: {lon: ["invalid longitude"]}})
   end
 
+  context "when input argument is an integer" do
+    it "raises a descriptive error" do
+      result = -> { contract.(5) }
+
+      expect(&result).to raise_error(ArgumentError, "Input must be a Hash. Integer was given.")
+    end
+  end
+
+  context "when input argument is an array" do
+    it "raises a descriptive error" do
+      result = -> { contract.([{name: "Tomas"}]) }
+
+      expect(&result).to raise_error(ArgumentError, "Input must be a Hash. Array was given.")
+    end
+  end
+
   context "duplicate key names on nested structures" do
     subject(:contract) do
       Class.new(Dry::Validation::Contract) do

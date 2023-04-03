@@ -90,6 +90,8 @@ module Dry
       # @api public
       # rubocop: disable Metrics/AbcSize
       def call(input, context = EMPTY_HASH)
+        validate_input_type(input)
+
         context_map = Concurrent::Map.new.tap do |map|
           default_context.each { |key, value| map[key] = value }
           context.each { |key, value| map[key] = value }
@@ -160,6 +162,12 @@ module Dry
       # @api private
       def messages
         self.class.messages
+      end
+
+      def validate_input_type(input)
+        return if input.is_a?(Hash)
+
+        raise ArgumentError, "Input must be a Hash. #{input.class} was given."
       end
     end
   end
