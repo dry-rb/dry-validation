@@ -1,46 +1,28 @@
-name: "RuboCop"
-on:
-  push:
-    branches:
-      - "main"
-      - "master"
-    paths:
-      - "**/*.rb"
-      - "**/*.rake"
-      - "Rakefile"
-      - "Gemfile*"
-      - ".rubocop.yml"
-  pull_request:
-    branches:
-      - "main"
-      - "master"
-    types:
-      - "opened"
-      - "synchronize"
-  workflow_dispatch:
+# frozen_string_literal: true
+
+# This file is synced from dry-rb/template-gem repo
+
+name: RuboCop
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
 jobs:
-  run:
+  build:
     runs-on: ubuntu-latest
-    name: ${{ matrix.type }}
-    strategy:
-      fail-fast: false
-      matrix:
-        type: ["Style", "Layout", "Naming", "Lint", "Metrics", "Security"]
+    env:
+      BUNDLE_ONLY: tools
+
     steps:
-    - name: Clone
-      uses: actions/checkout@v2
-    - name: Get git diff
-      id: get_diff
-      uses: technote-space/get-diff-action@v4
+    - uses: actions/checkout@v3
+
+    - name: Set up Ruby 3.2
+      uses: ruby/setup-ruby@v1
       with:
-        PATTERNS: |
-          **/*.rb
-          **/*.rake
-          Gemfile
-          Rakefile
-    - name: Check ${{ matrix.type }}
-      uses: repobot-app/actions/rubocop@main
-      if: ${{ env.GIT_DIFF != '' }}
-      with:
-        diff: ${{ env.GIT_DIFF }}
-        type: ${{ matrix.type }}
+        ruby-version: 3.2
+        bundler-cache: true
+
+    - name: Run RuboCop
+      run: bundle exec rubocop --parallel
