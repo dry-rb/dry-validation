@@ -2,7 +2,7 @@
 [gem]: https://rubygems.org/gems/dry-validation
 [actions]: https://github.com/dry-rb/dry-validation/actions
 
-# dry-validation [![Gem Version](https://badge.fury.io/rb/dry-validation.svg)][gem] [![CI Status](https://github.com/dry-rb/dry-validation/workflows/ci/badge.svg)][actions]
+# dry-validation [![Gem Version](https://badge.fury.io/rb/dry-validation.svg)][gem] [![CI Status](https://github.com/dry-rb/dry-validation/workflows/CI/badge.svg)][actions]
 
 ## Links
 
