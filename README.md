@@ -1,4 +1,5 @@
 <!--- this file is synced from dry-rb/template-gem project -->
+
 [gem]: https://rubygems.org/gems/dry-validation
 [actions]: https://github.com/dry-rb/dry-validation/actions
 
