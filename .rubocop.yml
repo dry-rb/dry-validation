@@ -244,6 +244,10 @@ Lint/EmptyBlock:
   Exclude:
     - "spec/**/*.rb"
 
+Lint/EmptyFile:
+  Exclude:
+    - "spec/**/*.rb"
+
 Lint/UselessMethodDefinition:
   Exclude:
     - "spec/**/*.rb"
