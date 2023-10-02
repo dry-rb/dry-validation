@@ -3,6 +3,7 @@
 AllCops:
   TargetRubyVersion: 3.0
   NewCops: disable
+  SuggestExtensions: false
   Exclude:
     - "**/vendor/**/*" # For GitHub Actions, see rubocop/rubocop#9832
     - benchmarks/*.rb
