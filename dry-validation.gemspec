@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.metadata["changelog_uri"]     = "https://github.com/dry-rb/dry-validation/blob/main/CHANGELOG.md"
   spec.metadata["source_code_uri"]   = "https://github.com/dry-rb/dry-validation"
   spec.metadata["bug_tracker_uri"]   = "https://github.com/dry-rb/dry-validation/issues"
+  spec.metadata["funding_uri"]       = "https://github.com/sponsors/hanami"
 
   spec.required_ruby_version = ">= 3.0"
 
