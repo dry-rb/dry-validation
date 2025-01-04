@@ -13,7 +13,7 @@ module Dry
     #
     # @api public
     class Rule < Function
-      include Dry::Equalizer(:keys, :block, inspect: false)
+      include ::Dry::Equalizer(:keys, :block, inspect: false)
 
       # @!attribute [r] keys
       #   @return [Array<Symbol, String, Hash>]
@@ -127,7 +127,7 @@ module Dry
 
       def add_macro_from_hash(macros, spec)
         spec.each do |k, v|
-          macros << [k, v.is_a?(Array) ? v : [v]]
+          macros << [k, v.is_a?(::Array) ? v : [v]]
         end
       end
     end

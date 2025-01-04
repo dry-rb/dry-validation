@@ -29,8 +29,8 @@ module Dry
         # @see Macro
         #
         # @api public
-        def register_macro(name, *args, &block)
-          macros.register(name, *args, &block)
+        def register_macro(name, ...)
+          macros.register(name, ...)
           self
         end
       end
@@ -80,8 +80,8 @@ module Dry
       # @return [Macros]
       #
       # @api public
-      def self.register(name, *args, &block)
-        container.register(name, *args, &block)
+      def self.register(name, ...)
+        container.register(name, ...)
         self
       end
 

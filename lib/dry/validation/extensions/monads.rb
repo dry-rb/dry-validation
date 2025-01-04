@@ -24,7 +24,7 @@ module Dry
     #
     # @api public
     class Result
-      include Dry::Monads::Result::Mixin
+      include ::Dry::Monads::Result::Mixin
 
       # Returns a result monad
       #

@@ -114,7 +114,7 @@ RSpec.describe Dry::Validation::Values do
     it "forwards to data" do
       result = []
 
-      values.each do |k, v|
+      values.each do |k, v| # rubocop:disable Style/MapIntoArray
         result << [k, v]
       end
 

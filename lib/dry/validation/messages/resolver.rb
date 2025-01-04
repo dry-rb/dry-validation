@@ -3,7 +3,7 @@
 module Dry
   module Validation
     module Messages
-      FULL_MESSAGE_WHITESPACE = Dry::Schema::MessageCompiler::FULL_MESSAGE_WHITESPACE
+      FULL_MESSAGE_WHITESPACE = ::Dry::Schema::MessageCompiler::FULL_MESSAGE_WHITESPACE
 
       # Resolve translated messages from failure arguments
       #
@@ -30,11 +30,11 @@ module Dry
         # @api public
         def call(message:, tokens:, path:, meta: EMPTY_HASH)
           case message
-          when Symbol
+          when ::Symbol
             Message[->(**opts) { message(message, path: path, tokens: tokens, **opts) }, path, meta]
-          when String
+          when ::String
             Message[->(**opts) { [message_text(message, path: path, **opts), meta] }, path, meta]
-          when Hash
+          when ::Hash
             meta = message.dup
             text = meta.delete(:text) { |key|
               raise ArgumentError, <<~STR
@@ -114,7 +114,7 @@ module Dry
 
         def parse_token(token)
           case token
-          when Array
+          when ::Array
             token.join(", ")
           else
             token

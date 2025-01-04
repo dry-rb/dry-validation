@@ -13,20 +13,20 @@ module Types
 end
 
 class Context
-  def schema(&block)
-    Dry::Schema.define(&block)
+  def schema(&)
+    Dry::Schema.define(&)
   end
 
-  def params(&block)
-    Dry::Schema.Params(&block)
+  def params(&)
+    Dry::Schema.Params(&)
   end
 
-  def json(&block)
-    Dry::Schema.JSON(&block)
+  def json(&)
+    Dry::Schema.JSON(&)
   end
 
-  def contract(&block)
-    Dry::Validation::Contract.build(&block)
+  def contract(&)
+    Dry::Validation::Contract.build(&)
   end
 end
 

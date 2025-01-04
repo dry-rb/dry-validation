@@ -7,7 +7,7 @@ module Dry
     class Path
       # @api private
       def multi_value?
-        last.is_a?(Array)
+        last.is_a?(::Array)
       end
 
       # @api private

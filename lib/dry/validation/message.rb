@@ -6,7 +6,7 @@ module Dry
     #
     # @api public
     class Message < Schema::Message
-      include Dry::Equalizer(:text, :path, :meta)
+      include ::Dry::Equalizer(:text, :path, :meta)
 
       # The error message text
       #

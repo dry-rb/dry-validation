@@ -50,8 +50,8 @@ module Dry
         # @see https://dry-rb.org/gems/dry-schema/params/
         #
         # @api public
-        def params(*external_schemas, &block)
-          define(:Params, external_schemas, &block)
+        def params(*external_schemas, &)
+          define(:Params, external_schemas, &)
         end
 
         # Define a JSON schema for your contract
@@ -62,8 +62,8 @@ module Dry
         # @see https://dry-rb.org/gems/dry-schema/json/
         #
         # @api public
-        def json(*external_schemas, &block)
-          define(:JSON, external_schemas, &block)
+        def json(*external_schemas, &)
+          define(:JSON, external_schemas, &)
         end
 
         # Define a plain schema for your contract
@@ -74,8 +74,8 @@ module Dry
         # @see https://dry-rb.org/gems/dry-schema/
         #
         # @api public
-        def schema(*external_schemas, &block)
-          define(:schema, external_schemas, &block)
+        def schema(*external_schemas, &)
+          define(:schema, external_schemas, &)
         end
 
         # Define a rule for your contract
@@ -115,8 +115,8 @@ module Dry
         # @return [Contract]
         #
         # @api public
-        def build(options = EMPTY_HASH, &block)
-          Class.new(self, &block).new(**options)
+        def build(options = EMPTY_HASH, &)
+          Class.new(self, &).new(**options)
         end
 
         # @api private

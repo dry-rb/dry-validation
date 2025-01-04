@@ -41,9 +41,9 @@ module Dry
     #
     # @api public
     class Contract
-      include Dry::Equalizer(:schema, :rules, :messages, inspect: false)
+      include ::Dry::Equalizer(:schema, :rules, :messages, inspect: false)
 
-      extend Dry::Initializer
+      extend ::Dry::Initializer
       extend ClassInterface
 
       config.messages.top_namespace = DEFAULT_ERRORS_NAMESPACE
@@ -92,7 +92,7 @@ module Dry
       def call(input, context = EMPTY_HASH)
         validate_input_type(input)
 
-        context_map = Concurrent::Map.new.tap do |map|
+        context_map = ::Concurrent::Map.new.tap do |map|
           default_context.each { |key, value| map[key] = value }
           context.each { |key, value| map[key] = value }
         end
@@ -165,9 +165,9 @@ module Dry
       end
 
       def validate_input_type(input)
-        return if input.is_a?(Hash)
+        return if input.is_a?(::Hash)
 
-        raise ArgumentError, "Input must be a Hash. #{input.class} was given."
+        raise ::ArgumentError, "Input must be a Hash. #{input.class} was given."
       end
     end
   end

@@ -12,8 +12,8 @@ module Dry
     #
     # @api public
     class Values
-      include Enumerable
-      include Dry::Equalizer(:data)
+      include ::Enumerable
+      include ::Dry::Equalizer(:data)
 
       # Schema's result output
       #
@@ -46,8 +46,8 @@ module Dry
         return data.dig(*args) if args.size > 1
 
         case (key = args[0])
-        when Symbol, String, Array, Hash
-          keys = Schema::Path[key].to_a
+        when ::Symbol, ::String, ::Array, ::Hash
+          keys = ::Dry::Schema::Path[key].to_a
 
           return data.dig(*keys) unless keys.last.is_a?(Array)
 
@@ -55,28 +55,24 @@ module Dry
           vals = self.class.new(data.dig(*keys))
           vals.fetch_values(*last) { nil }
         else
-          raise ArgumentError, "+key+ must be a valid path specification"
+          raise ::ArgumentError, "+key+ must be a valid path specification"
         end
       end
 
       # @api public
       # rubocop: disable Metrics/PerceivedComplexity
       def key?(key, hash = data)
-        return hash.key?(key) if key.is_a?(Symbol)
+        return hash.key?(key) if key.is_a?(::Symbol)
 
         Schema::Path[key].reduce(hash) do |a, e|
-          if e.is_a?(Array)
-            result = e.all? { |k| key?(k, a) }
-            return result
-          elsif e.is_a?(Symbol) && a.is_a?(Array)
-            return false
-          elsif a.nil?
-            return false
-          elsif a.is_a?(String)
+          if e.is_a?(::Array)
+            return e.all? { |k| key?(k, a) }
+          elsif (e.is_a?(::Symbol) && a.is_a?(::Array)) || a.nil? || a.is_a?(::String)
             return false
           else
-            return false unless a.is_a?(Array) ? (e >= 0 && e < a.size) : a.key?(e)
+            return false unless a.is_a?(::Array) ? (e >= 0 && e < a.size) : a.key?(e)
           end
+
           a[e]
         end
         true
@@ -91,14 +87,13 @@ module Dry
       private
 
       # @api private
-      def method_missing(meth, *args, &block)
+      def method_missing(meth, ...)
         if data.respond_to?(meth)
-          data.public_send(meth, *args, &block)
+          data.public_send(meth, ...)
         else
           super
         end
       end
-      ruby2_keywords(:method_missing) if respond_to?(:ruby2_keywords, true)
     end
   end
 end

@@ -59,7 +59,7 @@ module Dry
         end
       end
 
-      Dry::Schema.load_extensions(:hints)
+      ::Dry::Schema.load_extensions(:hints)
 
       Result.prepend(ResultExtensions)
     end

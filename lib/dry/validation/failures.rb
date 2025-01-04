@@ -27,7 +27,7 @@ module Dry
 
       # @api private
       def initialize(path = ROOT_PATH)
-        @path = Dry::Schema::Path[path]
+        @path = ::Dry::Schema::Path[path]
         @opts = EMPTY_ARRAY.dup
       end
 

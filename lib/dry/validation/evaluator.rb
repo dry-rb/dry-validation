@@ -117,8 +117,8 @@ module Dry
       end
 
       # @api private
-      def with(new_opts, &block)
-        self.class.new(_contract, **_options, **new_opts, &block)
+      def with(new_opts, &)
+        self.class.new(_contract, **_options, **new_opts, &)
       end
 
       # Return default (first) key name
@@ -216,15 +216,14 @@ module Dry
       # Forward to the underlying contract
       #
       # @api private
-      def method_missing(meth, *args, &block)
+      def method_missing(meth, ...)
         # yes, we do want to delegate to private methods too
         if _contract.respond_to?(meth, true)
-          _contract.__send__(meth, *args, &block)
+          _contract.__send__(meth, ...)
         else
           super
         end
       end
-      ruby2_keywords(:method_missing) if respond_to?(:ruby2_keywords, true)
     end
   end
 end

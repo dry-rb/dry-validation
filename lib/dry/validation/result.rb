@@ -10,7 +10,7 @@ module Dry
     #
     # @api public
     class Result
-      include Dry::Equalizer(:schema_result, :context, :errors, inspect: false)
+      include ::Dry::Equalizer(:schema_result, :context, :errors, inspect: false)
 
       # Build a new result
       #

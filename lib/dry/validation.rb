@@ -64,8 +64,8 @@ module Dry
     #
     # @api public
     #
-    def self.Contract(options = EMPTY_HASH, &block)
-      Contract.build(options, &block)
+    def self.Contract(options = EMPTY_HASH, &)
+      Contract.build(options, &)
     end
 
     # This is needed by Macros::Registrar
