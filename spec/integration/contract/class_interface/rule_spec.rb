@@ -32,8 +32,9 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
     end
 
     it "applies rule when value passed schema checks" do
-      expect(contract.(email: "jane@doe.org", login: "ab").errors.to_h)
-        .to eql(login: ["is too short"])
+      expect(contract.(email: "jane@doe.org", login: "ab").errors.to_h).to eql(
+        login: ["is too short"]
+      )
     end
   end
 
@@ -45,8 +46,9 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
     end
 
     it "applies the rule regardless of the schema result" do
-      expect(contract.(email: "jane@doe.org", login: "jane").errors.to_h)
-        .to eql(custom: ["this works"])
+      expect(contract.(email: "jane@doe.org", login: "jane").errors.to_h).to eql(
+        custom: ["this works"]
+      )
     end
   end
 
@@ -58,14 +60,17 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
     end
 
     it "applies the rule when nested value passed schema checks" do
-      expect(contract.(email: "jane@doe.org", login: "jane", details: nil).errors.to_h)
-        .to eql(details: ["must be a hash"])
+      expect(contract.(email: "jane@doe.org", login: "jane", details: nil).errors.to_h).to eql(
+        details: ["must be a hash"]
+      )
 
-      expect(contract.(email: "jane@doe.org", login: "jane", details: {address: nil}).errors.to_h)
-        .to eql(details: {address: ["must be a hash"]})
+      expect(contract.(email: "jane@doe.org", login: "jane", details: {address: nil}).errors.to_h).to eql(
+        details: {address: ["must be a hash"]}
+      )
 
-      expect(contract.(email: "jane@doe.org", login: "jane", details: {address: {street: " "}}).errors.to_h)
-        .to eql(details: {address: {street: ["cannot be empty"]}})
+      expect(
+        contract.(email: "jane@doe.org", login: "jane", details: {address: {street: " "}}).errors.to_h
+      ).to eql(details: {address: {street: ["cannot be empty"]}})
     end
   end
 
@@ -89,13 +94,14 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
     end
 
     it "applies the rule when nested value passed schema checks" do
-      expect(contract.(email: "jane@doe.org", login: "jane", details: {address: {street: " "}}).errors.to_h)
-        .to eql(
-          details: {address: [
-            ["invalid no matter what", "seriously invalid"],
-            {street: ["cannot be empty", "must include a number"]}
-          ]}
-        )
+      expect(
+        contract.(email: "jane@doe.org", login: "jane", details: {address: {street: " "}}).errors.to_h
+      ).to eql(
+        details: {address: [
+          ["invalid no matter what", "seriously invalid"],
+          {street: ["cannot be empty", "must include a number"]}
+        ]}
+      )
     end
   end
 
@@ -107,11 +113,13 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
     end
 
     it "sets a base error not attached to any key" do
-      expect(contract.(email: "jane@doe.org", login: "").errors.to_h)
-        .to eql(login: ["must be filled"], nil => ["this whole thing is invalid"])
+      expect(contract.(email: "jane@doe.org", login: "").errors.to_h).to eql(
+        login: ["must be filled"], nil => ["this whole thing is invalid"]
+      )
 
-      expect(contract.(email: "jane@doe.org", login: "").errors.filter(:base?).map(&:to_s))
-        .to eql(["this whole thing is invalid"])
+      expect(contract.(email: "jane@doe.org", login: "").errors.filter(:base?).map(&:to_s)).to eql(
+        ["this whole thing is invalid"]
+      )
     end
   end
 
@@ -125,113 +133,145 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
     end
 
     it "applies the rule when all values passed schema checks" do
-      expect(contract.(email: nil, login: nil).errors.to_h)
-        .to eql(email: ["must be filled"], login: ["must be filled"])
+      expect(contract.(email: nil, login: nil).errors.to_h).to eql(
+        email: ["must be filled"], login: ["must be filled"]
+      )
 
-      expect(contract.(email: "jane@doe.org", login: "jane").errors.to_h)
-        .to eql(login: ["is not needed when email is provided"])
+      expect(contract.(email: "jane@doe.org", login: "jane").errors.to_h).to eql(
+        login: ["is not needed when email is provided"]
+      )
     end
   end
 
   context "when keys are missing in the schema" do
     it "raises error with a list of symbol keys" do
-      expect { contract_class.rule(:invalid, :wrong) }
-        .to raise_error(
-          Dry::Validation::InvalidKeysError,
-          "TestContract.rule specifies keys that are not defined by the schema: [:invalid, :wrong]"
-        )
+      expect { contract_class.rule(:invalid, :wrong) }.to raise_error(
+        Dry::Validation::InvalidKeysError,
+        "TestContract.rule specifies keys that are not defined by the schema: [:invalid, :wrong]"
+      )
     end
 
     it "raises error with a hash path" do
-      expect { contract_class.rule(invalid: :wrong) }
-        .to raise_error(
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.4.0")
+        expect { contract_class.rule(invalid: :wrong) }.to raise_error(
+          Dry::Validation::InvalidKeysError,
+          "TestContract.rule specifies keys that are not defined by the schema: [{invalid: :wrong}]"
+        )
+      else
+        expect { contract_class.rule(invalid: :wrong) }.to raise_error(
           Dry::Validation::InvalidKeysError,
           "TestContract.rule specifies keys that are not defined by the schema: [{:invalid=>:wrong}]"
         )
+      end
     end
 
     it "raises error with a dot notation" do
-      expect { contract_class.rule("invalid.wrong") }
-        .to raise_error(
-          Dry::Validation::InvalidKeysError,
-          'TestContract.rule specifies keys that are not defined by the schema: ["invalid.wrong"]'
-        )
+      expect { contract_class.rule("invalid.wrong") }.to raise_error(
+        Dry::Validation::InvalidKeysError,
+        'TestContract.rule specifies keys that are not defined by the schema: ["invalid.wrong"]'
+      )
     end
 
     it "raises error with a hash path with multiple nested keys" do
-      expect { contract_class.rule(invalid: %i[wrong not_here]) }
-        .to raise_error(
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.4.0")
+        expect { contract_class.rule(invalid: %i[wrong not_here]) }.to raise_error(
+          Dry::Validation::InvalidKeysError,
+          "TestContract.rule specifies keys that are not defined by the schema: [{invalid: [:wrong, :not_here]}]"
+        )
+      else
+        expect { contract_class.rule(invalid: %i[wrong not_here]) }.to raise_error(
           Dry::Validation::InvalidKeysError,
           "TestContract.rule specifies keys that are not defined by the schema: [{:invalid=>[:wrong, :not_here]}]"
         )
+      end
     end
   end
 
   context "when keys are prefixes of valid keys" do
     it "raises error with a list of symbol keys" do
-      expect { contract_class.rule(:details, :addres) }
-        .to raise_error(
-          Dry::Validation::InvalidKeysError,
-          "TestContract.rule specifies keys that are not defined by the schema: [:addres]"
-        )
+      expect { contract_class.rule(:details, :addres) }.to raise_error(
+        Dry::Validation::InvalidKeysError,
+        "TestContract.rule specifies keys that are not defined by the schema: [:addres]"
+      )
     end
 
     it "raises error with a hash path" do
-      expect { contract_class.rule(details: :addres) }
-        .to raise_error(
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.4.0")
+        expect { contract_class.rule(details: :addres) }.to raise_error(
+          Dry::Validation::InvalidKeysError,
+          "TestContract.rule specifies keys that are not defined by the schema: [{details: :addres}]"
+        )
+      else
+        expect { contract_class.rule(details: :addres) }.to raise_error(
           Dry::Validation::InvalidKeysError,
           "TestContract.rule specifies keys that are not defined by the schema: [{:details=>:addres}]"
         )
+      end
     end
 
     it "raises error with a dot notation" do
-      expect { contract_class.rule("details.addres") }
-        .to raise_error(
-          Dry::Validation::InvalidKeysError,
-          'TestContract.rule specifies keys that are not defined by the schema: ["details.addres"]'
-        )
+      expect { contract_class.rule("details.addres") }.to raise_error(
+        Dry::Validation::InvalidKeysError,
+        'TestContract.rule specifies keys that are not defined by the schema: ["details.addres"]'
+      )
     end
 
     it "raises error with a hash path with multiple nested keys" do
-      expect { contract_class.rule(details: %i[addres]) }
-        .to raise_error(
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.4.0")
+        expect { contract_class.rule(details: %i[addres]) }.to raise_error(
+          Dry::Validation::InvalidKeysError,
+          "TestContract.rule specifies keys that are not defined by the schema: [{details: [:addres]}]"
+        )
+      else
+        expect { contract_class.rule(details: %i[addres]) }.to raise_error(
           Dry::Validation::InvalidKeysError,
           "TestContract.rule specifies keys that are not defined by the schema: [{:details=>[:addres]}]"
         )
+      end
     end
   end
 
   context "when keys are suffixes of valid keys" do
     it "raises error with a list of symbol keys" do
-      expect { contract_class.rule(:etails, :address) }
-        .to raise_error(
-          Dry::Validation::InvalidKeysError,
-          "TestContract.rule specifies keys that are not defined by the schema: [:etails, :address]"
-        )
+      expect { contract_class.rule(:etails, :address) }.to raise_error(
+        Dry::Validation::InvalidKeysError,
+        "TestContract.rule specifies keys that are not defined by the schema: [:etails, :address]"
+      )
     end
 
     it "raises error with a hash path" do
-      expect { contract_class.rule(etails: :address) }
-        .to raise_error(
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.4.0")
+        expect { contract_class.rule(etails: :address) }.to raise_error(
+          Dry::Validation::InvalidKeysError,
+          "TestContract.rule specifies keys that are not defined by the schema: [{etails: :address}]"
+        )
+      else
+        expect { contract_class.rule(etails: :address) }.to raise_error(
           Dry::Validation::InvalidKeysError,
           "TestContract.rule specifies keys that are not defined by the schema: [{:etails=>:address}]"
         )
+      end
     end
 
     it "raises error with a dot notation" do
-      expect { contract_class.rule("etails.address") }
-        .to raise_error(
-          Dry::Validation::InvalidKeysError,
-          'TestContract.rule specifies keys that are not defined by the schema: ["etails.address"]'
-        )
+      expect { contract_class.rule("etails.address") }.to raise_error(
+        Dry::Validation::InvalidKeysError,
+        'TestContract.rule specifies keys that are not defined by the schema: ["etails.address"]'
+      )
     end
 
     it "raises error with a hash path with multiple nested keys" do
-      expect { contract_class.rule(etails: %i[address]) }
-        .to raise_error(
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.4.0")
+        expect { contract_class.rule(etails: %i[address]) }.to raise_error(
+          Dry::Validation::InvalidKeysError,
+          "TestContract.rule specifies keys that are not defined by the schema: [{etails: [:address]}]"
+        )
+      else
+        expect { contract_class.rule(etails: %i[address]) }.to raise_error(
           Dry::Validation::InvalidKeysError,
           "TestContract.rule specifies keys that are not defined by the schema: [{:etails=>[:address]}]"
         )
+      end
     end
   end
 

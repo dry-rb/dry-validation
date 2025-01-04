@@ -33,31 +33,36 @@ RSpec.describe Dry::Validation::Contract do
     end
 
     it "configures messages for the schema" do
-      expect(contract.schema.config.messages.load_paths)
-        .to eql(contract.class.config.messages.load_paths)
+      expect(contract.schema.config.messages.load_paths).to eql(
+        contract.class.config.messages.load_paths
+      )
     end
 
     describe "result errors" do
       it "supports full: true option for schema errors" do
-        expect(contract.call(email: "").errors(full: true).map(&:to_s))
-          .to eql(["E-mail must be filled"])
+        expect(contract.call(email: "").errors(full: true).map(&:to_s)).to eql(
+          ["E-mail must be filled"]
+        )
       end
 
       it "supports full: true option for contract errors" do
-        expect(contract.call(email: "jane").errors(full: true).map(&:to_s))
-          .to eql(["E-mail oh noez bad email"])
+        expect(contract.call(email: "jane").errors(full: true).map(&:to_s)).to eql(
+          ["E-mail oh noez bad email"]
+        )
       end
     end
 
     describe "failure" do
       it "uses messages for failures" do
-        expect(contract.call(email: "foo").errors.to_h)
-          .to eql(email: ["oh noez bad email"])
+        expect(contract.call(email: "foo").errors.to_h).to eql(
+          email: ["oh noez bad email"]
+        )
       end
 
       it "passes tokens to message templates" do
-        expect(contract.call(email: "jane@doe.org").errors.to_h)
-          .to eql(email: ["looks like jane@doe.org is taken"])
+        expect(contract.call(email: "jane@doe.org").errors.to_h).to eql(
+          email: ["looks like jane@doe.org is taken"]
+        )
       end
     end
   end

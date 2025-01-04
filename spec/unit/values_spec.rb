@@ -43,10 +43,9 @@ RSpec.describe Dry::Validation::Values do
     end
 
     it "raises on unpexpected argument type" do
-      expect { values[123] }
-        .to raise_error(
-          ArgumentError, "+key+ must be a valid path specification"
-        )
+      expect { values[123] }.to raise_error(
+        ArgumentError, "+key+ must be a valid path specification"
+      )
     end
 
     it "accepts missing keys returning nil" do
@@ -122,8 +121,9 @@ RSpec.describe Dry::Validation::Values do
     end
 
     it "raises NoMethodError when data does not respond to the meth" do
-      expect { values.not_really_implemented }
-        .to raise_error(NoMethodError, /not_really_implemented/)
+      expect {
+        values.not_really_implemented
+      }.to raise_error(NoMethodError, /not_really_implemented/)
     end
   end
 

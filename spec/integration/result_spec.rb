@@ -11,7 +11,11 @@ RSpec.describe Dry::Validation::Result do
         r.add_error(Dry::Validation::Message.new("not valid", path: :email))
       end
 
-      expect(result.inspect).to eql('#<Dry::Validation::Result{:email=>"jane@doe.org"} errors={:email=>["not valid"]}>')
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.4.0")
+        expect(result.inspect).to eql('#<Dry::Validation::Result{email: "jane@doe.org"} errors={email: ["not valid"]}>')
+      else
+        expect(result.inspect).to eql('#<Dry::Validation::Result{:email=>"jane@doe.org"} errors={:email=>["not valid"]}>')
+      end
     end
   end
 

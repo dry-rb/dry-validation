@@ -29,8 +29,9 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
 
     context "when nested values fail both schema and rule checks" do
       it "produces schema and rule errors" do
-        expect(contract.(email: "jane@doe.org", address: {city: "NYC", zipcode: "123"}).errors.to_h)
-          .to eql(address: {street: ["is missing"], zipcode: ["bad format"]})
+        expect(
+          contract.(email: "jane@doe.org", address: {city: "NYC", zipcode: "123"}).errors.to_h
+        ).to eql(address: {street: ["is missing"], zipcode: ["bad format"]})
       end
     end
 
@@ -81,8 +82,9 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
 
     context "when one of the values fails" do
       it "produces an error for the invalid value" do
-        expect(contract.(address: {phones: ["+48123", "+47412", nil]}).errors.to_h)
-          .to eql(address: {phones: {1 => ["invalid phone"], 2 => ["must be a string"]}})
+        expect(
+          contract.(address: {phones: ["+48123", "+47412", nil]}).errors.to_h
+        ).to eql(address: {phones: {1 => ["invalid phone"], 2 => ["must be a string"]}})
       end
     end
 
@@ -105,18 +107,24 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
         end
 
         it "produces an error for base array value and another value" do
-          expect(contract.(name: "", addresses: "not an array").errors.to_h)
-            .to eql(name: ["must be filled"], addresses: ["must be an array"])
+          expect(
+            contract.(name: "", addresses: "not an array").errors.to_h
+          ).to eql(
+            name: ["must be filled"],
+            addresses: ["must be an array"]
+          )
         end
 
         it "produces an error for base array value" do
-          expect(contract.(name: "foo", addresses: "not an array").errors.to_h)
-            .to eql(addresses: ["must be an array"])
+          expect(
+            contract.(name: "foo", addresses: "not an array").errors.to_h
+          ).to eql(addresses: ["must be an array"])
         end
 
         it "produces an error for all paths" do
-          expect(contract.(name: "foo", addresses: [{phone: "+48123"}]).errors.to_h)
-            .to eql(addresses: {0 => [["invalid list"], {phone: ["invalid phone"]}]})
+          expect(
+            contract.(name: "foo", addresses: [{phone: "+48123"}]).errors.to_h
+          ).to eql(addresses: {0 => [["invalid list"], {phone: ["invalid phone"]}]})
         end
       end
 
@@ -136,8 +144,9 @@ RSpec.describe Dry::Validation::Contract, ".rule" do
           end
 
           it "produces an error for all paths" do
-            expect(contract.(addresses: [{phone: "+48123"}]).errors.to_h)
-              .to eql(addresses: {0 => [["invalid list"], [{phone: "invalid phone"}]]})
+            expect(
+              contract.(addresses: [{phone: "+48123"}]).errors.to_h
+            ).to eql(addresses: {0 => [["invalid list"], [{phone: "invalid phone"}]]})
           end
         end
       end

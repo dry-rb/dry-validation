@@ -75,8 +75,7 @@ RSpec.describe "Defining custom macros" do
     end
 
     it "fails with invalid input" do
-      expect(contract.(numbers: [1]).errors.to_h)
-        .to eql(numbers: ["must have at least 3 items"])
+      expect(contract.(numbers: [1]).errors.to_h).to eql(numbers: ["must have at least 3 items"])
     end
   end
 

@@ -52,8 +52,9 @@ RSpec.describe Dry::Validation::Contract, ".schema" do
     it "extends the schema" do
       contract = contract_class.new
 
-      expect(contract.(email: "", name: "").errors.to_h)
-        .to eql(email: ["must be filled"], name: ["must be filled"])
+      expect(contract.(email: "", name: "").errors.to_h).to eql(
+        email: ["must be filled"], name: ["must be filled"]
+      )
     end
 
     context "schema without block argument" do
@@ -85,10 +86,11 @@ RSpec.describe Dry::Validation::Contract, ".schema" do
 
       it "extends the schemas" do
         contract = contract_class.new
-        expect(contract.(email: "", name: "", company: "").errors.to_h)
-          .to eql(email: ["must be filled"],
-                  name: ["must be filled"],
-                  company: ["must be filled"])
+        expect(contract.(email: "", name: "", company: "").errors.to_h).to eql(
+          email: ["must be filled"],
+          name: ["must be filled"],
+          company: ["must be filled"]
+        )
       end
     end
   end

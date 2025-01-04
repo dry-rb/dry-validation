@@ -44,13 +44,15 @@ RSpec.describe Dry::Validation::Contract, "Rule#each" do
     end
 
     it "applies rule when an item passed schema checks" do
-      expect(contract.(nums: ["oops", 1, 4, 0]).errors.to_h)
-        .to eql(nums: {0 => ["must be an integer"], 1 => ["invalid"], 3 => ["invalid"]})
+      expect(contract.(nums: ["oops", 1, 4, 0]).errors.to_h).to eql(
+        nums: {0 => ["must be an integer"], 1 => ["invalid"], 3 => ["invalid"]}
+      )
     end
 
     it "applies rule to nested values when an item passed schema checks" do
-      expect(contract.(nums: [4], hash: {another_nums: ["oops", 1, 4]}).errors.to_h)
-        .to eql(hash: {another_nums: {0 => ["must be an integer"], 1 => ["invalid"]}})
+      expect(contract.(nums: [4], hash: {another_nums: ["oops", 1, 4]}).errors.to_h).to eql(
+        hash: {another_nums: {0 => ["must be an integer"], 1 => ["invalid"]}}
+      )
     end
 
     it "passes block options" do
@@ -59,10 +61,13 @@ RSpec.describe Dry::Validation::Contract, "Rule#each" do
 
     it "returns error from the rule namespace without an index" do
       contract_class.config.messages.load_paths << SPEC_ROOT.join("fixtures/messages/errors.en.yml").realpath
-      expect(contract.(small_integers: [11, 12], nums: [1]).errors.to_h)
-        .to eql(small_integers: {0 => ["is too big!"],
-                                 1 => ["is too big!"]},
-                nums: {0 => ["invalid"]})
+      expect(contract.(small_integers: [11, 12], nums: [1]).errors.to_h).to eql(
+        small_integers: {
+          0 => ["is too big!"],
+          1 => ["is too big!"]
+        },
+        nums: {0 => ["invalid"]}
+      )
     end
   end
 
@@ -90,13 +95,15 @@ RSpec.describe Dry::Validation::Contract, "Rule#each" do
     end
 
     it "applies rule when an item passed schema checks" do
-      expect(contract.(nums: [2, 3]).errors.to_h)
-        .to eql(nums: {1 => ["invalid"]})
+      expect(contract.(nums: [2, 3]).errors.to_h).to eql(
+        nums: {1 => ["invalid"]}
+      )
     end
 
     it "applies rule to nested values when an item passed schema checks" do
-      expect(contract.(nums: [4], hash: {another_nums: [2, 3]}).errors.to_h)
-        .to eql(hash: {another_nums: {1 => ["invalid"]}})
+      expect(contract.(nums: [4], hash: {another_nums: [2, 3]}).errors.to_h).to eql(
+        hash: {another_nums: {1 => ["invalid"]}}
+      )
     end
   end
 
@@ -128,13 +135,15 @@ RSpec.describe Dry::Validation::Contract, "Rule#each" do
     end
 
     it "applies rules when an item passed schema checks" do
-      expect(contract.(nums: [2, 15]).errors.to_h)
-        .to eql(nums: {1 => ["invalid", "too big"]})
+      expect(contract.(nums: [2, 15]).errors.to_h).to eql(
+        nums: {1 => ["invalid", "too big"]}
+      )
     end
 
     it "applies rules for nested values when an item passed schema checks" do
-      expect(contract.(nums: [2], hash: {another_nums: [2, 15]}).errors.to_h)
-        .to eql(hash: {another_nums: {1 => ["invalid", "too big"]}})
+      expect(contract.(nums: [2], hash: {another_nums: [2, 15]}).errors.to_h).to eql(
+        hash: {another_nums: {1 => ["invalid", "too big"]}}
+      )
     end
   end
 
@@ -163,13 +172,17 @@ RSpec.describe Dry::Validation::Contract, "Rule#each" do
     end
 
     it "applies rule when an item passed schema checks" do
-      expect(contract.(nums: ["oops", 1, 4, 0]).errors.to_h)
-        .to eql(nums: {0 => ["must be an integer"], 1 => ["invalid"], 3 => ["invalid"]})
+      expect(contract.(nums: ["oops", 1, 4, 0]).errors.to_h).to eql(
+        nums: {
+          0 => ["must be an integer"], 1 => ["invalid"], 3 => ["invalid"]
+        }
+      )
     end
 
     it "applies rule to nested values when an item passed schema checks" do
-      expect(contract.(nums: [4], hash: {another_nums: ["oops", 1, 4]}).errors.to_h)
-        .to eql(hash: {another_nums: {0 => ["must be an integer"], 1 => ["invalid"]}})
+      expect(contract.(nums: [4], hash: {another_nums: ["oops", 1, 4]}).errors.to_h).to eql(
+        hash: {another_nums: {0 => ["must be an integer"], 1 => ["invalid"]}}
+      )
     end
   end
 
@@ -198,13 +211,15 @@ RSpec.describe Dry::Validation::Contract, "Rule#each" do
     end
 
     it "applies rule when an item passed schema checks" do
-      expect(contract.(nums: ["oops", 4, 0, 6]).errors.to_h)
-        .to eql(nums: {0 => ["must be an integer"], 2 => ["invalid"], 3 => ["invalid"]})
+      expect(contract.(nums: ["oops", 4, 0, 6]).errors.to_h).to eql(
+        nums: {0 => ["must be an integer"], 2 => ["invalid"], 3 => ["invalid"]}
+      )
     end
 
     it "applies rule with nested values when an item passed schema checks" do
-      expect(contract.(nums: [4], hash: {another_nums: ["oops", 4, 0]}).errors.to_h)
-        .to eql(hash: {another_nums: {0 => ["must be an integer"], 2 => ["invalid"]}})
+      expect(contract.(nums: [4], hash: {another_nums: ["oops", 4, 0]}).errors.to_h).to eql(
+        hash: {another_nums: {0 => ["must be an integer"], 2 => ["invalid"]}}
+      )
     end
   end
 
@@ -238,13 +253,15 @@ RSpec.describe Dry::Validation::Contract, "Rule#each" do
     end
 
     it "applies rules when an item passed schema checks" do
-      expect(contract.(nums: ["oops", 4, 0, 6]).errors.to_h)
-        .to eql(nums: {0 => ["must be an integer"], 2 => ["invalid"], 3 => ["invalid"]})
+      expect(contract.(nums: ["oops", 4, 0, 6]).errors.to_h).to eql(
+        nums: {0 => ["must be an integer"], 2 => ["invalid"], 3 => ["invalid"]}
+      )
     end
 
     it "applies rules for nested values when an item passed schema checks" do
-      expect(contract.(nums: [4], hash: {another_nums: ["oops", 4, 0]}).errors.to_h)
-        .to eql(hash: {another_nums: {0 => ["must be an integer"], 2 => ["invalid"]}})
+      expect(contract.(nums: [4], hash: {another_nums: ["oops", 4, 0]}).errors.to_h).to eql(
+        hash: {another_nums: {0 => ["must be an integer"], 2 => ["invalid"]}}
+      )
     end
   end
 end

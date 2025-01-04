@@ -23,8 +23,7 @@ RSpec.describe Dry::Validation::Contract, "Rule#validate" do
     end
 
     it "applies rule when an item passed schema checks" do
-      expect(contract.(num: 2).errors.to_h)
-        .to eql(num: ["invalid"])
+      expect(contract.(num: 2).errors.to_h).to eql(num: ["invalid"])
     end
   end
 
@@ -48,8 +47,7 @@ RSpec.describe Dry::Validation::Contract, "Rule#validate" do
     end
 
     it "applies first rule when an item passed schema checks" do
-      expect(contract.(num: 3).errors.to_h)
-        .to eql(num: ["invalid"])
+      expect(contract.(num: 3).errors.to_h).to eql(num: ["invalid"])
     end
   end
 
@@ -77,8 +75,7 @@ RSpec.describe Dry::Validation::Contract, "Rule#validate" do
     end
 
     it "applies rules when an item passed schema checks" do
-      expect(contract.(num: 15).errors.to_h)
-        .to eql(num: ["invalid", "too big"])
+      expect(contract.(num: 15).errors.to_h).to eql(num: ["invalid", "too big"])
     end
   end
 
@@ -103,8 +100,7 @@ RSpec.describe Dry::Validation::Contract, "Rule#validate" do
     end
 
     it "applies rule when an item passed schema checks" do
-      expect(contract.(num: 2).errors.to_h)
-        .to eql(num: ["invalid"])
+      expect(contract.(num: 2).errors.to_h).to eql(num: ["invalid"])
     end
   end
 
@@ -129,8 +125,7 @@ RSpec.describe Dry::Validation::Contract, "Rule#validate" do
     end
 
     it "applies rule when an item passed schema checks" do
-      expect(contract.(num: 2).errors.to_h)
-        .to eql(num: ["invalid"])
+      expect(contract.(num: 2).errors.to_h).to eql(num: ["invalid"])
     end
   end
 
@@ -160,13 +155,11 @@ RSpec.describe Dry::Validation::Contract, "Rule#validate" do
     end
 
     it "applies first rule when an item passed schema checks" do
-      expect(contract.(num: 2).errors.to_h)
-        .to eql(num: ["too small"])
+      expect(contract.(num: 2).errors.to_h).to eql(num: ["too small"])
     end
 
     it "applies second rule when an item passed schema checks" do
-      expect(contract.(num: 6).errors.to_h)
-        .to eql(num: ["too big"])
+      expect(contract.(num: 6).errors.to_h).to eql(num: ["too big"])
     end
   end
 end
