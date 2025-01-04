@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"]   = "https://github.com/dry-rb/dry-validation"
   spec.metadata["bug_tracker_uri"]   = "https://github.com/dry-rb/dry-validation/issues"
 
-  spec.required_ruby_version = ">= 3.0"
+  spec.required_ruby_version = ">= 3.1"
 
   # to update dependencies edit project.yml
   spec.add_runtime_dependency "concurrent-ruby", "~> 1.0"
@@ -34,8 +34,4 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "dry-initializer", "~> 3.0"
   spec.add_runtime_dependency "dry-schema", "~> 1.12"
   spec.add_runtime_dependency "zeitwerk", "~> 2.6"
-
-  spec.add_development_dependency "bundler"
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "rspec"
 end
