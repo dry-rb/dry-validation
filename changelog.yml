@@ -1,4 +1,8 @@
 ---
+- version: 1.11.0
+  date: 2025-01-04
+  changed:
+  - 'Set minimum Ruby version to 3.1 (@flash-gordon)'
 - version: 1.10.0
   summary: This release is mostly about upgrading to dry-core 1.0 and dry-configurable 1.0. One of the outcomes is dropping dependency on dry-container (because it was moved to dry-core). If you happen to use dry-container, please switch to `Dry::Core::Container`.
   date: 2022-11-04
