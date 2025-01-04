@@ -15,5 +15,6 @@ end
 
 group :tools do
   gem "rubocop", "~> 1.69.2"
+  gem "readline"
   gem "byebug"
 end

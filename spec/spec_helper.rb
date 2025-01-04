@@ -10,6 +10,8 @@ begin
 rescue LoadError
 end
 
+Warning.process { |w| raise w }
+
 require "yaml"
 require "i18n"
 require "dry/validation"

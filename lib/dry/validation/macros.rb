@@ -29,8 +29,8 @@ module Dry
         # @see Macro
         #
         # @api public
-        def register_macro(name, ...)
-          macros.register(name, ...)
+        def register_macro(...)
+          macros.register(...)
           self
         end
       end
