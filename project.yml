@@ -6,13 +6,9 @@ gemspec:
   email: ["piotr.solnica@gmail.com"]
   summary: "Validation library"
   files: ["config/*.yml"]
-  development_dependencies:
-    - bundler
-    - rake
-    - rspec
   runtime_dependencies:
     - [zeitwerk, "~> 2.6"]
     - [concurrent-ruby, "~> 1.0"]
-    - [dry-core, "~> 1.0"]
-    - [dry-initializer, "~> 3.0"]
-    - [dry-schema, "~> 1.12"]
+    - [dry-core, "~> 1.1"]
+    - [dry-initializer, "~> 3.2"]
+    - [dry-schema, "~> 1.14"]
