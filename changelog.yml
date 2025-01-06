@@ -1,7 +1,8 @@
 ---
 - version: 1.11.0
-  date: 2025-01-04
+  date: 2025-01-06
   changed:
+  - "Passing non-hash values to `Contract#call` now raises a meaningful error (issue #716 via #723) (@flash-gordon)"
   - 'Set minimum Ruby version to 3.1 (@flash-gordon)'
 - version: 1.10.0
   summary: This release is mostly about upgrading to dry-core 1.0 and dry-configurable 1.0. One of the outcomes is dropping dependency on dry-container (because it was moved to dry-core). If you happen to use dry-container, please switch to `Dry::Core::Container`.
