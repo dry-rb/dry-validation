@@ -1,4 +1,8 @@
 ---
+- version: 1.11.1
+  date: 2025-01-21
+  fixed:
+  - "Fixed warning about unused block in macros (@flash-gordon)"
 - version: 1.11.0
   date: 2025-01-06
   changed:
