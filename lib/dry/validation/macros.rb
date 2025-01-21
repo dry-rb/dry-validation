@@ -80,8 +80,8 @@ module Dry
       # @return [Macros]
       #
       # @api public
-      def self.register(name, ...)
-        container.register(name, ...)
+      def self.register(...)
+        container.register(...)
         self
       end
 
