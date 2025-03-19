@@ -4,7 +4,6 @@
 
 require "bundler/setup"
 
-require "pry"
 require "dry/validation"
 require "dry/types"
 
@@ -28,10 +27,10 @@ class Context
   def contract(&)
     Dry::Validation::Contract.build(&)
   end
+
+  def console
+    binding.irb
+  end
 end
 
-prompt = Pry::Prompt.new(
-  :dry_validation, "dry-validation", [proc { "dry-validation> " }, proc { "dry-validation*> " }]
-)
-
-Pry.start(Context.new, prompt: prompt)
+Context.new.console
