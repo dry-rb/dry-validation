@@ -21,6 +21,8 @@ Gem::Specification.new do |spec|
   spec.executables   = []
   spec.require_paths = ["lib"]
 
+  spec.extra_rdoc_files = ["README.md", "CHANGELOG.md", "LICENSE"]
+
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
   spec.metadata["changelog_uri"]     = "https://github.com/dry-rb/dry-validation/blob/main/CHANGELOG.md"
   spec.metadata["source_code_uri"]   = "https://github.com/dry-rb/dry-validation"
