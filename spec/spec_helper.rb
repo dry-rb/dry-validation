@@ -2,7 +2,6 @@
 
 require_relative "support/coverage"
 require_relative "support/warnings"
-require_relative "support/rspec_options"
 
 begin
   require "pry"

@@ -1,0 +1,20 @@
+name:
+  gem: dry-validation
+  constant: Dry::Validation
+github_org: dry-rb
+gemspec:
+  authors: ["Hanakai team"]
+  email: ["info@hanakai.org"]
+  summary: "Validation library"
+  homepage: "https://dry-rb.org/gems/dry-validation"
+  files: ["config/*.yml"]
+  development_dependencies:
+    - bundler
+    - rake
+    - rspec
+  runtime_dependencies:
+    - [concurrent-ruby, "~> 1.0"]
+    - [dry-core, "~> 1.1"]
+    - [dry-initializer, "~> 3.2"]
+    - [dry-schema, "~> 1.14"]
+    - [zeitwerk, "~> 2.6"]
