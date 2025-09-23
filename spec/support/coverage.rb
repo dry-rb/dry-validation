@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# this file is managed by dry-rb/devtools
+# This file is synced from hanakai-rb/repo-sync
 
 if ENV["COVERAGE"] == "true"
   require "simplecov"
