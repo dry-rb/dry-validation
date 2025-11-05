@@ -49,7 +49,7 @@ jobs:
       - uses: liskin/gh-workflow-keepalive@v1
   release:
     runs-on: ubuntu-latest
-    if: contains(github.ref, 'tags') && github.event_name == 'create'
+    if: github.ref_type == 'tag'
     needs: tests
     env:
       GITHUB_LOGIN: dry-bot
