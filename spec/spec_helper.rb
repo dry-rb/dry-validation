@@ -3,12 +3,6 @@
 require_relative "support/coverage"
 require_relative "support/warnings"
 
-begin
-  require "pry"
-  require "pry-byebug"
-rescue LoadError
-end
-
 Warning.process { |w| raise w }
 
 require "yaml"
