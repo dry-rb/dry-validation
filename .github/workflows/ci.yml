@@ -14,8 +14,11 @@ on:
 
 jobs:
   tests:
+    name: Tests (${{ matrix.ruby }})
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
-    name: Tests
+    continue-on-error: ${{ matrix.optional }}
     strategy:
       fail-fast: false
       matrix:
@@ -23,9 +26,12 @@ jobs:
         - "3.4"
         - "3.3"
         - "3.2"
+        optional: [false]
         include:
           - ruby: "3.4"
             coverage: "true"
+          - ruby: "jruby"
+            optional: true
     env:
       COVERAGE: ${{matrix.coverage}}
     steps:
@@ -39,7 +45,26 @@ jobs:
           ruby-version: ${{matrix.ruby}}
           bundler-cache: true
       - name: Run all tests
-        run: bundle exec rake
+        id: test
+        run: |
+          status=0
+          bundle exec rake || status=$?
+          if [ ${status} -ne 0 ] && [ "${{ matrix.optional }}" == "true" ]; then
+            echo "::warning::Optional matrix job failed."
+            echo "optional_fail=true" >> "${GITHUB_OUTPUT}"
+            echo "optional_fail_status=${status}" >> "${GITHUB_OUTPUT}"
+            exit 0  # Ignore error here to keep the green checkmark
+          fi
+          exit ${status}
+      - name: Add comment for optional failures
+        uses: thollander/actions-comment-pull-request@v3
+        if: ${{ matrix.optional && github.event.pull_request }}
+        with:
+          comment-tag: "${{ matrix.ruby }}-optional-failure-notice"
+          message: |
+            ℹ️ Optional job failed: Ruby ${{ matrix.ruby }}
+          mode: ${{ steps.test.outputs.optional_fail == 'true' && 'upsert' || 'delete' }}
+
   workflow-keepalive:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
