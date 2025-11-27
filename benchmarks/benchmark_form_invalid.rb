@@ -5,7 +5,6 @@ require "active_model"
 
 require "i18n"
 require "dry-validation"
-require "byebug"
 
 require_relative "active_record_setup"
 

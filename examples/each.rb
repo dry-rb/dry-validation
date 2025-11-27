@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "byebug"
 require "dry-validation"
 
 contract = Class.new(Dry::Validation::Contract) do

@@ -5,7 +5,6 @@ require "active_model"
 
 require "i18n"
 require "dry-validation"
-require "byebug"
 
 COUNT = (ENV["COUNT"] || 100).to_i
 FIELDS = COUNT.times.map { |i| :"field_#{i}" }
