@@ -2,7 +2,15 @@
 
 require "active_record"
 
-ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+if RUBY_PLATFORM == "java"
+  require "activerecord-jdbc-adapter"
+  ActiveRecord::Base.establish_connection(
+    adapter: "sqlite3",
+    database: ":memory:"
+  )
+else
+  ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+end
 
 ActiveRecord::Schema.define do
   create_table :users do |table|
