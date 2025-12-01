@@ -17,4 +17,12 @@ RSpec.configure do |config|
   config.define_derived_metadata do |meta|
     meta[:aggregate_failures] = true
   end
+
+  if ENV['CI']
+    # No focused specs should be committed. This ensures
+    # builds fail when this happens.
+    config.before(:each, :focus) do
+      raise StandardError, "You've committed a focused spec!"
+    end
+  end
 end
