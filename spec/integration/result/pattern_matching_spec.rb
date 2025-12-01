@@ -24,7 +24,7 @@ RSpec.describe Dry::Validation::Result do
 
   it "supports pattern matching with arrays extracting keys and context" do
     case success
-    in [{ email: }, { country: }]
+    in [{email:}, {country:}]
       expect(email).to eql("jane@doe.org")
       expect(country).to eql("Sweden")
     end
@@ -40,7 +40,7 @@ RSpec.describe Dry::Validation::Result do
       end
 
       case success.to_monad
-      in Dry::Monads::Result::Success([_, { country: }])
+      in Dry::Monads::Result::Success([_, {country:}])
         expect(country).to eql("Sweden")
       end
     end

@@ -1,6 +1,7 @@
 .DS_Store
 coverage
 /.bundle
+/.rubocop-*
 vendor/bundle
 log/
 tmp/
