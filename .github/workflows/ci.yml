@@ -32,6 +32,8 @@ jobs:
             coverage: "true"
           - ruby: "jruby"
             optional: true
+          - ruby: "4.0.0-preview2"
+            optional: true
     env:
       COVERAGE: ${{matrix.coverage}}
     steps:
