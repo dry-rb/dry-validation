@@ -5,10 +5,10 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "release-*", "ci/*"]
     tags: ["v*"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "release-*"]
   schedule:
     - cron: "30 4 * * *"
 
