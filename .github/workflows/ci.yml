@@ -13,19 +13,18 @@ on:
 
 jobs:
   tests:
-    name: Tests (${{ matrix.ruby }})
+    name: Tests (Ruby ${{ matrix.ruby }})
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.optional }}
+    continue-on-error: ${{ matrix.optional || false }}
     strategy:
       fail-fast: false
       matrix:
         ruby:
-        - "3.4"
-        - "3.3"
-        - "3.2"
-        optional: [false]
+          - "3.4"
+          - "3.3"
+          - "3.2"
         include:
           - ruby: "3.4"
             coverage: "true"
@@ -34,7 +33,7 @@ jobs:
           - ruby: "4.0.0-preview2"
             optional: true
     env:
-      COVERAGE: ${{matrix.coverage}}
+      COVERAGE: ${{ matrix.coverage }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -43,7 +42,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{matrix.ruby}}
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
       - name: Run all tests
         id: test
@@ -73,6 +72,7 @@ jobs:
       actions: write
     steps:
       - uses: liskin/gh-workflow-keepalive@v1
+
   release:
     runs-on: ubuntu-latest
     if: github.ref_type == 'tag'
@@ -94,4 +94,5 @@ jobs:
         run: |
           tag=$(echo $GITHUB_REF | cut -d / -f 3)
           ossy gh w dry-rb/devtools release --payload "{\"tag\":\"$tag\",\"sha\":\"${{github.sha}}\",\"tag_creator\":\"$GITHUB_ACTOR\",\"repo\":\"$GITHUB_REPOSITORY\",\"repo_name\":\"${{github.event.repository.name}}\"}"
+  
 
