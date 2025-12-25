@@ -22,15 +22,14 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
+          - "4.0"
           - "3.4"
           - "3.3"
           - "3.2"
         include:
-          - ruby: "3.4"
+          - ruby: "4.0"
             coverage: "true"
           - ruby: "jruby"
-            optional: true
-          - ruby: "4.0.0-preview2"
             optional: true
     env:
       COVERAGE: ${{ matrix.coverage }}
