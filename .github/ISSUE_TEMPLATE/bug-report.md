@@ -21,6 +21,5 @@ A clear and concise description of what you expected to happen.
 
 ## My environment
 
-- Affects my production application: **YES/NO**
 - Ruby version: ...
 - OS: ...
