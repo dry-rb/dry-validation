@@ -17,8 +17,8 @@ Gem::Specification.new do |spec|
   spec.description   = spec.summary
   spec.homepage      = "https://dry-rb.org/gems/dry-validation"
   spec.files         = Dir["CHANGELOG.md", "LICENSE", "README.md", "dry-validation.gemspec", "lib/**/*", "config/*.yml"]
-  spec.bindir        = "bin"
-  spec.executables   = []
+  spec.bindir        = "exe"
+  spec.executables   = Dir["exe/*"].map { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.extra_rdoc_files = ["README.md", "CHANGELOG.md", "LICENSE"]
