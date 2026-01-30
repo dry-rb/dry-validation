@@ -25,11 +25,10 @@ jobs:
           - "3.4"
           - "3.3"
           - "3.2"
+          - "jruby"
         include:
           - ruby: "4.0"
             coverage: "true"
-          - ruby: "jruby"
-            optional: true
     env:
       COVERAGE: ${{ matrix.coverage }}
     steps:
