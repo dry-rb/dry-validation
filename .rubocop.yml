@@ -2,3 +2,6 @@
 
 inherit_from:
   - https://raw.githubusercontent.com/hanakai-rb/repo-sync/main/rubocop/rubocop.yml
+  <% if File.exist?(".rubocop.local.yml") %>
+  - .rubocop.local.yml
+  <% end %>
