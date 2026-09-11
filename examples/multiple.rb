@@ -9,17 +9,17 @@ contract = Class.new(Dry::Validation::Contract) do
 
   def self.messages
     super.merge(en: {
-                  dry_validation: {
-                    errors: {
-                      rules: {
-                        email: {
-                          john?: "%{value} is not a john email",
-                          example?: "%{value} is not an example email"
-                        }
-                      }
-                    }
-                  }
-                })
+      dry_validation: {
+        errors: {
+          rules: {
+            email: {
+              john?: "%{value} is not a john email",
+              example?: "%{value} is not an example email"
+            }
+          }
+        }
+      }
+    })
   end
 
   rule(:email) do
