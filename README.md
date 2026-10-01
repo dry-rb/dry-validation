@@ -2,7 +2,7 @@
 
 [actions]: https://github.com/dry-rb/dry-validation/actions
 [chat]: https://discord.gg/naQApPAsZB
-[forum]: https://discourse.hanamirb.org
+[forum]: https://discourse.hanakai.org
 [rubygem]: https://rubygems.org/gems/dry-validation
 
 # dry-validation [![Gem Version](https://badge.fury.io/rb/dry-validation.svg)][rubygem] [![CI Status](https://github.com/dry-rb/dry-validation/workflows/CI/badge.svg)][actions]
